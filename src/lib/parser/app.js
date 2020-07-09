@@ -1,53 +1,58 @@
 'use strict';
 
-let sum = (a, b) => a + b
-let sub = (a, b) => a - b
-let mul = (a, b) => a * b
-let del = (a, b) => a / b
-let rem = (a, b) => a % b
-let exp = (a, b) => (b == null) ? a : a ** b // топ10 успешных реализаций
-let equal = (a, b) => a == b
-let more = (a, b) => a > b
-let unMinus = a => -a
-let allFunc = new Map([
-    ["МОД", a => (a < 0) ? -a : a]
-    // ну и другие функции - мне уже больно больше чем нужно делать 
+const sum = (a, b) => a + b
+const sub = (a, b) => a - b
+const mul = (a, b) => a * b
+const del = (a, b) => a / b
+const rem = (a, b) => a % b
+const exp = (a, b) => (b == null) ? a : a ** b // С‚РѕРї10 СѓСЃРїРµС€РЅС‹С… СЂРµР°Р»РёР·Р°С†РёР№
+const equal = (a, b) => a == b
+const more = (a, b) => a > b
+const unMinus = a => -a
+const allFunc = new Map([
+    ["РњРћР”", a => (a < 0) ? -a : a]
+    // РЅСѓ Рё РґСЂСѓРіРёРµ С„СѓРЅРєС†РёРё - РјРЅРµ СѓР¶Рµ Р±РѕР»СЊРЅРѕ Р±РѕР»СЊС€Рµ С‡РµРј РЅСѓР¶РЅРѕ РґРµР»Р°С‚СЊ 
 ])
-let runFunc = (func, args) => { /* помолится и забыться */ return 1; }
-let makeInterval = (a1, a2) => [a1, a2]
-let getVal = a => 1
+const runFunc = (func, args) => { /* РїРѕРјРѕР»РёС‚СЃСЏ Рё Р·Р°Р±С‹С‚СЊСЃСЏ */ return 1; }
+const makeInterval = (a1, a2) => [a1, a2]
+const getVal = a => 1
 
-// все команды написанные выше parseExpr - усовны, являются заглушками
+// РІСЃРµ РєРѕРјР°РЅРґС‹ РЅР°РїРёСЃР°РЅРЅС‹Рµ РІС‹С€Рµ parseExpr - СѓСЃРѕРІРЅС‹, СЏРІР»СЏСЋС‚СЃСЏ Р·Р°РіР»СѓС€РєР°РјРё
 
-let parseExpr = inputString => {
+class Parser {
+    constructor(inputString) {
+        this.inputString = inputString
+        this.pos = 0
+    }
 
-    // === Блок №1 === //
+    next() { this.pos++; }
 
-    let pos = 0
-    let next = () => pos++
-    let get = () => (pos < inputString.length) ? inputString[pos] : String.fromCodePoint(0)
-    let checkGet = c => {
-        res = get() == c
+    get() { return (this.pos < this.inputString.length) ? this.inputString[this.pos] : String.fromCodePoint(0); }
+
+    checkGet(c) {
+        let res = get() == c
         if (res) next
         return res
     }
-    let error = () => { throw new Error }
-    let toInt = a => a.charCodeAt()
 
-    // === Блок №2 === //
+    makeError() { throw new Error }
 
-    let block = () => {
-        if (checkGet('=')) return equals()
-        return value()
+    static toInt(a) { return a.charCodeAt(); }
+
+    parseBlock() {
+        if (checkGet('=')) return parseEquals()
+        return parseValue()
     }
-    let equals = () => _equals(expr())
-    let _equals = res => {  // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
+
+    parseEquals() { return parseEparseHelperExpr(); }
+
+    parseEqualsHelper(res) {  // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
         let op = 0
         if (checkGet('!')) {
-            if (!checkGet('=')) error()
+            if (!checkGet('=')) makeError()
             else op = 6
         } else if (checkGet('=')) {
-            if (!checkGet('=')) error()
+            if (!checkGet('=')) makeError()
             else op = 1
         } else if (checkGet('>')) {
             if (checkGet('=')) op = 2
@@ -56,7 +61,7 @@ let parseExpr = inputString => {
             if (checkGet('=')) op = 4
             else op = 5
         } else return res
-        let res2 = expr()
+        let res2 = parseExpr()
         switch (op) {
             case 1: return equal(res, res2)
             case 2: return !more(res2, res)
@@ -66,55 +71,64 @@ let parseExpr = inputString => {
             case 6: return !equal(res, res2)
         }
     }
-    let expr = () => _expr(term())
-    let _expr = res => {
-        if (checkGet('-')) return _expr(sub(res, term()))
-        else if (checkGet('+')) return _expr(sum(res, term()))
+
+    parseExpr() { return parseExprHelper(parseTerm()); }
+
+    parseExprHelper(res) {
+        if (checkGet('-')) return parseExprHelper(sub(res, parseTerm()))
+        else if (checkGet('+')) return parseExprHelper(sum(res, parseTerm()))
         else return res
     }
-    let term = () => _term(factor())
-    let _term = res => {
-        if (checkGet('*')) return _term(mul(res, factor()))
-        else if (checkGet('/')) return _term(div(res, factor()))
-        else if (checkGet('%')) return _term(rem(res, factor()))
+
+    parseTerm() { return parseTermHelper(parseFactor()); }
+
+    parseTermHelper(res) {
+        if (checkGet('*')) return parseTermHelper(mul(res, parseFactor()))
+        else if (checkGet('/')) return parseTermHelper(div(res, parseFactor()))
+        else if (checkGet('%')) return parseTermHelper(rem(res, parseFactor()))
         else return res
     }
-    let factor = () => exp(power(), _factor())
-    let _factor = () => {
-        if (checkGet('^')) return exp(power(), _factor())
+
+    parseFactor() { return exp(parsePower(), parseFactorHelper()); }
+
+    parseFactorHelper() {
+        if (checkGet('^')) return exp(parsePower(), parseFactorHelper())
         else return null
     }
-    let power = () => {
+
+    parsePower() {
         if (checkGet('(')) {
-            let res = expr()
-            if (!checkGet(')')) error()
+            let res = parseExpr()
+            if (!checkGet(')')) makeError()
             return res
         } else if (checkGet('-')) {
-            return unMinus(power())
-        } else if ('А' <= get() && get() <= 'Я') {
+            return unMinus(parsePower())
+        } else if ('Рђ' <= get() && get() <= 'РЇ') {
             let nameFun = parseNameFunc()
-            // вот тут (если будут) должны появится ленивые вычисления - например, вместо парсинга, подсовывать подстроку, но пока пусть будет без этого
-            if (!checkGet('(')) error()
+            // РІРѕС‚ С‚СѓС‚ (РµСЃР»Рё Р±СѓРґСѓС‚) РґРѕР»Р¶РЅС‹ РїРѕСЏРІРёС‚СЃСЏ Р»РµРЅРёРІС‹Рµ РІС‹С‡РёСЃР»РµРЅРёСЏ - РЅР°РїСЂРёРјРµСЂ, РІРјРµСЃС‚Рѕ РїР°СЂСЃРёРЅРіР°, РїРѕРґСЃРѕРІС‹РІР°С‚СЊ РїРѕРґСЃС‚СЂРѕРєСѓ, РЅРѕ РїРѕРєР° РїСѓСЃС‚СЊ Р±СѓРґРµС‚ Р±РµР· СЌС‚РѕРіРѕ
+            if (!allFunc.has(nameFun)) makeError()
+            if (!checkGet('(')) makeError()
             let args = parseArgs()
-        } else value()
+            return runFunc(allFunc.get(nameFun), args)
+        } else parseValue()
     }
-    let parseArgs = () => {
+
+    parseArgs() {
         let arr = []
         if (checkGet(')')) return arr
-        arr.push(expr())
-        return _parseArgs(arr)
+        arr.push(parseExpr())
+        return parseArgsHelper(arr)
     }
-    let _parseArgs = arr => {
+
+    parseArgsHelper(arr) {
         if (checkGet(';')) {
-            arr.push(expr())
-            return _parseArgs(arr)
+            arr.push(parseExpr())
+            return parseArgsHelper(arr)
         } else if (checkGet(')')) return arr
-        else error()
+        else makeError()
     }
 
-    // === Блок №3 === //
-
-    let value = () => {
+    parseValue() {
         if (checkGet('\"')) {
             return parseStr()
         } else if ('0' <= get() && get() <= '9') {
@@ -126,10 +140,11 @@ let parseExpr = inputString => {
                 return makeInterval(res, res2)
             }
             return getVal(res)
-        } else error()
+        } else makeError()
     }
-    let parseFromTo = (from, to, func) => {
-        if (!(from <= get() && get() <= to)) error()
+
+    parseFromTo(from, to, func) {
+        if (!(from <= get() && get() <= to)) makeError()
         res = 0
         while (from <= get() && get() <= to) {
             res = func(res, get())
@@ -137,17 +152,21 @@ let parseExpr = inputString => {
         }
         return res
     }
-    let parseNum = () => parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'))
-    let parseNameFunc = () => parseFromTo('А', 'Я', (res, c) => res + с)
-    let parseAddress = () => {
+
+    parseNum() { return parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0')); }
+
+    parseNameFunc() { return parseFromTo('Рђ', 'РЇ', (res, c) => res + СЃ); }
+
+    parseAddress() {
         checkGet('$')
         let ind1 = parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'))
         checkGet('$')
         let ind2 = parseNum()
         return [ind1, ind2]
     }
-    let parseStr = () => {
-        if (!checkGet('\"')) error()
+
+    parseStr() {
+        if (!checkGet('\"')) makeError()
         res = ""
         while (!checkGet('\"')) {
             res += get()
@@ -156,9 +175,9 @@ let parseExpr = inputString => {
         return res
     }
 
-    // === Блок №4 === //
-
-    let ans = block()
-    if (pos < inputString.length) error()
-    return ans
+    run() {
+        let ans = parseBlock()
+        if (this.pos < this.inputString.length) makeError()
+        return ans
+    }
 }
