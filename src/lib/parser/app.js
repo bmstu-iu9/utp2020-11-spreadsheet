@@ -105,10 +105,9 @@ class Parser {
             return unMinus(this.parsePower())
         } else if (this.hasNext() && 'А' <= this.get() && this.get() <= 'Я') {
             let nameFun = this.parseNameFunc()
-            if (!allFunc.has(nameFun)) this.makeParserError("parsePower (no function)")
             if (!this.checkGet('(')) this.makeParserError("parsePower (no argument)")
             let args = this.parseArgs()
-            return runFunc(nameFun, args)
+            return makeFunc(nameFun, args)
         } else return this.parseValue()
     }
 
@@ -133,18 +132,18 @@ class Parser {
         } else if (this.hasNext() && '0' <= this.get() && this.get() <= '9') {
             return this.parseNum()
         } else if (this.hasNext() && 'A' <= this.get() && this.get() <= 'Z') {
-            let res = this.makeAddress(this.parseAddress())
+            let res = makeAddress(this.parseAddress())
             if (this.checkGet(':')) {
-                let res2 = this.makeAddress(this.parseAddress())
-                return this.makeInterval(res, res2)
+                let res2 = makeAddress(this.parseAddress())
+                return makeInterval(res, res2)
             }
             return res
         } else this.makeParserError("parseValue")
     }
 
-    parseFromTo(from, to, func) {
+    parseFromTo(from, to, func, start) {
         if (!(this.hasNext() && from <= this.get() && this.get() <= to)) this.makeParserError("parseFromTo")
-        let res = 0
+        let res = start
         while (this.hasNext() && from <= this.get() && this.get() <= to) {
             res = func(res, this.get())
             this.next()
@@ -152,13 +151,13 @@ class Parser {
         return res
     }
 
-    parseNum() { return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0')); }
+    parseNum() { return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0); }
 
-    parseNameFunc() { return this.parseFromTo('А', 'Я', (res, c) => res + с); }
+    parseNameFunc() { return this.parseFromTo('А', 'Я', (res, c) => res + c, ""); }
 
     parseAddress() {
         this.checkGet('$')
-        let ind1 = this.parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'))
+        let ind1 = this.parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'), "")
         this.checkGet('$')
         let ind2 = this.parseNum()
         return [ind1, ind2]
@@ -188,3 +187,5 @@ test("\"asdf\"")
 test("=\"abc\"+\"def\"")
 test("=(1+5^(1/2))/2")
 test("=(1-5^(1/2))/2")
+test("=СУММА(A2:F2)")
+test("=A1")
