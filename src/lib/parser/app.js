@@ -5,23 +5,23 @@ let sub = (a, b) => a - b
 let mul = (a, b) => a * b
 let del = (a, b) => a / b
 let rem = (a, b) => a % b
-let exp = (a, b) => (b == null) ? a : a ** b // топ10 успешных реализаций
+let exp = (a, b) => (b == null) ? a : a ** b // С‚РѕРї10 СѓСЃРїРµС€РЅС‹С… СЂРµР°Р»РёР·Р°С†РёР№
 let equal = (a, b) => a == b
 let more = (a, b) => a > b
 let unMinus = a => -a
 let allFunc = new Map([
-    ["МОД", a => (a < 0) ? -a : a]
-    // ну и другие функции - мне уже больно больше чем нужно делать 
+    ["ГЊГЋГ„", a => (a < 0) ? -a : a]
+    // РЅСѓ Рё РґСЂСѓРіРёРµ С„СѓРЅРєС†РёРё - РјРЅРµ СѓР¶Рµ Р±РѕР»СЊРЅРѕ Р±РѕР»СЊС€Рµ С‡РµРј РЅСѓР¶РЅРѕ РґРµР»Р°С‚СЊ 
 ])
-let runFunc = (func, args) => { /* помолится и забыться */ return 1; }
+let runFunc = (func, args) => { /* РїРѕРјРѕР»РёС‚СЃСЏ Рё Р·Р°Р±С‹С‚СЊСЃСЏ */ return 1; }
 let makeInterval = (a1, a2) => [a1, a2]
 let getVal = a => 1
 
-// все команды написанные выше parseExpr - усовны, являются заглушками
+// РІСЃРµ РєРѕРјР°РЅРґС‹ РЅР°РїРёСЃР°РЅРЅС‹Рµ РІС‹С€Рµ parseExpr - СѓСЃРѕРІРЅС‹, СЏРІР»СЏСЋС‚СЃСЏ Р·Р°РіР»СѓС€РєР°РјРё
 
 let parseExpr = inputString => {
 
-    // === Блок №1 === //
+    // === Р‘Р»РѕРє в„–1 === //
 
     let pos = 0
     let next = () => pos++
@@ -34,7 +34,7 @@ let parseExpr = inputString => {
     let error = () => { throw new Error }
     let toInt = a => a.charCodeAt()
 
-    // === Блок №2 === //
+    // === Р‘Р»РѕРє в„–2 === //
 
     let block = () => {
         if (checkGet('=')) return equals()
@@ -91,9 +91,9 @@ let parseExpr = inputString => {
             return res
         } else if (checkGet('-')) {
             return unMinus(power())
-        } else if ('А' <= get() && get() <= 'Я') {
+        } else if ('ГЂ' <= get() && get() <= 'Гџ') {
             let nameFun = parseNameFunc()
-            // вот тут (если будут) должны появится ленивые вычисления - например, вместо парсинга, подсовывать подстроку, но пока пусть будет без этого
+            // РІРѕС‚ С‚СѓС‚ (РµСЃР»Рё Р±СѓРґСѓС‚) РґРѕР»Р¶РЅС‹ РїРѕСЏРІРёС‚СЃСЏ Р»РµРЅРёРІС‹Рµ РІС‹С‡РёСЃР»РµРЅРёСЏ - РЅР°РїСЂРёРјРµСЂ, РІРјРµСЃС‚Рѕ РїР°СЂСЃРёРЅРіР°, РїРѕРґСЃРѕРІС‹РІР°С‚СЊ РїРѕРґСЃС‚СЂРѕРєСѓ, РЅРѕ РїРѕРєР° РїСѓСЃС‚СЊ Р±СѓРґРµС‚ Р±РµР· СЌС‚РѕРіРѕ
             if (!checkGet('(')) error()
             let args = parseArgs()
         } else value()
@@ -112,7 +112,7 @@ let parseExpr = inputString => {
         else error()
     }
 
-    // === Блок №3 === //
+    // === Р‘Р»РѕРє в„–3 === //
 
     let value = () => {
         if (checkGet('\"')) {
@@ -138,7 +138,7 @@ let parseExpr = inputString => {
         return res
     }
     let parseNum = () => parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'))
-    let parseNameFunc = () => parseFromTo('А', 'Я', (res, c) => res + с)
+    let parseNameFunc = () => parseFromTo('ГЂ', 'Гџ', (res, c) => res + Г±)
     let parseAddress = () => {
         checkGet('$')
         let ind1 = parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'))
@@ -156,7 +156,7 @@ let parseExpr = inputString => {
         return res
     }
 
-    // === Блок №4 === //
+    // === Р‘Р»РѕРє в„–4 === //
 
     let ans = block()
     if (pos < inputString.length) error()
