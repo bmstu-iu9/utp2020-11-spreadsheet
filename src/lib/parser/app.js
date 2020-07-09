@@ -5,19 +5,17 @@ const sub = (a, b) => a - b
 const mul = (a, b) => a * b
 const del = (a, b) => a / b
 const rem = (a, b) => a % b
-const exp = (a, b) => (b == null) ? a : a ** b // топ10 успешных реализаций
+const exp = (a, b) => (b == null) ? a : a ** b 
+const unMinus = a => -a
+
 const equal = (a, b) => a == b
 const more = (a, b) => a > b
-const unMinus = a => -a
-const allFunc = new Map([
-    ["МОД", a => (a < 0) ? -a : a]
-    // ну и другие функции - мне уже больно больше чем нужно делать 
-])
-const runFunc = (func, args) => { /* помолится и забыться */ return 1; }
-const makeInterval = (a1, a2) => [a1, a2]
-const getVal = a => 1
 
-// все команды написанные выше parseExpr - усовны, являются заглушками
+const makeFunc = (func, args) => [func, args]
+const makeInterval = (a1, a2) => [a1, a2]
+const makeAddress = a => a
+
+// все команды написанные выше - усовны, являются заглушками
 
 class Parser {
     constructor(inputString) {
@@ -25,17 +23,19 @@ class Parser {
         this.pos = 0
     }
 
+    makeParserError(str) { throw new SyntaxError(`Parser syntax error in ${str} !`); }
+
     next() { this.pos++; }
 
-    get() { return (this.pos < this.inputString.length) ? this.inputString[this.pos] : String.fromCodePoint(0); }
+    hasNext() { return this.pos < this.inputString.length; }
+
+    get() { return hasNext() ? this.inputString[this.pos] : makeParserError("get"); }
 
     checkGet(c) {
-        let res = get() == c
+        let res = hasNext() && (get() == c)
         if (res) next
         return res
     }
-
-    makeError() { throw new Error }
 
     static toInt(a) { return a.charCodeAt(); }
 
@@ -49,10 +49,10 @@ class Parser {
     parseEqualsHelper(res) {  // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
         let op = 0
         if (checkGet('!')) {
-            if (!checkGet('=')) makeError()
+            if (!checkGet('=')) makeParserError("parseEqualsHelper (only !)")
             else op = 6
         } else if (checkGet('=')) {
-            if (!checkGet('=')) makeError()
+            if (!checkGet('=')) makeParserError("parseEqualsHelper (only =)")
             else op = 1
         } else if (checkGet('>')) {
             if (checkGet('=')) op = 2
@@ -99,17 +99,16 @@ class Parser {
     parsePower() {
         if (checkGet('(')) {
             let res = parseExpr()
-            if (!checkGet(')')) makeError()
+            if (!checkGet(')')) makeParserError("parsePower (wrong bracket sequence)")
             return res
         } else if (checkGet('-')) {
             return unMinus(parsePower())
-        } else if ('А' <= get() && get() <= 'Я') {
+        } else if (hasNext() && 'А' <= get() && get() <= 'Я') {
             let nameFun = parseNameFunc()
-            // вот тут (если будут) должны появится ленивые вычисления - например, вместо парсинга, подсовывать подстроку, но пока пусть будет без этого
-            if (!allFunc.has(nameFun)) makeError()
-            if (!checkGet('(')) makeError()
+            if (!allFunc.has(nameFun)) makeParserError("parsePower (no function)")
+            if (!checkGet('(')) makeParserError("parsePower (no argument)")
             let args = parseArgs()
-            return runFunc(allFunc.get(nameFun), args)
+            return runFunc(nameFun, args)
         } else parseValue()
     }
 
@@ -125,28 +124,28 @@ class Parser {
             arr.push(parseExpr())
             return parseArgsHelper(arr)
         } else if (checkGet(')')) return arr
-        else makeError()
+        else makeParserError("parseArgsHelper")
     }
 
     parseValue() {
         if (checkGet('\"')) {
             return parseStr()
-        } else if ('0' <= get() && get() <= '9') {
+        } else if (hasNext() && '0' <= get() && get() <= '9') {
             return parseNum()
-        } else if ('A' <= get() && get() <= 'Z') {
-            let res = parseAddress()
+        } else if (hasNext() && 'A' <= get() && get() <= 'Z') {
+            let res = makeAddress(parseAddress())
             if (checkGet(':')) {
-                let res2 = parseAddress()
+                let res2 = makeAddress(parseAddress())
                 return makeInterval(res, res2)
             }
-            return getVal(res)
-        } else makeError()
+            return res
+        } else makeParserError("parseValue")
     }
 
     parseFromTo(from, to, func) {
-        if (!(from <= get() && get() <= to)) makeError()
+        if (!(hasNext() && from <= get() && get() <= to)) makeParserError("parseFromTo")
         res = 0
-        while (from <= get() && get() <= to) {
+        while (hasNext() && from <= get() && get() <= to) {
             res = func(res, get())
             next()
         }
@@ -166,7 +165,7 @@ class Parser {
     }
 
     parseStr() {
-        if (!checkGet('\"')) makeError()
+        if (!checkGet('\"')) makeParserError("parseStr")
         res = ""
         while (!checkGet('\"')) {
             res += get()
@@ -177,7 +176,7 @@ class Parser {
 
     run() {
         let ans = parseBlock()
-        if (this.pos < this.inputString.length) makeError()
+        if (this.pos < this.inputString.length) makeParserError("run")
         return ans
     }
 }
