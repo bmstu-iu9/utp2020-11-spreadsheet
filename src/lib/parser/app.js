@@ -15,7 +15,9 @@ const makeFunc = (func, args) => [func, args]
 const makeInterval = (a1, a2) => [a1, a2]
 const makeAddress = a => a
 
-// все команды написанные выше - усовны, являются заглушками
+// все команды написанные выше - условны, являются заглушками
+
+const toInt = a => a.charCodeAt()
 
 class Parser {
     constructor(inputString) {
@@ -23,45 +25,43 @@ class Parser {
         this.pos = 0
     }
 
-    makeParserError(str) { throw new SyntaxError(`Parser syntax error in ${str} !`); }
+    makeParserError(str) { throw new SyntaxError(`Parser syntax error in ${str}!`); }
 
     next() { this.pos++; }
 
     hasNext() { return this.pos < this.inputString.length; }
 
-    get() { return hasNext() ? this.inputString[this.pos] : makeParserError("get"); }
+    get() { return this.hasNext() ? this.inputString[this.pos] : this.makeParserError("get"); }
 
     checkGet(c) {
-        let res = hasNext() && (get() == c)
-        if (res) next
+        let res = this.hasNext() && (this.get() == c)
+        if (res) this.next()
         return res
     }
 
-    static toInt(a) { return a.charCodeAt(); }
-
     parseBlock() {
-        if (checkGet('=')) return parseEquals()
-        return parseValue()
+        if (this.checkGet('=')) return this.parseEquals()
+        return this.parseValue()
     }
 
-    parseEquals() { return parseEparseHelperExpr(); }
+    parseEquals() { return this.parseEqualsHelper(this.parseExpr()); }
 
     parseEqualsHelper(res) {  // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
         let op = 0
-        if (checkGet('!')) {
-            if (!checkGet('=')) makeParserError("parseEqualsHelper (only !)")
+        if (this.checkGet('!')) {
+            if (!this.checkGet('=')) this.makeParserError("parseEqualsHelper (only !)")
             else op = 6
-        } else if (checkGet('=')) {
-            if (!checkGet('=')) makeParserError("parseEqualsHelper (only =)")
+        } else if (this.checkGet('=')) {
+            if (!this.checkGet('=')) this.makeParserError("parseEqualsHelper (only =)")
             else op = 1
-        } else if (checkGet('>')) {
-            if (checkGet('=')) op = 2
+        } else if (this.checkGet('>')) {
+            if (this.checkGet('=')) op = 2
             else op = 3
-        } else if (checkGet('<')) {
-            if (checkGet('=')) op = 4
+        } else if (this.checkGet('<')) {
+            if (this.checkGet('=')) op = 4
             else op = 5
         } else return res
-        let res2 = parseExpr()
+        let res2 = this.parseExpr()
         switch (op) {
             case 1: return equal(res, res2)
             case 2: return !more(res2, res)
@@ -72,111 +72,119 @@ class Parser {
         }
     }
 
-    parseExpr() { return parseExprHelper(parseTerm()); }
+    parseExpr() { return this.parseExprHelper(this.parseTerm()); }
 
     parseExprHelper(res) {
-        if (checkGet('-')) return parseExprHelper(sub(res, parseTerm()))
-        else if (checkGet('+')) return parseExprHelper(sum(res, parseTerm()))
+        if (this.checkGet('-')) return this.parseExprHelper(sub(res, this.parseTerm()))
+        else if (this.checkGet('+')) return this.parseExprHelper(sum(res, this.parseTerm()))
         else return res
     }
 
-    parseTerm() { return parseTermHelper(parseFactor()); }
+    parseTerm() { return this.parseTermHelper(this.parseFactor()); }
 
     parseTermHelper(res) {
-        if (checkGet('*')) return parseTermHelper(mul(res, parseFactor()))
-        else if (checkGet('/')) return parseTermHelper(div(res, parseFactor()))
-        else if (checkGet('%')) return parseTermHelper(rem(res, parseFactor()))
+        if (this.checkGet('*')) return this.parseTermHelper(mul(res, this.parseFactor()))
+        else if (this.checkGet('/')) return this.parseTermHelper(del(res, this.parseFactor()))
+        else if (this.checkGet('%')) return this.parseTermHelper(rem(res, this.parseFactor()))
         else return res
     }
 
-    parseFactor() { return exp(parsePower(), parseFactorHelper()); }
+    parseFactor() { return exp(this.parsePower(), this.parseFactorHelper()); }
 
     parseFactorHelper() {
-        if (checkGet('^')) return exp(parsePower(), parseFactorHelper())
+        if (this.checkGet('^')) return exp(this.parsePower(), this.parseFactorHelper())
         else return null
     }
 
     parsePower() {
-        if (checkGet('(')) {
-            let res = parseExpr()
-            if (!checkGet(')')) makeParserError("parsePower (wrong bracket sequence)")
+        if (this.checkGet('(')) {
+            let res = this.parseExpr()
+            if (!this.checkGet(')')) this.makeParserError("parsePower (wrong bracket sequence)")
             return res
-        } else if (checkGet('-')) {
-            return unMinus(parsePower())
-        } else if (hasNext() && 'А' <= get() && get() <= 'Я') {
-            let nameFun = parseNameFunc()
-            if (!allFunc.has(nameFun)) makeParserError("parsePower (no function)")
-            if (!checkGet('(')) makeParserError("parsePower (no argument)")
-            let args = parseArgs()
+        } else if (this.checkGet('-')) {
+            return unMinus(this.parsePower())
+        } else if (this.hasNext() && 'А' <= this.get() && this.get() <= 'Я') {
+            let nameFun = this.parseNameFunc()
+            if (!allFunc.has(nameFun)) this.makeParserError("parsePower (no function)")
+            if (!this.checkGet('(')) this.makeParserError("parsePower (no argument)")
+            let args = this.parseArgs()
             return runFunc(nameFun, args)
-        } else parseValue()
+        } else return this.parseValue()
     }
 
     parseArgs() {
         let arr = []
-        if (checkGet(')')) return arr
-        arr.push(parseExpr())
-        return parseArgsHelper(arr)
+        if (this.checkGet(')')) return arr
+        arr.push(this.parseExpr())
+        return this.parseArgsHelper(arr)
     }
 
     parseArgsHelper(arr) {
-        if (checkGet(';')) {
-            arr.push(parseExpr())
-            return parseArgsHelper(arr)
-        } else if (checkGet(')')) return arr
-        else makeParserError("parseArgsHelper")
+        if (this.checkGet(';')) {
+            arr.push(this.parseExpr())
+            return this.parseArgsHelper(arr)
+        } else if (this.checkGet(')')) return arr
+        else this.makeParserError("parseArgsHelper")
     }
 
     parseValue() {
-        if (checkGet('\"')) {
-            return parseStr()
-        } else if (hasNext() && '0' <= get() && get() <= '9') {
-            return parseNum()
-        } else if (hasNext() && 'A' <= get() && get() <= 'Z') {
-            let res = makeAddress(parseAddress())
-            if (checkGet(':')) {
-                let res2 = makeAddress(parseAddress())
-                return makeInterval(res, res2)
+        if (this.hasNext() && (this.get() == '\"')) {
+            return this.parseStr()
+        } else if (this.hasNext() && '0' <= this.get() && this.get() <= '9') {
+            return this.parseNum()
+        } else if (this.hasNext() && 'A' <= this.get() && this.get() <= 'Z') {
+            let res = this.makeAddress(this.parseAddress())
+            if (this.checkGet(':')) {
+                let res2 = this.makeAddress(this.parseAddress())
+                return this.makeInterval(res, res2)
             }
             return res
-        } else makeParserError("parseValue")
+        } else this.makeParserError("parseValue")
     }
 
     parseFromTo(from, to, func) {
-        if (!(hasNext() && from <= get() && get() <= to)) makeParserError("parseFromTo")
-        res = 0
-        while (hasNext() && from <= get() && get() <= to) {
-            res = func(res, get())
-            next()
+        if (!(this.hasNext() && from <= this.get() && this.get() <= to)) this.makeParserError("parseFromTo")
+        let res = 0
+        while (this.hasNext() && from <= this.get() && this.get() <= to) {
+            res = func(res, this.get())
+            this.next()
         }
         return res
     }
 
-    parseNum() { return parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0')); }
+    parseNum() { return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0')); }
 
-    parseNameFunc() { return parseFromTo('А', 'Я', (res, c) => res + с); }
+    parseNameFunc() { return this.parseFromTo('А', 'Я', (res, c) => res + с); }
 
     parseAddress() {
-        checkGet('$')
-        let ind1 = parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'))
-        checkGet('$')
-        let ind2 = parseNum()
+        this.checkGet('$')
+        let ind1 = this.parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'))
+        this.checkGet('$')
+        let ind2 = this.parseNum()
         return [ind1, ind2]
     }
 
     parseStr() {
-        if (!checkGet('\"')) makeParserError("parseStr")
-        res = ""
-        while (!checkGet('\"')) {
-            res += get()
-            next()
+        if (!this.checkGet('\"')) this.makeParserError("parseStr")
+        let res = ""
+        while (!this.checkGet('\"')) {
+            res += this.get()
+            this.next()
         }
         return res
     }
 
     run() {
-        let ans = parseBlock()
-        if (this.pos < this.inputString.length) makeParserError("run")
+        let ans = this.parseBlock()
+        if (this.pos < this.inputString.length) this.makeParserError("run")
         return ans
     }
 }
+
+const test = (str) => { console.log(`${str} => ${new Parser(str).run()}`); }
+
+test("1")
+test("\"asdf\"")
+test("=\"abc\"+\"def\"")
+test("=(1+5^(1/2))/2")
+test("=(1-5^(1/2))/2")
