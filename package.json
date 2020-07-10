@@ -1,0 +1,32 @@
+{
+  "name": "unitables",
+  "version": "1.0.0",
+  "description": "Online spreadsheets with the opportunity to merge tables",
+  "main": "index.js",
+  "scripts": {
+    "test": "c8 --all mocha --recursive ./src/tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmstu-iu9/utp2020-11-spreadsheet.git"
+  },
+  "keywords": [
+    "spreadsheets"
+  ],
+  "author": "KAZBES team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet/issues"
+  },
+  "homepage": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet#readme",
+  "dependencies": {},
+  "type": "module",
+  "devDependencies": {
+    "c8": "^7.2.0",
+    "eslint": "^7.4.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "mocha": "^8.0.1",
+    "util.promisify": "^1.0.1"
+  }
+}
