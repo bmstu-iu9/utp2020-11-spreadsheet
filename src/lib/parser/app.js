@@ -5,7 +5,7 @@ const sub = (a, b) => a - b
 const mul = (a, b) => a * b
 const del = (a, b) => a / b
 const rem = (a, b) => a % b
-const exp = (a, b) => (b == null) ? a : a ** b 
+const exp = (a, b) => (b == null) ? a : a ** b
 const unMinus = a => -a
 
 const equal = (a, b) => a == b
@@ -19,7 +19,7 @@ const makeAddress = a => a
 
 const toInt = a => a.charCodeAt()
 
-class Parser {
+export class Parser {
     constructor(inputString) {
         this.inputString = inputString
         this.pos = 0
@@ -180,15 +180,3 @@ class Parser {
         return ans
     }
 }
-
-const test = (str) => { console.log(`${str} => ${new Parser(str).run()}`); }
-
-test(`1`)
-test(`"asdf"`)
-test(`12bc`)
-test(`="abc"+"def"`)
-test(`=(1+5^(1/2))/2`)
-test(`=(1-5^(1/2))/2`)
-test(`=СУММА(A2:F2;B3:ZA3)`)
-test(`=A1`)
-test(`=1+"b"+3+"c"`)
