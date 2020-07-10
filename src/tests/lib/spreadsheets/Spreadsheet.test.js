@@ -20,7 +20,7 @@ describe('Spreadsheet', () => {
       const cells = new Map();
       cells.set('A1', {});
       assert.throws(() => {
-        new Spreadsheet('', cells);
+        new Spreadsheet('a', cells);
       });
     });
     it('should throw an exception for integer name', () => {
@@ -31,20 +31,31 @@ describe('Spreadsheet', () => {
   });
   describe('#setName()', () => {
     it('should set name to Bob', () => {
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       spreadsheet.setName('Bob');
       assert.strictEqual(spreadsheet.name, 'Bob');
     });
     it('should throw an exception for integer argument', () => {
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       assert.throws(() => {
         spreadsheet.setName(1);
       });
     });
   });
+  describe('#isNameCorrect()', () => {
+    it('should return true for name "a"', () => {
+      assert.strictEqual(Spreadsheet.isNameCorrect('a'), true);
+    });
+    it('should return false for an empty name', () => {
+      assert.strictEqual(Spreadsheet.isNameCorrect(''), false);
+    });
+    it('should return false for a name " \n "', () => {
+      assert.strictEqual(Spreadsheet.isNameCorrect(' \n '), false);
+    });
+  });
   describe('#setCells()', () => {
     it('should set cells to B5=3, D3=false', () => {
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       const cells = new Map();
       cells.set('B5', new Cell(valueTypes.number, 3));
       cells.set('D3', new Cell(valueTypes.boolean, false));
@@ -54,13 +65,13 @@ describe('Spreadsheet', () => {
     it('should throw an exception for integer key', () => {
       const cells = new Map();
       cells.set(1, new Cell());
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       assert.throws(() => {
         spreadsheet.setCells(cells);
       });
     });
     it('should throw an exception for a non-map object', () => {
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       assert.throws(() => {
         spreadsheet.setCells({});
       });
@@ -68,18 +79,18 @@ describe('Spreadsheet', () => {
   });
   describe('#getCell()', () => {
     it('should get an existing cell', () => {
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       const cell = new Cell(valueTypes.boolean, true);
       spreadsheet.cells.set('A1', cell);
       assert.strictEqual(spreadsheet.getCell('A1'), cell);
     });
     it('should create an empty cell', () => {
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       const cell = spreadsheet.getCell('A1');
       assert.strictEqual(cell.type, valueTypes.string);
     });
     it('should throw an exception for position 1A', () => {
-      const spreadsheet = new Spreadsheet('');
+      const spreadsheet = new Spreadsheet('a');
       assert.throws(() => {
         spreadsheet.getCell('1A');
       });

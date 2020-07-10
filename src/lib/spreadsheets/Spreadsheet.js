@@ -7,10 +7,15 @@ export default class Spreadsheet {
   }
 
   setName(name) {
-    if (typeof name !== 'string') {
-      throw new Error('Spreadsheet name must be a string');
+    if (Spreadsheet.isNameCorrect(name)) {
+      this.name = name;
+    } else {
+      throw new Error('Illegal name');
     }
-    this.name = name;
+  }
+
+  static isNameCorrect(name) {
+    return (typeof name === 'string') && (name.trim().length > 0);
   }
 
   setCells(cells) {

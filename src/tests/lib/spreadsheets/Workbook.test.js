@@ -10,32 +10,43 @@ describe('Workbook', () => {
       assert.strictEqual(workbook.spreadsheets.length, 0);
     });
     it('should set create a workbook with one spreadsheet', () => {
-      const spreadsheets = [new Spreadsheet('')];
-      const workbook = new Workbook('', spreadsheets);
+      const spreadsheets = [new Spreadsheet('a')];
+      const workbook = new Workbook('a', spreadsheets);
       assert.strictEqual(workbook.spreadsheets, spreadsheets);
     });
     it('should throw an error for incorrect spreadsheets', () => {
       assert.throws(() => {
-        new Workbook('', {});
+        new Workbook('a', {});
       });
     });
   });
   describe('#setName()', () => {
     it('should set name to "Work"', () => {
-      const workbook = new Workbook('');
+      const workbook = new Workbook('a');
       workbook.setName('Work');
       assert.strictEqual(workbook.name, 'Work');
     });
     it('should throw an exception for 20202 name', () => {
-      const workbook = new Workbook('');
+      const workbook = new Workbook('a');
       assert.throws(() => {
         workbook.setName(20202);
       });
     });
   });
+  describe('#isNameCorrect()', () => {
+    it('should return true for name "a"', () => {
+      assert.strictEqual(Workbook.isNameCorrect('a'), true);
+    });
+    it('should return false for an empty name', () => {
+      assert.strictEqual(Workbook.isNameCorrect(''), false);
+    });
+    it('should return false for a name " \n "', () => {
+      assert.strictEqual(Workbook.isNameCorrect(' \n '), false);
+    });
+  });
   describe('#createSpreadsheet()', () => {
     it('should create a spreadsheet named "Sheet"', () => {
-      const workbook = new Workbook('');
+      const workbook = new Workbook('a');
       workbook.createSpreadsheet('Sheet');
       const spreadsheet = workbook.spreadsheets[0];
       assert.strictEqual(spreadsheet.name, 'Sheet');
@@ -43,19 +54,19 @@ describe('Workbook', () => {
   });
   describe('#setSpreadsheets()', () => {
     it('should set spreadsheets to an array with one spreadsheet', () => {
-      const workbook = new Workbook('');
-      const spreadsheets = [new Spreadsheet('')];
+      const workbook = new Workbook('a');
+      const spreadsheets = [new Spreadsheet('a')];
       workbook.setSpreadsheets(spreadsheets);
       assert.strictEqual(workbook.spreadsheets, spreadsheets);
     });
     it('should throw an exception for a plain spreadsheet', () => {
-      const workbook = new Workbook('');
+      const workbook = new Workbook('a');
       assert.throws(() => {
-        workbook.setSpreadsheets(new Spreadsheet(''));
+        workbook.setSpreadsheets(new Spreadsheet('a'));
       });
     });
     it('should throw an exception for an array with objects', () => {
-      const workbook = new Workbook('');
+      const workbook = new Workbook('a');
       assert.throws(() => {
         workbook.setSpreadsheets([{}, {}]);
       });
