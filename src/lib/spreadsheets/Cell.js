@@ -44,7 +44,7 @@ export class Cell {
 
   static isColorCorrect(color) {
     const colorRegExp = RegExp(
-      '^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$',
+      '^#[0-9a-f]{6}$',
     );
     return colorRegExp.test(color);
   }
