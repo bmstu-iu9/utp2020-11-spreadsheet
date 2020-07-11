@@ -32,7 +32,7 @@ export default class Parser {
     return res;
   }
 
-  // <Block> ::= =<Equals> | value.
+  // <Block> ::= =<Equals> | this .
   parseBlock() {
     if (this.checkGet('=')) {
       return this.parseEquals();

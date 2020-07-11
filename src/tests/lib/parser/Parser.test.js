@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import Parser from '../../../lib/parser/Parser.js';
+import EW from '../../../lib/parser/ExpressionWrapper.js';
 
 describe('Parser', () => {
   describe('#run()', () => {
@@ -7,7 +8,7 @@ describe('Parser', () => {
       assert.strictEqual(new Parser('123').run(), '123');
       assert.strictEqual(new Parser('abd123efg').run(), 'abd123efg');
       assert.strictEqual(new Parser('=1+2+3').run(), 1 + 2 + 3);
-      assert.deepEqual(new Parser('=A1').run(), [0, 1]);
+      assert.deepEqual(new Parser('=A1').run(), EW.makeAddress(0, 0));
     });
     it('should parse invalid values', () => {
       assert.throws(() => {
@@ -30,7 +31,7 @@ describe('Parser', () => {
       assert.strictEqual(new Parser('=1+2+3').run(), 1 + 2 + 3);
       assert.strictEqual(new Parser('=(1+5^(1/2))/2').run(), (1 + Math.sqrt(5)) / 2);
       assert.strictEqual(new Parser('=5*(2+2)').run(), 5 * (2 + 2));
-      assert.deepEqual(new Parser('=A1').run(), [0, 1]);
+      assert.deepEqual(new Parser('=A1').run(), EW.makeAddress(0, 1));
     });
   });
   describe('#parseEquals()', () => {
@@ -132,10 +133,10 @@ describe('Parser', () => {
       assert.strictEqual(new Parser('=5*(-5)').run(), -25);
     });
     it('should parse validity function name', () => {
-      assert.deepEqual(new Parser('=СУММА(1;2)').run(), ['СУММА', [1, 2]]);
-      assert.deepEqual(new Parser('=КОРЕНЬ(5)').run(), ['КОРЕНЬ', [5]]);
-      assert.deepEqual(new Parser('=ЛЮБЛЮПИСАТЬТЕСТЫ()').run(), ['ЛЮБЛЮПИСАТЬТЕСТЫ', []]);
-      assert.deepEqual(new Parser('=ИУТОП()').run(), ['ИУТОП', []]);
+      assert.deepEqual(new Parser('=СУММА(1;2)').run(), EW.makeFunc('СУММА', [1, 2]));
+      assert.deepEqual(new Parser('=КОРЕНЬ(5)').run(), EW.makeFunc('КОРЕНЬ', [5]));
+      assert.deepEqual(new Parser('=ЛЮБЛЮПИСАТЬТЕСТЫ()').run(), EW.makeFunc('ЛЮБЛЮПИСАТЬТЕСТЫ', []));
+      assert.deepEqual(new Parser('=ИУТОП()').run(), EW.makeFunc('ИУТОП', []));
     });
     it('should parse invalidity function name', () => {
       assert.throws(() => {
@@ -191,7 +192,7 @@ describe('Parser', () => {
       });
     });
     it('should parse valid interval', () => {
-      assert.deepEqual(new Parser('=A2:B8').run(), [[0, 2], [1, 8]]);
+      assert.deepEqual(new Parser('=A2:B8').run(), EW.makeInterval(EW.makeAddress(0, 1), EW.makeAddress(1, 7)));
     });
     it('should parse invalid interval', () => {
       assert.throws(() => {
