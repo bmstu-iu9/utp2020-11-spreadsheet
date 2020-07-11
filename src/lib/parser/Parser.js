@@ -33,12 +33,12 @@ export default class Parser {
 
   checkGet(c) {
     const res = this.hasNext() && (this.get() === c);
-    if (res) this.next();
+    if (res) { this.next(); }
     return res;
   }
 
   parseBlock() {
-    if (this.checkGet('=')) return this.parseEquals();
+    if (this.checkGet('=')) { return this.parseEquals(); }
     this.pos = this.inputString.length;
     return this.inputString;
   }
@@ -48,18 +48,14 @@ export default class Parser {
   parseEqualsHelper(res) { // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
     let op = 0;
     if (this.checkGet('!')) {
-      if (!this.checkGet('=')) Parser.makeParserError('parseEqualsHelper (only !)');
-      else op = 6;
+      if (!this.checkGet('=')) { Parser.makeParserError('parseEqualsHelper (only !)'); } else { op = 6; }
     } else if (this.checkGet('=')) {
-      if (!this.checkGet('=')) Parser.makeParserError('parseEqualsHelper (only =)');
-      else op = 1;
+      if (!this.checkGet('=')) { Parser.makeParserError('parseEqualsHelper (only =)'); } else { op = 1; }
     } else if (this.checkGet('>')) {
-      if (this.checkGet('=')) op = 2;
-      else op = 3;
+      if (this.checkGet('=')) { op = 2; } else { op = 3; }
     } else if (this.checkGet('<')) {
-      if (this.checkGet('=')) op = 4;
-      else op = 5;
-    } else return res;
+      if (this.checkGet('=')) { op = 4; } else { op = 5; }
+    } else { return res; }
     const res2 = this.parseExpr();
     switch (op) {
       case 1: return equal(res, res2);
@@ -74,37 +70,37 @@ export default class Parser {
   parseExpr() { return this.parseExprHelper(this.parseTerm()); }
 
   parseExprHelper(res) {
-    if (this.checkGet('-')) return this.parseExprHelper(sub(res, this.parseTerm()));
-    if (this.checkGet('+')) return this.parseExprHelper(sum(res, this.parseTerm()));
+    if (this.checkGet('-')) { return this.parseExprHelper(sub(res, this.parseTerm())); }
+    if (this.checkGet('+')) { return this.parseExprHelper(sum(res, this.parseTerm())); }
     return res;
   }
 
   parseTerm() { return this.parseTermHelper(this.parseFactor()); }
 
   parseTermHelper(res) {
-    if (this.checkGet('*')) return this.parseTermHelper(mul(res, this.parseFactor()));
-    if (this.checkGet('/')) return this.parseTermHelper(del(res, this.parseFactor()));
-    if (this.checkGet('%')) return this.parseTermHelper(rem(res, this.parseFactor()));
+    if (this.checkGet('*')) { return this.parseTermHelper(mul(res, this.parseFactor())); }
+    if (this.checkGet('/')) { return this.parseTermHelper(del(res, this.parseFactor())); }
+    if (this.checkGet('%')) { return this.parseTermHelper(rem(res, this.parseFactor())); }
     return res;
   }
 
   parseFactor() { return exp(this.parsePower(), this.parseFactorHelper()); }
 
   parseFactorHelper() {
-    if (this.checkGet('^')) return exp(this.parsePower(), this.parseFactorHelper());
+    if (this.checkGet('^')) { return exp(this.parsePower(), this.parseFactorHelper()); }
     return null;
   }
 
   parsePower() {
     if (this.checkGet('(')) {
       const res = this.parseExpr();
-      if (!this.checkGet(')')) Parser.makeParserError('parsePower (wrong bracket sequence)');
+      if (!this.checkGet(')')) { Parser.makeParserError('parsePower (wrong bracket sequence)'); }
       return res;
     } if (this.checkGet('-')) {
       return unMinus(this.parsePower());
     } if (this.hasNext() && this.get() >= 'А' && this.get() <= 'Я') {
       const nameFun = this.parseNameFunc();
-      if (!this.checkGet('(')) Parser.makeParserError('parsePower (no argument)');
+      if (!this.checkGet('(')) { Parser.makeParserError('parsePower (no argument)'); }
       const args = this.parseArgs();
       return makeFunc(nameFun, args);
     } return this.parseValue();
@@ -112,7 +108,7 @@ export default class Parser {
 
   parseArgs() {
     const arr = [];
-    if (this.checkGet(')')) return arr;
+    if (this.checkGet(')')) { return arr; }
     arr.push(this.parseExpr());
     return this.parseArgsHelper(arr);
   }
@@ -121,7 +117,7 @@ export default class Parser {
     if (this.checkGet(';')) {
       arr.push(this.parseExpr());
       return this.parseArgsHelper(arr);
-    } if (this.checkGet(')')) return arr;
+    } if (this.checkGet(')')) { return arr; }
     return Parser.makeParserError('parseArgsHelper');
   }
 
@@ -142,7 +138,7 @@ export default class Parser {
   }
 
   parseFromTo(from, to, func, start) {
-    if (!(this.hasNext() && from <= this.get() && this.get() <= to)) Parser.makeParserError('parseFromTo');
+    if (!(this.hasNext() && from <= this.get() && this.get() <= to)) { Parser.makeParserError('parseFromTo'); }
     let res = start;
     while (this.hasNext() && from <= this.get() && this.get() <= to) {
       res = func(res, this.get());
@@ -164,7 +160,7 @@ export default class Parser {
   }
 
   parseStr() {
-    if (!this.checkGet('"')) Parser.makeParserError('parseStr');
+    if (!this.checkGet('"')) { Parser.makeParserError('parseStr'); }
     let res = '';
     while (!this.checkGet('"')) {
       res += this.get();
@@ -175,7 +171,7 @@ export default class Parser {
 
   run() {
     const ans = this.parseBlock();
-    if (this.pos < this.inputString.length) Parser.makeParserError('run');
+    if (this.pos < this.inputString.length) { Parser.makeParserError('run'); }
     return ans;
   }
 }
