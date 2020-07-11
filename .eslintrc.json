@@ -13,6 +13,10 @@
         "sourceType": "module"
     },
     "rules": {
+        "curly": [
+            "error",
+            "all"
+        ],
         "import/extensions": [
             "error",
             "always"
