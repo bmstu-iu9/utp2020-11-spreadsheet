@@ -10,9 +10,15 @@ describe('Parser', () => {
       assert.deepEqual(new Parser('=A1').run(), [0, 1]);
     });
     it('should parse invalid values', () => {
-      assert.throws(() => { new Parser('=A2B').run(); });
-      assert.throws(() => { new Parser('=').run(); });
-      assert.throws(() => { new Parser('=1+((5*8)').run(); });
+      assert.throws(() => {
+        new Parser('=A2B').run();
+      });
+      assert.throws(() => {
+        new Parser('=').run();
+      });
+      assert.throws(() => {
+        new Parser('=1+((5*8)').run();
+      });
     });
   });
   describe('#parseBlock()', () => {
@@ -53,11 +59,21 @@ describe('Parser', () => {
       assert.strictEqual(new Parser('=4!=2+2').run(), false);
     });
     it('should parse invalid logic functions', () => {
-      assert.throws(() => { new Parser('=2<3<4').run(); });
-      assert.throws(() => { new Parser('=2<').run(); });
-      assert.throws(() => { new Parser('=<3').run(); });
-      assert.throws(() => { new Parser('=2!3').run(); });
-      assert.throws(() => { new Parser('=2=3').run(); });
+      assert.throws(() => {
+        new Parser('=2<3<4').run();
+      });
+      assert.throws(() => {
+        new Parser('=2<').run();
+      });
+      assert.throws(() => {
+        new Parser('=<3').run();
+      });
+      assert.throws(() => {
+        new Parser('=2!3').run();
+      });
+      assert.throws(() => {
+        new Parser('=2=3').run();
+      });
     });
   });
   describe('#parseExpr()', () => {
@@ -103,8 +119,12 @@ describe('Parser', () => {
       assert.strictEqual(new Parser('=((((2))+(((2)))))').run(), 4);
     });
     it('should parse invalid bracket sequence', () => {
-      assert.throws(() => { new Parser('=((1+1)+1)+1)+1').run(); });
-      assert.throws(() => { new Parser('=((((2))+(((2))))').run(); });
+      assert.throws(() => {
+        new Parser('=((1+1)+1)+1)+1').run();
+      });
+      assert.throws(() => {
+        new Parser('=((((2))+(((2))))').run();
+      });
     });
     it('should parse valid functions with unary minus', () => {
       assert.strictEqual(new Parser('=-1').run(), -1);
@@ -118,11 +138,21 @@ describe('Parser', () => {
       assert.deepEqual(new Parser('=ИУТОП()').run(), ['ИУТОП', []]);
     });
     it('should parse invalidity function name', () => {
-      assert.throws(() => { new Parser('=СУММА').run(); });
-      assert.throws(() => { new Parser('=КОРЕНЬ(5').run(); });
-      assert.throws(() => { new Parser('=КОРЕНЬ(5;0').run(); });
-      assert.throws(() => { new Parser('=ЛЮБЛЮПИСАТЬТЕСТЫ').run(); });
-      assert.throws(() => { new Parser('=ИУТОП').run(); });
+      assert.throws(() => {
+        new Parser('=СУММА').run();
+      });
+      assert.throws(() => {
+        new Parser('=КОРЕНЬ(5').run();
+      });
+      assert.throws(() => {
+        new Parser('=КОРЕНЬ(5;0').run();
+      });
+      assert.throws(() => {
+        new Parser('=ЛЮБЛЮПИСАТЬТЕСТЫ').run();
+      });
+      assert.throws(() => {
+        new Parser('=ИУТОП').run();
+      });
     });
   });
   describe('#parseStr()', () => {
@@ -132,26 +162,44 @@ describe('Parser', () => {
       assert.strictEqual(new Parser('="A"+1+":B"+2').run(), 'A1:B2');
     });
     it('should parse invalid strings', () => {
-      assert.throws(() => { new Parser('="a').run(); });
-      assert.throws(() => { new Parser('="a""b"').run(); });
-      assert.throws(() => { new Parser('=b"').run(); });
+      assert.throws(() => {
+        new Parser('="a').run();
+      });
+      assert.throws(() => {
+        new Parser('="a""b"').run();
+      });
+      assert.throws(() => {
+        new Parser('=b"').run();
+      });
     });
     it('should parse impossible strings', () => {
-      assert.throws(() => { new Parser('a').parseStr(); });
+      assert.throws(() => {
+        new Parser('a').parseStr();
+      });
     });
   });
   describe('#parseValue()', () => {
     it('should parse invalid something', () => {
-      assert.throws(() => { new Parser('=*').run(); });
-      assert.throws(() => { new Parser('=~').run(); });
-      assert.throws(() => { new Parser('=^').run(); });
+      assert.throws(() => {
+        new Parser('=*').run();
+      });
+      assert.throws(() => {
+        new Parser('=~').run();
+      });
+      assert.throws(() => {
+        new Parser('=^').run();
+      });
     });
     it('should parse valid interval', () => {
       assert.deepEqual(new Parser('=A2:B8').run(), [[0, 2], [1, 8]]);
     });
     it('should parse invalid interval', () => {
-      assert.throws(() => { new Parser('=A2:B').run(); });
-      assert.throws(() => { new Parser('=A2:').run(); });
+      assert.throws(() => {
+        new Parser('=A2:B').run();
+      });
+      assert.throws(() => {
+        new Parser('=A2:').run();
+      });
     });
   });
 });
