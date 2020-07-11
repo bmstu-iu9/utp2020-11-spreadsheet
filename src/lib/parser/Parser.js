@@ -89,8 +89,8 @@ export default class Parser {
       case cGreater: return EW.greater(res, res2);
       case cLessEqual: return EW.lessEqual(res, res2);
       case cLess: return EW.less(res, res2);
+      default:
       case cNotEqual: return EW.notEqual(res, res2);
-      default: return Parser.makeParserError('parseEqualsHelper (impossible error)');
     }
   }
 
