@@ -1,4 +1,4 @@
-export default class EW {
+export default class ExpressionWrapper {
   static constValue() {
     return 'V';
   }
@@ -77,14 +77,14 @@ export default class EW {
   }
 
   static makeInterval(a1, a2) {
-    return [EW.constInterval(), a1, a2];
+    return [ExpressionWrapper.constInterval(), a1, a2];
   }
 
   static makeAddress(a1, a2) {
-    return [EW.constAddress(), a1, a2];
+    return [ExpressionWrapper.constAddress(), a1, a2];
   }
 
   static makeClearValue(a) {
-    return [EW.constValue(), a];
+    return [ExpressionWrapper.constValue(), a];
   }
 }
