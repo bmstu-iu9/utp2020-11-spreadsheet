@@ -3,7 +3,7 @@ const sub = (a, b) => a - b;
 const mul = (a, b) => a * b;
 const del = (a, b) => a / b;
 const rem = (a, b) => a % b;
-const exp = (a, b) => ((b == null) ? a : a ** b);
+const exp = (a, b) => (b == null ? a : a ** b);
 const unMinus = (a) => -a;
 
 const equal = (a, b) => a === b;
