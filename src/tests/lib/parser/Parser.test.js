@@ -5,9 +5,9 @@ import EW from '../../../lib/parser/ExpressionWrapper.js';
 describe('Parser', () => {
   describe('#run()', () => {
     it('should parse valid values', () => {
-      assert.strictEqual(new Parser('123').run(), '123');
-      assert.strictEqual(new Parser('abd123efg').run(), 'abd123efg');
-      assert.strictEqual(new Parser('=1+2+3').run(), 1 + 2 + 3);
+      assert.deepEqual(new Parser('123').run(), EW.makeClearValue('123'));
+      assert.deepEqual(new Parser('abd123efg').run(), EW.makeClearValue('abd123efg'));
+      assert.deepEqual(new Parser('=1+2+3').run(), EW.sum(EW.sum(1, 2), 3));
       assert.deepEqual(new Parser('=A1').run(), EW.makeAddress(0, 0));
     });
     it('should parse invalid values', () => {
@@ -24,40 +24,40 @@ describe('Parser', () => {
   });
   describe('#parseBlock()', () => {
     it('should parse not function', () => {
-      assert.strictEqual(new Parser('123').run(), '123');
-      assert.strictEqual(new Parser('abd123efg').run(), 'abd123efg');
+      assert.deepEqual(new Parser('123').run(), EW.makeClearValue('123'));
+      assert.deepEqual(new Parser('abd123efg').run(), EW.makeClearValue('abd123efg'));
     });
     it('should parse function', () => {
-      assert.strictEqual(new Parser('=1+2+3').run(), 1 + 2 + 3);
-      assert.strictEqual(new Parser('=(1+5^(1/2))/2').run(), (1 + Math.sqrt(5)) / 2);
-      assert.strictEqual(new Parser('=5*(2+2)').run(), 5 * (2 + 2));
-      assert.deepEqual(new Parser('=A1').run(), EW.makeAddress(0, 1));
+      assert.deepEqual(new Parser('=1+2+3').run(), EW.sum(EW.sum(1, 2), 3));
+      assert.deepEqual(new Parser('=(1+5^(1/2))/2').run(), EW.del(EW.sum(1, EW.exp(5, EW.del(1, 2))), 2));
+      assert.deepEqual(new Parser('=5*(2+2)').run(), EW.mul(5, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=A1').run(), EW.makeAddress(0, 0));
     });
   });
   describe('#parseEquals()', () => {
     it('should parse valid logic functions (1)', () => {
-      assert.strictEqual(new Parser('=5==2+2').run(), false);
-      assert.strictEqual(new Parser('=5>=2+2').run(), true);
-      assert.strictEqual(new Parser('=5>2+2').run(), true);
-      assert.strictEqual(new Parser('=5<=2+2').run(), false);
-      assert.strictEqual(new Parser('=5<2+2').run(), false);
-      assert.strictEqual(new Parser('=5!=2+2').run(), true);
+      assert.deepEqual(new Parser('=5==2+2').run(), EW.equal(5, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=5>=2+2').run(), EW.greaterEqual(5, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=5>2+2').run(), EW.greater(5, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=5<=2+2').run(), EW.lessEqual(5, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=5<2+2').run(), EW.less(5, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=5!=2+2').run(), EW.notEqual(5, EW.sum(2, 2)));
     });
     it('should parse valid logic functions (2)', () => {
-      assert.strictEqual(new Parser('=3==2+2').run(), false);
-      assert.strictEqual(new Parser('=3>=2+2').run(), false);
-      assert.strictEqual(new Parser('=3>2+2').run(), false);
-      assert.strictEqual(new Parser('=3<=2+2').run(), true);
-      assert.strictEqual(new Parser('=3<2+2').run(), true);
-      assert.strictEqual(new Parser('=3!=2+2').run(), true);
+      assert.deepEqual(new Parser('=3==2+2').run(), EW.equal(3, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=3>=2+2').run(), EW.greaterEqual(3, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=3>2+2').run(), EW.greater(3, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=3<=2+2').run(), EW.lessEqual(3, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=3<2+2').run(), EW.less(3, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=3!=2+2').run(), EW.notEqual(3, EW.sum(2, 2)));
     });
     it('should parse valid logic functions (3)', () => {
-      assert.strictEqual(new Parser('=4==2+2').run(), true);
-      assert.strictEqual(new Parser('=4>=2+2').run(), true);
-      assert.strictEqual(new Parser('=4>2+2').run(), false);
-      assert.strictEqual(new Parser('=4<=2+2').run(), true);
-      assert.strictEqual(new Parser('=4<2+2').run(), false);
-      assert.strictEqual(new Parser('=4!=2+2').run(), false);
+      assert.deepEqual(new Parser('=4==2+2').run(), EW.equal(4, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=4>=2+2').run(), EW.greaterEqual(4, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=4>2+2').run(), EW.greater(4, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=4<=2+2').run(), EW.lessEqual(4, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=4<2+2').run(), EW.less(4, EW.sum(2, 2)));
+      assert.deepEqual(new Parser('=4!=2+2').run(), EW.notEqual(4, EW.sum(2, 2)));
     });
     it('should parse invalid logic functions', () => {
       assert.throws(() => {
@@ -79,45 +79,45 @@ describe('Parser', () => {
   });
   describe('#parseExpr()', () => {
     it('should parse valid summarizing functions', () => {
-      assert.strictEqual(new Parser('=2+2').run(), 4);
-      assert.strictEqual(new Parser('=13+27').run(), 40);
-      assert.strictEqual(new Parser('=436542641+23152654').run(), 436542641 + 23152654);
+      assert.deepEqual(new Parser('=2+2').run(), EW.sum(2, 2));
+      assert.deepEqual(new Parser('=13+27').run(), EW.sum(13, 27));
+      assert.deepEqual(new Parser('=436542641+23152654').run(), EW.sum(436542641, 23152654));
     });
     it('should parse valid subtractive functions', () => {
-      assert.strictEqual(new Parser('=2-2').run(), 0);
-      assert.strictEqual(new Parser('=13-27').run(), -14);
-      assert.strictEqual(new Parser('=436542641-23152654').run(), 436542641 - 23152654);
+      assert.deepEqual(new Parser('=2-2').run(), EW.sub(2, 2));
+      assert.deepEqual(new Parser('=13-27').run(), EW.sub(13, 27));
+      assert.deepEqual(new Parser('=436542641-23152654').run(), EW.sub(436542641, 23152654));
     });
   });
   describe('#parseTerm()', () => {
     it('should parse valid multiplying functions', () => {
-      assert.strictEqual(new Parser('=2*2').run(), 4);
-      assert.strictEqual(new Parser('=13*27').run(), 13 * 27);
-      assert.strictEqual(new Parser('=436542*23152').run(), 436542 * 23152);
+      assert.deepEqual(new Parser('=2*2').run(), EW.mul(2, 2));
+      assert.deepEqual(new Parser('=13*27').run(), EW.mul(13, 27));
+      assert.deepEqual(new Parser('=436542641*23152654').run(), EW.mul(436542641, 23152654));
     });
     it('should parse valid dividing functions', () => {
-      assert.strictEqual(new Parser('=2/2').run(), 2 / 2);
-      assert.strictEqual(new Parser('=13/27').run(), 13 / 27);
-      assert.strictEqual(new Parser('=436542641/23152654').run(), 436542641 / 23152654);
+      assert.deepEqual(new Parser('=2/2').run(), EW.del(2, 2));
+      assert.deepEqual(new Parser('=13/27').run(), EW.del(13, 27));
+      assert.deepEqual(new Parser('=436542641/23152654').run(), EW.del(436542641, 23152654));
     });
     it('should parse valid residual  functions', () => {
-      assert.strictEqual(new Parser('=2%2').run(), 2 % 2);
-      assert.strictEqual(new Parser('=13%27').run(), 13 % 27);
-      assert.strictEqual(new Parser('=436542641%23152654').run(), 436542641 % 23152654);
+      assert.deepEqual(new Parser('=2%2').run(), EW.rem(2, 2));
+      assert.deepEqual(new Parser('=13%27').run(), EW.rem(13, 27));
+      assert.deepEqual(new Parser('=436542641%23152654').run(), EW.rem(436542641, 23152654));
     });
   });
   describe('#parseFactor()', () => {
     it('should parse valid power functions', () => {
-      assert.strictEqual(new Parser('=2^2').run(), 4);
-      assert.strictEqual(new Parser('=1^1000').run(), 1);
-      assert.strictEqual(new Parser('=0^1000').run(), 0);
-      assert.strictEqual(new Parser('=2^10').run(), 1024);
+      assert.deepEqual(new Parser('=2^2').run(), EW.exp(2, 2));
+      assert.deepEqual(new Parser('=1^1000').run(), EW.exp(1, 1000));
+      assert.deepEqual(new Parser('=0^1000').run(), EW.exp(0, 1000));
+      assert.deepEqual(new Parser('=2^10').run(), EW.exp(2, 10));
     });
   });
   describe('#parsePower() && #parseArgs()', () => {
     it('should parse valid bracket sequence', () => {
-      assert.strictEqual(new Parser('=(((1+1)+1)+1)+1').run(), 5);
-      assert.strictEqual(new Parser('=((((2))+(((2)))))').run(), 4);
+      assert.deepEqual(new Parser('=(((1+1)+1)+1)+1').run(), EW.sum(EW.sum(EW.sum(EW.sum(1, 1), 1), 1), 1));
+      assert.deepEqual(new Parser('=((((2))+(((2)))))').run(), EW.sum(2, 2));
     });
     it('should parse invalid bracket sequence', () => {
       assert.throws(() => {
@@ -128,15 +128,15 @@ describe('Parser', () => {
       });
     });
     it('should parse valid functions with unary minus', () => {
-      assert.strictEqual(new Parser('=-1').run(), -1);
-      assert.strictEqual(new Parser('=(-2)^3').run(), -8);
-      assert.strictEqual(new Parser('=5*(-5)').run(), -25);
+      assert.deepEqual(new Parser('=-1').run(), EW.unMinus(1));
+      assert.deepEqual(new Parser('=(-2)^3').run(), EW.exp(EW.unMinus(2), 3));
+      assert.deepEqual(new Parser('=5*(-5)').run(), EW.mul(5, EW.unMinus(5)));
     });
     it('should parse validity function name', () => {
-      assert.deepEqual(new Parser('=СУММА(1;2)').run(), EW.makeFunc('СУММА', [1, 2]));
-      assert.deepEqual(new Parser('=КОРЕНЬ(5)').run(), EW.makeFunc('КОРЕНЬ', [5]));
-      assert.deepEqual(new Parser('=ЛЮБЛЮПИСАТЬТЕСТЫ()').run(), EW.makeFunc('ЛЮБЛЮПИСАТЬТЕСТЫ', []));
-      assert.deepEqual(new Parser('=ИУТОП()').run(), EW.makeFunc('ИУТОП', []));
+      assert.deepEqual(new Parser('=СУММА(1;2)').run(), EW.makeFuncWithArgs('СУММА', 1, 2));
+      assert.deepEqual(new Parser('=КОРЕНЬ(5)').run(), EW.makeFuncWithArgs('КОРЕНЬ', 5));
+      assert.deepEqual(new Parser('=ЛЮБЛЮПИСАТЬТЕСТЫ()').run(), EW.makeFunc('ЛЮБЛЮПИСАТЬТЕСТЫ'));
+      assert.deepEqual(new Parser('=ИУТОП()').run(), EW.makeFunc('ИУТОП'));
     });
     it('should parse invalidity function name', () => {
       assert.throws(() => {
@@ -158,9 +158,9 @@ describe('Parser', () => {
   });
   describe('#parseStr()', () => {
     it('should parse valid strings', () => {
-      assert.strictEqual(new Parser('="2^2"').run(), '2^2');
-      assert.strictEqual(new Parser('="a"+"b"').run(), 'ab');
-      assert.strictEqual(new Parser('="A"+1+":B"+2').run(), 'A1:B2');
+      assert.deepEqual(new Parser('="2^2"').run(), '2^2');
+      assert.deepEqual(new Parser('="a"+"b"').run(), EW.sum('a', 'b'));
+      assert.deepEqual(new Parser('="A"+1+":B"+2').run(), EW.sum(EW.sum(EW.sum('A', 1), ':B'), 2));
     });
     it('should parse invalid strings', () => {
       assert.throws(() => {
