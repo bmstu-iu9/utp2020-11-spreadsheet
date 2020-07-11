@@ -48,50 +48,36 @@ export default class Parser {
 
   // <_Equals> ::= EqOp <Expr> | .
   parseEqualsHelper(res) { // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
-    const cEqual = 1;
-    const cGreaterEqual = 2;
-    const cGreater = 3;
-    const cLessEqual = 4;
-    const cLess = 5;
-    const cNotEqual = 6;
     let op = 0;
     if (this.checkGet('!')) {
       if (!this.checkGet('=')) {
         Parser.makeParserError('parseEqualsHelper (only !)');
       } else {
-        op = cNotEqual;
+        op = (x, y) => EW.notEqual(x, y);
       }
     } else if (this.checkGet('=')) {
       if (!this.checkGet('=')) {
         Parser.makeParserError('parseEqualsHelper (only =)');
       } else {
-        op = cEqual;
+        op = (x, y) => EW.equal(x, y);
       }
     } else if (this.checkGet('>')) {
       if (this.checkGet('=')) {
-        op = cGreaterEqual;
+        op = (x, y) => EW.greaterEqual(x, y);
       } else {
-        op = cGreater;
+        op = (x, y) => EW.greater(x, y);
       }
     } else if (this.checkGet('<')) {
       if (this.checkGet('=')) {
-        op = cLessEqual;
+        op = (x, y) => EW.lessEqual(x, y);
       } else {
-        op = cLess;
+        op = (x, y) => EW.less(x, y);
       }
     } else {
       return res;
     }
     const res2 = this.parseExpr();
-    switch (op) {
-      case cEqual: return EW.equal(res, res2);
-      case cGreaterEqual: return EW.greaterEqual(res, res2);
-      case cGreater: return EW.greater(res, res2);
-      case cLessEqual: return EW.lessEqual(res, res2);
-      case cLess: return EW.less(res, res2);
-      default:
-      case cNotEqual: return EW.notEqual(res, res2);
-    }
+    return op(res, res2);
   }
 
   // <Expr> ::= <Term><_Expr>.
