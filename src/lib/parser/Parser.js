@@ -32,13 +32,13 @@ export default class Parser {
     return res;
   }
 
-  // <Block> ::= =<Equals> | this .
+  // <Block> ::= =<Equals> | clearValue .
   parseBlock() {
     if (this.checkGet('=')) {
       return this.parseEquals();
     }
     this.pos = this.inputString.length;
-    return this.inputString;
+    return EW.makeClearValue(this.inputString);
   }
 
   // <Equals> ::= <Exrp><_Equals>
@@ -85,11 +85,11 @@ export default class Parser {
     const res2 = this.parseExpr();
     switch (op) {
       case cEqual: return EW.equal(res, res2);
-      case cGreaterEqual: return !EW.more(res2, res);
-      case cGreater: return EW.more(res, res2);
-      case cLessEqual: return !EW.more(res, res2);
-      case cLess: return EW.more(res2, res);
-      /* case cNotEqual: */ default: return !EW.equal(res, res2);
+      case cGreaterEqual: return EW.greaterEqual(res, res2);
+      case cGreater: return EW.greater(res, res2);
+      case cLessEqual: return EW.lessEqual(res, res2);
+      case cLess: return EW.less(res, res2);
+      /* case cNotEqual: */ default: return EW.notEqual(res, res2);
     }
   }
 
@@ -141,7 +141,7 @@ export default class Parser {
     return null;
   }
 
-  // <Power> ::= value | (<Expr>) | unaryMinus Power | NameFunc (<Args> .
+  // <Power> ::= value | (<Expr>) | unaryMinus Power | nameFunc (<Args> .
   parsePower() {
     if (this.checkGet('(')) {
       const res = this.parseExpr();
@@ -152,32 +152,30 @@ export default class Parser {
     } if (this.checkGet('-')) {
       return EW.unMinus(this.parsePower());
     } if (this.hasNext() && this.get() >= 'А' && this.get() <= 'Я') {
-      const nameFun = this.parseNameFunc();
+      const func = EW.makeFunc(this.parseNameFunc());
       if (!this.checkGet('(')) {
         Parser.makeParserError('parsePower (no argument)');
       }
-      const args = this.parseArgs();
-      return EW.makeFunc(nameFun, args);
+      return this.parseArgs(func);
     } return this.parseValue();
   }
 
   // <Args> ::= <Expr><_Args> | ) .
-  parseArgs() {
-    const arr = [];
+  parseArgs(func) {
     if (this.checkGet(')')) {
-      return arr;
+      return func;
     }
-    arr.push(this.parseExpr());
-    return this.parseArgsHelper(arr);
+    EW.addArgFunc(func, this.parseExpr());
+    return this.parseArgsHelper(func);
   }
 
   // <_Args> ::= ;<Expr><_Args> | ) .
-  parseArgsHelper(arr) {
+  parseArgsHelper(func) {
     if (this.checkGet(';')) {
-      arr.push(this.parseExpr());
-      return this.parseArgsHelper(arr);
+      EW.addArgFunc(func, this.parseExpr());
+      return this.parseArgsHelper(func);
     } if (this.checkGet(')')) {
-      return arr;
+      return func;
     }
     return Parser.makeParserError('parseArgsHelper');
   }
@@ -217,7 +215,7 @@ export default class Parser {
     return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
   }
 
-  // NameFunc: [А-Я]*
+  // nameFunc: [А-Я]*
   parseNameFunc() {
     return this.parseFromTo('А', 'Я', (res, c) => res + c, '');
   }
