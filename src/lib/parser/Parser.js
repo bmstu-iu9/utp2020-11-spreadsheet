@@ -1,19 +1,4 @@
-const sum = (a, b) => a + b;
-const sub = (a, b) => a - b;
-const mul = (a, b) => a * b;
-const del = (a, b) => a / b;
-const rem = (a, b) => a % b;
-const exp = (a, b) => (b == null ? a : a ** b);
-const unMinus = (a) => -a;
-
-const equal = (a, b) => a === b;
-const more = (a, b) => a > b;
-
-const makeFunc = (func, args) => [func, args];
-const makeInterval = (a1, a2) => [a1, a2];
-const makeAddress = (a) => a;
-
-// все команды написанные выше - условны, являются заглушками
+import EW from './ExpressionWrapper.js';
 
 const toInt = (a) => a.charCodeAt();
 
@@ -24,7 +9,7 @@ export default class Parser {
   }
 
   static makeParserError(str) {
-    throw new SyntaxError(`Parser syntax error in ${str}!`);
+    throw new SyntaxError(`Parser SyntaxError in "${str}"!`);
   }
 
   next() {
@@ -47,6 +32,7 @@ export default class Parser {
     return res;
   }
 
+  // <Block> ::= =<Equals> | value.
   parseBlock() {
     if (this.checkGet('=')) {
       return this.parseEquals();
@@ -55,10 +41,12 @@ export default class Parser {
     return this.inputString;
   }
 
+  // <Equals> ::= <Exrp><_Equals>
   parseEquals() {
     return this.parseEqualsHelper(this.parseExpr());
   }
 
+  // <_Equals> ::= EqOp <Expr> | .
   parseEqualsHelper(res) { // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
     let op = 0;
     if (this.checkGet('!')) {
@@ -90,57 +78,64 @@ export default class Parser {
     }
     const res2 = this.parseExpr();
     switch (op) {
-      case 1: return equal(res, res2);
-      case 2: return !more(res2, res);
-      case 3: return more(res, res2);
-      case 4: return !more(res, res2);
-      case 5: return more(res2, res);
-      default: return !equal(res, res2);
+      case 1: return EW.equal(res, res2);
+      case 2: return !EW.more(res2, res);
+      case 3: return EW.more(res, res2);
+      case 4: return !EW.more(res, res2);
+      case 5: return EW.more(res2, res);
+      default: return !EW.equal(res, res2);
     }
   }
 
+  // <Expr> ::= <Term><_Expr>.
   parseExpr() {
     return this.parseExprHelper(this.parseTerm());
   }
 
+  // <_Expr> ::= AddOp <Term><_Expr> | .
   parseExprHelper(res) {
     if (this.checkGet('-')) {
-      return this.parseExprHelper(sub(res, this.parseTerm()));
+      return this.parseExprHelper(EW.sub(res, this.parseTerm()));
     }
     if (this.checkGet('+')) {
-      return this.parseExprHelper(sum(res, this.parseTerm()));
+      return this.parseExprHelper(EW.sum(res, this.parseTerm()));
     }
     return res;
   }
 
+  // <Term> ::= <Factor> <_Term> .
   parseTerm() {
     return this.parseTermHelper(this.parseFactor());
   }
 
+  // <_Term> ::= MulOp <Factor> <_Term> | .
   parseTermHelper(res) {
     if (this.checkGet('*')) {
-      return this.parseTermHelper(mul(res, this.parseFactor()));
+      return this.parseTermHelper(EW.mul(res, this.parseFactor()));
     }
     if (this.checkGet('/')) {
-      return this.parseTermHelper(del(res, this.parseFactor()));
+      return this.parseTermHelper(EW.del(res, this.parseFactor()));
     }
     if (this.checkGet('%')) {
-      return this.parseTermHelper(rem(res, this.parseFactor()));
+      return this.parseTermHelper(EW.rem(res, this.parseFactor()));
     }
     return res;
   }
 
+  // <Factor> ::= <Power> <_Factor> .
   parseFactor() {
-    return exp(this.parsePower(), this.parseFactorHelper());
+    return EW.exp(this.parsePower(), this.parseFactorHelper());
   }
 
+  // <_Factor> ::= PowOp <Power> <_Factor> | .
   parseFactorHelper() {
     if (this.checkGet('^')) {
-      return exp(this.parsePower(), this.parseFactorHelper());
+      return EW.exp(this.parsePower(), this.parseFactorHelper());
     }
     return null;
   }
 
+  // <Power> ::= value | (<Expr>) | unaryMinus Power | NameFunc (<Args> .
   parsePower() {
     if (this.checkGet('(')) {
       const res = this.parseExpr();
@@ -149,17 +144,18 @@ export default class Parser {
       }
       return res;
     } if (this.checkGet('-')) {
-      return unMinus(this.parsePower());
+      return EW.unMinus(this.parsePower());
     } if (this.hasNext() && this.get() >= 'А' && this.get() <= 'Я') {
       const nameFun = this.parseNameFunc();
       if (!this.checkGet('(')) {
         Parser.makeParserError('parsePower (no argument)');
       }
       const args = this.parseArgs();
-      return makeFunc(nameFun, args);
+      return EW.makeFunc(nameFun, args);
     } return this.parseValue();
   }
 
+  // <Args> ::= <Expr><_Args> | ) .
   parseArgs() {
     const arr = [];
     if (this.checkGet(')')) {
@@ -169,6 +165,7 @@ export default class Parser {
     return this.parseArgsHelper(arr);
   }
 
+  // <_Args> ::= ;<Expr><_Args> | ) .
   parseArgsHelper(arr) {
     if (this.checkGet(';')) {
       arr.push(this.parseExpr());
@@ -179,16 +176,18 @@ export default class Parser {
     return Parser.makeParserError('parseArgsHelper');
   }
 
+  // value: string | number | address | interval
+  // interval: address:address
   parseValue() {
     if (this.hasNext() && (this.get() === '"')) {
       return this.parseStr();
     } if (this.hasNext() && this.get() >= '0' && this.get() <= '9') {
       return this.parseNum();
     } if (this.hasNext() && this.get() >= 'A' && this.get() <= 'Z') {
-      const res = makeAddress(this.parseAddress());
+      const res = this.parseAddress();
       if (this.checkGet(':')) {
-        const res2 = makeAddress(this.parseAddress());
-        return makeInterval(res, res2);
+        const res2 = this.parseAddress();
+        return EW.makeInterval(res, res2);
       }
       return res;
     }
@@ -207,22 +206,26 @@ export default class Parser {
     return res;
   }
 
+  // number: [0-9]*
   parseNum() {
     return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
   }
 
+  // NameFunc: [А-Я]*
   parseNameFunc() {
     return this.parseFromTo('А', 'Я', (res, c) => res + c, '');
   }
 
+  // address: ($)[A-Z]*($)[0-9]*
   parseAddress() {
     this.checkGet('$');
     const ind1 = this.parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'), '');
     this.checkGet('$');
-    const ind2 = this.parseNum();
-    return [ind1, ind2];
+    const ind2 = this.parseNum() - 1;
+    return EW.makeAddress(ind1, ind2);
   }
 
+  // string: "..."
   parseStr() {
     if (!this.checkGet('"')) {
       Parser.makeParserError('parseStr');
