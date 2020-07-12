@@ -1,14 +1,22 @@
 export default class ExpressionWrapper {
-  static constValue() {
-    return 'V';
+  static makeInterval(a1, a2) {
+    return ['Interval', a1, a2];
   }
 
-  static constAddress() {
-    return 'A';
+  static makeAddress(a1, a2) {
+    return ['Address', a1 + a2];
   }
 
-  static constInterval() {
-    return 'I';
+  static makeClearValue(a) {
+    return ['Value', a];
+  }
+
+  static makeNumber(a) {
+    return ['Number', a];
+  }
+
+  static makeString(a) {
+    return ['String', a];
   }
 
   static sum(a, b) {
@@ -74,17 +82,5 @@ export default class ExpressionWrapper {
   static addArgFunc(func, arg) {
     func.push(arg);
     return func;
-  }
-
-  static makeInterval(a1, a2) {
-    return [ExpressionWrapper.constInterval(), a1, a2];
-  }
-
-  static makeAddress(a1, a2) {
-    return [ExpressionWrapper.constAddress(), a1, a2];
-  }
-
-  static makeClearValue(a) {
-    return [ExpressionWrapper.constValue(), a];
   }
 }

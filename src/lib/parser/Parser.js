@@ -173,7 +173,7 @@ export default class Parser {
     if (this.hasNext() && (this.get() === '"')) {
       return this.parseStr();
     } if (this.hasNext() && this.get() >= '0' && this.get() <= '9') {
-      return this.parseNum();
+      return EW.makeNumber(this.parseInt());
     } if (this.hasNext() && this.get() >= 'A' && this.get() <= 'Z') {
       const res = this.parseAddress();
       if (this.checkGet(':')) {
@@ -198,7 +198,7 @@ export default class Parser {
   }
 
   // number: [0-9]*
-  parseNum() {
+  parseInt() {
     return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
   }
 
@@ -210,9 +210,9 @@ export default class Parser {
   // address: ($)[A-Z]*($)[0-9]*
   parseAddress() {
     this.checkGet('$');
-    const ind1 = this.parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'), '');
+    const ind1 = this.parseFromTo('A', 'Z', (res, c) => res + c, '');
     this.checkGet('$');
-    const ind2 = this.parseNum() - 1;
+    const ind2 = this.parseInt();
     return EW.makeAddress(ind1, ind2);
   }
 
