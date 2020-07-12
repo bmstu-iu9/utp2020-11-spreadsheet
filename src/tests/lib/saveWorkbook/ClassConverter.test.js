@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+import fs from 'fs';
 import mock from 'mock-fs';
 import schema from 'jsonschema';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
@@ -12,74 +13,11 @@ import {
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
 const userStandartName = 'alexis';
-const tableSchema = {
-  $schema: 'https://json-schema.org/draft/2019-09/schema',
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    name: {
-      type: 'string',
-    },
-    additionalProperties: false,
-    sheets: {
-      type: 'array',
-      items: {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          name: {
-            type: 'string',
-          },
-          cells: {
-            type: 'object',
-            patternProperties: {
-              '^[A-Z]+[1-9][0-9]*$': {
-                type: 'object',
-                additionalProperties: false,
-                properties: {
-                  color: {
-                    type: 'string',
-                    pattern: '^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$',
-                  },
-                  type: {
-                    oneOf: [
-                      {
-                        pattern: '^boolean$',
-                      },
-                      {
-                        pattern: '^number$',
-                      },
-                      {
-                        pattern: '^string$',
-                      },
-                      {
-                        pattern: '^formula$',
-                      },
-                    ],
-                  },
-                  value: {
-                    type: [
-                      'number',
-                      'boolean',
-                      'string',
-                    ],
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  required: [
-    'sheets',
-  ],
-};
+const tableSchema = JSON.parse(fs.readFileSync('./resources/tableSchema.json'));
 
 describe('ClassConverter', () => {
   describe('#convertToJson()', () => {
-    it('should create a valid jason file', () => {
+    it('should create a valid json file', () => {
       const cells = new Map();
       cells.set('A1', new Cell(valueTypes.number, 10));
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
@@ -115,6 +53,20 @@ describe('ClassConverter', () => {
       });
       assert.throws(() => {
         ClassConverter.saveJson(userStandartName, workbook, '~/src');
+      });
+      mock.restore();
+    });
+    it('should throw an exeption for creating file without permission', () => {
+      const spreadsheets = [new Spreadsheet(spreadsheetStandardName)];
+      const workbook = new Workbook(workbookStandardName, spreadsheets);
+      mock({
+        '~/workbooks': mock.directory({
+          mode: '0555',
+          items: {},
+        }),
+      });
+      assert.throws(() => {
+        ClassConverter.saveJson(userStandartName, workbook, '~/workbooks');
       });
       mock.restore();
     });
