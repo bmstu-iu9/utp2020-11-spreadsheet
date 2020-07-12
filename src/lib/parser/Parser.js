@@ -38,7 +38,7 @@ export default class Parser {
       return this.parseEquals();
     }
     this.pos = this.inputString.length;
-    return EW.makeClearValue(this.inputString);
+    return EW.makeClearValue(this.inputString); // may be need change
   }
 
   // <Equals> ::= <Exrp><_Equals>
@@ -107,7 +107,7 @@ export default class Parser {
       return this.parseTermHelper(EW.mul(res, this.parseFactor()));
     }
     if (this.checkGet('/')) {
-      return this.parseTermHelper(EW.del(res, this.parseFactor()));
+      return this.parseTermHelper(EW.div(res, this.parseFactor()));
     }
     if (this.checkGet('%')) {
       return this.parseTermHelper(EW.rem(res, this.parseFactor()));
@@ -226,7 +226,7 @@ export default class Parser {
       res += this.get();
       this.next();
     }
-    return res;
+    return EW.makeString(res);
   }
 
   run() {

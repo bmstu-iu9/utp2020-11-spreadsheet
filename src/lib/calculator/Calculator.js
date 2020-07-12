@@ -7,7 +7,7 @@ export default class Calculator {
   }
 
   calculate(cell, page) {
-    const tree = new Parser(this.book.spreadsheets[page].getCell(cell)).run();
+    const tree = new Parser(this.book.spreadsheets[page].getCell(cell).value).run();
     return new TreeRunner(this.book, page, tree).run();
   }
 }

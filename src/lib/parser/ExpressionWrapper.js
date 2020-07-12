@@ -12,11 +12,11 @@ export default class ExpressionWrapper {
   }
 
   static makeNumber(a) {
-    return ['Number', a];
+    return ['number', a];
   }
 
   static makeString(a) {
-    return ['String', a];
+    return ['string', a];
   }
 
   static sum(a, b) {
@@ -31,7 +31,7 @@ export default class ExpressionWrapper {
     return ['*', a, b];
   }
 
-  static del(a, b) {
+  static div(a, b) {
     return ['/', a, b];
   }
 
@@ -44,7 +44,7 @@ export default class ExpressionWrapper {
   }
 
   static unMinus(a) {
-    return ['-', a];
+    return ['unMinus', a];
   }
 
   static equal(a, b) {

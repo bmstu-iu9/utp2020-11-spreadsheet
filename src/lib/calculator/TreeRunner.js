@@ -1,7 +1,15 @@
 import NumberType from '../typevalue/NumberType.js';
+import StringType from '../typevalue/StringType.js';
 
 const libFunc = new Map([
-  ['integer', (treeRunner) => new NumberType(treeRunner.tree[1])],
+  ['number', (treeRunner) => new NumberType(treeRunner.tree[1])],
+
+  ['string', (treeRunner) => new StringType(treeRunner.tree[1])],
+
+  ['Value', (treeRunner) => {
+    const ans = Number(treeRunner.tree[1]);
+    return { value: Number.isNaN(ans) ? treeRunner.tree[1] : ans };
+  }],
 
   ['+', (treeRunner) => {
     const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
@@ -24,7 +32,24 @@ const libFunc = new Map([
   ['/', (treeRunner) => {
     const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
     const res2 = treeRunner.makeTreeRunner(treeRunner.tree[2]).run();
-    return res1.mul(res2);
+    return res1.div(res2);
+  }],
+
+  ['%', (treeRunner) => {
+    const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
+    const res2 = treeRunner.makeTreeRunner(treeRunner.tree[2]).run();
+    return res1.rem(res2);
+  }],
+
+  ['^', (treeRunner) => {
+    const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
+    const res2 = treeRunner.makeTreeRunner(treeRunner.tree[2]).run();
+    return res1.exp(res2);
+  }],
+
+  ['unMinus', (treeRunner) => {
+    const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
+    return res1.unMinus();
   }],
 ]);
 
@@ -40,9 +65,6 @@ export default class TreeRunner {
   }
 
   run() {
-    if (!Array.isArray(this.tree)) {
-      return this.tree;
-    }
     if (!libFunc.has(this.tree[0])) {
       throw new TypeError(`TreeRunner: undefind function ${this.tree[0]}`);
     }

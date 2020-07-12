@@ -1,55 +1,56 @@
-import DefaultType from './DefaultType.js';
-import StringType from './StringType.js';
+export default class NumberType {
+  constructor(value) {
+    this.value = value;
+  }
 
-export default class NumberType extends DefaultType {
-  static getType() {
-    return 'number';
+  static makeTypeError(str) {
+    throw new TypeError(`NumberType: imposible type for ${str}() with not NumberType`);
   }
 
   sum(valueType) {
-    switch (valueType.getType()) {
-      case 'number': return new NumberType(this.value + valueType.value);
-      case 'string': return new StringType(this.value + valueType.value);
-      default: throw new TypeError(`NumberType: imposible type for sum() with ${valueType.getType()}`);
+    if (valueType instanceof NumberType) {
+      return new NumberType(this.value + valueType.value);
     }
+    throw NumberType.makeTypeError('sum');
   }
 
   sub(valueType) {
-    switch (valueType.getType()) {
-      case 'number': return new NumberType(this.value - valueType.value);
-      default: throw new TypeError(`NumberType: imposible type for sub() with ${valueType.getType()}`);
+    if (valueType instanceof NumberType) {
+      return new NumberType(this.value - valueType.value);
     }
+    throw NumberType.makeTypeError('sub');
   }
 
   mul(valueType) {
-    switch (valueType.getType()) {
-      case 'number': return new NumberType(this.value * valueType.value);
-      default: throw new TypeError(`NumberType: imposible type for mul() with ${valueType.getType()}`);
+    if (valueType instanceof NumberType) {
+      return new NumberType(this.value * valueType.value);
     }
+    throw NumberType.makeTypeError('mul');
   }
 
-  del(valueType) {
-    switch (valueType.getType()) {
-      case 'number': return new NumberType(this.value / valueType.value);
-      default: throw new TypeError(`NumberType: imposible type for del() with ${valueType.getType()}`);
+  div(valueType) {
+    if (valueType instanceof NumberType) {
+      return new NumberType(this.value / valueType.value);
     }
+    throw NumberType.makeTypeError('div');
   }
 
   rem(valueType) {
-    switch (valueType.getType()) {
-      case 'number': if (this.value % valueType.value === 0) {
-        return new NumberType(this.value % valueType.value);
-      }
-        throw new TypeError('NumberType: imposible type for rem() with float');
-      default: throw new TypeError(`NumberType: imposible type for rem() with ${valueType.getType()}`);
+    if (valueType instanceof NumberType
+      && Number.isInteger(this.value) && Number.isInteger(valueType.value)) {
+      return new NumberType(this.value % valueType.value);
     }
+    throw NumberType.makeTypeError('rem');
   }
 
   exp(valueType) {
-    return (b == null ? a : ['^', a, b]);
+    if (valueType instanceof NumberType) {
+      return new NumberType(this.value ** valueType.value);
+    }
+    throw NumberType.makeTypeError('exp');
   }
 
-  unMinus(a) {
-    return ['-', a];
+  unMinus() {
+    return new NumberType(-this.value);
   }
 }

@@ -17,7 +17,7 @@ export class Cell {
   }
 
   getProcessedValue() {
-    return this.value; // TODO Реализовать обработку формул
+    return this.value;
   }
 
   setValue(type, value = null) {

@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
+import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
@@ -73,6 +74,24 @@ describe('Workbook', () => {
       assert.throws(() => {
         workbook.setSpreadsheets([{}, {}]);
       });
+    });
+  });
+  describe('#getProcessedValue()', () => {
+    it('should calculate formula from cell', () => {
+      const cells = new Map();
+      cells.set('A1', new Cell(valueTypes.formula, '=(1+5^(1/2))/2'));
+      const spreadsheet = new Spreadsheet('table', cells);
+      const wb = new Workbook('book', [spreadsheet]);
+
+      assert.deepEqual(wb.getProcessedValue('A1'), (1 + Math.sqrt(5)) / 2);
+    });
+    it('should take value from cell', () => {
+      const cells = new Map();
+      cells.set('A1', new Cell(valueTypes.number, 23456));
+      const spreadsheet = new Spreadsheet('table', cells);
+      const wb = new Workbook('book', [spreadsheet]);
+
+      assert.deepEqual(wb.getProcessedValue('A1'), 23456);
     });
   });
 });
