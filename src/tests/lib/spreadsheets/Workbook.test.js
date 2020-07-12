@@ -43,7 +43,7 @@ describe('Workbook', () => {
     it('should return false for an empty name', () => {
       assert.strictEqual(Workbook.isNameCorrect(''), false);
     });
-    it('should return false for a name " \n "', () => {
+    it('should return false for a name " \\n "', () => {
       assert.strictEqual(Workbook.isNameCorrect(' \n '), false);
     });
   });
