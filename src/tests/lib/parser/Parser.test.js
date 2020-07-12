@@ -30,7 +30,8 @@ describe('Parser', () => {
     it('should parse function', () => {
       assert.deepEqual(new Parser('=1+2+3').run(), EW.sum(EW.sum(EW.makeNumber(1), EW.makeNumber(2)), EW.makeNumber(3)));
       assert.deepEqual(new Parser('=(1+5^(1/2))/2').run(),
-        EW.div(EW.sum(EW.makeNumber(1), EW.exp(EW.makeNumber(5), EW.div(EW.makeNumber(1), EW.makeNumber(2)))), EW.makeNumber(2)));
+        EW.div(EW.sum(EW.makeNumber(1), EW.exp(EW.makeNumber(5),
+          EW.div(EW.makeNumber(1), EW.makeNumber(2)))), EW.makeNumber(2)));
       assert.deepEqual(new Parser('=5*(2+2)').run(), EW.mul(EW.makeNumber(5), EW.sum(EW.makeNumber(2), EW.makeNumber(2))));
       assert.deepEqual(new Parser('=A1').run(), EW.makeAddress('A', 1));
     });
@@ -118,7 +119,8 @@ describe('Parser', () => {
   describe('#parsePower() && #parseArgs()', () => {
     it('should parse valid bracket sequence', () => {
       assert.deepEqual(new Parser('=(((1+1)+1)+1)+1').run(),
-        EW.sum(EW.sum(EW.sum(EW.sum(EW.makeNumber(1), EW.makeNumber(1)), EW.makeNumber(1)), EW.makeNumber(1)), EW.makeNumber(1)));
+        EW.sum(EW.sum(EW.sum(EW.sum(EW.makeNumber(1), EW.makeNumber(1)),
+          EW.makeNumber(1)), EW.makeNumber(1)), EW.makeNumber(1)));
       assert.deepEqual(new Parser('=((((2))+(((2)))))').run(), EW.sum(EW.makeNumber(2), EW.makeNumber(2)));
     });
     it('should parse invalid bracket sequence', () => {
