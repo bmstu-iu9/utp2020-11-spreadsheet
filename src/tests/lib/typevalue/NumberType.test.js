@@ -125,4 +125,70 @@ describe('NumberType', () => {
       assert.deepEqual(new NT(3).unMinus(), new NT(-3));
     });
   });
+  describe('#equal()', () => {
+    it('should calculate valid equal', () => {
+      assert.deepEqual(new NT(9999).equal(new NT(0)), false);
+      assert.deepEqual(new NT(123).equal(new NT(123)), true);
+    });
+    it('should calculate invalid equal', () => {
+      assert.throws(() => {
+        new NT(0).equal(new ST('5'));
+      });
+    });
+  });
+  describe('#greaterEqual()', () => {
+    it('should calculate valid greater or equal', () => {
+      assert.deepEqual(new NT(9999).greaterEqual(new NT(0)), true);
+      assert.deepEqual(new NT(123).greaterEqual(new NT(123)), true);
+    });
+    it('should calculate invalid greater or equal', () => {
+      assert.throws(() => {
+        new NT(0).greaterEqual(new ST('5'));
+      });
+    });
+  });
+  describe('#greater()', () => {
+    it('should calculate valid greater', () => {
+      assert.deepEqual(new NT(9999).greater(new NT(0)), true);
+      assert.deepEqual(new NT(123).greater(new NT(123)), false);
+    });
+    it('should calculate invalid greater', () => {
+      assert.throws(() => {
+        new NT(0).greater(new ST('5'));
+      });
+    });
+  });
+  describe('#lessEqual()', () => {
+    it('should calculate valid less or equal', () => {
+      assert.deepEqual(new NT(9999).lessEqual(new NT(0)), false);
+      assert.deepEqual(new NT(123).lessEqual(new NT(123)), true);
+    });
+    it('should calculate invalid less or equal', () => {
+      assert.throws(() => {
+        new NT(0).lessEqual(new ST('5'));
+      });
+    });
+  });
+  describe('#less()', () => {
+    it('should calculate valid less', () => {
+      assert.deepEqual(new NT(9999).less(new NT(0)), false);
+      assert.deepEqual(new NT(123).less(new NT(123)), false);
+    });
+    it('should calculate invalid less', () => {
+      assert.throws(() => {
+        new NT(0).less(new ST('5'));
+      });
+    });
+  });
+  describe('#notEqual()', () => {
+    it('should calculate valid not equal', () => {
+      assert.deepEqual(new NT(9999).notEqual(new NT(0)), true);
+      assert.deepEqual(new NT(123).notEqual(new NT(123)), false);
+    });
+    it('should calculate invalid not equal', () => {
+      assert.throws(() => {
+        new NT(0).notEqual(new ST('5'));
+      });
+    });
+  });
 });

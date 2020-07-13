@@ -9,7 +9,7 @@ export default class Parser {
   }
 
   static makeParserError(str) {
-    throw new SyntaxError(`Parser SyntaxError in "${str}"!`);
+    throw new SyntaxError(`Parser: error in "${str}"!`);
   }
 
   next() {
@@ -38,7 +38,7 @@ export default class Parser {
       return this.parseEquals();
     }
     this.pos = this.inputString.length;
-    return EW.makeClearValue(this.inputString); // may be need change
+    return EW.makeClearValue(this.inputString);
   }
 
   // <Equals> ::= <Exrp><_Equals>
@@ -47,7 +47,7 @@ export default class Parser {
   }
 
   // <_Equals> ::= EqOp <Expr> | .
-  parseEqualsHelper(res) { // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
+  parseEqualsHelper(res) {
     let op = 0;
     if (this.checkGet('!')) {
       if (!this.checkGet('=')) {
@@ -152,14 +152,14 @@ export default class Parser {
     if (this.checkGet(')')) {
       return func;
     }
-    EW.addArgFunc(func, this.parseExpr());
+    EW.addArgFunc(func, this.parseEquals());
     return this.parseArgsHelper(func);
   }
 
   // <_Args> ::= ;<Expr><_Args> | ) .
   parseArgsHelper(func) {
     if (this.checkGet(';')) {
-      EW.addArgFunc(func, this.parseExpr());
+      EW.addArgFunc(func, this.parseEquals());
       return this.parseArgsHelper(func);
     } if (this.checkGet(')')) {
       return func;

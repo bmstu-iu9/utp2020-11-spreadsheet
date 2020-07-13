@@ -53,4 +53,46 @@ export default class NumberType {
   unMinus() {
     return new NumberType(-this.value);
   }
+
+  equal(valueType) {
+    if (valueType instanceof NumberType) {
+      return (this.value === valueType.value);
+    }
+    throw NumberType.makeTypeError('equal');
+  }
+
+  greaterEqual(valueType) {
+    if (valueType instanceof NumberType) {
+      return (this.value >= valueType.value);
+    }
+    throw NumberType.makeTypeError('greaterEqual');
+  }
+
+  greater(valueType) {
+    if (valueType instanceof NumberType) {
+      return (this.value > valueType.value);
+    }
+    throw NumberType.makeTypeError('greater');
+  }
+
+  lessEqual(valueType) {
+    if (valueType instanceof NumberType) {
+      return (this.value <= valueType.value);
+    }
+    throw NumberType.makeTypeError('lessEqual');
+  }
+
+  less(valueType) {
+    if (valueType instanceof NumberType) {
+      return (this.value < valueType.value);
+    }
+    throw NumberType.makeTypeError('less');
+  }
+
+  notEqual(valueType) {
+    if (valueType instanceof NumberType) {
+      return (this.value !== valueType.value);
+    }
+    throw NumberType.makeTypeError('notEqual');
+  }
 }

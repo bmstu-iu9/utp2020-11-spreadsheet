@@ -28,4 +28,70 @@ describe('StringType', () => {
       });
     });
   });
+  describe('#equal()', () => {
+    it('should calculate valid equal', () => {
+      assert.deepEqual(new ST('love').equal(new ST('iu')), false);
+      assert.deepEqual(new ST('123').equal(new ST('123')), true);
+    });
+    it('should calculate invalid equal', () => {
+      assert.throws(() => {
+        new ST('123').equal(new NT(5));
+      });
+    });
+  });
+  describe('#greaterEqual()', () => {
+    it('should calculate valid greater or equal', () => {
+      assert.deepEqual(new ST('love').greaterEqual(new ST('iu')), true);
+      assert.deepEqual(new ST('123').greaterEqual(new ST('123')), true);
+    });
+    it('should calculate invalid greater or equal', () => {
+      assert.throws(() => {
+        new ST('123').greaterEqual(new NT(5));
+      });
+    });
+  });
+  describe('#greater()', () => {
+    it('should calculate valid greater', () => {
+      assert.deepEqual(new ST('love').greater(new ST('iu')), true);
+      assert.deepEqual(new ST('123').greater(new ST('123')), false);
+    });
+    it('should calculate invalid greater', () => {
+      assert.throws(() => {
+        new ST('123').greater(new NT(5));
+      });
+    });
+  });
+  describe('#lessEqual()', () => {
+    it('should calculate valid less or equal', () => {
+      assert.deepEqual(new ST('love').lessEqual(new ST('iu')), false);
+      assert.deepEqual(new ST('123').lessEqual(new ST('123')), true);
+    });
+    it('should calculate invalid less or equal', () => {
+      assert.throws(() => {
+        new ST('123').lessEqual(new NT(5));
+      });
+    });
+  });
+  describe('#less()', () => {
+    it('should calculate valid less', () => {
+      assert.deepEqual(new ST('love').less(new ST('iu')), false);
+      assert.deepEqual(new ST('123').less(new ST('123')), false);
+    });
+    it('should calculate invalid less', () => {
+      assert.throws(() => {
+        new ST('123').less(new NT(5));
+      });
+    });
+  });
+  describe('#notEqual()', () => {
+    it('should calculate valid not equal', () => {
+      assert.deepEqual(new ST('love').notEqual(new ST('iu')), true);
+      assert.deepEqual(new ST('123').notEqual(new ST('123')), false);
+    });
+    it('should calculate invalid not equal', () => {
+      assert.throws(() => {
+        new ST('123').notEqual(new NT(5));
+      });
+    });
+  });
 });

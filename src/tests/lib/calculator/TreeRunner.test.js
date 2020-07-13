@@ -66,5 +66,85 @@ describe('TreeRunner', () => {
       assert.deepEqual(new TR(new WB('book'), 0, new Parser('=-92380').run()).run(), { value: -92380 });
       assert.deepEqual(new TR(new WB('book'), 0, new Parser('=-9783').run()).run(), { value: -9783 });
     });
+    it('should calculate equal()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=3==4').run()).run(), { value: 3 === 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=4==4').run()).run(), { value: true });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=5==4').run()).run(), { value: 5 === 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('="asdfg"=="lkas"').run()).run(), { value: 'asdfg' === 'lkas' });
+    });
+    it('should calculate greaterEqual()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=3>=4').run()).run(), { value: 3 >= 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=4>=4').run()).run(), { value: true });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=5>=4').run()).run(), { value: 5 >= 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('="asdfg">="lkas"').run()).run(), { value: 'asdfg' >= 'lkas' });
+    });
+    it('should calculate greater()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=3>4').run()).run(), { value: 3 > 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=4>4').run()).run(), { value: false });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=5>4').run()).run(), { value: 5 > 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('="asdfg">"lkas"').run()).run(), { value: 'asdfg' > 'lkas' });
+    });
+    it('should calculate lessEqual()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=3<=4').run()).run(), { value: 3 <= 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=4<=4').run()).run(), { value: true });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=5<=4').run()).run(), { value: 5 <= 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('="asdfg"<="lkas"').run()).run(), { value: 'asdfg' <= 'lkas' });
+    });
+    it('should calculate less()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=3<4').run()).run(), { value: 3 < 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=4<4').run()).run(), { value: false });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=5<4').run()).run(), { value: 5 < 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('="asdfg"<"lkas"').run()).run(), { value: 'asdfg' < 'lkas' });
+    });
+    it('should calculate notEqual()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=3!=4').run()).run(), { value: 3 !== 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=4!=4').run()).run(), { value: false });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=5!=4').run()).run(), { value: 5 !== 4 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('="asdfg"!="lkas"').run()).run(), { value: 'asdfg' !== 'lkas' });
+    });
+    it('should calculate И()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=И()').run()).run(), { value: true });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=И(1==1;5/2==10/4)').run()).run(), { value: true });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=И(1==1;5/2==10/3)').run()).run(), { value: false });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=И(1==5;5/2==10/4)').run()).run(), { value: false });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=И(1==5;"gregdfsg")').run()).run(), { value: false });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=И(1==1;"gregdfsg")').run()).run();
+      });
+    });
+    it('should calculate ИЛИ()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ИЛИ()').run()).run(), { value: false });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ИЛИ(1==1;5/2==10/4)').run()).run(), { value: true });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ИЛИ(1==5;5/2==10/4)').run()).run(), { value: true });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ИЛИ(1==5;5/2==10/3)').run()).run(), { value: false });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ИЛИ(1==1;"gregdfsg")').run()).run(), { value: true });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=ИЛИ(1==5;"gregdfsg")').run()).run();
+      });
+    });
+    it('should calculate ЕСЛИ()', () => {
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1==1;1;2)').run()).run(), { value: 1 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1==5;1;2)').run()).run(), { value: 2 });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1==1;"true";"gregdfsg"*8)').run()).run(), { value: 'true' });
+      assert.deepEqual(new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1==5;"gregdfsg"*8;"false")').run()).run(), { value: 'false' });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=ЕСЛИ()').run()).run();
+      });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1;2)').run()).run();
+      });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1;2;3)').run()).run();
+      });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1;2;3;4)').run()).run();
+      });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1==5;"true";"gregdfsg"*8)').run()).run();
+      });
+      assert.throws(() => {
+        new TR(new WB('book'), 0, new Parser('=ЕСЛИ(1==1;"gregdfsg"*8;"false")').run()).run();
+      });
+    });
   });
 });
