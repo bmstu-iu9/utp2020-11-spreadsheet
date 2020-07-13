@@ -30,9 +30,7 @@ export default class ClassConverter {
 
   static saveJson(userWorkbook, pathToWorkbooks) {
     const file = this.convertToJson(userWorkbook);
-    if (!fs.existsSync(`${pathToWorkbooks}`)) {
-      fs.mkdirSync(`${pathToWorkbooks}`, true);
-    }
+    fs.mkdirSync(pathToWorkbooks, true);
     fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
   }
 }
