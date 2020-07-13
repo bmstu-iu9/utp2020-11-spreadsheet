@@ -28,12 +28,21 @@ export default class ClassConverter {
     return JSON.stringify(jsonWorkbook);
   }
 
-  static saveJson(userName, userWorkbook, pathToWorkbooks = '.') {
+  static saveJson(userWorkbook, pathToWorkbooks) {
     const file = this.convertToJson(userWorkbook);
-    if (!fs.existsSync(`${pathToWorkbooks}/${userName}`)) {
-      fs.mkdirSync(`${pathToWorkbooks}/${userName}`);
+    const directories = pathToWorkbooks.split('/');
+    let checkPath = false;
+    directories.forEach((dir) => {
+      if (dir === 'workbooks') {
+        checkPath = true;
+      }
+    });
+    if (checkPath === false) {
+      throw new Error('Incorrect path to workbooks');
     }
-    fs.writeFileSync(`${pathToWorkbooks}/${userName}/${userWorkbook.name}.json`, file);
-    return true;
+    if (!fs.existsSync(`${pathToWorkbooks}`)) {
+      fs.mkdirSync(`${pathToWorkbooks}`);
+    }
+    fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
   }
 }

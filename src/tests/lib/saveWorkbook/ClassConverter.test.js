@@ -12,7 +12,7 @@ import {
 
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
-const userStandartName = 'alexis';
+const pathToWorkbooks = '~/workbooks/alexis';
 const tableSchema = JSON.parse(fs.readFileSync('./resources/tableSchema.json'));
 
 describe('ClassConverter', () => {
@@ -42,7 +42,8 @@ describe('ClassConverter', () => {
       mock({
         '~/workbooks': {},
       });
-      assert.strictEqual(ClassConverter.saveJson(userStandartName, workbook, '~/workbooks'), true);
+      ClassConverter.saveJson(workbook, pathToWorkbooks);
+      assert.strictEqual(fs.existsSync(`${pathToWorkbooks}/${workbookStandardName}.json`), true);
       mock.restore();
     });
     it('should throw an exception for incorrect path to workbooks', () => {
@@ -52,7 +53,7 @@ describe('ClassConverter', () => {
         '~/workbooks': {},
       });
       assert.throws(() => {
-        ClassConverter.saveJson(userStandartName, workbook, '~/src');
+        ClassConverter.saveJson(workbook, '~/src');
       });
       mock.restore();
     });
@@ -66,7 +67,7 @@ describe('ClassConverter', () => {
         }),
       });
       assert.throws(() => {
-        ClassConverter.saveJson(userStandartName, workbook, '~/workbooks');
+        ClassConverter.saveJson(workbook, pathToWorkbooks);
       });
       mock.restore();
     });
