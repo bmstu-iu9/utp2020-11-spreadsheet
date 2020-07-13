@@ -30,18 +30,8 @@ export default class ClassConverter {
 
   static saveJson(userWorkbook, pathToWorkbooks) {
     const file = this.convertToJson(userWorkbook);
-    const directories = pathToWorkbooks.split('/');
-    let checkPath = false;
-    directories.forEach((dir) => {
-      if (dir === 'workbooks') {
-        checkPath = true;
-      }
-    });
-    if (checkPath === false) {
-      throw new Error('Incorrect path to workbooks');
-    }
     if (!fs.existsSync(`${pathToWorkbooks}`)) {
-      fs.mkdirSync(`${pathToWorkbooks}`);
+      fs.mkdirSync(`${pathToWorkbooks}`, true);
     }
     fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
   }
