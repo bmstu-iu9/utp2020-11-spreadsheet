@@ -24,12 +24,6 @@ describe('Cell', () => {
       });
     });
   });
-  describe('#getProcessedValue()', () => {
-    it('should return 5', () => {
-      const cell = new Cell(valueTypes.number, 5);
-      assert.strictEqual(cell.getProcessedValue(), 5);
-    });
-  });
   describe('#setValue()', () => {
     it('should set value to false', () => {
       const cell = new Cell();
