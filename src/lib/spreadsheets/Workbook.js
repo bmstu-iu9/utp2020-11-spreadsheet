@@ -41,6 +41,6 @@ export default class Workbook {
     if (this.spreadsheets[page].getCell(cell).type === valueTypes.formula) {
       return this.calculator.calculate(cell, page).value;
     }
-    return this.spreadsheets[page].getCell(cell).getProcessedValue();
+    return this.spreadsheets[page].getCell(cell).value;
   }
 }

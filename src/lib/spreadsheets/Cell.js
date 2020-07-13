@@ -16,10 +16,6 @@ export class Cell {
     this.setColor(color);
   }
 
-  getProcessedValue() {
-    return this.value;
-  }
-
   setValue(type, value = null) {
     if (value === null) {
       this.value = Cell.getDefaultValue(type);
