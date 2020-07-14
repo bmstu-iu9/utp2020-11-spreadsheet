@@ -31,6 +31,8 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "mocha": "^8.0.1",
-    "util.promisify": "^1.0.1"
+    "util.promisify": "^1.0.1",
+    "jsonschema": "^1.2.6",
+    "mock-fs": "^4.12.0"
   }
 }
