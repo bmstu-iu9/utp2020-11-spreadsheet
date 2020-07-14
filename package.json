@@ -19,7 +19,9 @@
     "url": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet/issues"
   },
   "homepage": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet#readme",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^3.21.2"
+  },
   "type": "module",
   "devDependencies": {
     "c8": "^7.2.0",
