@@ -28,12 +28,9 @@ export default class ClassConverter {
     return JSON.stringify(jsonWorkbook);
   }
 
-  static saveJson(userName, userWorkbook, pathToWorkbooks = '.') {
+  static saveJson(userWorkbook, pathToWorkbooks) {
     const file = this.convertToJson(userWorkbook);
-    if (!fs.existsSync(`${pathToWorkbooks}/${userName}`)) {
-      fs.mkdirSync(`${pathToWorkbooks}/${userName}`);
-    }
-    fs.writeFileSync(`${pathToWorkbooks}/${userName}/${userWorkbook.name}.json`, file);
-    return true;
+    fs.mkdirSync(pathToWorkbooks, true);
+    fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
   }
 }
