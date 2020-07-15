@@ -37,33 +37,39 @@ div.content {
 div.description-wrapper {
   display: flex;
   width: 50%;
-  background-color: red;
   height: 600px;
 }
 
 div.sign-forms-wrapper {
   display: flex;
-  background-color: blue;
   width: 50%;
   top: 0;
 }
 
 div#login-form-wrapper {
   margin: 5%;
-  background-color: grey;
-  height: 200px;
-  padding: 10px;
+  background-color: white;
 }
 
 div#reg-form-wrapper {
   margin: 5%;
-  background-color: green;
-  height: 300px;
+  background-color: white;
 }
 
 div.sign-forms-wrapper input {
+  border: 1px solid black;
+  border-radius: 4px;
+  width: 90%;
+  height: 30px;
+  margin: 5%;
+}
+
+div.sign-forms-wrapper input[type="submit"] {
+  width: 50%;
+  margin-left: 25%;
   border: 0;
-  display: block;
-  margin: 10px;
-  top: 0;
+  border-radius: 0;
+  background-color: coral;
+  color: white;
+  font-family: "Abyssinica SIL";
 }

@@ -37,12 +37,10 @@
 
   div.description-wrapper {
     width: 50%;
-    background-color: red;
     display: inline-block;
   }
 
   div.sign-forms-wrapper {
-    background-color: blue;
     display: inline-block;
     width: 49%;
     padding-top: 0;
