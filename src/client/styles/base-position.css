@@ -5,6 +5,7 @@
 
   div.content {
     padding: 10px 18px;
+    flex-direction: column;
   }
 
   div.description-wrapper {
@@ -30,6 +31,7 @@
   }
 
   div.content {
+    flex-direction: row;
     padding: 15px 20px;
   }
 

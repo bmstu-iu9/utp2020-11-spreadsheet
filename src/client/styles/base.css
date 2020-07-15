@@ -30,31 +30,40 @@ nav.header div.logo {
 }
 
 div.content {
+  display: flex;
   background-color: #b9d0cf;
 }
 
 div.description-wrapper {
+  display: flex;
   width: 50%;
   background-color: red;
   height: 600px;
-  display: inline-block;
 }
 
 div.sign-forms-wrapper {
+  display: flex;
   background-color: blue;
-  display: inline-block;
-  height: 600px;
   width: 50%;
+  top: 0;
 }
 
 div#login-form-wrapper {
   margin: 5%;
-  background-color: yellow;
+  background-color: grey;
   height: 200px;
+  padding: 10px;
 }
 
 div#reg-form-wrapper {
   margin: 5%;
   background-color: green;
   height: 300px;
+}
+
+div.sign-forms-wrapper input {
+  border: 0;
+  display: block;
+  margin: 10px;
+  top: 0;
 }
