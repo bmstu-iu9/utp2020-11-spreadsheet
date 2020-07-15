@@ -9,7 +9,7 @@ export default class Parser {
   }
 
   static makeParserError(str) {
-    throw new SyntaxError(`Parser SyntaxError in "${str}"!`);
+    throw new SyntaxError(`Parser: error in "${str}"!`);
   }
 
   next() {
@@ -47,7 +47,7 @@ export default class Parser {
   }
 
   // <_Equals> ::= EqOp <Expr> | .
-  parseEqualsHelper(res) { // 1 == | 2 >= | 3 > | 4 <= | 5 < | 6 !=
+  parseEqualsHelper(res) {
     let op = 0;
     if (this.checkGet('!')) {
       if (!this.checkGet('=')) {
@@ -107,7 +107,7 @@ export default class Parser {
       return this.parseTermHelper(EW.mul(res, this.parseFactor()));
     }
     if (this.checkGet('/')) {
-      return this.parseTermHelper(EW.del(res, this.parseFactor()));
+      return this.parseTermHelper(EW.div(res, this.parseFactor()));
     }
     if (this.checkGet('%')) {
       return this.parseTermHelper(EW.rem(res, this.parseFactor()));
@@ -152,14 +152,14 @@ export default class Parser {
     if (this.checkGet(')')) {
       return func;
     }
-    EW.addArgFunc(func, this.parseExpr());
+    EW.addArgFunc(func, this.parseEquals());
     return this.parseArgsHelper(func);
   }
 
   // <_Args> ::= ;<Expr><_Args> | ) .
   parseArgsHelper(func) {
     if (this.checkGet(';')) {
-      EW.addArgFunc(func, this.parseExpr());
+      EW.addArgFunc(func, this.parseEquals());
       return this.parseArgsHelper(func);
     } if (this.checkGet(')')) {
       return func;
@@ -173,7 +173,7 @@ export default class Parser {
     if (this.hasNext() && (this.get() === '"')) {
       return this.parseStr();
     } if (this.hasNext() && this.get() >= '0' && this.get() <= '9') {
-      return this.parseNum();
+      return EW.makeNumber(this.parseInt());
     } if (this.hasNext() && this.get() >= 'A' && this.get() <= 'Z') {
       const res = this.parseAddress();
       if (this.checkGet(':')) {
@@ -198,7 +198,7 @@ export default class Parser {
   }
 
   // number: [0-9]*
-  parseNum() {
+  parseInt() {
     return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
   }
 
@@ -210,9 +210,9 @@ export default class Parser {
   // address: ($)[A-Z]*($)[0-9]*
   parseAddress() {
     this.checkGet('$');
-    const ind1 = this.parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A'), '');
+    const ind1 = this.parseFromTo('A', 'Z', (res, c) => res + c, '');
     this.checkGet('$');
-    const ind2 = this.parseNum() - 1;
+    const ind2 = this.parseInt();
     return EW.makeAddress(ind1, ind2);
   }
 
@@ -226,7 +226,7 @@ export default class Parser {
       res += this.get();
       this.next();
     }
-    return res;
+    return EW.makeString(res);
   }
 
   run() {

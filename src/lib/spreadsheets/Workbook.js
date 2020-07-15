@@ -1,9 +1,12 @@
 import Spreadsheet from './Spreadsheet.js';
+import Calculator from '../calculator/Calculator.js';
+import { valueTypes } from './Cell.js';
 
 export default class Workbook {
   constructor(name, spreadsheets = []) {
     this.setName(name);
     this.setSpreadsheets(spreadsheets);
+    this.calculator = new Calculator(this);
   }
 
   setName(name) {
@@ -32,5 +35,12 @@ export default class Workbook {
       }
     });
     this.spreadsheets = spreadsheets;
+  }
+
+  getProcessedValue(cell, page = 0) {
+    if (this.spreadsheets[page].getCell(cell).type === valueTypes.formula) {
+      return this.calculator.calculate(cell, page).value;
+    }
+    return this.spreadsheets[page].getCell(cell).value;
   }
 }
