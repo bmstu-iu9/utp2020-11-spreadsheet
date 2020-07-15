@@ -6,7 +6,6 @@ export default class Workbook {
   constructor(name, spreadsheets = []) {
     this.setName(name);
     this.setSpreadsheets(spreadsheets);
-    this.calculator = new Calculator(this);
   }
 
   setName(name) {
@@ -39,7 +38,7 @@ export default class Workbook {
 
   getProcessedValue(cell, page = 0) {
     if (this.spreadsheets[page].getCell(cell).type === valueTypes.formula) {
-      return this.calculator.calculate(cell, page).value;
+      return new Calculator(this).calculate(cell, page).value;
     }
     return this.spreadsheets[page].getCell(cell).value;
   }
