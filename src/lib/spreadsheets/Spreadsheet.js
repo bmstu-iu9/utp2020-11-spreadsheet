@@ -48,4 +48,9 @@ export default class Spreadsheet {
     const positionRegExp = new RegExp('^[A-Z]+[1-9][0-9]*$');
     return positionRegExp.test(position);
   }
+
+  static isColumnCorrect(column) {
+    const columnRegExp = new RegExp('^[A-Z]+$');
+    return columnRegExp.test(column);
+  }
 }
