@@ -1,0 +1,105 @@
+@media (min-width: 320px) {
+  body {
+    padding: 100px 0 0;
+  }
+
+  div.content {
+    padding: 10px 18px;
+  }
+
+  div.description-wrapper {
+    display: block;
+    width: 100%;
+  }
+
+  div.sign-forms-wrapper {
+    display: block;
+    width: 100%;
+    padding-top: 5%;
+    margin-top: 5%;
+  }
+
+  div#login-form-wrapper {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 720px) {
+  body {
+    padding: 130px 30px 30px;
+  }
+
+  div.content {
+    padding: 15px 20px;
+  }
+
+  div.description-wrapper {
+    width: 50%;
+    background-color: red;
+    display: inline-block;
+  }
+
+  div.sign-forms-wrapper {
+    background-color: blue;
+    display: inline-block;
+    width: 49%;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  div#login-form-wrapper {
+    margin-top: 5%;
+  }
+}
+
+@media (min-width: 960px) {
+  div.content {
+    padding: 25px 40px;
+  }
+
+  div.description-wrapper {
+    display: inline-block;
+  }
+
+  div.sign-forms-wrapper {
+    display: inline-block;
+  }
+}
+
+@media (min-width: 1140px) {
+  body {
+    padding: 130px 80px 30px;
+  }
+
+  div.content {
+    padding: 35px 65px;
+  }
+
+  div.description-wrapper {
+    display: inline-block;
+    width: 60%;
+  }
+
+  div.sign-forms-wrapper {
+    display: inline-block;
+    width: 39%;
+  }
+}
+
+@media (min-width: 1500px) {
+  body {
+    padding: 130px;
+  }
+
+  div.content {
+    padding: 50px 80px;
+  }
+
+  div.description-wrapper {
+    display: inline-block;
+  }
+
+  div.sign-forms-wrapper {
+    display: inline-block;
+  }
+}

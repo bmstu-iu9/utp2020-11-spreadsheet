@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  background-color: white;
+  padding: 130px 30px;
+}
+
+nav,
+header,
+footer,
+section,
+aside {
+  display: block;
+  z-index: 2;
+}
+
+nav.header {
+  left: 0;
+  height: 100px;
+  width: 100%;
+  background: #444c5c;
+  position: absolute;
+  top: 0;
+}
+
+nav.header div.logo {
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+  background-color: red;
+}
+
+div.content {
+  background-color: #b9d0cf;
+}
+
+div.description-wrapper {
+  width: 50%;
+  background-color: red;
+  height: 600px;
+  display: inline-block;
+}
+
+div.sign-forms-wrapper {
+  background-color: blue;
+  display: inline-block;
+  height: 600px;
+  width: 50%;
+}
+
+div#login-form-wrapper {
+  margin: 5%;
+  background-color: yellow;
+  height: 200px;
+}
+
+div#reg-form-wrapper {
+  margin: 5%;
+  background-color: green;
+  height: 300px;
+}
