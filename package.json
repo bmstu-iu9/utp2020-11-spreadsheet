@@ -19,7 +19,9 @@
     "url": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet/issues"
   },
   "homepage": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet#readme",
-  "dependencies": {},
+  "dependencies": {
+    "sqlite3": "^5.0.0"
+  },
   "type": "module",
   "devDependencies": {
     "c8": "^7.2.0",
