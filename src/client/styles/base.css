@@ -1,7 +1,7 @@
 body {
-  margin: 0;
-  background-color: white;
-  padding: 130px 30px;
+    margin: 0;
+    background-color: white;
+    padding: 130px 30px;
 }
 
 nav,
@@ -9,67 +9,91 @@ header,
 footer,
 section,
 aside {
-  display: block;
-  z-index: 2;
+    display: block;
+    z-index: 2;
 }
 
 nav.header {
-  left: 0;
-  height: 100px;
-  width: 100%;
-  background: #444c5c;
-  position: absolute;
-  top: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+    background: #444c5c;
+    position: absolute;
+    top: 0;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 78px;
+    color: #444;
 }
 
 nav.header div.logo {
-  width: 80px;
-  height: 80px;
-  margin: 10px;
-  background-color: red;
+    position: absolute;
+    width: 205px;
+    height: 80px;
+    left: 17px;
+    top: 9px;
+    background: #FFFFFF;
+    border-radius: 10px;
 }
 
 div.content {
-  display: flex;
-  background-color: #b9d0cf;
+    display: flex;
+    background-color: #dae6e6;
 }
 
 div.description-wrapper {
-  display: flex;
-  width: 50%;
-  height: 600px;
+    display: flex;
+    width: 50%;
+    height: 600px;
+    font-size: 30px;
+    font-family: Lato;
+    color: #444;
 }
 
 div.sign-forms-wrapper {
-  display: flex;
-  width: 50%;
-  top: 0;
+    display: flex;
+    width: 50%;
+    top: 0;
 }
 
 div#login-form-wrapper {
-  margin: 5%;
-  background-color: white;
+    margin: 5%;
+    background-color: #fafafa;
+    border-radius: 10px;
 }
 
 div#reg-form-wrapper {
-  margin: 5%;
-  background-color: white;
+    margin: 5%;
+    background-color: #fafafa;
+    border-radius: 10px;
 }
 
 div.sign-forms-wrapper input {
-  border: 1px solid black;
-  border-radius: 4px;
-  width: 90%;
-  height: 30px;
-  margin: 5%;
+    width: 90%;
+    height: 40px;
+    margin: 4%;
+
+    background: #FFFFFF;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    border: 1px solid #999999;
+    box-sizing: border-box;
+    border-radius: 5px;
 }
 
 div.sign-forms-wrapper input[type="submit"] {
-  width: 50%;
-  margin-left: 25%;
-  border: 0;
-  border-radius: 0;
-  background-color: lightcoral;
-  color: white;
-  font-family: "Abyssinica SIL";
+    width: 76%;
+    margin-left: 12%;
+    border: 0;
+    background: #E1B16A;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bolder;
+    font-size: 17px;
+    color: #FFFFFF;
 }
