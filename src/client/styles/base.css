@@ -84,6 +84,7 @@ div.sign-forms-wrapper input {
   border: 1px solid #999;
   box-sizing: border-box;
   border-radius: 5px;
+  font-size: 20px;
 }
 
 div.sign-forms-wrapper input[type="submit"] {
