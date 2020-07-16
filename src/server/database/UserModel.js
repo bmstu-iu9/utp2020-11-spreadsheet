@@ -1,16 +1,24 @@
-import {DAO, databasePath} from './DAO.js'
-
 export class UserModel {
-    static database = new DAO(databasePath).database;
+    static database = null;
 
-    constructor(login) {
-        this.login = login;
+    constructor(login, password, isAdmin) {
+        if (login.length > 0 && password.length > 0 && (isAdmin === 1 || isAdmin === 0)) {
+            this.login = login;
+            this.password = password;
+            this.isAdmin = isAdmin;
+        } else {
+            throw Error('Error while creating user: wrong format of data')
+        }
+    }
+
+    static setDatabase(database) {
+        UserModel.database = database
     }
 
     static get(login) {
-        this.database.get(`SELECT *
-                           FROM Users
-                           WHERE login = ?`, [login], (err, row) => {
+        UserModel.database.get(`SELECT *
+                                FROM Users
+                                WHERE login = ?`, [login], (err, row) => {
             if (err) {
                 throw Error(`Error while get user: ${err}`);
             }
@@ -26,12 +34,35 @@ export class UserModel {
         })
     }
 
+    static getAllUsers() {
+        UserModel.database.all(`SELECT login, password, isAdmin
+                                FROM Users `, (err, rows) => {
+            if (err) {
+                throw Error(`Error while get users: ${err}`);
+            }
+            let result = []
+            rows.forEach((row) => {
+                const user = new UserModel(row.login, row.password, row.isAdmin);
+                result.push(user);
+            })
+            return result
+        })
+    }
+
     setIsAdmin(isAdmin) {
-        this.isAdmin = isAdmin;
+        if (isAdmin === 1 || isAdmin === 0) {
+            this.isAdmin = isAdmin;
+        } else {
+            throw Error('Error while creating user: wrong format of data')
+        }
     }
 
     setPassword(password) {
-        this.password = password;
+        if (password.length > 0) {
+            this.password = password;
+        } else {
+            throw Error('Error while creating user: wrong format of data')
+        }
     }
 
     save() {
@@ -41,7 +72,7 @@ export class UserModel {
                                                                  isAdmin = ?;`,
             [this.login, this.password, this.isAdmin, this.password, this.isAdmin], (err) => {
                 if (err) {
-                    throw Error(`Error while inserting user: ${err}`);
+                    throw Error(`Error while inserting or updating user: ${err}`);
                 }
             })
     }
@@ -56,10 +87,3 @@ export class UserModel {
         })
     }
 }
-
-let user = new UserModel('bbhs');
-user.setIsAdmin(true);
-user.setPassword(123);
-user.save()
-user = UserModel.get('bbhs')
-UserModel.get('abs')

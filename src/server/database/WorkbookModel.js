@@ -1,18 +1,26 @@
 import {DAO, databasePath} from './DAO.js'
 
 export class WorkbookModel {
-    static database = new DAO(databasePath).database;
+    static database = null;
 
-    constructor(login, path) {
-        this.id = null;
-        this.path = path
-        this.login = login
+    constructor(login = null, path) {
+        if (path.length > 0) {
+            this.id = null;
+            this.path = path;
+            this.login = login;
+        } else {
+            throw Error('Error while creating book: wrong format of data');
+        }
+    }
+
+    static setDatabase(database) {
+        WorkbookModel.database = database
     }
 
     static getById(id) {
-        this.database.get(`SELECT id, login, path
-                           FROM Books
-                           WHERE id = ?`, [id], (err, row) => {
+        WorkbookModel.database.get(`SELECT id, login, path
+                                    FROM Books
+                                    WHERE id = ?`, [id], (err, row) => {
             if (err) {
                 throw Error(`Error while get workbook: ${err}`);
             }
@@ -28,9 +36,9 @@ export class WorkbookModel {
     }
 
     static getByLogin(login) {
-        this.database.all(`SELECT id, login, path
-                           FROM Books
-                           WHERE login = ?`, [login], (err, rows) => {
+        WorkbookModel.database.all(`SELECT id, login, path
+                                    FROM Books
+                                    WHERE login = ?`, [login], (err, rows) => {
             if (err) {
                 throw Error(`Error while get workbooks: ${err}`);
             }
@@ -47,6 +55,25 @@ export class WorkbookModel {
             } else {
                 throw Error(`Error while get books: no books with login ${login}`);
             }
+        })
+    }
+
+    static getAllBooks() {
+        WorkbookModel.database.all(`SELECT id, login, path
+                                    FROM Books`, (err, rows) => {
+            if (err) {
+                throw Error(`Error while get workbooks: ${err}`);
+            }
+            let result = []
+            rows.forEach((row) => {
+                let book = new WorkbookModel(row.id);
+                console.log(row.path)
+                book.setPath(row.path);
+                book.setLogin(row.login);
+                result.push(book);
+            })
+            return result
+
         })
     }
 
@@ -69,7 +96,7 @@ export class WorkbookModel {
                 })
         } else {
             WorkbookModel.database.run(`UPDATE Books
-                                        SET path = ?,
+                                        SET path  = ?,
                                             login = ?
                                         WHERE id = ?`,
                 [this.path, this.login, this.id], (err) => {
@@ -91,6 +118,3 @@ export class WorkbookModel {
     }
 }
 
-let book = new WorkbookModel('bbhs', 'gjh');
-book.save()
-book = WorkbookModel.getByLogin('bbhs')

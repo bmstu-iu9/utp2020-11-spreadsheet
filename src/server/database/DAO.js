@@ -26,12 +26,12 @@ export class DAO {
         this.database.run(`PRAGMA foreign_keys = ON;`)
         this.database.run(userTableSchema, (err) => {
             if (err) {
-                throw Error(`Error while creating user database: ${err}`);
+                throw Error(`Error while creating user table: ${err}`);
             }
         });
         this.database.run(workbookTableSchema, (err) => {
             if (err) {
-                throw Error(`Error while creating book database: ${err}`);
+                throw Error(`Error while creating book table: ${err}`);
             }
         });
     }
