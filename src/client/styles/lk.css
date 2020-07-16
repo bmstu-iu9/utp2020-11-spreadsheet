@@ -32,12 +32,22 @@ div.new-book-button {
   background-color: white;
 }
 
+div.new-book-button > a > div {
+  width: 100%;
+  height: 100%;
+}
+
 div.lk-button {
-  border: 1px inset grey;
+  border: 1px outset grey;
   width: 200px;
   height: 45px;
   margin-top: 50px;
   border-radius: 4px;
+}
+
+div.lk-button:hover {
+  background-color: lightslategrey;
+  border-style: inset;
 }
 
 div.book-list {
