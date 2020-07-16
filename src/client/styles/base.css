@@ -1,7 +1,6 @@
 body {
   margin: 0;
   background-color: white;
-  padding: 130px 30px;
 }
 
 nav,
@@ -46,10 +45,13 @@ div.content {
 div.description-wrapper {
   display: flex;
   width: 50%;
-  height: 600px;
   font-size: 30px;
   font-family: Lato;
   color: #444;
+}
+
+div.description-wrapper > div{
+  margin: 5%;
 }
 
 div.sign-forms-wrapper {
@@ -95,4 +97,8 @@ div.sign-forms-wrapper input[type="submit"] {
   font-weight: bolder;
   font-size: 17px;
   color: #fff;
+}
+
+div.sign-forms-wrapper input[type="submit"]:hover{
+  background: #e1b192;
 }

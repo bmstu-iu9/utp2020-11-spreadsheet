@@ -1,10 +1,15 @@
 @media (min-width: 320px) {
+  body{
+    padding: 100px 0 0;
+  }
+
   div.content {
     padding: 10px 18px;
     flex-direction: column;
   }
 
   div.description-wrapper {
+    font-size: 21px;
     display: block;
     width: 100%;
   }
@@ -35,6 +40,7 @@
   div.description-wrapper {
     width: 50%;
     display: inline-block;
+    font-size: 23px;
   }
 
   div.sign-forms-wrapper {
@@ -60,6 +66,7 @@
 
   div.description-wrapper {
     display: inline-block;
+    font-size: 25px;
   }
 
   div.sign-forms-wrapper {
