@@ -1,8 +1,4 @@
 @media (min-width: 320px) {
-  body {
-    padding: 100px 0 0;
-  }
-
   div.content {
     padding: 10px 18px;
     flex-direction: column;
@@ -23,14 +19,15 @@
   div#login-form-wrapper {
     margin-top: 0;
   }
+
+  div#decorative-line {
+    margin-top: 150px;
+  }
 }
 
 @media (min-width: 720px) {
-  body {
-    padding: 130px 30px 30px;
-  }
-
   div.content {
+    margin: 30px;
     flex-direction: row;
     padding: 15px 20px;
   }
@@ -50,6 +47,10 @@
   div#login-form-wrapper {
     margin-top: 5%;
   }
+
+  div#decorative-line {
+    margin-top: 180px;
+  }
 }
 
 @media (min-width: 960px) {
@@ -67,10 +68,6 @@
 }
 
 @media (min-width: 1140px) {
-  body {
-    padding: 130px 80px 30px;
-  }
-
   div.content {
     padding: 35px 65px;
   }
@@ -87,10 +84,6 @@
 }
 
 @media (min-width: 1500px) {
-  body {
-    padding: 130px;
-  }
-
   div.content {
     padding: 50px 80px;
   }

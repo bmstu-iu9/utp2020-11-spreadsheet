@@ -1,7 +1,7 @@
 body {
   margin: 0;
   background-color: white;
-  padding: 130px 30px;
+  padding-top: 100px;
 }
 
 nav,
@@ -27,6 +27,11 @@ nav.header div.logo {
   height: 80px;
   margin: 10px;
   background-color: red;
+}
+
+div.content-wrapper {
+  width: 100%;
+  height: 100%;
 }
 
 div.content {
