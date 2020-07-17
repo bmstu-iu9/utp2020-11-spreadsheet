@@ -37,6 +37,8 @@ div.form-choice-button {
   justify-content: center;
   align-items: center;
   font-size: 15px;
+  font-family: Lato, serif;
+  color: #444;
 }
 
 div.form-choice-button:first-child {
