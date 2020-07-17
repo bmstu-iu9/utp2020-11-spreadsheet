@@ -21,9 +21,7 @@
   },
   "homepage": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet#readme",
   "dependencies": {
-    "express": "^3.21.2",
-    "stylelint": "^13.6.1",
-    "stylelint-config-standard": "^20.0.0"
+    "express": "^3.21.2"
   },
   "type": "module",
   "devDependencies": {
@@ -31,6 +29,8 @@
     "eslint": "^7.4.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
+    "stylelint": "^13.6.1",
+    "stylelint-config-standard": "^20.0.0",
     "jsonschema": "^1.2.6",
     "mocha": "^8.0.1",
     "mock-fs": "^4.12.0",
