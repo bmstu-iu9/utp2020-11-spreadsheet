@@ -1,32 +1,11 @@
 @media (min-width: 320px) {
-  body{
+  body {
     padding: 100px 0 0;
   }
 
   div.content {
     padding: 10px 18px;
     flex-direction: column;
-  }
-
-  div.description-wrapper {
-    font-size: 21px;
-    display: block;
-    width: 100%;
-  }
-
-  div.sign-forms-wrapper {
-    display: block;
-    width: 100%;
-    padding-top: 5%;
-    margin-top: 5%;
-  }
-
-  div#login-form-wrapper {
-    margin-top: 0;
-  }
-
-  div#decorative-line {
-    margin-top: 150px;
   }
 }
 
@@ -36,41 +15,11 @@
     flex-direction: row;
     padding: 15px 20px;
   }
-
-  div.description-wrapper {
-    width: 50%;
-    display: inline-block;
-    font-size: 23px;
-  }
-
-  div.sign-forms-wrapper {
-    display: inline-block;
-    width: 49%;
-    padding-top: 0;
-    margin-top: 0;
-  }
-
-  div#login-form-wrapper {
-    margin-top: 5%;
-  }
-
-  div#decorative-line {
-    margin-top: 180px;
-  }
 }
 
 @media (min-width: 960px) {
   div.content {
     padding: 25px 40px;
-  }
-
-  div.description-wrapper {
-    display: inline-block;
-    font-size: 25px;
-  }
-
-  div.sign-forms-wrapper {
-    display: inline-block;
   }
 }
 
@@ -78,28 +27,10 @@
   div.content {
     padding: 35px 65px;
   }
-
-  div.description-wrapper {
-    display: inline-block;
-    width: 60%;
-  }
-
-  div.sign-forms-wrapper {
-    display: inline-block;
-    width: 39%;
-  }
 }
 
 @media (min-width: 1500px) {
   div.content {
     padding: 50px 80px;
-  }
-
-  div.description-wrapper {
-    display: inline-block;
-  }
-
-  div.sign-forms-wrapper {
-    display: inline-block;
   }
 }

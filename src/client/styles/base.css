@@ -14,11 +14,11 @@ aside {
 
 nav.header {
   left: 0;
+  top: 0;
   height: 100px;
   width: 100%;
   background: #444c5c;
   position: absolute;
-  top: 0;
   font-family: Lato;
   font-style: normal;
   font-weight: 500;
@@ -40,66 +40,4 @@ nav.header div.logo {
 div.content {
   display: flex;
   background-color: #dae6e6;
-}
-
-div.description-wrapper {
-  display: flex;
-  width: 50%;
-  font-size: 30px;
-  font-family: Lato;
-  color: #444;
-}
-
-div.description-wrapper > div{
-  margin: 5%;
-}
-
-div.sign-forms-wrapper {
-  display: flex;
-  width: 50%;
-  top: 0;
-}
-
-div#login-form-wrapper {
-  margin: 5%;
-  background-color: #fafafa;
-  border-radius: 10px;
-}
-
-div#reg-form-wrapper {
-  margin: 5%;
-  background-color: #fafafa;
-  border-radius: 10px;
-}
-
-div.sign-forms-wrapper input {
-  width: 90%;
-  height: 40px;
-  margin: 4%;
-  background: #fff;
-  font-family: Lato;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 13px;
-  border: 1px solid #999;
-  box-sizing: border-box;
-  border-radius: 5px;
-  font-size: 20px;
-}
-
-div.sign-forms-wrapper input[type="submit"] {
-  width: 76%;
-  margin-left: 12%;
-  border: 0;
-  background: #e1b16a;
-  border-radius: 5px;
-  font-family: Lato;
-  font-style: normal;
-  font-weight: bolder;
-  font-size: 17px;
-  color: #fff;
-}
-
-div.sign-forms-wrapper input[type="submit"]:hover{
-  background: #e1b192;
 }
