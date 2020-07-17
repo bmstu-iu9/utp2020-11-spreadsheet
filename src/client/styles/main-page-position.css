@@ -22,7 +22,7 @@
 }
 
 @media (min-width: 720px) {
-  div.content > div{
+  div.content > div {
     flex-direction: row;
   }
 

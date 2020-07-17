@@ -1,4 +1,4 @@
-div.content > div{
+div.content > div {
   display: flex;
 }
 
@@ -6,7 +6,7 @@ div.description-wrapper {
   display: flex;
   width: 50%;
   font-size: 30px;
-  font-family: Lato;
+  font-family: Lato, serif;
   color: #444;
 }
 
@@ -32,7 +32,7 @@ div.sign-forms-wrapper input {
   margin: 4%;
   padding-left: 10px;
   background: #fff;
-  font-family: Lato;
+  font-family: Lato, serif;
   font-style: normal;
   font-weight: normal;
   border: 1px solid #999;

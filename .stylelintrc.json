@@ -1,5 +1,5 @@
 {
-  "extends": ["/home/kurigohan933/Linters/node_modules/stylelint-config-standard"],
+  "extends": ["./node_modules/stylelint-config-standard"],
   "rules": {
 
   }

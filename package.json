@@ -4,6 +4,7 @@
   "description": "Online spreadsheets with the opportunity to merge tables",
   "main": "index.js",
   "scripts": {
+    "stylelint": "stylelint src/client/styles/*.css || true",
     "test": "c8 --all mocha --recursive ./src/tests"
   },
   "repository": {
@@ -20,17 +21,19 @@
   },
   "homepage": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet#readme",
   "dependencies": {
-    "express": "^3.21.2"
+    "express": "^3.21.2",
+    "stylelint": "^13.6.1",
+    "stylelint-config-standard": "^20.0.0"
   },
   "type": "module",
   "devDependencies": {
-    "c8": "^7.2.0",
+    "c8": "^7.2.1",
     "eslint": "^7.4.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
-    "mocha": "^8.0.1",
-    "util.promisify": "^1.0.1",
     "jsonschema": "^1.2.6",
-    "mock-fs": "^4.12.0"
+    "mocha": "^8.0.1",
+    "mock-fs": "^4.12.0",
+    "util.promisify": "^1.0.1"
   }
 }
