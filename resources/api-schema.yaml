@@ -1,0 +1,138 @@
+openapi: "3.0.0"
+info:
+  title: "Unitables API"
+  version: "0.1.0"
+security:
+  - "bearer": []
+paths:
+  /user:
+    get:
+      description: "Получение всех пользователей"
+      responses:
+        "200":
+          description: "Пользователи были успешно получены"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для просмотра всех пользователей"
+    post:
+      description: "Регистрация нового пользователя"
+      security: []
+      responses:
+        "200":
+          description: "Пользователь был успешно создан"
+        "400":
+          description: "Некорректный запрос"
+        "409":
+          description: "Уже есть пользователь с таким логином"
+  /user/{id}:
+    parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        description: "Идентификатор пользователя"
+        schema:
+          type: integer
+          format: int64
+    get:
+      description: "Получение пользователя с заданным ID"
+      responses:
+        "200":
+          description: "Пользователь был успешно получен"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для просмотра пользователя"
+        "404":
+          description: "Пользователь не был найден"
+    patch:
+      description: "Изменение пользователя с заданным ID"
+      responses:
+        "200":
+          description: "Пользователь был успешно изменён"
+        "400":
+          description: "Некорректный запрос"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для изменения пользователя"
+        "404":
+          description: "Пользователь не был найден"
+    delete:
+      description: "Удаление пользователя с заданным ID"
+      responses:
+        "200":
+          description: "Пользователь был успешно удалён"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для удаления пользователя"
+        "404":
+          description: "Пользователь не был найден"
+  /workbook:
+    get:
+      description: "Получение списка всех доступных пользователю книг"
+      responses:
+        "200":
+          description: "Все книги были успешно получены"
+        "401":
+          description: "Неавторизованный запрос"
+    post:
+      description: "Создание новой книги"
+      responses:
+        "200":
+          description: "Книга была успешно создана"
+        "400":
+          description: "Некорректный запрос"
+        "401":
+          description: "Неавторизованный запрос"
+  /workbook/{id}:
+    parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        description: "Идентификатор книги"
+        schema:
+          type: integer
+          format: int64
+    get:
+      description: "Получение книги с заданным ID"
+      responses:
+        "200":
+          description: "Книга была успешно получена"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для просмотра книги"
+        "404":
+          description: "Книга не была найдена"
+    patch:
+      description: "Изменение книги с заданным ID"
+      responses:
+        "200":
+          description: "Книга была успешно изменена"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для изменения книги"
+        "404":
+          description: "Книга не была найдена"
+        "409":
+          description: "Были обнаружены конфликтные изменения"
+    delete:
+      description: "Удаление книги с заданным ID"
+      responses:
+        "200":
+          description: "Книга была успешно удалена"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для удаления книги"
+        "404":
+          description: "Книга не была найдена"
+components:
+  securitySchemes:
+    "bearer":
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "Bearer mF_9.B5f-4.1JqM"
