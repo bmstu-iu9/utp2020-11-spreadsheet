@@ -36,9 +36,9 @@ div.form-choice-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 15px;
+  font-size: 18px;
   font-family: Lato, serif;
-  color: #444;
+  color: #444c5c;
 }
 
 div.form-choice-button:first-child {
@@ -54,7 +54,9 @@ div.form-choice-button:last-child {
 }
 
 div.form-choice-button:hover {
-  background-color: #999;
+  background-color: #e1b16a;
+  color: white;
+  font-weight: bolder;
 }
 
 div.sign-forms-wrapper input {
@@ -70,7 +72,17 @@ div.sign-forms-wrapper input {
   border: 1px solid #999;
   box-sizing: border-box;
   border-radius: 5px;
-  font-size: 20px;
+  font-size: 18px;
+  color: #444c5c;
+  outline: none;
+}
+
+div.sign-forms-wrapper input:hover{
+  border-color: #444444;
+}
+
+div.sign-forms-wrapper input:active{
+  border-color: #767676;
 }
 
 div.sign-forms-wrapper input[type="submit"] {
@@ -82,10 +94,10 @@ div.sign-forms-wrapper input[type="submit"] {
   background: #e1b16a;
   border-radius: 5px;
   font-weight: bolder;
-  font-size: 17px;
+  font-size: 18px;
   color: #fff;
 }
 
 div.sign-forms-wrapper input[type="submit"]:hover {
-  background: #e1b192;
+  background: #d19a48;
 }
