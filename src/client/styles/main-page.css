@@ -10,7 +10,7 @@ div.description-wrapper {
 div.description-wrapper > div {
   margin: 5%;
   font-size: 30px;
-  font-family: Lato, serif;
+  font-family: Lato, sans-serif;
   color: #444;
 }
 
@@ -37,7 +37,7 @@ div.form-choice-button {
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  font-family: Lato, serif;
+  font-family: Lato, sans-serif;
   color: #444c5c;
 }
 
@@ -66,7 +66,7 @@ div.sign-forms-wrapper input {
   margin-top: 35px;
   padding-left: 10px;
   background: #fff;
-  font-family: Lato, serif;
+  font-family: Lato, sans-serif;
   font-style: normal;
   font-weight: normal;
   border: 1px solid #999;
@@ -77,11 +77,11 @@ div.sign-forms-wrapper input {
   outline: none;
 }
 
-div.sign-forms-wrapper input:hover{
-  border-color: #444444;
+div.sign-forms-wrapper input:hover {
+  border-color: #444;
 }
 
-div.sign-forms-wrapper input:active{
+div.sign-forms-wrapper input:active {
   border-color: #767676;
 }
 
