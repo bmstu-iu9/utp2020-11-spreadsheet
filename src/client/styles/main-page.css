@@ -1,3 +1,7 @@
+div.content > div{
+  display: flex;
+}
+
 div.description-wrapper {
   display: flex;
   width: 50%;
@@ -26,6 +30,7 @@ div.sign-forms-wrapper input {
   width: 90%;
   height: 40px;
   margin: 4%;
+  padding-left: 10px;
   background: #fff;
   font-family: Lato;
   font-style: normal;
@@ -39,6 +44,7 @@ div.sign-forms-wrapper input {
 div.sign-forms-wrapper input[type="submit"] {
   width: 76%;
   margin-left: 12%;
+  padding-left: 0;
   border: 0;
   background: #e1b16a;
   border-radius: 5px;

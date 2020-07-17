@@ -1,4 +1,8 @@
 @media (min-width: 320px) {
+  div.content > div {
+    flex-direction: column-reverse;
+  }
+
   div.description-wrapper {
     font-size: 21px;
     display: block;
@@ -18,6 +22,10 @@
 }
 
 @media (min-width: 720px) {
+  div.content > div{
+    flex-direction: row;
+  }
+
   div.description-wrapper {
     width: 50%;
     display: inline-block;
