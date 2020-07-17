@@ -1,0 +1,20 @@
+@media (min-width: 320px) {
+  div#decorative-line {
+    top: 250px;
+  }
+}
+
+@media (min-width: 720px) {
+  div#decorative-line {
+    top: 280px;
+  }
+}
+
+@media (min-width: 960px) {
+}
+
+@media (min-width: 1140px) {
+}
+
+@media (min-width: 1500px) {
+}
