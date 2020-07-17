@@ -105,3 +105,6 @@ dist
 
 # VSCode directory
 .vscode/
+
+# SQLite database
+database.db

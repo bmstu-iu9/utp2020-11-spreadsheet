@@ -7,8 +7,6 @@ import UserRepo from '../../../server/database/UserRepo.js';
 const login = 'login';
 const password = 'password';
 const isAdmin = 0;
-const anotherPassword = 'qwerty';
-const anotherLogin = 'log';
 describe('UserRepo', () => {
   describe('#save', () => {
     it('Should save new user', () => {
@@ -16,7 +14,7 @@ describe('UserRepo', () => {
       mock({
         'database.db': {},
       });
-      const userRepo = new UserRepo(new DAO('/database.db'));
+      const userRepo = new UserRepo(new DAO('database.db'));
       const resultOfTest = userRepo.createTable()
         .then(() => userRepo.save(user))
         .then(() => userRepo.get(login))
@@ -34,7 +32,7 @@ describe('UserRepo', () => {
       mock({
         'database.db': {},
       });
-      const dao = new DAO('/database.db');
+      const dao = new DAO('database.db');
       const userRepo = new UserRepo(dao);
       const resultOfTest = userRepo.createTable()
         .then(() => {
@@ -54,7 +52,7 @@ describe('UserRepo', () => {
       mock({
         'database.db': {},
       });
-      const dao = new DAO('/database.db');
+      const dao = new DAO('database.db');
       const userRepo = new UserRepo(dao);
       assert.rejects(userRepo.createTable()
         .then(() => {
@@ -97,7 +95,7 @@ describe('UserRepo', () => {
       mock({
         'database.db': {},
       });
-      const dao = new DAO('/database.db');
+      const dao = new DAO('database.db');
       const userRepo = new UserRepo(dao);
       assert.rejects(userRepo.createTable()
         .then(userRepo.delete(login)));
