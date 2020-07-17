@@ -1,0 +1,6 @@
+{
+  "extends": ["./node_modules/stylelint-config-standard"],
+  "rules": {
+    "selector-list-comma-newline-after": null
+  }
+}
