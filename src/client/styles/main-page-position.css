@@ -24,6 +24,8 @@
 @media (min-width: 720px) {
   div.content > div {
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
 
   div.description-wrapper {

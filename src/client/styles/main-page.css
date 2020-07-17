@@ -5,31 +5,61 @@ div.content > div {
 div.description-wrapper {
   display: flex;
   width: 50%;
+}
+
+div.description-wrapper > div {
+  margin: 5%;
   font-size: 30px;
   font-family: Lato, serif;
   color: #444;
 }
 
-div.description-wrapper > div {
-  margin: 5%;
-}
-
 div.sign-forms-wrapper {
+  background-color: #fafafa;
+  border-radius: 10px;
   display: flex;
   width: 50%;
+  height: max-content;
   top: 0;
 }
 
-div.form-wrapper {
-  margin: 5%;
-  background-color: #fafafa;
-  border-radius: 10px;
+div.form-choice-wrapper {
+  height: 50px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+div.form-choice-button {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+}
+
+div.form-choice-button:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  width: 45%;
+}
+
+div.form-choice-button:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  width: 45%;
+}
+
+div.form-choice-button:hover {
+  background-color: #999;
 }
 
 div.sign-forms-wrapper input {
   width: 90%;
   height: 40px;
   margin: 4%;
+  margin-top: 35px;
   padding-left: 10px;
   background: #fff;
   font-family: Lato, serif;
@@ -44,6 +74,7 @@ div.sign-forms-wrapper input {
 div.sign-forms-wrapper input[type="submit"] {
   width: 76%;
   margin-left: 12%;
+  margin-top: 60px;
   padding-left: 0;
   border: 0;
   background: #e1b16a;
