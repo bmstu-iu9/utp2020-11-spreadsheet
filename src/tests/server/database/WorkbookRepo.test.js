@@ -5,8 +5,9 @@ import WorkbookRepo from '../../../server/database/WorkbookRepo.js';
 import UserRepo from '../../../server/database/UserRepo.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 
+const path = 'database.db';
 const login = 'login';
-const path = 'path';
+const bookPath = 'path';
 const anotherPath = 'qwerty';
 const anotherLogin = 'login2';
 let database;
@@ -32,13 +33,14 @@ describe('WorkbookRepo', () => {
     workbookRepo.dropTable();
     userRepo.dropTable();
   });
+  after(() => database.close());
 
   describe('#deleteAll', () => {
     it('Should delete all books', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
       );
-      inserting.run(null, login, path);
+      inserting.run(null, login, bookPath);
       inserting.run(null, login, anotherPath);
       workbookRepo.deleteAll();
       assert.deepStrictEqual(
@@ -50,7 +52,7 @@ describe('WorkbookRepo', () => {
   describe('#delete', () => {
     it('Should delete book', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
-        .run(null, login, path);
+        .run(null, login, bookPath);
       const id = info.lastInsertRowid;
       workbookRepo.delete(id);
       assert.deepStrictEqual(
@@ -62,16 +64,16 @@ describe('WorkbookRepo', () => {
   describe('#getById', () => {
     it('Should get book by id', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
-        .run(null, login, path);
+        .run(null, login, bookPath);
       const id = info.lastInsertRowid;
       const book = workbookRepo.getById(id);
       assert.strictEqual(book.id, id);
       assert.strictEqual(book.login, login);
-      assert.strictEqual(book.path, path);
+      assert.strictEqual(book.path, bookPath);
     });
     it('Should throw error because book doesn\'t exist', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
-        .run(null, login, path);
+        .run(null, login, bookPath);
       const id = info.lastInsertRowid;
       assert.throws(() => workbookRepo.getById(id + 1));
     });
@@ -82,21 +84,21 @@ describe('WorkbookRepo', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
       );
-      let info = inserting.run(null, login, path);
+      let info = inserting.run(null, login, bookPath);
       const id = info.lastInsertRowid;
       info = inserting.run(null, login, anotherPath);
       const anotherId = info.lastInsertRowid;
       inserting.run(null, null, 'path1');
       assert.deepStrictEqual(
         workbookRepo.getByLogin(login),
-        [new WorkbookModel(path, login, id),
+        [new WorkbookModel(bookPath, login, id),
           new WorkbookModel(anotherPath, login, anotherId)],
       );
     });
 
     it('Should throw error because user don\'t has books', () => {
       database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
-        .run(null, anotherLogin, path);
+        .run(null, anotherLogin, bookPath);
       assert.throws(() => workbookRepo.getByLogin(login));
     });
   });
@@ -105,27 +107,27 @@ describe('WorkbookRepo', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
       );
-      let info = inserting.run(null, login, path);
+      let info = inserting.run(null, login, bookPath);
       const id = info.lastInsertRowid;
       info = inserting.run(null, null, anotherPath);
       const anotherId = info.lastInsertRowid;
       assert.deepStrictEqual(
         workbookRepo.getAllBooks(),
-        [new WorkbookModel(path, login, id),
+        [new WorkbookModel(bookPath, login, id),
           new WorkbookModel(anotherPath, null, anotherId)],
       );
     });
   });
   describe('#save', () => {
     it('Should save new user', () => {
-      const book = new WorkbookModel(path, login);
+      const book = new WorkbookModel(bookPath, login);
       const id = workbookRepo.save(book);
       assert.deepStrictEqual(
         database.prepare('SELECT * FROM Books WHERE id = ?')
           .get(id),
         {
           id,
-          path,
+          path: bookPath,
           login,
         },
       );
