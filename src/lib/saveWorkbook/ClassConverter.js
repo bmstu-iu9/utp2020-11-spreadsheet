@@ -1,6 +1,12 @@
 import fs from 'fs';
 
 export default class ClassConverter {
+  static saveJson(userWorkbook, pathToWorkbooks) {
+    const file = this.convertToJson(userWorkbook);
+    fs.mkdirSync(pathToWorkbooks, { recursive: true });
+    fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
+  }
+
   static convertToJson(userWorkbook) {
     if (userWorkbook === null) {
       throw new Error('Empty workbook');
@@ -26,11 +32,5 @@ export default class ClassConverter {
     });
     jsonWorkbook.sheets = sheets;
     return JSON.stringify(jsonWorkbook);
-  }
-
-  static saveJson(userWorkbook, pathToWorkbooks) {
-    const file = this.convertToJson(userWorkbook);
-    fs.mkdirSync(pathToWorkbooks, true);
-    fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
   }
 }
