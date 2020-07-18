@@ -1,20 +1,33 @@
 export default class WorkbookModel {
   constructor(path, login = null, id = null) {
-    if (path.length > 0) {
-      this.path = path;
+    if (WorkbookModel.idIsCorrect(id)) {
+      this.setPath(path);
       this.id = id;
-      this.login = login;
+      this.setLogin(login);
     } else {
-      throw Error('Error while creating book: wrong format of data');
+      throw Error('WorkbookModel: wrong format of data');
     }
   }
 
+  static idIsCorrect(id) {
+    return typeof id === 'number' || id == null;
+  }
+
   setLogin(login) {
-    this.login = login;
+    if ((typeof login === 'string' && login.length > 0) || login == null) {
+      this.login = login;
+    } else {
+      throw TypeError('WorkbookModel: impossible type for field login');
+    }
   }
 
   setPath(path) {
-    this.path = path;
+    const pathRegExp = new RegExp('^(~|\\.?)\\/?((\\d|\\w)+\\/)*(\\d|\\w)+\\.json+$');
+    if (pathRegExp.test(path)) {
+      this.path = path;
+    } else {
+      throw Error('WorkbookModel: wrong format of path');
+    }
   }
 
   static fromSQLtoBooks(rows) {

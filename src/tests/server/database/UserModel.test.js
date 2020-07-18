@@ -4,19 +4,19 @@ import UserModel from '../../../server/database/UserModel.js';
 describe('UserModel', () => {
   describe('#constructor', () => {
     it('Should create user', () => {
-      const user = new UserModel('login', 'password', 0);
+      const user = new UserModel('login', 'password', false);
       assert.strictEqual(user.login, 'login');
       assert.strictEqual(user.password, 'password');
       assert.strictEqual(user.isAdmin, 0);
     });
     it('Should throw error because of empty password', () => {
       assert.throws(() => {
-        new UserModel('login', '', 0);
+        new UserModel('login', '', false);
       });
     });
     it('Should throw error because of empty login', () => {
       assert.throws(() => {
-        new UserModel('', 'password', 1);
+        new UserModel('', 'password', true);
       });
     });
     it('Should throw error because of invalid isAdmin', () => {
@@ -27,24 +27,24 @@ describe('UserModel', () => {
   });
   describe('#set voids', () => {
     it('Should set password', () => {
-      const user = new UserModel('login', 'password', 0);
+      const user = new UserModel('login', 'password', false);
       user.setPassword('password1');
       assert.strictEqual(user.password, 'password1');
     });
     it('Should throw error because of empty password', () => {
       assert.throws(() => {
-        const user = new UserModel('login', 'password', 0);
+        const user = new UserModel('login', 'password', false);
         user.setPassword('');
       });
     });
     it('Should set isAdmin', () => {
-      const user = new UserModel('login', 'password', 0);
-      user.setIsAdmin(1);
+      const user = new UserModel('login', 'password', false);
+      user.setIsAdmin(true);
       assert.strictEqual(user.isAdmin, 1);
     });
     it('Should throw error because of invalid isAdmin', () => {
       assert.throws(() => {
-        const user = new UserModel('login', 'password', 0);
+        const user = new UserModel('login', 'password', false);
         user.setIsAdmin(2);
       });
     });
@@ -55,18 +55,18 @@ describe('UserModel', () => {
         {
           login: 'login',
           password: 'password',
-          isAdmin: 0,
+          isAdmin: false,
         },
         {
           login: 'log',
           password: 'qwerty',
-          isAdmin: 0,
+          isAdmin: false,
         },
       ];
       assert.deepStrictEqual(
         UserModel.fromSQLtoUsers(rows),
-        [new UserModel('login', 'password', 0),
-          new UserModel('log', 'qwerty', 0)],
+        [new UserModel('login', 'password', false),
+          new UserModel('log', 'qwerty', false)],
       );
     });
   });

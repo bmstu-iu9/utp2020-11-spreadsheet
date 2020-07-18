@@ -4,6 +4,6 @@ export default class BooleanType {
   }
 
   static makeTypeError(str) {
-    throw new TypeError(`BooleanType: imposible type for ${str}() with not BooleanType`);
+    throw new TypeError(`BooleanType: impossible type for ${str}() with not BooleanType`);
   }
 }

@@ -1,19 +1,23 @@
 export default class UserModel {
   constructor(login, password, isAdmin) {
-    if (login.length > 0 && password.length > 0 && (isAdmin === 1 || isAdmin === 0)) {
+    if (UserModel.isLoginCorrect(login)) {
       this.login = login;
-      this.password = password;
-      this.isAdmin = isAdmin;
+      this.setPassword(password);
+      this.setIsAdmin(isAdmin);
     } else {
-      throw Error('Error while creating user: wrong format of data');
+      throw Error('UserModel: wrong format of data');
     }
   }
 
+  static isLoginCorrect(login) {
+    return typeof login === 'string' && login.length > 0;
+  }
+
   setIsAdmin(isAdmin) {
-    if (isAdmin === 1 || isAdmin === 0) {
-      this.isAdmin = isAdmin;
+    if (typeof isAdmin === 'boolean') {
+      this.isAdmin = Number(isAdmin);
     } else {
-      throw Error('Error while creating user: wrong format of data');
+      throw TypeError('UserModel: impossible type for field admin');
     }
   }
 
@@ -21,14 +25,14 @@ export default class UserModel {
     if (password.length > 0) {
       this.password = password;
     } else {
-      throw Error('Error while creating user: wrong format of data');
+      throw Error('UserModel: wrong format of data');
     }
   }
 
   static fromSQLtoUsers(rows) {
     const result = [];
     rows.forEach((row) => {
-      const user = new UserModel(row.login, row.password, row.isAdmin);
+      const user = new UserModel(row.login, row.password, Boolean(row.isAdmin));
       result.push(user);
     });
     return result;

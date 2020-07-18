@@ -7,8 +7,8 @@ import WorkbookModel from '../../../server/database/WorkbookModel.js';
 
 const path = 'database.db';
 const login = 'login';
-const bookPath = 'path';
-const anotherPath = 'qwerty';
+const bookPath = 'path.json';
+const anotherPath = 'qwerty.json';
 const anotherLogin = 'login2';
 let database;
 let workbookRepo;
@@ -26,8 +26,8 @@ describe('WorkbookRepo', () => {
     workbookRepo.createTable();
     // Where should be user's table because login is foreign key to user
     userRepo.createTable();
-    userRepo.save(new UserModel(login, 'abc', 0));
-    userRepo.save(new UserModel(anotherLogin, 'abc', 0));
+    userRepo.save(new UserModel(login, 'abc', false));
+    userRepo.save(new UserModel(anotherLogin, 'abc', false));
   });
   afterEach(() => {
     workbookRepo.dropTable();

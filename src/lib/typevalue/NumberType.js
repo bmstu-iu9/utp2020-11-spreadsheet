@@ -4,7 +4,7 @@ export default class NumberType {
   }
 
   static makeTypeError(str) {
-    throw new TypeError(`NumberType: imposible type for ${str}() with not NumberType`);
+    throw new TypeError(`NumberType: impossible type for ${str}() with not NumberType`);
   }
 
   sum(valueType) {

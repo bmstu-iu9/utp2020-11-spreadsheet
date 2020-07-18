@@ -46,7 +46,7 @@ export default class UserRepo {
                               FROM Users
                               WHERE login = ?`).get(login);
       if (row) {
-        return new UserModel(row.login, row.password, row.isAdmin);
+        return new UserModel(row.login, row.password, Boolean(row.isAdmin));
       }
       throw Error(`no user with login ${login}`);
     } catch (e) {
