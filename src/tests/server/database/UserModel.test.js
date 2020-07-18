@@ -49,4 +49,25 @@ describe('UserModel', () => {
       });
     });
   });
+  describe('#fromSQLtoUsers', () => {
+    it('Should transform sql answer to array of users', () => {
+      const rows = [
+        {
+          login: 'login',
+          password: 'password',
+          isAdmin: 0,
+        },
+        {
+          login: 'log',
+          password: 'qwerty',
+          isAdmin: 0,
+        },
+      ];
+      assert.deepStrictEqual(
+        UserModel.fromSQLtoUsers(rows),
+        [new UserModel('login', 'password', 0),
+          new UserModel('log', 'qwerty', 0)],
+      );
+    });
+  });
 });

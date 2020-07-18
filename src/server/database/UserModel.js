@@ -24,4 +24,13 @@ export default class UserModel {
       throw Error('Error while creating user: wrong format of data');
     }
   }
+
+  static fromSQLtoUsers(rows) {
+    const result = [];
+    rows.forEach((row) => {
+      const user = new UserModel(row.login, row.password, row.isAdmin);
+      result.push(user);
+    });
+    return result;
+  }
 }

@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet#readme",
   "dependencies": {
-    "sqlite3": "^5.0.0"
+    "better-sqlite3": "^7.1.0"
   },
   "type": "module",
   "devDependencies": {

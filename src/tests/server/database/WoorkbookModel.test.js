@@ -1,5 +1,4 @@
 import * as assert from 'assert';
-// eslint-disable-next-line import/named
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 
 describe('WorkbookModel', () => {
@@ -36,6 +35,26 @@ describe('WorkbookModel', () => {
       const book = new WorkbookModel('path', 'login');
       book.setLogin('login1');
       assert.strictEqual(book.login, 'login1');
+    });
+  });
+  describe('#fromSQLtoBooks', () => {
+    it('Should transform sql answer to array of books', () => {
+      const rows = [
+        {
+          id: 1,
+          login: 'login',
+          path: 'path',
+        },
+        {
+          id: 3,
+          login: null,
+          path: 'path1',
+        },
+      ];
+      assert.deepStrictEqual(
+        WorkbookModel.fromSQLtoBooks(rows), [new WorkbookModel('path', 'login', 1),
+          new WorkbookModel('path1', null, 3)],
+      );
     });
   });
 });

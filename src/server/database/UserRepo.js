@@ -1,8 +1,16 @@
 import UserModel from './UserModel.js';
 
 export default class UserRepo {
-  constructor(dao) {
-    this.dao = dao;
+  constructor(database) {
+    this.database = database;
+  }
+
+  dropTable() {
+    try {
+      this.database.prepare('DROP TABLE IF EXISTS Users').run();
+    } catch (err) {
+      throw Error(`Error while dropping user table: ${err}`);
+    }
   }
 
   createTable() {
@@ -13,61 +21,67 @@ export default class UserRepo {
                                  isAdmin  INTEGER NOT NULL DEFAULT 0
                              );
     `;
-    return this.dao.run(userTableSchema, (err) => {
-      if (err) {
-        throw Error(`Error while creating user table: ${err}`);
-      }
-    });
+    try {
+      this.database.prepare(userTableSchema).run();
+    } catch (err) {
+      throw Error(`Error while creating user table: ${err}`);
+    }
   }
 
   save(user) {
-    return this.dao.run(`INSERT INTO Users (login, password, isAdmin)
-                         VALUES (?, ?, ?)
-                         ON CONFLICT(login) DO UPDATE SET password = ?,
-                                                          isAdmin  = ?;`,
-    [user.login, user.password, user.isAdmin, user.password, user.isAdmin], (err) => {
-      if (err) {
-        throw Error(`Error while inserting or updating user: ${err}`);
-      }
-    });
+    try {
+      this.database.prepare(`INSERT INTO Users (login, password, isAdmin)
+                             VALUES (?, ?, ?)
+                             ON CONFLICT(login) DO UPDATE SET password = ?,
+                                                              isAdmin  = ?;`)
+        .run(user.login, user.password, user.isAdmin, user.password, user.isAdmin);
+    } catch (err) {
+      throw Error(`Error while inserting or updating user: ${err}`);
+    }
   }
 
   get(login) {
-    return this.dao.get(`SELECT login, password, isAdmin
-                         FROM Users
-                         WHERE login = ?`, [login], (err, row) => {
-      if (err) {
-        throw Error(`Error while get user: ${err}`);
-      }
+    try {
+      const row = this.database.prepare(`SELECT login, password, isAdmin
+                              FROM Users
+                              WHERE login = ?`).get(login);
       if (row) {
         return new UserModel(row.login, row.password, row.isAdmin);
       }
-      throw Error(`Error while get user: no user with login ${login} `);
-    });
+      throw Error(`no user with login ${login}`);
+    } catch (e) {
+      throw Error(`Error while get user: ${e}`);
+    }
   }
 
   getAllUsers() {
-    return this.dao.all(`SELECT login, password, isAdmin
-                         FROM Users `, (err, rows) => {
-      if (err) {
-        throw Error(`Error while get users: ${err}`);
-      }
-      const result = [];
-      rows.forEach((row) => {
-        const user = new UserModel(row.login, row.password, row.isAdmin);
-        result.push(user);
-      });
-      return result;
-    });
+    try {
+      const rows = this.database.prepare(`SELECT login, password, isAdmin
+                                          FROM Users`).all();
+      return UserModel.fromSQLtoUsers(rows);
+    } catch (e) {
+      throw Error(`Error while get users: ${e}`);
+    }
   }
 
-  delete(user) {
-    return this.dao.run(`DELETE
-                         FROM Users
-                         WHERE login = ?`, [user.login], (err) => {
-      if (err) {
-        throw Error(`Error while deleting user: ${err}`);
-      }
-    });
+  delete(login) {
+    try {
+      this.database.prepare(`DELETE
+                             FROM Users
+                             WHERE login = ?`)
+        .run(login);
+    } catch (err) {
+      throw Error(`Error while deleting user: ${err}`);
+    }
+  }
+
+  deleteAll() {
+    try {
+      this.database.prepare(`DELETE
+                             FROM Users`)
+        .run();
+    } catch (err) {
+      throw Error(`Error while deleting users: ${err}`);
+    }
   }
 }
