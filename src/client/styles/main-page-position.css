@@ -1,0 +1,80 @@
+@media (min-width: 320px) {
+  div.content > div {
+    flex-direction: column-reverse;
+  }
+
+  div.description-wrapper {
+    font-size: 21px;
+    display: block;
+    width: 100%;
+  }
+
+  div.sign-forms-wrapper {
+    display: block;
+    width: 100%;
+    padding-top: 5%;
+    margin-top: 5%;
+  }
+
+  div#login-form-wrapper {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 720px) {
+  div.content > div {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div.description-wrapper {
+    width: 50%;
+    display: inline-block;
+    font-size: 23px;
+  }
+
+  div.sign-forms-wrapper {
+    display: inline-block;
+    width: 49%;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  div#login-form-wrapper {
+    margin-top: 5%;
+  }
+}
+
+@media (min-width: 960px) {
+  div.description-wrapper {
+    display: inline-block;
+    font-size: 25px;
+  }
+
+  div.sign-forms-wrapper {
+    display: inline-block;
+  }
+}
+
+@media (min-width: 1140px) {
+  div.description-wrapper {
+    display: inline-block;
+    width: 60%;
+  }
+
+  div.sign-forms-wrapper {
+    display: inline-block;
+    width: 39%;
+  }
+}
+
+@media (min-width: 1500px) {
+  div.description-wrapper {
+    display: inline-block;
+  }
+
+  div.sign-forms-wrapper {
+    display: inline-block;
+  }
+}

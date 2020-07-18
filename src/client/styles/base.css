@@ -1,0 +1,42 @@
+body {
+  background-color: white;
+}
+
+nav,
+header,
+footer,
+section,
+aside {
+  display: block;
+  z-index: 2;
+}
+
+nav.header {
+  left: 0;
+  top: 0;
+  height: 100px;
+  width: 100%;
+  background: #444c5c;
+  position: absolute;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 78px;
+  color: #444;
+}
+
+nav.header div.logo {
+  position: absolute;
+  width: 205px;
+  height: 80px;
+  left: 17px;
+  top: 9px;
+  background: #fff;
+  border-radius: 10px;
+}
+
+div.content {
+  display: flex;
+  background-color: #dae6e6;
+}

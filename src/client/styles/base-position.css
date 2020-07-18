@@ -1,0 +1,35 @@
+@media (min-width: 320px) {
+  body {
+    padding: 100px 0 0;
+  }
+
+  div.content {
+    padding: 10px 18px;
+  }
+}
+
+@media (min-width: 720px) {
+  div.content {
+    margin: 30px;
+    flex-direction: row;
+    padding: 15px 20px;
+  }
+}
+
+@media (min-width: 960px) {
+  div.content {
+    padding: 25px 40px;
+  }
+}
+
+@media (min-width: 1140px) {
+  div.content {
+    padding: 35px 65px;
+  }
+}
+
+@media (min-width: 1500px) {
+  div.content {
+    padding: 50px 80px;
+  }
+}

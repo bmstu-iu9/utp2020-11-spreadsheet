@@ -108,3 +108,5 @@ dist
 
 # SQLite database
 database.db
+#PHPstorm directory
+.idea/
