@@ -5,12 +5,25 @@ info:
 security:
   - "bearer": []
 paths:
+  /auth:
+    post:
+      description: "Авторизация"
+      responses:
+        "200":
+          description: "Успешная авторизация"
+        "403":
+          description: "Неудачная авторизация"
   /user:
     get:
       description: "Получение всех пользователей"
       responses:
         "200":
           description: "Пользователи были успешно получены"
+          content:
+            "application/json":
+              examples:
+                users:
+                  $ref: "#/components/examples/users"
         "401":
           description: "Неавторизованный запрос"
         "403":
@@ -75,13 +88,33 @@ paths:
       responses:
         "200":
           description: "Все книги были успешно получены"
+          content:
+            "application/json":
+              examples:
+                workbooks:
+                  $ref: "#/components/examples/workbooks"
         "401":
           description: "Неавторизованный запрос"
     post:
       description: "Создание новой книги"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/workbook"
+            examples:
+              workbook:
+                $ref: "#/components/examples/workbook"
       responses:
         "200":
           description: "Книга была успешно создана"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/workbook"
+              examples:
+                workbook:
+                  $ref: "#/components/examples/workbook"
         "400":
           description: "Некорректный запрос"
         "401":
@@ -100,6 +133,13 @@ paths:
       responses:
         "200":
           description: "Книга была успешно получена"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/workbook"
+              examples:
+                workbook:
+                  $ref: "#/components/examples/workbook"
         "401":
           description: "Неавторизованный запрос"
         "403":
@@ -139,3 +179,16 @@ components:
   schemas:
     workbook:
       $ref: "tableSchema.json"
+  examples:
+    workbook:
+      value:
+        $ref: "examples/table.json"
+    workbooks:
+      value:
+        $ref: "examples/tables.json"
+    user:
+      value:
+        $ref: "examples/user.json"
+    users:
+      value:
+        $ref: "example/users.json"
