@@ -3,31 +3,41 @@ import UserRepo from '../../server/database/UserRepo.js';
 import UserModel from '../../server/database/UserModel.js';
 
 export default class Validation {
-  static validate(login, password, isRegistration, pathToDatabase) {
-    const database = new Database(pathToDatabase);
+  constructor(pathToDatabase) {
+    this.setNewDatabase(pathToDatabase);
+  }
+
+  setNewDatabase(pathToDatabase) {
+    this.database = new Database(pathToDatabase);
+  }
+
+  // Main method
+  validate(login, password, isRegistration) {
+    if (this.database.open === false) {
+      throw Error('Closed database');
+    }
     let result = '';
     if (isRegistration === true) {
-      result = this.validateRegistration(login, password, database);
+      result = this.validateRegistration(login, password);
     } else {
-      result = this.validateAuthorization(login, password, database);
+      result = this.validateAuthorization(login, password);
     }
-    database.close();
     return result;
   }
 
-  static validateRegistration(login, password, database) {
-    const repo = new UserRepo(database);
+  validateRegistration(login, password) {
+    const repo = new UserRepo(this.database);
     const checkUser = repo.get(login);
     let result = '';
-    if (login.length === 0) {
-      result = 'Short login';
-    } else if (this.emptyString(login)) {
+    if (Validation.haveWhitespaces(login)) {
+      result = 'Whitespaces in login';
+    } else if (login.length === 0) {
       result = 'Empty login';
     } else if (typeof checkUser !== 'undefined') {
       result = 'Need to change login';
+    } else if (Validation.haveWhitespaces(password)) {
+      result = 'Whitespaces in password';
     } else if (password.length === 0) {
-      result = 'Short password';
-    } else if (this.emptyString(password)) {
       result = 'Empty password';
     } else {
       result = 'OK';
@@ -35,15 +45,13 @@ export default class Validation {
     return result;
   }
 
-  static validateAuthorization(login, password, database) {
-    const repo = new UserRepo(database);
+  validateAuthorization(login, password) {
+    const repo = new UserRepo(this.database);
     const checkUser = repo.get(login);
     let result = '';
     if (typeof checkUser === 'undefined') {
       result = 'Nonexistent user';
-    } else if (!this.checkLogin(login, checkUser.login)) {
-      result = 'Incorrect login';
-    } else if (!this.checkPassword(UserModel.getHashedPassword(password), checkUser.password)) {
+    } else if (!Validation.checkPassword(UserModel.getHashedPassword(password), checkUser.password)) {
       result = 'Incorrect password';
     } else {
       result = 'OK';
@@ -51,8 +59,12 @@ export default class Validation {
     return result;
   }
 
-  static emptyString(str) {
-    return str.replace(/\s/g, '').length === 0;
+  close() {
+    this.database.close();
+  }
+
+  static haveWhitespaces(str) {
+    return str.length !== str.replace(/\s/g, '').length;
   }
 
   static checkLogin(login, databaseLogin) {
