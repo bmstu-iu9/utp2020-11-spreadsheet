@@ -7,10 +7,25 @@ security:
 paths:
   /auth:
     post:
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/auth"
+            examples:
+              auth:
+                $ref: "#/components/examples/auth"
       description: "Авторизация"
       responses:
         "200":
           description: "Успешная авторизация"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/token"
+              examples:
+                token:
+                  $ref: "#/components/examples/token"
         "403":
           description: "Неудачная авторизация"
   /user:
@@ -21,6 +36,8 @@ paths:
           description: "Пользователи были успешно получены"
           content:
             "application/json":
+              schema:
+                $ref: "#/components/schemas/users"
               examples:
                 users:
                   $ref: "#/components/examples/users"
@@ -31,27 +48,48 @@ paths:
     post:
       description: "Регистрация нового пользователя"
       security: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/userRegistration"
+            examples:
+              userRegistration:
+                $ref: "#/components/examples/userRegistration"
       responses:
         "200":
           description: "Пользователь был успешно создан"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/user"
+              examples:
+                user:
+                  $ref: "#/components/examples/user"
         "400":
           description: "Некорректный запрос"
         "409":
           description: "Уже есть пользователь с таким логином"
-  /user/{id}:
+  /user/{username}:
     parameters:
-      - name: "id"
+      - name: "username"
         in: "path"
         required: true
         description: "Идентификатор пользователя"
         schema:
-          type: integer
-          format: int64
+          type: string
     get:
       description: "Получение пользователя с заданным ID"
       responses:
         "200":
           description: "Пользователь был успешно получен"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/user"
+              examples:
+                user:
+                  $ref: "#/components/examples/user"
         "401":
           description: "Неавторизованный запрос"
         "403":
@@ -60,9 +98,24 @@ paths:
           description: "Пользователь не был найден"
     patch:
       description: "Изменение пользователя с заданным ID"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/userPatch"
+            examples:
+              userPatch:
+                $ref: "#/components/examples/userPatch"
       responses:
         "200":
           description: "Пользователь был успешно изменён"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/user"
+              examples:
+                user:
+                  $ref: "#/components/examples/user"
         "400":
           description: "Некорректный запрос"
         "401":
@@ -111,10 +164,10 @@ paths:
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/workbook"
+                $ref: "#/components/schemas/workbookID"
               examples:
                 workbook:
-                  $ref: "#/components/examples/workbook"
+                  $ref: "#/components/examples/workbookID"
         "400":
           description: "Некорректный запрос"
         "401":
@@ -136,10 +189,10 @@ paths:
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/workbook"
+                $ref: "#/components/schemas/workbookID"
               examples:
                 workbook:
-                  $ref: "#/components/examples/workbook"
+                  $ref: "#/components/examples/workbookID"
         "401":
           description: "Неавторизованный запрос"
         "403":
@@ -179,6 +232,20 @@ components:
   schemas:
     workbook:
       $ref: "tableSchema.json"
+    user:
+      type: "object"
+    users:
+      type: "array"
+    auth:
+      type: "object"
+    token:
+      type: "object"
+    userRegistration:
+      type: "object"
+    userPatch:
+      type: "object"
+    workbookID:
+      type: "object"
   examples:
     workbook:
       value:
@@ -191,4 +258,19 @@ components:
         $ref: "examples/user.json"
     users:
       value:
-        $ref: "example/users.json"
+        $ref: "examples/users.json"
+    auth:
+      value:
+        $ref: "examples/auth.json"
+    token:
+      value:
+        $ref: "examples/token.json"
+    userRegistration:
+      value:
+        $ref: "examples/userRegistration.json"
+    userPatch:
+      value:
+        $ref: "examples/userPatch.json"
+    workbookID:
+      value:
+        $ref: "examples/workbookID.json"
