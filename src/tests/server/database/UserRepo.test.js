@@ -40,10 +40,10 @@ describe('UserRepo', () => {
       assert.strictEqual(anotherUser.isAdmin, Number(isAdmin));
     });
 
-    it('Should throw error because user doesn\'t exist', () => {
+    it('Should return undefined because user doesn\'t exist', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
         .run(anotherLogin, password, Number(isAdmin));
-      assert.throws(() => userRepo.get(login));
+      assert.strictEqual(userRepo.get(login), undefined);
     });
   });
   describe('#save', () => {
