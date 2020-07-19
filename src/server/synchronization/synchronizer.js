@@ -22,18 +22,22 @@ export default class Synchronizer {
       }
     }
     if (this.lastChanges.length !== 0 && lastPos === -1) {
-      return { first: undefined, second: undefined };
+      throw new TypeError('invalid log ID');
     }
+    const errAns = [];
     for (let i = 0; i < arrayLogs.length; i += 1) {
       for (let j = lastPos + 1; j < this.lastChanges.length; j += 1) {
         if (arrayLogs[i].cellAddress === this.lastChanges[j].cellAddress
           && arrayLogs[i].changeType === this.lastChanges[j].changeType) {
-          return { first: this.lastChanges[j], second: arrayLogs[i] };
+          errAns.push(this.lastChanges[j]);
         }
       }
       if (!setChangeType.has(arrayLogs[0].changeType)) {
         throw new TypeError(`invalid log change type, find ${arrayLogs[i].changeType}`);
       }
+    }
+    if (errAns.length > 0) {
+      return errAns;
     }
     arrayLogs.forEach((log) => {
       if (log.changeType === 'color') {

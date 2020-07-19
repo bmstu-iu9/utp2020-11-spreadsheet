@@ -93,6 +93,10 @@ describe('Synchronizer', () => {
       assert.throws(() => {
         sz.addArrayLogs([log3], 0);
       });
+      sz.addArrayLogs([log1], 0);
+      assert.throws(() => {
+        sz.addArrayLogs([log3], -1);
+      });
     });
     it('should add collision log', () => {
       mock({
@@ -101,8 +105,7 @@ describe('Synchronizer', () => {
       ClassConverter.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       sz.addArrayLogs([log2], 0);
-      assert.deepEqual(sz.addArrayLogs([log4], 0),
-        { first: log2, second: log4 });
+      assert.deepEqual(sz.addArrayLogs([log4], 0), [log2]);
       mock.restore();
     });
   });
@@ -113,7 +116,7 @@ describe('Synchronizer', () => {
       });
       ClassConverter.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
-      sz.addArrayLogs([log1, log2]);
+      sz.addArrayLogs([log1, log2], 0);
       sz.clearCheckChanges();
       assert.deepEqual(sz.lastChanges, [{ ID: 0 }]);
       mock.restore();
