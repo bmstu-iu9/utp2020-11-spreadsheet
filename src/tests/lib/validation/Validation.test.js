@@ -12,8 +12,8 @@ const workbookRepo = new WorkbookRepo(database);
 
 describe('Validation', () => {
   before(() => {
-    userRepo.dropTable();
     workbookRepo.dropTable();
+    userRepo.dropTable();
   });
   beforeEach(() => {
     userRepo.createTable();
