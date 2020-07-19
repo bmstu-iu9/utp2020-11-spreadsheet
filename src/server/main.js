@@ -1,13 +1,13 @@
-const express = require('express');
-const http = require('http');
-const path = require('path');
+import express from 'express';
+import http from 'http';
+import path from 'path';
 
 const config = { port: 3000 };
 
 const app = express();
 
 app.set('view options', { layout: false });
-app.use(express.static(`${__dirname}/template`));
+app.use(express.static(`${path.resolve()}/template`));
 
 app.use(express.favicon());
 
@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
   res.render('/index.html');
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(path.resolve(), 'public')));
 
 app.use((err, req, res, next) => {
   // NODE_ENV = 'production'
