@@ -1,52 +1,65 @@
-import fs from 'fs';
+import readWorkbook from '../../lib/readWorkbook/JsonConverter.js';
+import saveWorkbook from '../../lib/saveWorkbook/ClassConverter.js';
+
+const setChangeType = new Set(['color', 'value']);
 
 export default class Synchronizer {
-  constructor(pathToWorkbook, page) {
+  constructor(nameWorkbook, pathToWorkbook, page, lastChanges = [{ ID: 0 }], maxLogSize = 10) {
     this.pathToWorkbook = pathToWorkbook;
-    this.jsonWorkbook = JSON.parse(fs.readFileSync(pathToWorkbook));
+    this.workbook = readWorkbook.readWorkbook(`${this.pathToWorkbook}/${nameWorkbook}.json`);
     this.page = page;
-    this.lastChanges = new Map();
-    this.IDlogs = 0;
+    this.lastChanges = lastChanges;
+    this.maxLogSize = maxLogSize;
   }
 
-  addArrayLogs(arrayLogs) {
-    this.IDlogs += 1;
-    arrayLogs.forEach((log) => {
-      switch (log.type) {
-        case 'color': {
-          const { cells } = this.jsonWorkbook.sheets[this.page];
-          if (cells[log.cellAddress] === undefined) {
-            cells[log.cellAddress] = {};
-          }
-          cells[log.cellAddress].color = log.color;
-          break;
-        }
-        case 'value': {
-          const { cells } = this.jsonWorkbook.sheets[this.page];
-          if (cells[log.cellAddress] === undefined) {
-            cells[log.cellAddress] = {};
-          }
-          cells[log.cellAddress].type = log.valueType;
-          cells[log.cellAddress].value = log.value;
-          break;
-        }
-        default:
-          throw new TypeError('undefined log change type');
+  // в userID желательно записывать Math.random() и userID должен быть записан во все arrayLogs
+  addArrayLogs(arrayLogs, userID) {
+    let lastPos = -1;
+    for (let i = this.lastChanges.length - 1; i >= 0; i -= 1) {
+      if (userID === this.lastChanges[i].ID) {
+        lastPos = i;
+        break;
       }
+    }
+    if (this.lastChanges.length !== 0 && lastPos === -1) {
+      return { first: undefined, second: undefined };
+    }
+    for (let i = 0; i < arrayLogs.length; i += 1) {
+      for (let j = lastPos + 1; j < this.lastChanges.length; j += 1) {
+        if (arrayLogs[i].cellAddress === this.lastChanges[j].cellAddress
+          && arrayLogs[i].changeType === this.lastChanges[j].changeType) {
+          return { first: this.lastChanges[j], second: arrayLogs[i] };
+        }
+      }
+      if (!setChangeType.has(arrayLogs[0].changeType)) {
+        throw new TypeError(`invalid log change type, find ${arrayLogs[i].changeType}`);
+      }
+    }
+    arrayLogs.forEach((log) => {
+      if (log.changeType === 'color') {
+        const { cells } = this.workbook.spreadsheets[this.page];
+        if (cells.get(log.cellAddress) === undefined) {
+          cells.set(log.cellAddress, {});
+        }
+        cells.get(log.cellAddress).color = log.color;
+      } else if (log.changeType === 'value') {
+        const { cells } = this.workbook.spreadsheets[this.page];
+        if (cells.get(log.cellAddress) === undefined) {
+          cells.set(log.cellAddress, {});
+        }
+        cells.get(log.cellAddress).type = log.type;
+        cells.get(log.cellAddress).value = log.value;
+      }
+      this.lastChanges.push(log);
     });
-    const last = arrayLogs[arrayLogs.length - 1];
-    const inMap = this.lastChanges.get(`${last.cellAddress}/${last.type}`);
-    const ans = (inMap !== undefined) ? { first: inMap, second: last } : undefined;
-    // при коллизия изменений - изменение также применяется, но начинает возвращать пару
-    this.lastChanges.set(`${last.cellAddress}/${last.type}`, last);
-    return ans;
+    return true;
   }
 
   clearCheckChanges() {
-    this.lastChanges = new Map();
+    this.lastChanges = [{ ID: 0 }];
   }
 
   synchronize() {
-    fs.writeFileSync(this.pathToWorkbook, JSON.stringify(this.jsonWorkbook));
+    saveWorkbook.saveJson(this.workbook, `${this.pathToWorkbook}/../`);
   }
 }
