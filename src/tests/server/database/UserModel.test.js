@@ -6,7 +6,7 @@ describe('UserModel', () => {
     it('Should create user', () => {
       const user = new UserModel('login', 'password', false);
       assert.strictEqual(user.login, 'login');
-      assert.strictEqual(user.password, 'password');
+      assert.strictEqual(user.password, UserModel.getHashedPassword('password'));
       assert.strictEqual(user.isAdmin, 0);
     });
     it('Should throw error because of empty password', () => {
@@ -29,7 +29,7 @@ describe('UserModel', () => {
     it('Should set password', () => {
       const user = new UserModel('login', 'password', false);
       user.setPassword('password1');
-      assert.strictEqual(user.password, 'password1');
+      assert.strictEqual(user.password, UserModel.getHashedPassword('password1'));
     });
     it('Should throw error because of empty password', () => {
       assert.throws(() => {
@@ -49,24 +49,16 @@ describe('UserModel', () => {
       });
     });
   });
-  describe('#fromSQLtoUsers', () => {
-    it('Should transform sql answer to array of users', () => {
-      const rows = [
-        {
-          login: 'login',
-          password: 'password',
-          isAdmin: false,
-        },
-        {
-          login: 'log',
-          password: 'qwerty',
-          isAdmin: false,
-        },
-      ];
+  describe('#fromSQLtoUser', () => {
+    it('Should transform sql answer to user', () => {
+      const row = {
+        login: 'login',
+        password: UserModel.getHashedPassword('password'),
+        isAdmin: false,
+      };
       assert.deepStrictEqual(
-        UserModel.fromSQLtoUsers(rows),
-        [new UserModel('login', 'password', false),
-          new UserModel('log', 'qwerty', false)],
+        UserModel.fromSQLtoUser(row),
+        new UserModel('login', 'password', false),
       );
     });
   });
