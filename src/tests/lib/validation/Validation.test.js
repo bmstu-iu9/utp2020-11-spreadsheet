@@ -3,14 +3,17 @@ import Database from 'better-sqlite3';
 import Validation from '../../../lib/validation/Validation.js';
 import UserModel from '../../../server/database/UserModel.js';
 import UserRepo from '../../../server/database/UserRepo.js';
+import WorkbookRepo from '../../../server/database/WorkbookRepo.js';
 
 const pathToDatabase = 'database.db';
 const database = new Database(pathToDatabase);
 const userRepo = new UserRepo(database);
+const workbookRepo = new WorkbookRepo(database);
 
 describe('Validation', () => {
   before(() => {
     userRepo.dropTable();
+    workbookRepo.dropTable();
   });
   beforeEach(() => {
     userRepo.createTable();
@@ -41,83 +44,83 @@ describe('Validation', () => {
       });
     });
   });
-  describe('#setNewDatabase()', () => {
+  describe('#setDatabase()', () => {
     it('should throw an exception for incorrect path to database', () => {
       const validator = new Validation(pathToDatabase);
       assert.throws(() => {
-        validator.setNewDatabase('~/db/database.db');
+        validator.setDatabase('~/db/database.db');
       });
     });
   });
   describe('#validateRegistration()', () => {
     it('should return \'OK\' for correct user', () => {
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateRegistration('alexis', 'omg'), 'OK');
+      assert.strictEqual(validator.validateRegistration('alexis', 'omgomg'), 'OK');
       validator.close();
     });
     it('should ask for changing login', () => {
-      userRepo.save(new UserModel('alexis', 'omg', true));
+      userRepo.save(new UserModel('alexis', 'omgomg', true));
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateRegistration('alexis', 'omg'), 'Need to change login');
+      assert.strictEqual(validator.validateRegistration('alexis', 'omgomg'), 'Login unavailable');
       validator.close();
     });
     it('should find whitespaces in login', () => {
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateRegistration(' alexis', 'omg'), 'Whitespaces in login');
+      assert.strictEqual(validator.validateRegistration(' alexis', 'omgomg'), 'Whitespaces in login');
       validator.close();
     });
     it('should find whitespaces in password', () => {
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateRegistration('alexis', ' omg'), 'Whitespaces in password');
+      assert.strictEqual(validator.validateRegistration('alexis', ' omgomg'), 'Whitespaces in password');
       validator.close();
     });
     it('should report about empty login', () => {
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateRegistration('', 'omg'), 'Empty login');
+      assert.strictEqual(validator.validateRegistration('', 'omgomg'), 'Empty login');
       validator.close();
     });
-    it('should report about empty password', () => {
+    it('should report about short password', () => {
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateRegistration('alexis', ''), 'Empty password');
+      assert.strictEqual(validator.validateRegistration('alexis', 'omg'), 'Short password');
       validator.close();
     });
   });
   describe('#validateAuthorization()', () => {
     it('should return \'OK\' for correct user', () => {
-      userRepo.save(new UserModel('alexis', 'omg', true));
+      userRepo.save(new UserModel('alexis', 'omgomg', true));
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateAuthorization('alexis', 'omg'), 'OK');
+      assert.strictEqual(validator.validateAuthorization('alexis', 'omgomg'), 'OK');
       validator.close();
     });
     it('should report about incorrect password', () => {
-      userRepo.save(new UserModel('alexis', 'omg', true));
+      userRepo.save(new UserModel('alexis', 'omgomg', true));
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateAuthorization('alexis', 'OMG'), 'Incorrect password');
+      assert.strictEqual(validator.validateAuthorization('alexis', 'Omgomg'), 'Incorrect password');
       validator.close();
     });
     it('should report about nonexistent user', () => {
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validateAuthorization('alexis', 'omg'), 'Nonexistent user');
+      assert.strictEqual(validator.validateAuthorization('alexis', 'omgomg'), 'Nonexistent user');
       validator.close();
     });
   });
   describe('#validate()', () => {
     it('should return \'Empty login\' from validateRegistration()', () => {
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validate('', 'omg', true), 'Empty login');
+      assert.strictEqual(validator.validate('', 'omgomg', true), 'Empty login');
       validator.close();
     });
     it('should return \'Incorrect password\' from validateAuthorization()', () => {
-      userRepo.save(new UserModel('alexis', 'omg', true));
+      userRepo.save(new UserModel('alexis', 'omgomg', true));
       const validator = new Validation(pathToDatabase);
-      assert.strictEqual(validator.validate('alexis', 'OMG', false), 'Incorrect password');
+      assert.strictEqual(validator.validate('alexis', 'OMGomg', false), 'Incorrect password');
       validator.close();
     });
     it('should throw an exception for closed database', () => {
       const validator = new Validation(pathToDatabase);
       validator.close();
       assert.throws(() => {
-        validator.validate('alexis', 'omg', true);
+        validator.validate('alexis', 'omgomg', true);
       });
     });
   });

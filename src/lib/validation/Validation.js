@@ -4,10 +4,10 @@ import UserModel from '../../server/database/UserModel.js';
 
 export default class Validation {
   constructor(pathToDatabase) {
-    this.setNewDatabase(pathToDatabase);
+    this.setDatabase(pathToDatabase);
   }
 
-  setNewDatabase(pathToDatabase) {
+  setDatabase(pathToDatabase) {
     this.database = new Database(pathToDatabase);
   }
 
@@ -34,11 +34,11 @@ export default class Validation {
     } else if (login.length === 0) {
       result = 'Empty login';
     } else if (typeof checkUser !== 'undefined') {
-      result = 'Need to change login';
+      result = 'Login unavailable';
     } else if (Validation.haveWhitespaces(password)) {
       result = 'Whitespaces in password';
-    } else if (password.length === 0) {
-      result = 'Empty password';
+    } else if (password.length < 6) {
+      result = 'Short password';
     } else {
       result = 'OK';
     }
