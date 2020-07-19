@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export default class UserModel {
   constructor(login, password, isAdmin) {
     if (UserModel.isLoginCorrect(login)) {
@@ -23,17 +25,26 @@ export default class UserModel {
 
   setPassword(password) {
     if (password.length > 0) {
-      this.password = password;
+      this.password = UserModel.getHashedPassword(password);
     } else {
       throw Error('UserModel: wrong format of data');
     }
   }
 
+  static getHashedPassword(password) {
+    return crypto.createHash('sha256').update(password).digest('base64');
+  }
+
+  static fromSQLtoUser(row) {
+    const user = new UserModel(row.login, 'password', Boolean(row.isAdmin));
+    user.password = row.password;
+    return user;
+  }
+
   static fromSQLtoUsers(rows) {
     const result = [];
     rows.forEach((row) => {
-      const user = new UserModel(row.login, row.password, Boolean(row.isAdmin));
-      result.push(user);
+      result.push(UserModel.fromSQLtoUser(row));
     });
     return result;
   }

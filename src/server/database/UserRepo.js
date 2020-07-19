@@ -45,10 +45,7 @@ export default class UserRepo {
       const row = this.database.prepare(`SELECT login, password, isAdmin
                               FROM Users
                               WHERE login = ?`).get(login);
-      if (row) {
-        return new UserModel(row.login, row.password, Boolean(row.isAdmin));
-      }
-      throw Error(`no user with login ${login}`);
+      return row ? UserModel.fromSQLtoUser(row) : undefined;
     } catch (e) {
       throw Error(`Error while get user: ${e}`);
     }

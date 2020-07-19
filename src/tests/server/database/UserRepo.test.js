@@ -33,17 +33,17 @@ describe('UserRepo', () => {
   describe('#get', () => {
     it('Should get user by login', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
-        .run(login, password, Number(isAdmin));
+        .run(login, UserModel.getHashedPassword(password), Number(isAdmin));
       const anotherUser = userRepo.get(login);
       assert.strictEqual(anotherUser.login, login);
-      assert.strictEqual(anotherUser.password, password);
+      assert.strictEqual(anotherUser.password, UserModel.getHashedPassword(password));
       assert.strictEqual(anotherUser.isAdmin, Number(isAdmin));
     });
 
-    it('Should throw error because user doesn\'t exist', () => {
+    it('Should return undefined because user doesn\'t exist', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
         .run(anotherLogin, password, Number(isAdmin));
-      assert.throws(() => userRepo.get(login));
+      assert.strictEqual(userRepo.get(login), undefined);
     });
   });
   describe('#save', () => {
@@ -56,13 +56,13 @@ describe('UserRepo', () => {
         {
           isAdmin: Number(isAdmin),
           login,
-          password,
+          password: UserModel.getHashedPassword(password),
         },
       );
     });
     it('Should update existing user', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
-        .run(login, password, Number(isAdmin));
+        .run(login, UserModel.getHashedPassword(password), Number(isAdmin));
       const sameUser = userRepo.get(login);
       sameUser.setPassword(anotherPassword);
       userRepo.save(sameUser);
@@ -72,7 +72,7 @@ describe('UserRepo', () => {
         {
           isAdmin: Number(isAdmin),
           login,
-          password: anotherPassword,
+          password: UserModel.getHashedPassword(anotherPassword),
         },
       );
     });
@@ -81,8 +81,8 @@ describe('UserRepo', () => {
   describe('#getAllUsers', () => {
     it('Should get all users', () => {
       const inserting = database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)');
-      inserting.run(login, password, Number(isAdmin));
-      inserting.run(anotherLogin, anotherPassword, Number(isAdmin));
+      inserting.run(login, UserModel.getHashedPassword(password), Number(isAdmin));
+      inserting.run(anotherLogin, UserModel.getHashedPassword(anotherPassword), Number(isAdmin));
       assert.deepStrictEqual(
         userRepo.getAllUsers(),
         [new UserModel(login, password, isAdmin),
@@ -106,8 +106,8 @@ describe('UserRepo', () => {
   describe('#deleteAll', () => {
     it('Should delete all users', () => {
       const inserting = database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)');
-      inserting.run(login, password, Number(isAdmin));
-      inserting.run(anotherLogin, anotherPassword, Number(isAdmin));
+      inserting.run(login, UserModel.getHashedPassword(password), Number(isAdmin));
+      inserting.run(anotherLogin, UserModel.getHashedPassword(anotherPassword), Number(isAdmin));
       userRepo.deleteAll();
       assert.deepStrictEqual(
         database.prepare('SELECT * FROM Users').all(),
