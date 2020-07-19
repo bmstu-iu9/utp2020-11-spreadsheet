@@ -10,7 +10,7 @@
 
 @media (min-width: 720px) {
   div.content {
-    margin: 30px;
+    margin: 0;
     flex-direction: row;
     padding: 15px 20px;
   }
