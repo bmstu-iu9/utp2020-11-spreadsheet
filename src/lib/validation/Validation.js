@@ -51,7 +51,10 @@ export default class Validation {
     let result = '';
     if (typeof checkUser === 'undefined') {
       result = 'Nonexistent user';
-    } else if (!Validation.checkPassword(UserModel.getHashedPassword(password), checkUser.password)) {
+    } else if (!Validation.checkPassword(
+      UserModel.getHashedPassword(password),
+      checkUser.password,
+    )) {
       result = 'Incorrect password';
     } else {
       result = 'OK';

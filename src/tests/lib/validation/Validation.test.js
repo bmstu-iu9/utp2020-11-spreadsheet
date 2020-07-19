@@ -1,5 +1,4 @@
 import * as assert from 'assert';
-import mock from 'mock-fs';
 import Database from 'better-sqlite3';
 import Validation from '../../../lib/validation/Validation.js';
 import UserModel from '../../../server/database/UserModel.js';
@@ -38,7 +37,7 @@ describe('Validation', () => {
     });
     it('should throw an exception for incorrect path to database', () => {
       assert.throws(() => {
-        const validator = new Validation('~/db/database.db');
+        new Validation('~/db/database.db');
       });
     });
   });
