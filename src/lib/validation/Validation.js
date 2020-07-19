@@ -8,6 +8,9 @@ export default class Validation {
   }
 
   setDatabase(pathToDatabase) {
+    if (typeof this.database !== 'undefined' && this.database.open === true) {
+      this.close();
+    }
     this.database = new Database(pathToDatabase);
   }
 
