@@ -201,6 +201,14 @@ paths:
           description: "Книга не была найдена"
     patch:
       description: "Изменение книги с заданным ID"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/workbookPatch"
+            examples:
+              workbookPatch:
+                $ref: "#/components/examples/workbookPatch"
       responses:
         "200":
           description: "Книга была успешно изменена"
@@ -212,6 +220,13 @@ paths:
           description: "Книга не была найдена"
         "409":
           description: "Были обнаружены конфликтные изменения"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/workbookPatchConflict"
+              examples:
+                workbookPatchConflict:
+                  $ref: "#/components/examples/workbookPatchConflict"
     delete:
       description: "Удаление книги с заданным ID"
       responses:
@@ -246,6 +261,10 @@ components:
       type: "object"
     workbookID:
       type: "object"
+    workbookPatch:
+      type: "object"
+    workbookPatchConflict:
+      type: "object"
   examples:
     workbook:
       value:
@@ -274,3 +293,9 @@ components:
     workbookID:
       value:
         $ref: "examples/workbookID.json"
+    workbookPatch:
+      value:
+        $ref: "examples/workbookPatch.json"
+    workbookPatchConflict:
+      value:
+        $ref: "examples/workbookPatchConflict.json"
