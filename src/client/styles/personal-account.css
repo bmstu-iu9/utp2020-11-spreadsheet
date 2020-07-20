@@ -3,6 +3,7 @@ div#decorative-line {
   height: 30px;
   background-color: #444c5c;
   position: absolute;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 div.content {
@@ -16,12 +17,18 @@ div.content {
 div.name-panel {
   width: 250px;
   height: 30px;
-  border-radius: 3px;
-  background-color: white;
+  border-radius: 5px;
+  background-color: #fcfcfc;
+  opacity: 80%;
   margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #444c5c;
 }
 
 div.new-book-button {
@@ -30,6 +37,12 @@ div.new-book-button {
   margin-top: 45px;
   z-index: 1;
   background-color: white;
+  border: 1px solid #f6f6f6;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  box-sizing: border-box;
+  border-radius: 5px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
 div.new-book-button > a > div {
@@ -40,14 +53,24 @@ div.new-book-button > a > div {
 div.lk-button {
   border: 1px outset grey;
   width: 200px;
-  height: 45px;
-  margin-top: 50px;
-  border-radius: 4px;
+  height: 30px;
+  margin-top: 45px;
+  padding-top: 15px;
+  border-radius: 5px;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #444c5c;
+  cursor: pointer;
 }
 
 div.lk-button:hover {
-  background-color: lightslategrey;
-  border-style: inset;
+  background-color: #fca311;
+  color: #f6f6f6;
+  opacity: 90%;
+  font-weight: bolder;
+  border-color: #fca311;
 }
 
 div.book-list {
@@ -58,13 +81,15 @@ div.book-list {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 50px;
 }
 
 div.book-icon {
   width: 150px;
   height: 120px;
-  background-color: darkgrey;
+  background-color: #ededed;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 div.book-list-nav {
@@ -76,12 +101,30 @@ div.book-list-nav {
   align-items: center;
   justify-content: center;
 }
+div.filename {
+  margin-top: 100px;
+  position: absolute;
+  width: 150px;
+  height: 20px;
+  background: #fedaa0;
+  border-radius: 0 0 5px 5px;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #444c5c;
+  align-content: end;
+}
 
 div.nav-arrow {
   width: 30px;
-  height: 100%;
-  background-color: lightslategrey;
-  opacity: 30%;
+  height: 104%;
+  background-color: #444c5c;
+  opacity: 50%;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.25);
 }
 
 div.nav-arrow:hover {
@@ -91,17 +134,19 @@ div.nav-arrow:hover {
 div#vertical_line {
   width: 12px;
   height: 70px;
-  background-color: slategrey;
+  background-color: #918f8f;
   position: absolute;
   margin-top: 10px;
   margin-left: 79px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 div#horizontal_line {
   width: 70px;
   height: 12px;
-  background-color: lightslategrey;
+  background-color: #c4c4c4;
   position: absolute;
   margin-top: 39px;
   margin-left: 50px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }

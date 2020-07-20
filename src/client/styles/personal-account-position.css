@@ -6,6 +6,16 @@
 
 @media (min-width: 720px) {
   div#decorative-line {
-    top: 280px;
+    top: 250px;
   }
+}
+
+
+@media (min-width: 960px) {
+}
+
+@media (min-width: 1140px) {
+}
+
+@media (min-width: 1500px) {
 }
