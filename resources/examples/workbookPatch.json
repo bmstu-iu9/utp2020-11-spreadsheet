@@ -2,6 +2,7 @@
   "lastSynchronizedCommit": "e2e98442-c844-4430-ae13-67cbd2dd8d0a",
   "changes": [
     {
+      "id": "bc096a5e-8cca-4e9d-82dc-856bb26271d0",
       "changeType": "value",
       "cellAddress": "A2",
       "type": "formula",
@@ -10,6 +11,7 @@
       "page": 2
     },
     {
+      "id": "41c23854-8c6b-40a7-b8fa-2a2b794ce034",
       "changeType": "color",
       "cellAddress": "A1",
       "color": "#aaaaaa"
