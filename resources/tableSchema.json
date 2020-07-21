@@ -6,7 +6,6 @@
         "name": {
             "type": "string"
         },
-        "additionalProperties": false,
         "sheets": {
             "type": "array",
             "items": {
