@@ -22,7 +22,7 @@
   "homepage": "https://github.com/bmstu-iu9/utp2020-11-spreadsheet#readme",
   "dependencies": {
     "better-sqlite3": "^7.1.0",
-    "express": "^3.21.2"
+    "express": "^4.17.1"
   },
   "type": "module",
   "devDependencies": {
