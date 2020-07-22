@@ -6,7 +6,7 @@ const config = { port: 3000 };
 const app = express();
 
 app.set('view options', { layout: false });
-app.use(express.static('src/server/template'));
+app.use(express.static('src/client'));
 
 app.use(express.favicon());
 
