@@ -28,15 +28,17 @@ nav.header {
 
 nav.header div.logo {
   position: absolute;
-  width: 205px;
-  height: 80px;
-  left: 17px;
-  top: 9px;
-  background: #fff;
+  width: 250px;
+  height: 65px;
+  left: 30px;
+  top: 15px;
+  background: #444c5c;
   border-radius: 10px;
 }
 
 div.content {
   display: flex;
-  background-color: #dae6e6;
+  background-color: #ededed;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
