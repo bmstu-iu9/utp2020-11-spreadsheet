@@ -25,3 +25,6 @@ jobs:
     - run: npm ci
     - run: npx eslint .
     - run: npm test
+    - name: Stylelint checkout
+      uses: actions-hub/stylelint@master
+
