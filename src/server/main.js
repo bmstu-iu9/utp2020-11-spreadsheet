@@ -1,13 +1,12 @@
 import express from 'express';
 import http from 'http';
-import path from 'path';
 
 const config = { port: 3000 };
 
 const app = express();
 
 app.set('view options', { layout: false });
-app.use(express.static(`${path.resolve()}/template`));
+app.use(express.static('src/server/template'));
 
 app.use(express.favicon());
 
@@ -26,8 +25,6 @@ app.use(app.router);
 app.get('/', (req, res) => {
   res.render('/index.html');
 });
-
-app.use(express.static(path.join(path.resolve(), 'public')));
 
 app.use((err, req, res, next) => {
   // NODE_ENV = 'production'
