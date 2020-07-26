@@ -21,6 +21,19 @@ export default class TokenModel {
     this.uuid = uuid;
   }
 
+  static fromSQLtoToken(row) {
+    const token = new TokenModel(row.login, row.uuid);
+    return token;
+  }
+
+  static fromSQLtoTokens(rows) {
+    const result = [];
+    rows.forEach((row) => {
+      result.push(TokenModel.fromSQLtoToken(row));
+    });
+    return result;
+  }
+
   static generateUuid() {
     return uuidv4();
   }
