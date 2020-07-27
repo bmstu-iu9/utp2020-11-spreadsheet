@@ -48,7 +48,7 @@ describe('FilterGroup', () => {
         new Map([['A4', cells.get('A4')]]),
         new Map([['A5', cells.get('A5')], ['B5', cells.get('B5')]]),
       ];
-      assert.deepEqual(result, answer);
+      assert.deepStrictEqual(result, answer);
     });
   });
 });

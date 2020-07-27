@@ -27,15 +27,15 @@ describe('ColumnFilter', () => {
   describe('#doesPositionMatch()', () => {
     it('should match AB3 position for AB column', () => {
       const columnFilter = new ColumnFilter('AB');
-      assert.equal(columnFilter.doesPositionMatch('AB3'), true);
+      assert.strictEqual(columnFilter.doesPositionMatch('AB3'), true);
     });
     it('should match ABA57 position for ABA column', () => {
       const columnFilter = new ColumnFilter('ABA');
-      assert.equal(columnFilter.doesPositionMatch('ABA57'), true);
+      assert.strictEqual(columnFilter.doesPositionMatch('ABA57'), true);
     });
     it('should not match ABA57 position for AB column', () => {
       const columnFilter = new ColumnFilter('AB');
-      assert.equal(columnFilter.doesPositionMatch('ABA57'), false);
+      assert.strictEqual(columnFilter.doesPositionMatch('ABA57'), false);
     });
   });
   describe('#run()', () => {
@@ -47,9 +47,9 @@ describe('ColumnFilter', () => {
         ['BA13', new Cell()],
       ]);
       const filtered = columnFilter.run(cells);
-      assert.equal(filtered.has('AB12'), true);
-      assert.equal(filtered.has('AB3'), true);
-      assert.equal(filtered.has('BA13'), false);
+      assert.strictEqual(filtered.has('AB12'), true);
+      assert.strictEqual(filtered.has('AB3'), true);
+      assert.strictEqual(filtered.has('BA13'), false);
     });
   });
 });
