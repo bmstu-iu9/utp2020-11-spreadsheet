@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 
-describe('TokenParser', () => {
+describe('HeaderMatcher', () => {
   describe('#constructor()', () => {
     it('should create parser with correct parameters', () => {
       const name = 'Authorization';
