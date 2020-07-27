@@ -5,11 +5,12 @@ import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 import NumberType from '../../../lib/typevalue/NumberType.js';
 
+const book = new Workbook('book');
 describe('Calculator', () => {
   describe('#constructor()', () => {
     it('should make new element', () => {
-      const calculator = new Calculator(new Workbook('book'));
-      assert.deepStrictEqual(calculator.book, new Workbook('book'));
+      const calculator = new Calculator(book);
+      assert.deepStrictEqual(calculator.book, book);
     });
   });
   describe('#calculate()', () => {

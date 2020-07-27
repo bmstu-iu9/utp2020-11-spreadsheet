@@ -1,4 +1,5 @@
 /* eslint-disable no-self-compare */
+// self-comparison is necessary to check the comparison function
 import * as assert from 'assert';
 import TreeRunner from '../../../lib/calculator/TreeRunner.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
