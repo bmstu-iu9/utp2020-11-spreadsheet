@@ -1,39 +1,36 @@
 import express from 'express';
 import http from 'http';
-
-const config = { port: 3000 };
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import favicon from 'serve-favicon';
+import bodyParser from 'body-parser';
+import errorHandler from 'errorhandler';
 
 const app = express();
 
-app.set('view options', { layout: false });
-app.use(express.static('src/client'));
+app.set('port', 3000);
 
-app.use(express.favicon());
+app.set('view options', { layout: false });
+
+app.use(favicon('src/client/styles/img/favicon.ico'));
 
 if (app.get('env') === 'development') {
-  app.use(express.logger('dev'));
+  app.use(morgan('dev'));
 } else {
-  app.use(express.logger('default'));
+  app.use(morgan('short'));
 }
 
-app.use(express.bodyParser());
+app.use(cookieParser());
 
-app.use(express.cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(app.router);
+app.use(express.static('src/client'));
 
 app.get('/', (req, res) => {
   res.render('/index.html');
 });
 
-app.use((err, req, res, next) => {
-  // NODE_ENV = 'production'
-  if (app.get('env') === 'development') {
-    const errorHandler = express.errorHandler();
-    errorHandler(err, req, res, next);
-  } else {
-    res.send(500);
-  }
-});
+app.use(errorHandler());
 
-http.createServer(app).listen(config.port, () => {});
+http.createServer(app).listen(app.get('port'), () => {});
