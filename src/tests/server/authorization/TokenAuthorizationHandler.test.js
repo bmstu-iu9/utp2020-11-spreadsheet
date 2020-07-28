@@ -37,14 +37,14 @@ describe('TokenAuthenticator', () => {
       });
     });
   });
-  describe('#fetchUserFromHeaders()', () => {
+  describe('#authenticate()', () => {
     it('should throw an exception for empty headers', () => {
       const matcher = new HeaderMatcher('', '');
       const handler = new TokenAuthenticator(
         matcher, environment.tokenRepo, environment.userRepo,
       );
       assert.throws(() => {
-        handler.fetchUserFromHeaders({});
+        handler.authenticate({ headers: {} });
       });
     });
     it('should return test user', () => {
@@ -55,8 +55,10 @@ describe('TokenAuthenticator', () => {
         matcher, environment.tokenRepo, environment.userRepo,
       );
       const { uuid } = environment.userTokens[0].token;
-      const user = handler.fetchUserFromHeaders({
-        Authorization: `Token ${uuid}`,
+      const user = handler.authenticate({
+        headers: {
+          Authorization: `Token ${uuid}`,
+        },
       });
       assert.strictEqual(user.login, environment.userTokens[0].username);
     });

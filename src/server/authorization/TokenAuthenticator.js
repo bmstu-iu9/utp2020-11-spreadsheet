@@ -30,7 +30,8 @@ export default class TokenAuthenticator {
     this.tokenRepo = tokenRepo;
   }
 
-  fetchUserFromHeaders(headers) {
+  authenticate(request) {
+    const { headers } = request;
     const uuid = this.fetchTokenUuidFromHeaders(headers);
     const token = this.tokenRepo.getByUuid(uuid);
     const user = this.userRepo.get(token.login);
