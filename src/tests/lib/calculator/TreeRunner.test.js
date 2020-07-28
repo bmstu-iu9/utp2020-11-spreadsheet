@@ -8,7 +8,7 @@ import Parser from '../../../lib/parser/Parser.js';
 const book = new Workbook('book');
 describe('TreeRunner', () => {
   describe('#constructor()', () => {
-    it('Should make new element', () => {
+    it('should make new element', () => {
       const tree = new Parser('=(1+5^(1/2))/2').run();
       const treeRunner = new TreeRunner(book, 0, tree);
       assert.strictEqual(treeRunner.book, book);
@@ -17,7 +17,7 @@ describe('TreeRunner', () => {
     });
   });
   describe('#makeTreeRunner()', () => {
-    it('Should derive new element', () => {
+    it('should derive new element', () => {
       const tree = new Parser('=(1+5^(1/2))/2').run();
       const treeRunner = new TreeRunner(book, 0, null);
       const newTreeRunner = treeRunner.makeTreeRunner(tree);
@@ -27,233 +27,233 @@ describe('TreeRunner', () => {
     });
   });
   describe('#run()', () => {
-    it('Should throw error because of invalid expression', () => {
+    it('should throw error because of invalid expression', () => {
       assert.throws(() => {
         new TreeRunner(book, 0, new Parser('=СТРАННАЯФУНКЦИЯ(0/0;2;"a"/5)').run()).run();
       });
     });
     const testCasesWithoutError = [{
-      description: 'Should calculate integer',
+      description: 'should calculate integer',
       parserExpression: '=10',
       result: 10,
     },
     {
-      description: 'Should calculate string',
+      description: 'should calculate string',
       parserExpression: '="string"',
       result: 'string',
     },
     {
-      description: 'Should calculate value in number form',
+      description: 'should calculate value in number form',
       parserExpression: 'askd ;j mfa,F:m;',
       result: 'askd ;j mfa,F:m;',
     },
     {
-      description: 'Should calculate value in other form',
+      description: 'should calculate value in other form',
       parserExpression: '456789876',
       result: 456789876,
     },
     {
-      description: 'Should calculate sum() of two numbers',
+      description: 'should calculate sum() of two numbers',
       parserExpression: '=10+100',
       result: 110,
     },
     {
-      description: 'Should calculate sum() of two strings',
+      description: 'should calculate sum() of two strings',
       parserExpression: '="str"+"ing"',
       result: 'string',
     },
     {
-      description: 'Should calculate sub() of two numbers',
+      description: 'should calculate sub() of two numbers',
       parserExpression: '=100-90',
       result: 10,
     },
     {
-      description: 'Should calculate mul() of two numbers',
+      description: 'should calculate mul() of two numbers',
       parserExpression: '=10*100',
       result: 1000,
     },
     {
-      description: 'Should calculate div() of two numbers',
+      description: 'should calculate div() of two numbers',
       parserExpression: '=100/10',
       result: 100 / 10,
     },
     {
-      description: 'Should calculate rem()',
+      description: 'should calculate rem()',
       parserExpression: '=50%3',
       result: 50 % 3,
     },
     {
-      description: 'Should calculate exp()',
+      description: 'should calculate exp()',
       parserExpression: '=2^3',
       result: 2 ** 3,
     },
     {
-      description: 'Should calculate unMinus()',
+      description: 'should calculate unMinus()',
       parserExpression: '=-10',
       result: -10,
     },
     {
-      description: 'Should calculate equal() different numbers',
+      description: 'should calculate equal() different numbers',
       parserExpression: '=3==4',
       result: 3 === 4,
     },
     {
-      description: 'Should calculate equal() equal numbers',
+      description: 'should calculate equal() equal numbers',
       parserExpression: '=4==4',
       result: 4 === 4,
     },
     {
-      description: 'Should calculate equal() different strings',
+      description: 'should calculate equal() different strings',
       parserExpression: '="abc"=="abcd"',
       result: 'abc' === 'abcd',
     },
     {
-      description: 'Should calculate equal() equal strings',
+      description: 'should calculate equal() equal strings',
       parserExpression: '="abc"=="abc"',
       result: 'abc' === 'abc',
     },
     {
-      description: 'Should calculate greaterEqual() with not equal numbers',
+      description: 'should calculate greaterEqual() with not equal numbers',
       parserExpression: '=3>=4',
       result: 3 >= 4,
     },
     {
-      description: 'Should calculate greaterEqual() with equal numbers',
+      description: 'should calculate greaterEqual() with equal numbers',
       parserExpression: '=4>=4',
       result: 4 >= 4,
     },
     {
-      description: 'Should calculate greaterEqual() with not equal strings',
+      description: 'should calculate greaterEqual() with not equal strings',
       parserExpression: '="abc">="abcd"',
       result: 'abc' >= 'abcd',
     },
     {
-      description: 'Should calculate greaterEqual() with equal strings',
+      description: 'should calculate greaterEqual() with equal strings',
       parserExpression: '="abc">="abc"',
       result: 'abs' >= 'abs',
     },
     {
-      description: 'Should calculate greater with numbers',
+      description: 'should calculate greater with numbers',
       parserExpression: '=3>4',
       result: 3 > 4,
     },
     {
-      description: 'Should calculate greater with strings',
+      description: 'should calculate greater with strings',
       parserExpression: '="abcd">"abc"',
       result: 'abcd' > 'abc',
     },
     {
-      description: 'Should calculate lessEqual() with not equal numbers',
+      description: 'should calculate lessEqual() with not equal numbers',
       parserExpression: '=3<=4',
       result: 3 <= 4,
     },
     {
-      description: 'Should calculate lessEqual() with equal numbers',
+      description: 'should calculate lessEqual() with equal numbers',
       parserExpression: '=4<=4',
       result: 4 <= 4,
     },
     {
-      description: 'Should calculate lessEqual() with not equal strings',
+      description: 'should calculate lessEqual() with not equal strings',
       parserExpression: '="abc"<="abcd"',
       result: 'abc' <= 'abcd',
     },
     {
-      description: 'Should calculate lessEqual() with equal strings',
+      description: 'should calculate lessEqual() with equal strings',
       parserExpression: '="abc"<="abc"',
       result: 'abs' <= 'abs',
     },
     {
-      description: 'Should calculate less with numbers',
+      description: 'should calculate less with numbers',
       parserExpression: '=3<4',
       result: 3 < 4,
     },
     {
-      description: 'Should calculate less with strings',
+      description: 'should calculate less with strings',
       parserExpression: '="abcd"<"abc"',
       result: 'abcd' < 'abc',
     },
     {
-      description: 'Should calculate notEqual() different numbers',
+      description: 'should calculate notEqual() different numbers',
       parserExpression: '=3!=4',
       result: 3 !== 4,
     },
     {
-      description: 'Should calculate notEqual() equal numbers',
+      description: 'should calculate notEqual() equal numbers',
       parserExpression: '=4!=4',
       result: 4 !== 4,
     },
     {
-      description: 'Should calculate notEqual() different strings',
+      description: 'should calculate notEqual() different strings',
       parserExpression: '="abc"!="abcd"',
       result: 'abc' !== 'abcd',
     },
     {
-      description: 'Should calculate notEqual() equal strings',
+      description: 'should calculate notEqual() equal strings',
       parserExpression: '="abc"!="abc"',
       result: 'abc' !== 'abc',
     },
     {
-      description: 'Should calculate И() without expressions',
+      description: 'should calculate И() without expressions',
       parserExpression: '=И()',
       result: true,
     },
     {
-      description: 'Should calculate И() with true expressions',
+      description: 'should calculate И() with true expressions',
       parserExpression: '=И(1==1;2==2)',
       result: 1 === 1 && 2 === 2,
     },
     {
-      description: 'Should calculate И() with one true and one false expressions',
+      description: 'should calculate И() with one true and one false expressions',
       parserExpression: '=И(1==1;2==1)',
       result: 1 === 1 && 2 === 1,
     },
     {
-      description: 'Should calculate И() with false expressions',
+      description: 'should calculate И() with false expressions',
       parserExpression: '=И(1==2;1==3)',
       result: 1 === 2 && 1 === 3,
     },
     {
-      description: 'Should calculate И() with false expression and not boolean expression',
+      description: 'should calculate И() with false expression and not boolean expression',
       parserExpression: '=И(1==5;"gregdfsg")',
       result: false,
     },
     {
-      description: 'Should calculate ИЛИ() without expressions',
+      description: 'should calculate ИЛИ() without expressions',
       parserExpression: '=ИЛИ()',
       result: false,
     },
     {
-      description: 'Should calculate ИЛИ() with two true expressions',
+      description: 'should calculate ИЛИ() with two true expressions',
       parserExpression: '=ИЛИ(1==1;2==2)',
       result: 1 === 1 || 2 === 2,
     },
     {
-      description: 'Should calculate ИЛИ() with two false expressions',
+      description: 'should calculate ИЛИ() with two false expressions',
       parserExpression: '=ИЛИ(1==2;2==3)',
       result: 1 === 2 || 2 === 3,
     },
     {
-      description: 'Should calculate ИЛИ() with one false and one true expressions',
+      description: 'should calculate ИЛИ() with one false and one true expressions',
       parserExpression: '=ИЛИ(1==1;1==2)',
       result: 1 === 1 || 1 === 2,
     },
     {
-      description: 'Should calculate ИЛИ() with true expression and not boolean expression',
+      description: 'should calculate ИЛИ() with true expression and not boolean expression',
       parserExpression: '=ИЛИ(1==1;"string")',
       result: true,
     },
     {
-      description: 'Should calculate ЕСЛИ() with true expression',
+      description: 'should calculate ЕСЛИ() with true expression',
       parserExpression: '=ЕСЛИ(1==1;1;2)',
       result: 1,
     },
     {
-      description: 'Should calculate ЕСЛИ() with false expression',
+      description: 'should calculate ЕСЛИ() with false expression',
       parserExpression: '=ЕСЛИ(1==2;1;2)',
       result: 2,
     },
     {
-      description: 'Should calculate ЕСЛИ() with true expression and error in another branch',
+      description: 'should calculate ЕСЛИ() with true expression and error in another branch',
       parserExpression: '=ЕСЛИ(1==1;1;"string"*2)',
       result: 1,
     },
@@ -266,23 +266,23 @@ describe('TreeRunner', () => {
       });
     });
     const testCasesWithError = [{
-      description: 'Should throw error in И() because an invalid expression started evaluating',
+      description: 'should throw error in И() because an invalid expression started evaluating',
       parserExpression: '=И(1==1;"string")',
     },
     {
-      description: 'Should throw error in ИЛИ() because an invalid expression started evaluating',
+      description: 'should throw error in ИЛИ() because an invalid expression started evaluating',
       parserExpression: '=ИЛИ(1==5;"string")',
     },
     {
-      description: 'Should throw error in ЕСЛИ() because has zero arguments',
+      description: 'should throw error in ЕСЛИ() because has zero arguments',
       parserExpression: '=ЕСЛИ()',
     },
     {
-      description: 'Should throw error in ЕСЛИ() because an invalid syntax',
+      description: 'should throw error in ЕСЛИ() because an invalid syntax',
       parserExpression: '=ЕСЛИ(1;2;3)',
     },
     {
-      description: 'Should throw error in ЕСЛИ() because an invalid expression started evaluating',
+      description: 'should throw error in ЕСЛИ() because an invalid expression started evaluating',
       parserExpression: '=ЕСЛИ(1==1;"string"*2;"false")',
     },
     ];

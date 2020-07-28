@@ -39,20 +39,14 @@ export default class Synchronizer {
     if (errAns.length > 0) {
       return errAns;
     }
+    const spreadsheet = this.workbook.spreadsheets[this.page];
     arrayLogs.forEach((log) => {
       if (log.changeType === 'color') {
-        const { cells } = this.workbook.spreadsheets[this.page];
-        if (cells.get(log.cellAddress) === undefined) {
-          cells.set(log.cellAddress, {});
-        }
-        cells.get(log.cellAddress).color = log.color;
-      } else if (log.changeType === 'value') {
-        const { cells } = this.workbook.spreadsheets[this.page];
-        if (cells.get(log.cellAddress) === undefined) {
-          cells.set(log.cellAddress, {});
-        }
-        cells.get(log.cellAddress).type = log.type;
-        cells.get(log.cellAddress).value = log.value;
+        const cell = spreadsheet.getCell(log.cellAddress);
+        cell.setColor(log.color);
+      } else {
+        const cell = spreadsheet.getCell(log.cellAddress);
+        cell.setValue(log.type, log.value);
       }
       this.lastChanges.push(log);
     });

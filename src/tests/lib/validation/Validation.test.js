@@ -60,6 +60,7 @@ describe('Validation', () => {
     });
     it('should ask for changing login', () => {
       userRepo.save(new UserModel('alexis', 'omgomg', true));
+      assert.strictEqual(Validation.checkLogin(NaN, NaN), false);
       const validator = new Validation(pathToDatabase);
       assert.strictEqual(validator.validateRegistration('alexis', 'omgomg'), 'Login unavailable');
       validator.close();

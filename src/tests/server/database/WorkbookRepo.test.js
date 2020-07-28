@@ -34,35 +34,26 @@ describe('WorkbookRepo', () => {
     userRepo.dropTable();
   });
   after(() => database.close());
-
-  describe('#deleteAll', () => {
-    it('Should delete all books', () => {
-      const inserting = database.prepare(
-        'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
-      );
-      inserting.run(null, login, bookPath);
-      inserting.run(null, login, anotherPath);
-      workbookRepo.deleteAll();
-      assert.deepStrictEqual(
-        database.prepare('SELECT * FROM Books').all(),
-        [],
-      );
+  it('should make all errors', () => {
+    const { prepare } = database;
+    database.prepare = null;
+    const allMethodsError = ['dropTable', 'createTable', 'getById', 'getByLogin',
+      'getAllBooks', 'delete', 'deleteAll'];
+    allMethodsError.forEach((method) => {
+      assert.throws(() => {
+        workbookRepo[method]();
+      });
     });
-  });
-  describe('#delete', () => {
-    it('Should delete book', () => {
-      const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
-        .run(null, login, bookPath);
-      const id = info.lastInsertRowid;
-      workbookRepo.delete(id);
-      assert.deepStrictEqual(
-        database.prepare('SELECT * FROM Books').all(),
-        [],
-      );
+    assert.throws(() => {
+      workbookRepo.save({ id: null });
     });
+    assert.throws(() => {
+      workbookRepo.save({ id: 1 });
+    });
+    database.prepare = prepare;
   });
   describe('#getById', () => {
-    it('Should get book by id', () => {
+    it('should get book by id', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, login, bookPath);
       const id = info.lastInsertRowid;
@@ -71,16 +62,15 @@ describe('WorkbookRepo', () => {
       assert.strictEqual(book.login, login);
       assert.strictEqual(book.path, bookPath);
     });
-    it('Should throw error because book doesn\'t exist', () => {
+    it('should throw error because book doesn\'t exist', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, login, bookPath);
       const id = info.lastInsertRowid;
       assert.throws(() => workbookRepo.getById(id + 1));
     });
   });
-
   describe('#detByLogin', () => {
-    it('Should get all user\'s books', () => {
+    it('should get all user\'s books', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
       );
@@ -95,15 +85,14 @@ describe('WorkbookRepo', () => {
           new WorkbookModel(anotherPath, login, anotherId)],
       );
     });
-
-    it('Should throw error because user don\'t has books', () => {
+    it('should throw error because user don\'t has books', () => {
       database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, anotherLogin, bookPath);
       assert.throws(() => workbookRepo.getByLogin(login));
     });
   });
   describe('#getAllBooks', () => {
-    it('Should get all books', () => {
+    it('should get all books', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
       );
@@ -119,7 +108,7 @@ describe('WorkbookRepo', () => {
     });
   });
   describe('#save', () => {
-    it('Should save new user', () => {
+    it('should save new user', () => {
       const book = new WorkbookModel(bookPath, login);
       const id = workbookRepo.save(book);
       assert.deepStrictEqual(
@@ -130,6 +119,32 @@ describe('WorkbookRepo', () => {
           path: bookPath,
           login,
         },
+      );
+    });
+  });
+  describe('#delete', () => {
+    it('should delete book', () => {
+      const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
+        .run(null, login, bookPath);
+      const id = info.lastInsertRowid;
+      workbookRepo.delete(id);
+      assert.deepStrictEqual(
+        database.prepare('SELECT * FROM Books').all(),
+        [],
+      );
+    });
+  });
+  describe('#deleteAll', () => {
+    it('should delete all books', () => {
+      const inserting = database.prepare(
+        'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
+      );
+      inserting.run(null, login, bookPath);
+      inserting.run(null, login, anotherPath);
+      workbookRepo.deleteAll();
+      assert.deepStrictEqual(
+        database.prepare('SELECT * FROM Books').all(),
+        [],
       );
     });
   });
