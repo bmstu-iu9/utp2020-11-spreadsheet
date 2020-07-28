@@ -1,19 +1,17 @@
 import HeaderMatcher from './HeaderMatcher.js';
-import TokenRepo from '../database/TokenRepo.js';
-import UserRepo from '../database/UserRepo.js';
+import DataRepo from '../database/DataRepo.js';
 
 export default class TokenAuthenticator {
-  constructor(matcher, tokenRepo, userRepo) {
+  constructor(matcher, dataRepo) {
     this.setMatcher(matcher);
-    this.setTokenRepo(tokenRepo);
-    this.setUserRepo(userRepo);
+    this.setDataRepo(dataRepo);
   }
 
-  setUserRepo(userRepo) {
-    if (!(userRepo instanceof UserRepo)) {
+  setDataRepo(dataRepo) {
+    if (!(dataRepo instanceof DataRepo)) {
       throw TypeError('userRepo must be a UserRepo instance');
     }
-    this.userRepo = userRepo;
+    this.dataRepo = dataRepo;
   }
 
   setMatcher(matcher) {
@@ -23,18 +21,11 @@ export default class TokenAuthenticator {
     this.matcher = matcher;
   }
 
-  setTokenRepo(tokenRepo) {
-    if (!(tokenRepo instanceof TokenRepo)) {
-      throw TypeError('tokenRepo must be a TokenRepo instance');
-    }
-    this.tokenRepo = tokenRepo;
-  }
-
   authenticate(request) {
     const { headers } = request;
     const uuid = this.fetchTokenUuidFromHeaders(headers);
-    const token = this.tokenRepo.getByUuid(uuid);
-    const user = this.userRepo.get(token.login);
+    const token = this.dataRepo.tokenRepo.getByUuid(uuid);
+    const user = this.dataRepo.userRepo.get(token.login);
     return user;
   }
 
