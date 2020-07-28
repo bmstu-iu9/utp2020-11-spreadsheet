@@ -35,14 +35,14 @@ describe('ColorFilter', () => {
       const cell = new Cell();
       cell.setColor('#bbbbbb');
       const doesMatch = colorFilter.doesCellMatch(cell);
-      assert.equal(doesMatch, true);
+      assert.strictEqual(doesMatch, true);
     });
     it('should not match cell with color #bbbbbb for colors []', () => {
       const colorFilter = new ColorFilter('A', []);
       const cell = new Cell();
       cell.setColor('#bbbbbb');
       const doesMatch = colorFilter.doesCellMatch(cell);
-      assert.equal(doesMatch, false);
+      assert.strictEqual(doesMatch, false);
     });
   });
   describe('#run()', () => {
@@ -59,7 +59,7 @@ describe('ColorFilter', () => {
       ])];
       const colorFilter = new ColorFilter('AA', ['#aaaaaa']);
       const filtered = colorFilter.run(cells);
-      assert.deepEqual(filtered, [cells[0], cells[1]]);
+      assert.deepStrictEqual(filtered, [cells[0], cells[1]]);
     });
     it('should throw an exception for 2 cells in one position', () => {
       const cells = [new Map([

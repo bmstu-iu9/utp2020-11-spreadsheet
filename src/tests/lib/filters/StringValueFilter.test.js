@@ -35,19 +35,19 @@ describe('StringValueFilter', () => {
       const stringValueFilter = new StringValueFilter('A', ['test']);
       const cell = new Cell(valueTypes.string, 'test');
       const result = stringValueFilter.doesCellMatch(cell);
-      assert.equal(result, true);
+      assert.strictEqual(result, true);
     });
     it('should return false for "test1" value and "test" filter', () => {
       const stringValueFilter = new StringValueFilter('A', ['test']);
       const cell = new Cell(valueTypes.string, 'test1');
       const result = stringValueFilter.doesCellMatch(cell);
-      assert.equal(result, false);
+      assert.strictEqual(result, false);
     });
     it('should return false for formula type', () => {
       const stringValueFilter = new StringValueFilter('A', ['test']);
       const cell = new Cell(valueTypes.formula, 'test');
       const result = stringValueFilter.doesCellMatch(cell);
-      assert.equal(result, false);
+      assert.strictEqual(result, false);
     });
   });
 });

@@ -87,7 +87,7 @@ describe('RegionFilter', () => {
         const regionFilter = new RegionFilter(...testCase.filter);
         if (!testCase.exception) {
           const result = regionFilter.doesPositionMatch(testCase.position);
-          assert.equal(result, testCase.result);
+          assert.strictEqual(result, testCase.result);
         } else {
           assert.throws(() => {
             regionFilter.doesPositionMatch(testCase.position);
