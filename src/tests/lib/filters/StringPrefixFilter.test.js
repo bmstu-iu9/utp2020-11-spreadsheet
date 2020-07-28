@@ -8,13 +8,13 @@ describe('StringPrefixFilter', () => {
       const stringPrefixFilter = new StringPrefixFilter('A', ['test']);
       const cell = new Cell(valueTypes.string, 'test123');
       const result = stringPrefixFilter.doesCellMatch(cell);
-      assert.equal(result, true);
+      assert.strictEqual(result, true);
     });
     it('should return false for "test" and "test123" filter', () => {
       const stringPrefixFilter = new StringPrefixFilter('A', ['test123']);
       const cell = new Cell(valueTypes.string, 'test');
       const result = stringPrefixFilter.doesCellMatch(cell);
-      assert.equal(result, false);
+      assert.strictEqual(result, false);
     });
     it('should return false for formula cell', () => {
       const stringPrefixFilter = new StringPrefixFilter('A', ['=1']);
