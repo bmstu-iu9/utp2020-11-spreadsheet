@@ -89,6 +89,7 @@ div.book-list {
   background-color: white;
   width: inherit;
   overflow: scroll;
+  overflow-y: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
