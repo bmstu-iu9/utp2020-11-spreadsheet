@@ -7,6 +7,10 @@ div#decorative-line {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+body {
+  overflow: hidden;
+}
+
 div.content {
   display: flex;
   flex-direction: column;
@@ -93,6 +97,19 @@ div.book-list {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fca311;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 div.book-icon {
