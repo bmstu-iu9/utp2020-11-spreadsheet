@@ -1,4 +1,5 @@
 div#decorative-line {
+  top: 250px;
   width: 100%;
   height: 30px;
   background-color: #444c5c;
@@ -9,9 +10,8 @@ div#decorative-line {
 div.content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 25px;
+  padding-top: 25px;
 }
 
 div.name-panel {
@@ -73,25 +73,6 @@ div.lk-button:hover {
   border-color: #fca311;
 }
 
-div.book-list {
-  width: 90%;
-  height: 100%;
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 50px;
-}
-
-div.book-icon {
-  width: 150px;
-  height: 120px;
-  background-color: #ededed;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
 div.book-list-nav {
   margin-top: 80px;
   width: 100%;
@@ -101,10 +82,30 @@ div.book-list-nav {
   align-items: center;
   justify-content: center;
 }
+
+div.book-list {
+  height: inherit;
+  padding: 0 30px;
+  background-color: white;
+  width: inherit;
+  overflow: scroll;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+div.book-icon {
+  margin: 0 30px;
+  width: 150px;
+  height: 120px;
+  background-color: #ededed;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
 div.filename {
   margin-top: 100px;
-  position: absolute;
-  width: 150px;
+  width: inherit;
   height: 20px;
   background: #fedaa0;
   border-radius: 0 0 5px 5px;
@@ -121,7 +122,7 @@ div.filename {
 
 div.nav-arrow {
   width: 30px;
-  height: 104%;
+  height: 156px;
   background-color: #444c5c;
   opacity: 50%;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.25);
