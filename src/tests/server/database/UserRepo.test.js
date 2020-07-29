@@ -29,25 +29,22 @@ describe('UserRepo', () => {
     userRepo.dropTable();
   });
   after(() => database.close());
-
-  describe('#get', () => {
-    it('Should get user by login', () => {
-      database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
-        .run(login, UserModel.getHashedPassword(password), Number(isAdmin));
-      const anotherUser = userRepo.get(login);
-      assert.strictEqual(anotherUser.login, login);
-      assert.strictEqual(anotherUser.password, UserModel.getHashedPassword(password));
-      assert.strictEqual(anotherUser.isAdmin, Number(isAdmin));
-    });
-
-    it('Should return undefined because user doesn\'t exist', () => {
-      database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
-        .run(anotherLogin, password, Number(isAdmin));
-      assert.strictEqual(userRepo.get(login), undefined);
+  describe('#errors', () => {
+    const allMethodsError = ['dropTable', 'createTable', 'save', 'get',
+      'getAllUsers', 'delete', 'deleteAll'];
+    allMethodsError.forEach((method) => {
+      it(`should make error in #${method}()`, () => {
+        const { prepare } = database;
+        database.prepare = null;
+        assert.throws(() => {
+          userRepo[method]();
+        });
+        database.prepare = prepare;
+      });
     });
   });
-  describe('#save', () => {
-    it('Should save new user', () => {
+  describe('#save()', () => {
+    it('should save new user', () => {
       const user = new UserModel(login, password, isAdmin);
       userRepo.save(user);
       assert.deepStrictEqual(
@@ -60,7 +57,7 @@ describe('UserRepo', () => {
         },
       );
     });
-    it('Should update existing user', () => {
+    it('should update existing user', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
         .run(login, UserModel.getHashedPassword(password), Number(isAdmin));
       const sameUser = userRepo.get(login);
@@ -77,9 +74,23 @@ describe('UserRepo', () => {
       );
     });
   });
-
-  describe('#getAllUsers', () => {
-    it('Should get all users', () => {
+  describe('#get()', () => {
+    it('should get user by login', () => {
+      database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
+        .run(login, UserModel.getHashedPassword(password), Number(isAdmin));
+      const anotherUser = userRepo.get(login);
+      assert.strictEqual(anotherUser.login, login);
+      assert.strictEqual(anotherUser.password, UserModel.getHashedPassword(password));
+      assert.strictEqual(anotherUser.isAdmin, Number(isAdmin));
+    });
+    it('should return undefined because user doesn\'t exist', () => {
+      database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
+        .run(anotherLogin, password, Number(isAdmin));
+      assert.strictEqual(userRepo.get(login), undefined);
+    });
+  });
+  describe('#getAllUsers()', () => {
+    it('should get all users', () => {
       const inserting = database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)');
       inserting.run(login, UserModel.getHashedPassword(password), Number(isAdmin));
       inserting.run(anotherLogin, UserModel.getHashedPassword(anotherPassword), Number(isAdmin));
@@ -90,9 +101,8 @@ describe('UserRepo', () => {
       );
     });
   });
-
-  describe('#delete', () => {
-    it('Should delete user', () => {
+  describe('#delete()', () => {
+    it('should delete user', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
         .run(login, password, Number(isAdmin));
       userRepo.delete(login);
@@ -102,9 +112,8 @@ describe('UserRepo', () => {
       );
     });
   });
-
-  describe('#deleteAll', () => {
-    it('Should delete all users', () => {
+  describe('#deleteAll()', () => {
+    it('should delete all users', () => {
       const inserting = database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)');
       inserting.run(login, UserModel.getHashedPassword(password), Number(isAdmin));
       inserting.run(anotherLogin, UserModel.getHashedPassword(anotherPassword), Number(isAdmin));

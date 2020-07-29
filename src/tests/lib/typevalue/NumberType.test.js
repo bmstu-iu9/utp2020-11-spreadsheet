@@ -5,16 +5,16 @@ import NT from '../../../lib/typevalue/NumberType.js';
 describe('NumberType', () => {
   describe('#constructor()', () => {
     it('should make new element', () => {
-      assert.deepEqual(new NT(123).value, 123);
-      assert.deepEqual(new NT(231).value, 231);
-      assert.deepEqual(new NT(312).value, 312);
+      assert.deepStrictEqual(new NT(123).value, 123);
+      assert.deepStrictEqual(new NT(231).value, 231);
+      assert.deepStrictEqual(new NT(312).value, 312);
     });
   });
   describe('#sum()', () => {
     it('should calculate valid sum', () => {
-      assert.deepEqual(new NT(1234).sum(new NT(3245)), new NT(1234 + 3245));
-      assert.deepEqual(new NT(234).sum(new NT(2134)), new NT(234 + 2134));
-      assert.deepEqual(new NT(3).sum(new NT(4)), new NT(3 + 4));
+      assert.deepStrictEqual(new NT(1234).sum(new NT(3245)), new NT(1234 + 3245));
+      assert.deepStrictEqual(new NT(234).sum(new NT(2134)), new NT(234 + 2134));
+      assert.deepStrictEqual(new NT(3).sum(new NT(4)), new NT(3 + 4));
     });
     it('should calculate invalid sum', () => {
       assert.throws(() => {
@@ -30,9 +30,9 @@ describe('NumberType', () => {
   });
   describe('#sub()', () => {
     it('should calculate valid subtraction', () => {
-      assert.deepEqual(new NT(1234).sub(new NT(3245)), new NT(1234 - 3245));
-      assert.deepEqual(new NT(234).sub(new NT(2134)), new NT(234 - 2134));
-      assert.deepEqual(new NT(3).sub(new NT(4)), new NT(3 - 4));
+      assert.deepStrictEqual(new NT(1234).sub(new NT(3245)), new NT(1234 - 3245));
+      assert.deepStrictEqual(new NT(234).sub(new NT(2134)), new NT(234 - 2134));
+      assert.deepStrictEqual(new NT(3).sub(new NT(4)), new NT(3 - 4));
     });
     it('should calculate invalid subtraction', () => {
       assert.throws(() => {
@@ -48,9 +48,9 @@ describe('NumberType', () => {
   });
   describe('#mul()', () => {
     it('should calculate valid multiplication', () => {
-      assert.deepEqual(new NT(1234).mul(new NT(3245)), new NT(1234 * 3245));
-      assert.deepEqual(new NT(234).mul(new NT(2134)), new NT(234 * 2134));
-      assert.deepEqual(new NT(3).mul(new NT(4)), new NT(3 * 4));
+      assert.deepStrictEqual(new NT(1234).mul(new NT(3245)), new NT(1234 * 3245));
+      assert.deepStrictEqual(new NT(234).mul(new NT(2134)), new NT(234 * 2134));
+      assert.deepStrictEqual(new NT(3).mul(new NT(4)), new NT(3 * 4));
     });
     it('should calculate invalid multiplication', () => {
       assert.throws(() => {
@@ -66,9 +66,9 @@ describe('NumberType', () => {
   });
   describe('#div()', () => {
     it('should calculate valid division', () => {
-      assert.deepEqual(new NT(1234).div(new NT(3245)), new NT(1234 / 3245));
-      assert.deepEqual(new NT(234).div(new NT(2134)), new NT(234 / 2134));
-      assert.deepEqual(new NT(3).div(new NT(4)), new NT(3 / 4));
+      assert.deepStrictEqual(new NT(1234).div(new NT(3245)), new NT(1234 / 3245));
+      assert.deepStrictEqual(new NT(234).div(new NT(2134)), new NT(234 / 2134));
+      assert.deepStrictEqual(new NT(3).div(new NT(4)), new NT(3 / 4));
     });
     it('should calculate invalid division', () => {
       assert.throws(() => {
@@ -84,9 +84,9 @@ describe('NumberType', () => {
   });
   describe('#rem()', () => {
     it('should calculate valid remainder', () => {
-      assert.deepEqual(new NT(3245).rem(new NT(1234)), new NT(3245 % 1234));
-      assert.deepEqual(new NT(2134).rem(new NT(234)), new NT(2134 % 234));
-      assert.deepEqual(new NT(3).rem(new NT(4)), new NT(3 % 4));
+      assert.deepStrictEqual(new NT(3245).rem(new NT(1234)), new NT(3245 % 1234));
+      assert.deepStrictEqual(new NT(2134).rem(new NT(234)), new NT(2134 % 234));
+      assert.deepStrictEqual(new NT(3).rem(new NT(4)), new NT(3 % 4));
     });
     it('should calculate invalid remainder', () => {
       assert.throws(() => {
@@ -102,9 +102,9 @@ describe('NumberType', () => {
   });
   describe('#exp()', () => {
     it('should calculate valid exponent', () => {
-      assert.deepEqual(new NT(1234).exp(new NT(3245)), new NT(1234 ** 3245));
-      assert.deepEqual(new NT(234).exp(new NT(2134)), new NT(234 ** 2134));
-      assert.deepEqual(new NT(3).exp(new NT(4)), new NT(3 ** 4));
+      assert.deepStrictEqual(new NT(1234).exp(new NT(3245)), new NT(1234 ** 3245));
+      assert.deepStrictEqual(new NT(234).exp(new NT(2134)), new NT(234 ** 2134));
+      assert.deepStrictEqual(new NT(3).exp(new NT(4)), new NT(3 ** 4));
     });
     it('should calculate invalid exponent', () => {
       assert.throws(() => {
@@ -120,15 +120,15 @@ describe('NumberType', () => {
   });
   describe('#unMinus()', () => {
     it('should calculate unary minus', () => {
-      assert.deepEqual(new NT(1234).unMinus(), new NT(-1234));
-      assert.deepEqual(new NT(234).unMinus(), new NT(-234));
-      assert.deepEqual(new NT(3).unMinus(), new NT(-3));
+      assert.deepStrictEqual(new NT(1234).unMinus(), new NT(-1234));
+      assert.deepStrictEqual(new NT(234).unMinus(), new NT(-234));
+      assert.deepStrictEqual(new NT(3).unMinus(), new NT(-3));
     });
   });
   describe('#equal()', () => {
     it('should calculate valid equal', () => {
-      assert.deepEqual(new NT(9999).equal(new NT(0)), false);
-      assert.deepEqual(new NT(123).equal(new NT(123)), true);
+      assert.deepStrictEqual(new NT(9999).equal(new NT(0)), false);
+      assert.deepStrictEqual(new NT(123).equal(new NT(123)), true);
     });
     it('should calculate invalid equal', () => {
       assert.throws(() => {
@@ -138,8 +138,8 @@ describe('NumberType', () => {
   });
   describe('#greaterEqual()', () => {
     it('should calculate valid greater or equal', () => {
-      assert.deepEqual(new NT(9999).greaterEqual(new NT(0)), true);
-      assert.deepEqual(new NT(123).greaterEqual(new NT(123)), true);
+      assert.deepStrictEqual(new NT(9999).greaterEqual(new NT(0)), true);
+      assert.deepStrictEqual(new NT(123).greaterEqual(new NT(123)), true);
     });
     it('should calculate invalid greater or equal', () => {
       assert.throws(() => {
@@ -149,8 +149,8 @@ describe('NumberType', () => {
   });
   describe('#greater()', () => {
     it('should calculate valid greater', () => {
-      assert.deepEqual(new NT(9999).greater(new NT(0)), true);
-      assert.deepEqual(new NT(123).greater(new NT(123)), false);
+      assert.deepStrictEqual(new NT(9999).greater(new NT(0)), true);
+      assert.deepStrictEqual(new NT(123).greater(new NT(123)), false);
     });
     it('should calculate invalid greater', () => {
       assert.throws(() => {
@@ -160,8 +160,8 @@ describe('NumberType', () => {
   });
   describe('#lessEqual()', () => {
     it('should calculate valid less or equal', () => {
-      assert.deepEqual(new NT(9999).lessEqual(new NT(0)), false);
-      assert.deepEqual(new NT(123).lessEqual(new NT(123)), true);
+      assert.deepStrictEqual(new NT(9999).lessEqual(new NT(0)), false);
+      assert.deepStrictEqual(new NT(123).lessEqual(new NT(123)), true);
     });
     it('should calculate invalid less or equal', () => {
       assert.throws(() => {
@@ -171,8 +171,8 @@ describe('NumberType', () => {
   });
   describe('#less()', () => {
     it('should calculate valid less', () => {
-      assert.deepEqual(new NT(9999).less(new NT(0)), false);
-      assert.deepEqual(new NT(123).less(new NT(123)), false);
+      assert.deepStrictEqual(new NT(9999).less(new NT(0)), false);
+      assert.deepStrictEqual(new NT(123).less(new NT(123)), false);
     });
     it('should calculate invalid less', () => {
       assert.throws(() => {
@@ -182,8 +182,8 @@ describe('NumberType', () => {
   });
   describe('#notEqual()', () => {
     it('should calculate valid not equal', () => {
-      assert.deepEqual(new NT(9999).notEqual(new NT(0)), true);
-      assert.deepEqual(new NT(123).notEqual(new NT(123)), false);
+      assert.deepStrictEqual(new NT(9999).notEqual(new NT(0)), true);
+      assert.deepStrictEqual(new NT(123).notEqual(new NT(123)), false);
     });
     it('should calculate invalid not equal', () => {
       assert.throws(() => {
