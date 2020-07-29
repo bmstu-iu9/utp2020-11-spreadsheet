@@ -40,6 +40,20 @@ describe('UserRepo', () => {
     });
     database.prepare = prepare;
   });
+  describe('#errors', () => {
+    const allMethodsError = ['dropTable', 'createTable', 'save', 'get',
+      'getAllUsers', 'delete', 'deleteAll'];
+    allMethodsError.forEach((method) => {
+      it(`should make error in #${method}()`, () => {
+        const { prepare } = database;
+        database.prepare = null;
+        assert.throws(() => {
+          userRepo[method]();
+        });
+        database.prepare = prepare;
+      });
+    });
+  });
   describe('#save', () => {
     it('should save new user', () => {
       const user = new UserModel(login, password, isAdmin);
