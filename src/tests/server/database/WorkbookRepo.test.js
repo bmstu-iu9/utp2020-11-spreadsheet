@@ -59,7 +59,7 @@ describe('WorkbookRepo', () => {
       database.prepare = prepare;
     });
   });
-  describe('#getById', () => {
+  describe('#getById()', () => {
     it('should get book by id', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, login, bookPath);
@@ -76,7 +76,7 @@ describe('WorkbookRepo', () => {
       assert.throws(() => workbookRepo.getById(id + 1));
     });
   });
-  describe('#detByLogin', () => {
+  describe('#detByLogin()', () => {
     it('should get all user\'s books', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
@@ -98,7 +98,7 @@ describe('WorkbookRepo', () => {
       assert.throws(() => workbookRepo.getByLogin(login));
     });
   });
-  describe('#getAllBooks', () => {
+  describe('#getAllBooks()', () => {
     it('should get all books', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',
@@ -114,7 +114,7 @@ describe('WorkbookRepo', () => {
       );
     });
   });
-  describe('#save', () => {
+  describe('#save()', () => {
     it('should save new user', () => {
       const book = new WorkbookModel(bookPath, login);
       const id = workbookRepo.save(book);
@@ -129,7 +129,7 @@ describe('WorkbookRepo', () => {
       );
     });
   });
-  describe('#delete', () => {
+  describe('#delete()', () => {
     it('should delete book', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, login, bookPath);
@@ -141,7 +141,7 @@ describe('WorkbookRepo', () => {
       );
     });
   });
-  describe('#deleteAll', () => {
+  describe('#deleteAll()', () => {
     it('should delete all books', () => {
       const inserting = database.prepare(
         'INSERT INTO Books (id, login, path) VALUES (?, ?, ?)',

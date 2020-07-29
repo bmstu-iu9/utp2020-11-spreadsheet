@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import UserModel from '../../../server/database/UserModel.js';
 
 describe('UserModel', () => {
-  describe('#constructor', () => {
+  describe('#constructor()', () => {
     it('should create user', () => {
       const user = new UserModel('login', 'password', false);
       assert.strictEqual(user.login, 'login');
@@ -25,7 +25,7 @@ describe('UserModel', () => {
       });
     });
   });
-  describe('#set voids', () => {
+  describe('#setPassword() && #getHashedPassword()', () => {
     it('should set password', () => {
       const user = new UserModel('login', 'password', false);
       user.setPassword('password1');
@@ -37,6 +37,8 @@ describe('UserModel', () => {
         user.setPassword('');
       });
     });
+  });
+  describe('#setIsAdmin()', () => {
     it('should set isAdmin', () => {
       const user = new UserModel('login', 'password', false);
       user.setIsAdmin(true);
@@ -49,7 +51,7 @@ describe('UserModel', () => {
       });
     });
   });
-  describe('#fromSQLtoUser', () => {
+  describe('#fromSQLtoUser()', () => {
     it('should transform sql answer to user', () => {
       const row = {
         login: 'login',

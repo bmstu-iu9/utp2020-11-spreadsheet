@@ -43,7 +43,7 @@ describe('UserRepo', () => {
       });
     });
   });
-  describe('#save', () => {
+  describe('#save()', () => {
     it('should save new user', () => {
       const user = new UserModel(login, password, isAdmin);
       userRepo.save(user);
@@ -74,7 +74,7 @@ describe('UserRepo', () => {
       );
     });
   });
-  describe('#get', () => {
+  describe('#get()', () => {
     it('should get user by login', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
         .run(login, UserModel.getHashedPassword(password), Number(isAdmin));
@@ -89,7 +89,7 @@ describe('UserRepo', () => {
       assert.strictEqual(userRepo.get(login), undefined);
     });
   });
-  describe('#getAllUsers', () => {
+  describe('#getAllUsers()', () => {
     it('should get all users', () => {
       const inserting = database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)');
       inserting.run(login, UserModel.getHashedPassword(password), Number(isAdmin));
@@ -101,7 +101,7 @@ describe('UserRepo', () => {
       );
     });
   });
-  describe('#delete', () => {
+  describe('#delete()', () => {
     it('should delete user', () => {
       database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)')
         .run(login, password, Number(isAdmin));
@@ -112,7 +112,7 @@ describe('UserRepo', () => {
       );
     });
   });
-  describe('#deleteAll', () => {
+  describe('#deleteAll()', () => {
     it('should delete all users', () => {
       const inserting = database.prepare('INSERT INTO Users (login, password, isAdmin) VALUES (?, ?, ?)');
       inserting.run(login, UserModel.getHashedPassword(password), Number(isAdmin));

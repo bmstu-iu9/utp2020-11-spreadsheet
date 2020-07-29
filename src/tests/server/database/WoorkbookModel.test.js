@@ -3,7 +3,7 @@ import WorkbookModel from '../../../server/database/WorkbookModel.js';
 
 const path = 'path.json';
 describe('WorkbookModel', () => {
-  describe('#constructor', () => {
+  describe('#constructor()', () => {
     it('should create book with null id', () => {
       const book = new WorkbookModel(path, 'login');
       assert.strictEqual(book.login, 'login');
@@ -22,16 +22,7 @@ describe('WorkbookModel', () => {
       });
     });
   });
-  describe('#set voids', () => {
-    it('should set path', () => {
-      const book = new WorkbookModel(path, 'login');
-      book.setPath('path1.json');
-      assert.strictEqual(book.path, 'path1.json');
-    });
-    it('should throw error because of incorrect path', () => {
-      const book = new WorkbookModel(path, 'login');
-      assert.throws(() => book.setPath('path'));
-    });
+  describe('#setLogin()', () => {
     it('should set login', () => {
       const book = new WorkbookModel(path, 'login');
       book.setLogin('login1');
@@ -42,7 +33,18 @@ describe('WorkbookModel', () => {
       assert.throws(() => book.setLogin(''));
     });
   });
-  describe('#fromSQLtoBooks', () => {
+  describe('#setPath()', () => {
+    it('should set path', () => {
+      const book = new WorkbookModel(path, 'login');
+      book.setPath('path1.json');
+      assert.strictEqual(book.path, 'path1.json');
+    });
+    it('should throw error because of incorrect path', () => {
+      const book = new WorkbookModel(path, 'login');
+      assert.throws(() => book.setPath('path'));
+    });
+  });
+  describe('#fromSQLtoBooks()', () => {
     it('should transform sql answer to array of books', () => {
       const rows = [
         {
