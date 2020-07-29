@@ -29,17 +29,6 @@ describe('UserRepo', () => {
     userRepo.dropTable();
   });
   after(() => database.close());
-  it('should make all errors', () => {
-    const { prepare } = database;
-    database.prepare = null;
-    const allMethodsError = Object.getOwnPropertyNames(Object.getPrototypeOf(new UserRepo()));
-    allMethodsError.forEach((method) => {
-      assert.throws(() => {
-        userRepo[method]();
-      });
-    });
-    database.prepare = prepare;
-  });
   describe('#errors', () => {
     const allMethodsError = ['dropTable', 'createTable', 'save', 'get',
       'getAllUsers', 'delete', 'deleteAll'];
