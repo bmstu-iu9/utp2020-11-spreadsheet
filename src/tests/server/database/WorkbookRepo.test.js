@@ -34,23 +34,30 @@ describe('WorkbookRepo', () => {
     userRepo.dropTable();
   });
   after(() => database.close());
-  it('should make all errors', () => {
-    const { prepare } = database;
-    database.prepare = null;
+  describe('#errors', () => {
     const allMethodsError = ['dropTable', 'createTable', 'getById', 'getByLogin',
       'getAllBooks', 'delete', 'deleteAll'];
     allMethodsError.forEach((method) => {
-      assert.throws(() => {
-        workbookRepo[method]();
+      it(`should make error in #${method}()`, () => {
+        const { prepare } = database;
+        database.prepare = null;
+        assert.throws(() => {
+          workbookRepo[method]();
+        });
+        database.prepare = prepare;
       });
     });
-    assert.throws(() => {
-      workbookRepo.save({ id: null });
+    it('should make error in #save()', () => {
+      const { prepare } = database;
+      database.prepare = null;
+      assert.throws(() => {
+        workbookRepo.save({ id: null });
+      });
+      assert.throws(() => {
+        workbookRepo.save({ id: 1 });
+      });
+      database.prepare = prepare;
     });
-    assert.throws(() => {
-      workbookRepo.save({ id: 1 });
-    });
-    database.prepare = prepare;
   });
   describe('#getById', () => {
     it('should get book by id', () => {
