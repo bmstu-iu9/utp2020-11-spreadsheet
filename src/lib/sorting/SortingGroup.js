@@ -21,15 +21,13 @@ export default class SortingGroup {
       }
       rows.get(row).set(position, cell);
     });
-    const rowsArray = [];
+    let rowsArray = [];
     rows.forEach((...args) => {
       rowsArray.push(args[0]);
     });
     this.cellColumnSorts.forEach((sort) => {
-      sort.run(rowsArray);
+      rowsArray = sort.run(rowsArray);
     });
-    // тут всеми ли фильтрами одобрено
-    // а мне надо иначе сделать как-то
     return rowsArray;
   }
 
