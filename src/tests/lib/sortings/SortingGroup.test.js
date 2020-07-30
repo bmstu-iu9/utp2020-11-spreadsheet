@@ -32,12 +32,33 @@ describe('SortingGroup', () => {
       ['B3', new Cell(valueTypes.string, 's')],
       ['B4', new Cell(valueTypes.string, 'r')],
       ['B6', new Cell(valueTypes.string, 'm')],
+      ['BB6', new Cell(valueTypes.number, 1)],
+      ['BB7', new Cell(valueTypes.number, 2)],
+      ['BB8', new Cell(valueTypes.number, 3)],
+      ['BB9', new Cell(valueTypes.number, 4)],
+      ['BA7', new Cell(valueTypes.string, 'a')],
+      ['BA9', new Cell(valueTypes.string, 'b')],
     ]);
     it('should throw an exception for {} spreadsheet', () => {
       const sortingGroup = new SortingGroup('A1', 'A1');
       assert.throws(() => {
         sortingGroup.run({});
       });
+    });
+    it('should sorting workbook with one sort', () => {
+      const spreadsheet = new Spreadsheet('a', cells);
+      const sortGroup = new SortingGroup('BA6', 'BB9', [
+        new StringSort('BA', true),
+      ]);
+      const result = sortGroup.run(spreadsheet);
+      const answer = [
+        new Map([['BA7', cells.get('BA7')], ['BB7', cells.get('BB7')]]),
+        new Map([['BA9', cells.get('BA9')], ['BB9', cells.get('BB9')]]),
+        new Map([['BB6', cells.get('BB6')]]),
+        new Map([['BB8', cells.get('BB8')]]),
+
+      ];
+      assert.deepStrictEqual(result, answer);
     });
     it('should sorting workbook with several sorts', () => {
       const spreadsheet = new Spreadsheet('a', cells);

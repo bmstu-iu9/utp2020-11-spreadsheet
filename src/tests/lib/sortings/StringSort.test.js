@@ -12,33 +12,52 @@ describe('StringSort', () => {
     });
   });
   describe('#compareFunction()', () => {
+    const results = {
+      positive: (answer) => answer > 0,
+      negative: (answer) => answer < 0,
+      zero: (answer) => answer === 0,
+    };
     const testCases = [{
       description: 'should return negative number for \'a\' and \'b\' in alphabet order',
       sort: ['A', true],
       cellA: [valueTypes.string, 'a'],
       cellB: [valueTypes.string, 'b'],
-      result: (answer) => answer < 0,
+      result: results.negative,
     },
     {
       description: 'should return negative number for \'ab\' and \'a\' not in alphabet order',
       sort: ['A', false],
       cellA: [valueTypes.string, 'ab'],
       cellB: [valueTypes.string, 'a'],
-      result: (answer) => answer < 0,
+      result: results.negative,
     },
     {
       description: 'should return zero for \'a\' and \'a\' in alphabet order',
       sort: ['A', true],
       cellA: [valueTypes.string, 'a'],
       cellB: [valueTypes.string, 'a'],
-      result: (answer) => answer === 0,
+      result: results.zero,
     },
     {
       description: 'should return zero for \'a\' and \'a\' not in alphabet order',
       sort: ['A', false],
       cellA: [valueTypes.string, 'a'],
       cellB: [valueTypes.string, 'a'],
-      result: (answer) => answer === 0,
+      result: results.zero,
+    },
+    {
+      description: 'should return zero for two numbers',
+      sort: ['A', true],
+      cellA: [valueTypes.number, 1],
+      cellB: [valueTypes.number, 2],
+      result: results.zero,
+    },
+    {
+      description: 'should return positive for number and string',
+      sort: ['A', true],
+      cellA: [valueTypes.number, 1],
+      cellB: [valueTypes.string, 'abc'],
+      result: results.positive,
     }];
     testCases.forEach((testCase) => {
       it(testCase.description, () => {
