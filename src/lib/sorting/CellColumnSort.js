@@ -12,14 +12,14 @@ export default class CellColumnSort {
 
   run(rows) {
     let emptyRowsCount = 0;
-    const rowsAndSells = [];
+    const rowsAndCells = [];
     rows.forEach((cells) => {
       const filteredCells = this.columnFilter.run(cells);
       if (filteredCells.size > 1) {
         throw new Error('two cells on one position');
       }
       if (filteredCells.size === 0) {
-        rowsAndSells.push({
+        rowsAndCells.push({
           position: emptyRowsCount,
           cells,
         });
@@ -29,14 +29,14 @@ export default class CellColumnSort {
           if (!(cell instanceof Cell)) {
             throw new TypeError('cell expected');
           }
-          rowsAndSells.push({
+          rowsAndCells.push({
             position,
             cells,
           });
         });
       }
     });
-    rowsAndSells.sort((a, b) => {
+    rowsAndCells.sort((a, b) => {
       const isAEmpty = !this.columnFilter.doesPositionMatch(a.position);
       const isBEmpty = !this.columnFilter.doesPositionMatch(b.position);
       if (isAEmpty && isBEmpty) {
@@ -54,7 +54,7 @@ export default class CellColumnSort {
     });
 
     const rightOrderedRows = [];
-    rowsAndSells.forEach((pair) => rightOrderedRows.push(pair.cells));
+    rowsAndCells.forEach((pair) => rightOrderedRows.push(pair.cells));
     return rightOrderedRows;
   }
 }
