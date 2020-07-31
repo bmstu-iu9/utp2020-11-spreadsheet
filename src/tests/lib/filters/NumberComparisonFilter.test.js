@@ -9,7 +9,7 @@ describe('NumberComparisonFilter', () => {
         new NumberComparisonFilter('A', operators.more, 5);
       });
     });
-    it('should not throw an exception for "A", "moreOrLess", 5', () => {
+    it('should throw an exception for "A", "moreOrLess", 5', () => {
       assert.throws(() => {
         new NumberComparisonFilter('A', 'moreOrLess', 5);
       });
