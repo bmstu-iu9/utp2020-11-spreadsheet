@@ -41,3 +41,8 @@ div.content {
   min-height: 100vh;
   box-sizing: border-box;
 }
+
+div.row{
+  display: flex;
+  flex-direction: row;
+}

@@ -20,7 +20,6 @@ div.name-panel {
   border-radius: 5px;
   background-color: #fcfcfc;
   opacity: 80%;
-  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +28,12 @@ div.name-panel {
   font-weight: normal;
   font-size: 18px;
   color: #444c5c;
+}
+
+div.name-panel > img {
+  width: 25px;
+  height: 25px;
+  float: right;
 }
 
 div.new-book-button {
@@ -140,8 +145,26 @@ div.book-icon {
   border-bottom-left-radius: 5px;
 }
 
+div.book-icon-text {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+span.book-icon-text {
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  color: #444c5c;
+}
+
+span.book-icon-text-size {
+  font-size: 35px;
+}
+
 div.filename {
-  margin-top: 100px;
   width: inherit;
   height: 20px;
   background: #fedaa0;
@@ -157,16 +180,12 @@ div.filename {
   align-content: end;
 }
 
-div.nav-arrow {
+div.book-list-column {
   width: 30px;
   height: 156px;
   background-color: #444c5c;
   opacity: 50%;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.25);
-}
-
-div.nav-arrow:hover {
-  opacity: 70%;
 }
 
 div#vertical_line {
