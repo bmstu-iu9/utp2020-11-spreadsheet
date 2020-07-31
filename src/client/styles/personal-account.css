@@ -7,10 +7,6 @@ div#decorative-line {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-body {
-  overflow: hidden;
-}
-
 div.content {
   display: flex;
   flex-direction: column;
@@ -77,9 +73,27 @@ div.lk-button:hover {
   border-color: #fca311;
 }
 
-div.book-list-nav {
+div.book-list-wrapper {
   margin-top: 80px;
   width: 100%;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+div.book-list-header {
+  height: 30px;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #444c5c;
+}
+
+div.book-list-nav {
+  width: inherit;
   height: 150px;
   display: flex;
   flex-direction: row;
@@ -88,8 +102,8 @@ div.book-list-nav {
 }
 
 div.book-list {
+  padding-right: 30px;
   height: inherit;
-  padding: 0 30px;
   background-color: white;
   width: inherit;
   overflow: scroll;
@@ -109,6 +123,11 @@ div.book-list {
 
 ::-webkit-scrollbar-thumb {
   background-color: #fca311;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #f89a03;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
