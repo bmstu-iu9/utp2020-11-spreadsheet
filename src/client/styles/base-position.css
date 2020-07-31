@@ -9,10 +9,6 @@
 }
 
 @media (min-width: 720px) {
-  body {
-    padding: 0;
-  }
-
   div.content {
     margin: 0;
     flex-direction: row;
