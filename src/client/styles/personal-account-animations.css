@@ -51,19 +51,19 @@ div#new-book-button:hover div.animation-dot{
 }
 
 div#new-book-button:hover div#tl-dot {
-  animation: dashing-tl 2s infinite;
+  animation: dashing-tl 3s infinite;
 }
 
 div#new-book-button:hover div#br-dot {
-  animation: dashing-br 2s infinite;
+  animation: dashing-br 3s infinite;
 }
 
 div#new-book-button:hover div#tr-dot {
-  animation: dashing-tr 2s infinite;
+  animation: dashing-tr 3s infinite;
 }
 
 div#new-book-button:hover div#bl-dot {
-  animation: dashing-bl 2s infinite;
+  animation: dashing-bl 3s infinite;
 }
 
 @keyframes pulsing {
