@@ -37,6 +37,10 @@ nav.header div.logo {
   border-radius: 10px;
 }
 
+div.content-wrapper {
+  width: 100%;
+}
+
 div.content {
   height: 100%;
   margin-top: 100px;
