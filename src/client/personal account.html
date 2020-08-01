@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/base-position.css">
     <link rel="stylesheet" href="styles/personal-account.css">
     <link rel="stylesheet" href="styles/personal-account-position.css">
+    <link rel="stylesheet" href="styles/personal-account-animations.css">
     <title>Личный кабинет</title>
 </head>
 <body>
@@ -16,8 +17,10 @@
         <span><img src="img/logo.png" alt="Unitables" width="250" height="65"> </span>
     </div>
 </nav>
-<div id="decorative-line"></div>
 <div class="content-wrapper">
+    <div class="row flex-center">
+        <div id="decorative-line"></div>
+    </div>
     <div class="content">
         <div class="row" style="margin-top: 20px;">
             <div class="name-panel">
@@ -26,17 +29,13 @@
             <img src="img/edit-orange.png"
                  style="width: 25px; height: 25px; margin-left: -33px; margin-top: 2px; position: absolute;">
         </div>
-        <div class="new-book-button">
-            <a href="">
-                <div>
-                    <div id="vertical_line"></div>
-                    <div id="horizontal_line"></div>
-                </div>
-            </a>
+        <div id="new-book-button" onmouseover="hideDecorativeLine()" onmouseout="showDecorativeLine()">
+            <div id="new-book-button-panel">
+                <span class="base-text no-click">NEW BOOK</span>
+            </div>
+            <div id="vertical_line"></div>
+            <div id="horizontal_line"></div>
         </div>
-        <!--        <div class="lk-button" style="text-align: center;">-->
-        <!--            <span>RECENTLY UPDATED</span>-->
-        <!--        </div>-->
         <div class="book-list-wrapper">
             <div class="book-list-header">MY BOOKS</div>
             <div class="book-list-nav">
@@ -110,6 +109,6 @@
         </div>
     </div>
 </div>
-
+<script src="scripts/personal-account-animations.js"></script>
 </body>
 </html>

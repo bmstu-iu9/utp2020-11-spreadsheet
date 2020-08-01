@@ -50,3 +50,19 @@ div.row {
   display: flex;
   flex-direction: row;
 }
+
+.flex-center {
+  justify-content: center;
+}
+
+.base-text {
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  color: #444;
+}
+
+.no-click {
+  pointer-events: none;
+}
