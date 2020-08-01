@@ -1,21 +1,11 @@
 @media (min-width: 320px) {
-  body {
-    padding: 100px 0 0;
-  }
-
   div.content {
     padding: 10px 18px;
   }
 }
 
 @media (min-width: 720px) {
-  body {
-    padding: 0;
-  }
-
   div.content {
-    margin: 0;
-    flex-direction: row;
     padding: 15px 20px;
   }
 }
