@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { operators, NumberComparisonFilter } from '../../../lib/filters/NumberComparisonFilter.js';
+import { NumberComparisonFilter, operators } from '../../../lib/filters/NumberComparisonFilter.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 
 describe('NumberComparisonFilter', () => {
@@ -9,7 +9,7 @@ describe('NumberComparisonFilter', () => {
         new NumberComparisonFilter('A', operators.more, 5);
       });
     });
-    it('should not throw an exception for "A", "moreOrLess", 5', () => {
+    it('should throw an exception for "A", "moreOrLess", 5', () => {
       assert.throws(() => {
         new NumberComparisonFilter('A', 'moreOrLess', 5);
       });
@@ -58,7 +58,7 @@ describe('NumberComparisonFilter', () => {
         const numberComparisonFilter = new NumberComparisonFilter(...testCase.filter);
         const cell = new Cell(...testCase.cell);
         const result = numberComparisonFilter.doesCellMatch(cell);
-        assert.equal(result, testCase.result);
+        assert.strictEqual(result, testCase.result);
       });
     });
   });

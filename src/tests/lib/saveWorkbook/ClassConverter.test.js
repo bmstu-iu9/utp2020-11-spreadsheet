@@ -46,7 +46,7 @@ describe('ClassConverter', () => {
       assert.strictEqual(fs.existsSync(`${pathToWorkbooks}/${workbookStandardName}.json`), true);
       mock.restore();
     });
-    it('should throw an exeption for creating file without permission', () => {
+    it('should throw an exception for creating file without permission', () => {
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName)];
       const workbook = new Workbook(workbookStandardName, spreadsheets);
       mock({

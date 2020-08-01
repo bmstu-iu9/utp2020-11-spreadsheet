@@ -1,5 +1,6 @@
 body {
-  background-color: white;
+  background-color: #ededed;
+  display: flex;
 }
 
 nav,
@@ -37,12 +38,11 @@ nav.header div.logo {
 }
 
 div.content {
-  background-color: #ededed;
-  min-height: 100vh;
-  box-sizing: border-box;
+  height: 100%;
+  margin-top: 100px;
 }
 
-div.row{
+div.row {
   display: flex;
   flex-direction: row;
 }

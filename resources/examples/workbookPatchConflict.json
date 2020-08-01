@@ -1,0 +1,19 @@
+{
+  "conflicts": [
+    {
+      "id": "bc096a5e-8cca-4e9d-82dc-856bb26271d0",
+      "changeType": "value",
+      "cellAddress": "A2",
+      "type": "formula",
+      "value": "=4",
+      "workbook": 3222,
+      "page": 2
+    },
+    {
+      "id": "41c23854-8c6b-40a7-b8fa-2a2b794ce034",
+      "changeType": "color",
+      "cellAddress": "A1",
+      "color": "#aaaaaa"
+    }
+  ]
+}

@@ -83,7 +83,7 @@ describe('Workbook', () => {
       const spreadsheet = new Spreadsheet('table', cells);
       const wb = new Workbook('book', [spreadsheet]);
 
-      assert.deepEqual(wb.getProcessedValue('A1'), (1 + Math.sqrt(5)) / 2);
+      assert.deepStrictEqual(wb.getProcessedValue('A1'), (1 + Math.sqrt(5)) / 2);
     });
     it('should take value from cell', () => {
       const cells = new Map();
@@ -91,7 +91,7 @@ describe('Workbook', () => {
       const spreadsheet = new Spreadsheet('table', cells);
       const wb = new Workbook('book', [spreadsheet]);
 
-      assert.deepEqual(wb.getProcessedValue('A1'), 23456);
+      assert.deepStrictEqual(wb.getProcessedValue('A1'), 23456);
     });
   });
 });

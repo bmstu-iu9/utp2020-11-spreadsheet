@@ -106,5 +106,7 @@ dist
 # VSCode directory
 .vscode/
 
+# SQLite database
+database.db
 #PHPstorm directory
 .idea/

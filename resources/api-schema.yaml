@@ -1,0 +1,315 @@
+openapi: "3.0.0"
+info:
+  title: "Unitables API"
+  version: "0.1.0"
+security:
+  - "bearer": []
+paths:
+  /auth:
+    post:
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/auth"
+            examples:
+              auth:
+                $ref: "#/components/examples/auth"
+      description: "Авторизация"
+      responses:
+        "200":
+          description: "Успешная авторизация"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/token"
+              examples:
+                token:
+                  $ref: "#/components/examples/token"
+        "403":
+          description: "Неудачная авторизация"
+  /user:
+    get:
+      description: "Получение всех пользователей"
+      responses:
+        "200":
+          description: "Пользователи были успешно получены"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/users"
+              examples:
+                users:
+                  $ref: "#/components/examples/users"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для просмотра всех пользователей"
+    post:
+      description: "Регистрация нового пользователя"
+      security: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/userRegistration"
+            examples:
+              userRegistration:
+                $ref: "#/components/examples/userRegistration"
+      responses:
+        "200":
+          description: "Пользователь был успешно создан"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/user"
+              examples:
+                user:
+                  $ref: "#/components/examples/user"
+        "400":
+          description: "Некорректный запрос"
+        "409":
+          description: "Уже есть пользователь с таким логином"
+  /user/{username}:
+    parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        description: "Идентификатор пользователя"
+        schema:
+          type: string
+    get:
+      description: "Получение пользователя с заданным ID"
+      responses:
+        "200":
+          description: "Пользователь был успешно получен"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/user"
+              examples:
+                user:
+                  $ref: "#/components/examples/user"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для просмотра пользователя"
+        "404":
+          description: "Пользователь не был найден"
+    patch:
+      description: "Изменение пользователя с заданным ID"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/userPatch"
+            examples:
+              userPatch:
+                $ref: "#/components/examples/userPatch"
+      responses:
+        "200":
+          description: "Пользователь был успешно изменён"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/user"
+              examples:
+                user:
+                  $ref: "#/components/examples/user"
+        "400":
+          description: "Некорректный запрос"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для изменения пользователя"
+        "404":
+          description: "Пользователь не был найден"
+    delete:
+      description: "Удаление пользователя с заданным ID"
+      responses:
+        "200":
+          description: "Пользователь был успешно удалён"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для удаления пользователя"
+        "404":
+          description: "Пользователь не был найден"
+  /workbook:
+    get:
+      description: "Получение списка всех доступных пользователю книг"
+      responses:
+        "200":
+          description: "Все книги были успешно получены"
+          content:
+            "application/json":
+              examples:
+                workbooks:
+                  $ref: "#/components/examples/workbooks"
+        "401":
+          description: "Неавторизованный запрос"
+    post:
+      description: "Создание новой книги"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/workbook"
+            examples:
+              workbook:
+                $ref: "#/components/examples/workbook"
+      responses:
+        "200":
+          description: "Книга была успешно создана"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/workbookID"
+              examples:
+                workbook:
+                  $ref: "#/components/examples/workbookID"
+        "400":
+          description: "Некорректный запрос"
+        "401":
+          description: "Неавторизованный запрос"
+  /workbook/{id}:
+    parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        description: "Идентификатор книги"
+        schema:
+          type: integer
+          format: int64
+    get:
+      parameters:
+        - name: "from"
+          in: "query"
+          required: false
+          description: "ID коммита, начиная с которого требуются изменения."
+          schema:
+            type: string
+      description: "Получение книги с заданным ID"
+      responses:
+        "200":
+          description: "Книга была успешно получена"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/workbookID"
+              examples:
+                workbook:
+                  $ref: "#/components/examples/workbookID"
+                workbookChanges:
+                  $ref: "#/components/examples/workbookChanges"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для просмотра книги"
+        "404":
+          description: "Книга не была найдена"
+        "409":
+          description: "Коммит с указанным ID не был найден, требуется заново загрузить таблицу"
+    patch:
+      description: "Изменение книги с заданным ID"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/workbookPatch"
+            examples:
+              workbookPatch:
+                $ref: "#/components/examples/workbookPatch"
+      responses:
+        "200":
+          description: "Книга была успешно изменена"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для изменения книги"
+        "404":
+          description: "Книга не была найдена"
+        "409":
+          description: "Были обнаружены конфликтные изменения"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/workbookPatchConflict"
+              examples:
+                workbookPatchConflict:
+                  $ref: "#/components/examples/workbookPatchConflict"
+    delete:
+      description: "Удаление книги с заданным ID"
+      responses:
+        "200":
+          description: "Книга была успешно удалена"
+        "401":
+          description: "Неавторизованный запрос"
+        "403":
+          description: "Недостаточно прав для удаления книги"
+        "404":
+          description: "Книга не была найдена"
+components:
+  securitySchemes:
+    "bearer":
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "Bearer mF_9.B5f-4.1JqM"
+  schemas:
+    workbook:
+      $ref: "tableSchema.json"
+    user:
+      type: "object"
+    users:
+      type: "array"
+    auth:
+      type: "object"
+    token:
+      type: "object"
+    userRegistration:
+      type: "object"
+    userPatch:
+      type: "object"
+    workbookID:
+      type: "object"
+    workbookPatch:
+      type: "object"
+    workbookPatchConflict:
+      type: "object"
+  examples:
+    workbook:
+      value:
+        $ref: "examples/table.json"
+    workbooks:
+      value:
+        $ref: "examples/tables.json"
+    user:
+      value:
+        $ref: "examples/user.json"
+    users:
+      value:
+        $ref: "examples/users.json"
+    auth:
+      value:
+        $ref: "examples/auth.json"
+    token:
+      value:
+        $ref: "examples/token.json"
+    userRegistration:
+      value:
+        $ref: "examples/userRegistration.json"
+    userPatch:
+      value:
+        $ref: "examples/userPatch.json"
+    workbookID:
+      value:
+        $ref: "examples/workbookID.json"
+    workbookPatch:
+      value:
+        $ref: "examples/workbookPatch.json"
+    workbookPatchConflict:
+      value:
+        $ref: "examples/workbookPatchConflict.json"
+    workbookChanges:
+      value:
+        $ref: "examples/workbookChanges.json"
