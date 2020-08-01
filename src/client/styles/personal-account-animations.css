@@ -28,6 +28,7 @@ div#new-book-button:hover div#new-book-button-panel {
 div#new-book-button-panel:hover > span {
   opacity: 1;
   animation: pulsing 3s infinite;
+  animation-timing-function: cubic-bezier(0.25, 0.82, 0, 1.57);
 }
 
 div#new-book-button:hover div#vertical_line {
