@@ -29,13 +29,19 @@
             <img src="img/edit-orange.png"
                  style="width: 25px; height: 25px; margin-left: -33px; margin-top: 2px; position: absolute;">
         </div>
-        <div id="new-book-button" onmouseover="hideDecorativeLine()" onmouseout="showDecorativeLine()">
-            <div id="new-book-button-panel">
-                <span class="base-text no-click">NEW BOOK</span>
+            <div id="new-book-button" onmouseover="hideDecorativeLine()" onmouseout="showDecorativeLine()">
+                <div id="animation-dots-wrapper">
+                    <div class="animation-dot" id="tl-dot"></div>
+                    <div class="animation-dot" id="tr-dot"></div>
+                    <div class="animation-dot" id="bl-dot"></div>
+                    <div class="animation-dot" id="br-dot"></div>
+                </div>
+                <div id="new-book-button-panel">
+                    <span class="base-text no-click">NEW BOOK</span>
+                </div>
+                <div id="vertical_line"></div>
+                <div id="horizontal_line"></div>
             </div>
-            <div id="vertical_line"></div>
-            <div id="horizontal_line"></div>
-        </div>
         <div class="book-list-wrapper">
             <div class="book-list-header">MY BOOKS</div>
             <div class="book-list-nav">

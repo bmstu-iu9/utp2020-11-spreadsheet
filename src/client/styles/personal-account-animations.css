@@ -46,6 +46,26 @@ div#new-book-button:hover div#horizontal_line {
   background-color: #f89a03;
 }
 
+div#new-book-button:hover div.animation-dot{
+  visibility: visible;
+}
+
+div#new-book-button:hover div#tl-dot {
+  animation: dashing-tl 2s infinite;
+}
+
+div#new-book-button:hover div#br-dot {
+  animation: dashing-br 2s infinite;
+}
+
+div#new-book-button:hover div#tr-dot {
+  animation: dashing-tr 2s infinite;
+}
+
+div#new-book-button:hover div#bl-dot {
+  animation: dashing-bl 2s infinite;
+}
+
 @keyframes pulsing {
   0% {
     opacity: 0;
@@ -55,5 +75,66 @@ div#new-book-button:hover div#horizontal_line {
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes dashing-tl {
+  0% {
+    width: 0;
+    margin-left: 15px;
+  }
+  50% {
+    width: 90px;
+    margin-left: 55px;
+  }
+  100% {
+    width: 0;
+    margin-left: 180px;
+  }
+}
+
+@keyframes dashing-br {
+  0% {
+    width: 0;
+    margin-left: 180px;
+
+  }
+  50% {
+    width: 90px;
+    margin-left: 55px;
+  }
+  100% {
+    width: 0;
+    margin-left: 15px;
+  }
+}
+
+@keyframes dashing-tr {
+  0% {
+    height: 0;
+    margin-top: 20px;
+  }
+  50% {
+    height: 60px;
+    margin-top: 35px;
+  }
+  100% {
+    height: 0;
+    margin-top: 110px;
+  }
+}
+
+@keyframes dashing-bl {
+  0% {
+    height: 0;
+    margin-top: 110px;
+  }
+  50% {
+    height: 60px;
+    margin-top: 35px;
+  }
+  100% {
+    height: 0;
+    margin-top: 20px;
   }
 }
