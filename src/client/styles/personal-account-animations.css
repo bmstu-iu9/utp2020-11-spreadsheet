@@ -7,11 +7,11 @@ div#new-book-button-panel > span {
 }
 
 div#vertical_line {
-  transition: opacity 250ms cubic-bezier(0, 0.75, 0.58, 0.7);
+  transition: opacity 250ms cubic-bezier(0, 0.75, 0.58, 0.7), background-color 250ms cubic-bezier(0, 0, 1, 1) 0.3s;
 }
 
 div#horizontal_line {
-  transition: opacity 250ms cubic-bezier(0, 0.75, 0.58, 0.7);
+  transition: opacity 250ms cubic-bezier(0, 0.75, 0.58, 0.7), background-color 250ms cubic-bezier(0, 0, 1, 1) 0.3s;
 }
 
 div#decorative-line {
@@ -27,12 +27,33 @@ div#new-book-button:hover div#new-book-button-panel {
 
 div#new-book-button-panel:hover > span {
   opacity: 1;
+  animation: pulsing 3s infinite;
 }
 
 div#new-book-button:hover div#vertical_line {
   opacity: 0;
+  animation: pulsing 3s infinite;
+  animation-delay: 1700ms;
+  animation-timing-function: cubic-bezier(0, 0.94, 0.4, 1.19);
+  background-color: #f89a03;
 }
 
 div#new-book-button:hover div#horizontal_line {
   opacity: 0;
+  animation: pulsing 3s infinite;
+  animation-delay: 1700ms;
+  animation-timing-function: cubic-bezier(0, 0.94, 0.4, 1.19);
+  background-color: #f89a03;
+}
+
+@keyframes pulsing {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
