@@ -9,7 +9,7 @@ export default class TokenAuthenticator {
 
   setDataRepo(dataRepo) {
     if (!(dataRepo instanceof DataRepo)) {
-      throw TypeError('userRepo must be a UserRepo instance');
+      throw TypeError('dataRepo must be a DataRepo instance');
     }
     this.dataRepo = dataRepo;
   }
