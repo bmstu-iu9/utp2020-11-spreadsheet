@@ -117,6 +117,7 @@ const libFunc = new Map([
 
   ['ЕСЛИ', (treeRunner) => {
     if (treeRunner.tree.length - 1 !== 3) {
+      // не typeError
       treeRunner.constructor.makeTypeError('wrong number arguments in ЕСЛИ');
     }
     const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
@@ -144,7 +145,7 @@ export default class TreeRunner {
 
   run() {
     if (!libFunc.has(this.tree[0])) {
-      throw new TypeError(`undefind function ${this.tree[0]}`);
+      throw new Error(`undefined function ${this.tree[0]}`);
     }
     return libFunc.get(this.tree[0])(this);
   }

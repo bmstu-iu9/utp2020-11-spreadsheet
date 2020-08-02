@@ -22,7 +22,7 @@ export default class Synchronizer {
       }
     }
     if (this.lastChanges.length !== 0 && lastPos === -1) {
-      throw new TypeError('invalid log ID');
+      throw new Error('invalid log ID');
     }
     const errAns = [];
     for (let i = 0; i < arrayLogs.length; i += 1) {
@@ -33,7 +33,7 @@ export default class Synchronizer {
         }
       }
       if (!setChangeType.has(arrayLogs[0].changeType)) {
-        throw new TypeError(`invalid log change type, find ${arrayLogs[i].changeType}`);
+        throw new Error(`invalid log change type, find ${arrayLogs[i].changeType}`);
       }
     }
     if (errAns.length > 0) {

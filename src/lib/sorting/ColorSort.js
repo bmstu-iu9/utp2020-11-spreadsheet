@@ -13,7 +13,7 @@ export default class ColorSort extends CellColumnSort {
     }
     colors.forEach((color) => {
       if (!Cell.isColorCorrect(color)) {
-        throw new TypeError('invalid color');
+        throw new Error('invalid color');
       }
     });
     this.colors = colors;

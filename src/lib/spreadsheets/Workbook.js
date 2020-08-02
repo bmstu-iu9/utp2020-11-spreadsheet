@@ -26,11 +26,11 @@ export default class Workbook {
 
   setSpreadsheets(spreadsheets) {
     if (!(spreadsheets instanceof Array)) {
-      throw new Error('Spreadsheets must be an array');
+      throw new TypeError('Spreadsheets must be an array');
     }
     spreadsheets.forEach((value) => {
       if (!(value instanceof Spreadsheet)) {
-        throw new Error('Spreadsheets array elements must be spreadsheets');
+        throw new TypeError('Spreadsheets array elements must be spreadsheets');
       }
     });
     this.spreadsheets = spreadsheets;

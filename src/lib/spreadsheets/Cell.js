@@ -24,7 +24,7 @@ export class Cell {
       this.type = type;
       this.value = value;
     } else {
-      throw new Error('value type does not correspond to specified cell type');
+      throw new TypeError('value type does not correspond to specified cell type');
     }
   }
 

@@ -25,12 +25,12 @@ export default class Spreadsheet {
           throw new Error('Illegal position');
         }
         if (!(cell instanceof Cell)) {
-          throw new Error('Map values must be cells');
+          throw new TypeError('Map values must be cells');
         }
       });
       this.cells = cells;
     } else {
-      throw new Error('Cells must be a Map');
+      throw new TypeError('Cells must be a Map');
     }
   }
 
