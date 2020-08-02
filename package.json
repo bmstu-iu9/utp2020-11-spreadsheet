@@ -4,6 +4,7 @@
   "description": "Online spreadsheets with the opportunity to merge tables",
   "main": "index.js",
   "scripts": {
+    "run": "node src/server/main.js",
     "stylelint": "stylelint src/client/styles/*.css || true",
     "test": "c8 --all mocha --recursive ./src/tests"
   },

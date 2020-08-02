@@ -1,58 +1,10 @@
 import * as assert from 'assert';
-import fs from 'fs';
-import Database from 'better-sqlite3';
-import TokenRepo from '../../../server/database/TokenRepo.js';
 import TokenModel from '../../../server/database/TokenModel.js';
-import UserRepo from '../../../server/database/UserRepo.js';
-import UserModel from '../../../server/database/UserModel.js';
-
-class TestEnvironment {
-  static getInstance() {
-    if (this.instance === undefined || this.instance === null) {
-      this.instance = new TestEnvironment();
-    }
-    return this.instance;
-  }
-
-  static destroyInstance() {
-    TestEnvironment.instance = null;
-    fs.unlinkSync('database.db');
-  }
-
-  constructor() {
-    this.database = new Database('database.db');
-    this.userRepo = new UserRepo(this.database);
-    this.tokenRepo = new TokenRepo(this.database);
-    this.userTokens = [];
-  }
-
-  init() {
-    this.userRepo.createTable();
-    this.tokenRepo.createTable();
-  }
-
-  addUsers(n, withTokens = false) {
-    for (let i = 0; i < n; i += 1) {
-      const userId = this.userTokens + i;
-      const username = `test${userId.toString()}`;
-      const user = new UserModel(username, '123', false);
-      this.userRepo.save(user);
-      let token = null;
-      if (withTokens) {
-        token = new TokenModel(username);
-        this.tokenRepo.save(token);
-      }
-      this.userTokens.push({
-        username,
-        token,
-      });
-    }
-  }
-}
-
-let environment;
+import TestEnvironment from './TestEnvironment.js';
 
 describe('TokenRepo', () => {
+  let environment;
+
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
   });
@@ -63,7 +15,7 @@ describe('TokenRepo', () => {
   describe('#dropTable()', () => {
     it('should drop table', () => {
       environment.init();
-      environment.tokenRepo.dropTable();
+      environment.dataRepo.tokenRepo.dropTable();
       const tables = environment.database.prepare(
         'SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'Tokens\'',
       ).all();
@@ -77,7 +29,7 @@ describe('TokenRepo', () => {
   });
   describe('#createTable()', () => {
     it('should create a table', () => {
-      environment.tokenRepo.createTable();
+      environment.dataRepo.tokenRepo.createTable();
       const columns = environment.database.prepare('PRAGMA table_info(Tokens)').all();
       const expected = [
         {
@@ -112,7 +64,7 @@ describe('TokenRepo', () => {
       environment.addUsers(1, true);
       const expectedToken = environment.userTokens[0].token;
       const { uuid } = expectedToken;
-      const actualToken = environment.tokenRepo.getByUuid(uuid);
+      const actualToken = environment.dataRepo.tokenRepo.getByUuid(uuid);
       assert.deepStrictEqual(actualToken, expectedToken);
     });
     it('should throw an exception when token not found', () => {
@@ -127,7 +79,7 @@ describe('TokenRepo', () => {
       environment.init();
       environment.addUsers(1, true);
       const userToken = environment.userTokens[0];
-      const actualToken = environment.tokenRepo.getByLogin(userToken.username);
+      const actualToken = environment.dataRepo.tokenRepo.getByLogin(userToken.username);
       assert.deepStrictEqual(actualToken, userToken.token);
     });
     it('should throw an exception when token not found', () => {
@@ -141,7 +93,7 @@ describe('TokenRepo', () => {
     it('should return 2 tokens', () => {
       environment.init();
       environment.addUsers(2, true);
-      const tokens = environment.tokenRepo.getAllTokens();
+      const tokens = environment.dataRepo.tokenRepo.getAllTokens();
       assert.strictEqual(tokens.length, 2);
     });
     it('should throw an exception for absent table', () => {
@@ -155,9 +107,9 @@ describe('TokenRepo', () => {
       environment.init();
       environment.addUsers(1);
       const token = new TokenModel(environment.userTokens[0].username);
-      assert.strictEqual(environment.tokenRepo.getAllTokens().length, 0);
-      environment.tokenRepo.save(token);
-      assert.strictEqual(environment.tokenRepo.getAllTokens().length, 1);
+      assert.strictEqual(environment.dataRepo.tokenRepo.getAllTokens().length, 0);
+      environment.dataRepo.tokenRepo.save(token);
+      assert.strictEqual(environment.dataRepo.tokenRepo.getAllTokens().length, 1);
     });
     it('should throw an exception for absent table', () => {
       const token = new TokenModel('test');
@@ -171,8 +123,8 @@ describe('TokenRepo', () => {
       environment.addUsers(1);
       const { token } = environment.userTokens[0];
       token.login = environment.userTokens[1].username;
-      environment.tokenRepo.save(token);
-      assert.deepStrictEqual(environment.tokenRepo.getAllTokens(), [token]);
+      environment.dataRepo.tokenRepo.save(token);
+      assert.deepStrictEqual(environment.dataRepo.tokenRepo.getAllTokens(), [token]);
     });
     it('should throw an exception for invalid login', () => {
       environment.init();
@@ -190,8 +142,8 @@ describe('TokenRepo', () => {
       environment.addUsers(2, true);
       const token1 = environment.userTokens[0].token;
       const token2 = environment.userTokens[1].token;
-      environment.tokenRepo.delete(token1.uuid);
-      assert.deepStrictEqual(environment.tokenRepo.getAllTokens(), [token2]);
+      environment.dataRepo.tokenRepo.delete(token1.uuid);
+      assert.deepStrictEqual(environment.dataRepo.tokenRepo.getAllTokens(), [token2]);
     });
     it('should throw an exception for absent table', () => {
       assert.throws(() => {
@@ -203,9 +155,9 @@ describe('TokenRepo', () => {
     it('should delete 2 tokens', () => {
       environment.init();
       environment.addUsers(2, true);
-      assert.strictEqual(environment.tokenRepo.getAllTokens().length, 2);
-      environment.tokenRepo.deleteAll();
-      assert.strictEqual(environment.tokenRepo.getAllTokens().length, 0);
+      assert.strictEqual(environment.dataRepo.tokenRepo.getAllTokens().length, 2);
+      environment.dataRepo.tokenRepo.deleteAll();
+      assert.strictEqual(environment.dataRepo.tokenRepo.getAllTokens().length, 0);
     });
     it('should throw an exception for absent table', () => {
       assert.throws(() => {
