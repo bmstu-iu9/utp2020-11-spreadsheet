@@ -69,7 +69,7 @@ describe('Authorizer', () => {
         ...request,
       };
       middleware(requestCopy, {}, () => { });
-      assert.deepEqual(requestCopy, request);
+      assert.deepStrictEqual(requestCopy, request);
     });
   });
 });
