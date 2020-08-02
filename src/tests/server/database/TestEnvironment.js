@@ -13,7 +13,8 @@ export default class TestEnvironment {
   }
 
   static destroyInstance() {
-    TestEnvironment.instance = null;
+    this.instance.database.close();
+    this.instance = null;
     fs.unlinkSync('database.db');
   }
 
