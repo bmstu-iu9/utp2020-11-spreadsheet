@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
+import config from './config.js';
 
 let server;
 let app;
@@ -13,11 +14,11 @@ export default class Server {
   static run() {
     app = express();
 
-    app.set('port', 3000);
+    app.set('port', config.port);
 
-    app.set('view options', { layout: false });
+    app.set('view options', config.viewOptions);
 
-    app.use(favicon('src/client/styles/img/favicon.ico'));
+    app.use(favicon(config.favicon));
 
     if (app.get('env') === 'development') {
       app.use(morgan('dev'));
@@ -28,19 +29,19 @@ export default class Server {
     app.use(cookieParser());
 
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.urlencoded(config.urlencoded));
 
-    app.use(express.static('src/client'));
+    app.use(express.static(config.static));
 
     app.get('/', (req, res) => {
-      res.render('/index.html');
+      res.render(config.entrypoint);
     });
 
     app.use(errorHandler());
 
     server = http.createServer(app);
 
-    server.listen(app.get('port'), () => {});
+    server.listen(app.get('port'), () => { });
   }
 
   static close() {
