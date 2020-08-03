@@ -1,5 +1,5 @@
 export default class DatabaseError extends Error {
-constructor(message) {
+  constructor(message) {
     super(message);
     this.name = 'DatabaseError';
   }
