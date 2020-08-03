@@ -8,6 +8,9 @@ describe('ColorSort', () => {
       const colorSort = new ColorSort('A', []);
       assert.throws(() => {
         colorSort.setColors({});
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
     it('should not throw an exception for []', () => {
@@ -20,6 +23,9 @@ describe('ColorSort', () => {
       const colorSort = new ColorSort('A', []);
       assert.throws(() => {
         colorSort.setColors(['#aaa']);
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
     it('should not throw an exception for ["#aaaaaa"]', () => {

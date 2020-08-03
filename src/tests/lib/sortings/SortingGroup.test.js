@@ -8,13 +8,22 @@ import StringSort from '../../../lib/sorting/StringSort.js';
 describe('SortingGroup', () => {
   describe('#constructor()', () => {
     it('should throw an exception for 5B:C7 interval', () => {
-      assert.throws(() => new SortingGroup('5B', 'C7'));
+      assert.throws(() => new SortingGroup('5B', 'C7'), (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
+      });
     });
     it('should throw an exception for {} sorting', () => {
-      assert.throws(() => new SortingGroup('B5', 'C7', {}));
+      assert.throws(() => new SortingGroup('B5', 'C7', {}), (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
+      });
     });
     it('should throw an exception for [1] sorting', () => {
-      assert.throws(() => new SortingGroup('B5', 'C7', [1]));
+      assert.throws(() => new SortingGroup('B5', 'C7', [1]), (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
+      });
     });
   });
 
@@ -43,6 +52,9 @@ describe('SortingGroup', () => {
       const sortingGroup = new SortingGroup('A1', 'A1');
       assert.throws(() => {
         sortingGroup.run({});
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
     it('should sorting workbook with one sort', () => {

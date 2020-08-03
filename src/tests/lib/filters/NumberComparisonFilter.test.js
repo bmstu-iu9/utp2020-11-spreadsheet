@@ -12,6 +12,9 @@ describe('NumberComparisonFilter', () => {
     it('should throw an exception for "A", "moreOrLess", 5', () => {
       assert.throws(() => {
         new NumberComparisonFilter('A', 'moreOrLess', 5);
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });

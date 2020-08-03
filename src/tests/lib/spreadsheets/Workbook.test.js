@@ -21,6 +21,9 @@ describe('Workbook', () => {
     it('should throw an error for incorrect spreadsheets', () => {
       assert.throws(() => {
         new Workbook(workbookStandardName, {});
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -34,6 +37,9 @@ describe('Workbook', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setName(20202);
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });
@@ -67,12 +73,18 @@ describe('Workbook', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setSpreadsheets(new Spreadsheet(spreadsheetStandardName));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
     it('should throw an exception for an array with objects', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setSpreadsheets([{}, {}]);
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });

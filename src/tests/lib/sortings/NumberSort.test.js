@@ -8,7 +8,10 @@ describe('NumberSort', () => {
       assert.doesNotThrow(() => new NumberSort('A', true));
     });
     it('should throw an exception for \'A\', 5', () => {
-      assert.throws(() => new NumberSort('A', 5));
+      assert.throws(() => new NumberSort('A', 5), (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
+      });
     });
   });
   describe('#compareFunction()', () => {
@@ -84,6 +87,9 @@ describe('NumberSort', () => {
       const numberSort = new NumberSort('A', true);
       assert.throws(() => {
         numberSort.run(cells);
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
     it('should throw an exception for not cell value', () => {
@@ -93,6 +99,9 @@ describe('NumberSort', () => {
       const numberSort = new NumberSort('A', true);
       assert.throws(() => {
         numberSort.run(cells);
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });

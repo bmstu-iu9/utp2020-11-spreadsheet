@@ -41,6 +41,9 @@ describe('Validation', () => {
     it('should throw an exception for incorrect path to database', () => {
       assert.throws(() => {
         new Validation('~/db/database.db');
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -49,6 +52,9 @@ describe('Validation', () => {
       const validator = new Validation(pathToDatabase);
       assert.throws(() => {
         validator.setDatabase('~/db/database.db');
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });

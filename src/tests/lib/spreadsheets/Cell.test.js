@@ -1,9 +1,5 @@
 import * as assert from 'assert';
-import {
-  valueTypes,
-  defaultCellColor,
-  Cell,
-} from '../../../lib/spreadsheets/Cell.js';
+import { Cell, defaultCellColor, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 
 describe('Cell', () => {
   describe('#constructor()', () => {
@@ -21,6 +17,9 @@ describe('Cell', () => {
     it('should throw an exception for 2 as boolean', () => {
       assert.throws(() => {
         new Cell(valueTypes.boolean, 2);
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -34,6 +33,9 @@ describe('Cell', () => {
       const cell = new Cell();
       assert.throws(() => {
         cell.setValue('formula', false);
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -47,6 +49,9 @@ describe('Cell', () => {
       const cell = new Cell();
       assert.throws(() => {
         cell.setColor('#zzzzzz');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });
@@ -82,6 +87,9 @@ describe('Cell', () => {
     it('should throw an exception for type "wrong"', () => {
       assert.throws(() => {
         Cell.getDefaultValue('wrong');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });

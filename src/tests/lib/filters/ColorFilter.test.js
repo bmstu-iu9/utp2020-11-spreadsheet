@@ -8,6 +8,9 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', []);
       assert.throws(() => {
         colorFilter.setColors({});
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
     it('should not throw an exception for []', () => {
@@ -19,7 +22,10 @@ describe('ColorFilter', () => {
     it('should throw an exception for ["#fff"]', () => {
       const colorFilter = new ColorFilter('A', []);
       assert.throws(() => {
-        colorFilter.setColors(['#fff']);
+        colorFilter.setColors(['#fff'], (err) => {
+          assert.strictEqual(err.name, 'FormatError');
+          return true;
+        });
       });
     });
     it('should not throw an exception for ["#ffffff"]', () => {
@@ -69,6 +75,9 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', ['#aaaaaa']);
       assert.throws(() => {
         colorFilter.run(cells);
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
     it('should throw an exception for not cell value', () => {
@@ -78,6 +87,9 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', ['#aaaaaa']);
       assert.throws(() => {
         colorFilter.run(cells);
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });

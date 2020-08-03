@@ -10,16 +10,25 @@ describe('FilterGroup', () => {
     it('should throw an exception for 5A:A6 interval', () => {
       assert.throws(() => {
         new FilterGroup('5A', 'A6');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
     it('should throw an exception for {} filters', () => {
       assert.throws(() => {
         new FilterGroup('A5', 'A6', {});
       });
+    }, (err) => {
+      assert.strictEqual(err.name, 'TypeError');
+      return true;
     });
     it('should throw an exception for [1] filters', () => {
       assert.throws(() => {
         new FilterGroup('A5', 'A6', [1]);
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -28,6 +37,9 @@ describe('FilterGroup', () => {
       const filterGroup = new FilterGroup('A1', 'A1');
       assert.throws(() => {
         filterGroup.run({});
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
     it('should filter 4th and 5th rows', () => {

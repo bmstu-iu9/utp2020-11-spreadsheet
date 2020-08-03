@@ -7,6 +7,9 @@ describe('ColumnFilter', () => {
     it('should throw an error for column A5', () => {
       assert.throws(() => {
         new ColumnFilter('A5');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });
@@ -15,6 +18,9 @@ describe('ColumnFilter', () => {
       const columnFilter = new ColumnFilter('A');
       assert.throws(() => {
         columnFilter.setColumn('55');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
     it('should not throw an error for column ABA', () => {

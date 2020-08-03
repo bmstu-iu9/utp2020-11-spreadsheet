@@ -30,6 +30,9 @@ describe('TreeRunner', () => {
     it('should throw error because of invalid expression', () => {
       assert.throws(() => {
         new TreeRunner(book, 0, new Parser('=СТРАННАЯФУНКЦИЯ(0/0;2;"a"/5)').run()).run();
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
     const testCasesWithoutError = [{
@@ -265,7 +268,7 @@ describe('TreeRunner', () => {
         assert.strictEqual(treeRunner.run().value, testCase.result);
       });
     });
-    const testCasesWithError = [{
+    const testCasesWithTypeError = [{
       description: 'should throw error in И() because an invalid expression started evaluating',
       parserExpression: '=И(1==1;"string")',
     },
@@ -274,23 +277,30 @@ describe('TreeRunner', () => {
       parserExpression: '=ИЛИ(1==5;"string")',
     },
     {
-      description: 'should throw error in ЕСЛИ() because has zero arguments',
-      parserExpression: '=ЕСЛИ()',
+      description: 'should throw error in ЕСЛИ() because an invalid expression started evaluating',
+      parserExpression: '=ЕСЛИ(1==1;"string"*2;"false")',
     },
     {
       description: 'should throw error in ЕСЛИ() because an invalid syntax',
       parserExpression: '=ЕСЛИ(1;2;3)',
     },
-    {
-      description: 'should throw error in ЕСЛИ() because an invalid expression started evaluating',
-      parserExpression: '=ЕСЛИ(1==1;"string"*2;"false")',
-    },
     ];
-    testCasesWithError.forEach((testCase) => {
+    testCasesWithTypeError.forEach((testCase) => {
       it(testCase.description, () => {
         const tree = new Parser(testCase.parserExpression).run();
         const treeRunner = new TreeRunner(book, 0, tree);
-        assert.throws(() => treeRunner.run());
+        assert.throws(() => treeRunner.run(), (err) => {
+          assert.strictEqual(err.name, 'TypeError');
+          return true;
+        });
+      });
+    });
+    it('should throw error in ЕСЛИ() because has zero arguments', () => {
+      const tree = new Parser('=ЕСЛИ()').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.throws(() => treeRunner.run(), (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });

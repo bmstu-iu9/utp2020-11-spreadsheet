@@ -11,11 +11,17 @@ describe('RegionFilter', () => {
     it('should throw an exception for B5, 7A', () => {
       assert.throws(() => {
         new RegionFilter('B5', '7A');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
     it('should throw an exception for 5B, A7', () => {
       assert.throws(() => {
         new RegionFilter('5B', '7A');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });
@@ -91,6 +97,9 @@ describe('RegionFilter', () => {
         } else {
           assert.throws(() => {
             regionFilter.doesPositionMatch(testCase.position);
+          }, (err) => {
+            assert.strictEqual(err.name, 'FormatError');
+            return true;
           });
         }
       });
