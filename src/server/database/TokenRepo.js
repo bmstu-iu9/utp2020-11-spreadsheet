@@ -1,5 +1,5 @@
 import TokenModel from './TokenModel.js';
-import DatabaseError from '../../Errors/DatabaseError.js';
+import DatabaseError from '../../errors/DatabaseError.js';
 
 export default class TokenRepo {
   constructor(database) {

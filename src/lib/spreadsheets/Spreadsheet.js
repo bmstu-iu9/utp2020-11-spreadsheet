@@ -1,5 +1,5 @@
 import { Cell } from './Cell.js';
-import FormatError from '../../Errors/FormatError.js';
+import FormatError from '../../errors/FormatError.js';
 
 export default class Spreadsheet {
   constructor(name, cells = new Map()) {

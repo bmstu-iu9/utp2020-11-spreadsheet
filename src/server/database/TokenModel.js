@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import UserModel from './UserModel.js';
-import FormatError from '../../Errors/FormatError.js';
+import FormatError from '../../errors/FormatError.js';
 
 export default class TokenModel {
   constructor(login, uuid = TokenModel.generateUuid()) {

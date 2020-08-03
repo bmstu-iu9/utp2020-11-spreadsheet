@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import FormatError from '../../Errors/FormatError.js';
+import FormatError from '../../errors/FormatError.js';
 
 export default class UserModel {
   constructor(login, password, isAdmin) {

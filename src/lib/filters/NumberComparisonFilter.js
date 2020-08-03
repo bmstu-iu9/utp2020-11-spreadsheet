@@ -1,6 +1,6 @@
 import CellColumnFilter from './CellColumnFilter.js';
 import { valueTypes } from '../spreadsheets/Cell.js';
-import FormatError from '../../Errors/FormatError.js';
+import FormatError from '../../errors/FormatError.js';
 
 export const operators = {
   equal: 'equal',

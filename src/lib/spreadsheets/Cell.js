@@ -1,4 +1,4 @@
-import FormatError from '../../Errors/FormatError.js';
+import FormatError from '../../errors/FormatError.js';
 
 export const defaultCellColor = '#ffffff';
 export const valueTypes = {

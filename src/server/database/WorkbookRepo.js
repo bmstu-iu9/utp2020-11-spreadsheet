@@ -1,5 +1,5 @@
 import WorkbookModel from './WorkbookModel.js';
-import DatabaseError from '../../Errors/DatabaseError.js';
+import DatabaseError from '../../errors/DatabaseError.js';
 
 export default class WorkbookRepo {
   constructor(database) {

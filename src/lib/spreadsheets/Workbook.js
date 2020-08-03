@@ -1,7 +1,7 @@
 import Spreadsheet from './Spreadsheet.js';
 import Calculator from '../calculator/Calculator.js';
 import { valueTypes } from './Cell.js';
-import FormatError from '../../Errors/FormatError.js';
+import FormatError from '../../errors/FormatError.js';
 
 export default class Workbook {
   constructor(name, spreadsheets = []) {

@@ -1,5 +1,5 @@
 import UserModel from './UserModel.js';
-import DatabaseError from '../../Errors/DatabaseError.js';
+import DatabaseError from '../../errors/DatabaseError.js';
 
 export default class UserRepo {
   constructor(database) {

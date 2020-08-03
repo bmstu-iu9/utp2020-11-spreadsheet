@@ -1,6 +1,6 @@
 import CellColumnSort from './CellColumnSort.js';
 import { Cell } from '../spreadsheets/Cell.js';
-import FormatError from '../../Errors/FormatError.js';
+import FormatError from '../../errors/FormatError.js';
 
 export default class ColorSort extends CellColumnSort {
   constructor(column, colors) {
