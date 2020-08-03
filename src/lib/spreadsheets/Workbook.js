@@ -1,6 +1,7 @@
 import Spreadsheet from './Spreadsheet.js';
 import Calculator from '../calculator/Calculator.js';
 import { valueTypes } from './Cell.js';
+import FormatError from '../../Errors/FormatError.js';
 
 export default class Workbook {
   constructor(name, spreadsheets = []) {
@@ -12,7 +13,7 @@ export default class Workbook {
     if (Workbook.isNameCorrect(name)) {
       this.name = name;
     } else {
-      throw new Error('Illegal name');
+      throw new FormatError('Illegal name');
     }
   }
 

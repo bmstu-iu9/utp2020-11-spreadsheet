@@ -1,5 +1,6 @@
 import ColumnFilter from '../filters/ColumnFilter.js';
 import { Cell } from '../spreadsheets/Cell.js';
+import FormatError from '../../Errors/FormatError.js';
 
 export default class CellColumnSort {
   constructor(column) {
@@ -16,7 +17,7 @@ export default class CellColumnSort {
     rows.forEach((cells) => {
       const filteredCells = this.columnFilter.run(cells);
       if (filteredCells.size > 1) {
-        throw new Error('two cells on one position');
+        throw new FormatError('two cells on one position');
       }
       if (filteredCells.size === 0) {
         rowsAndCells.push({

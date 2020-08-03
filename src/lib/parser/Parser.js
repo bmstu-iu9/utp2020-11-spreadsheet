@@ -1,4 +1,5 @@
 import EW from './ExpressionWrapper.js';
+import FormatError from '../../Errors/FormatError.js';
 
 const toInt = (a) => a.charCodeAt();
 
@@ -9,7 +10,7 @@ export default class Parser {
   }
 
   static makeParserError(str) {
-    throw new SyntaxError(`Parser: error in "${str}"!`);
+    throw new FormatError(`Parser: error in "${str}"!`);
   }
 
   next() {

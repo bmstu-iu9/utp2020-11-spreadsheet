@@ -1,3 +1,5 @@
+import FormatError from '../../Errors/FormatError.js';
+
 export default class HeaderMatcher {
   constructor(name, prefix) {
     this.name = HeaderMatcher.getValueIfString(name, 'name');
@@ -12,7 +14,7 @@ export default class HeaderMatcher {
 
   fetchPayload(name, value) {
     if (!this.doesHeaderMatch(name, value)) {
-      throw Error('Header does not match specified format');
+      throw FormatError('Header does not match specified format');
     }
     const prefixLength = this.prefix.length;
     return value.substr(prefixLength);

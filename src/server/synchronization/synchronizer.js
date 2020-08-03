@@ -1,5 +1,6 @@
 import readWorkbook from '../../lib/readWorkbook/JsonConverter.js';
 import saveWorkbook from '../../lib/saveWorkbook/ClassConverter.js';
+import FormatError from '../../Errors/FormatError.js';
 
 const setChangeType = new Set(['color', 'value']);
 
@@ -22,7 +23,7 @@ export default class Synchronizer {
       }
     }
     if (this.lastChanges.length !== 0 && lastPos === -1) {
-      throw new Error('invalid log ID');
+      throw new FormatError('invalid log ID');
     }
     const errAns = [];
     for (let i = 0; i < arrayLogs.length; i += 1) {
@@ -33,7 +34,7 @@ export default class Synchronizer {
         }
       }
       if (!setChangeType.has(arrayLogs[0].changeType)) {
-        throw new Error(`invalid log change type, find ${arrayLogs[i].changeType}`);
+        throw new FormatError(`invalid log change type, find ${arrayLogs[i].changeType}`);
       }
     }
     if (errAns.length > 0) {

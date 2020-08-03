@@ -1,5 +1,6 @@
 import PositionFilter from './PositionFilter.js';
 import Spreadsheet from '../spreadsheets/Spreadsheet.js';
+import FormatError from '../../Errors/FormatError.js';
 
 export default class RegionFilter extends PositionFilter {
   constructor(start, finish) {
@@ -9,7 +10,7 @@ export default class RegionFilter extends PositionFilter {
 
   doesPositionMatch(position) {
     if (!Spreadsheet.isPositionCorrect(position)) {
-      throw new Error('invalid position');
+      throw new FormatError('invalid position');
     }
     const { column, row } = RegionFilter.getColumnRowFromPosition(position);
     return this.doesColumnMatch(column) && this.doesRowMatch(row);
@@ -17,10 +18,10 @@ export default class RegionFilter extends PositionFilter {
 
   setBounds(start, finish) {
     if (!Spreadsheet.isPositionCorrect(start)) {
-      throw new Error('invalid start position');
+      throw new FormatError('invalid start position');
     }
     if (!Spreadsheet.isPositionCorrect(finish)) {
-      throw new Error('invalid finish position');
+      throw new FormatError('invalid finish position');
     }
     this.start = RegionFilter.getColumnRowFromPosition(start);
     this.finish = RegionFilter.getColumnRowFromPosition(finish);

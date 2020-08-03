@@ -1,3 +1,5 @@
+import FormatError from '../../Errors/FormatError.js';
+
 export default class WorkbookModel {
   constructor(path, login = null, id = null) {
     if (WorkbookModel.idIsCorrect(id)) {
@@ -5,7 +7,7 @@ export default class WorkbookModel {
       this.id = id;
       this.setLogin(login);
     } else {
-      throw Error('WorkbookModel: wrong format of data');
+      throw new FormatError('WorkbookModel: wrong format of id');
     }
   }
 
@@ -26,7 +28,7 @@ export default class WorkbookModel {
     if (pathRegExp.test(path)) {
       this.path = path;
     } else {
-      throw Error('WorkbookModel: wrong format of path');
+      throw new FormatError('WorkbookModel: wrong format of path');
     }
   }
 

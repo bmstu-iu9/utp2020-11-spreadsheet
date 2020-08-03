@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import FormatError from '../../Errors/FormatError.js';
 
 export default class UserModel {
   constructor(login, password, isAdmin) {
@@ -7,7 +8,7 @@ export default class UserModel {
       this.setPassword(password);
       this.setIsAdmin(isAdmin);
     } else {
-      throw Error('UserModel: wrong format of data');
+      throw FormatError('UserModel: wrong format of login');
     }
   }
 
@@ -27,7 +28,7 @@ export default class UserModel {
     if (password.length > 0) {
       this.password = UserModel.getHashedPassword(password);
     } else {
-      throw Error('UserModel: wrong format of data');
+      throw FormatError('UserModel: wrong format of password');
     }
   }
 

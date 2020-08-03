@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import UserModel from './UserModel.js';
+import FormatError from '../../Errors/FormatError.js';
 
 export default class TokenModel {
   constructor(login, uuid = TokenModel.generateUuid()) {
@@ -9,14 +10,14 @@ export default class TokenModel {
 
   setLogin(login) {
     if (!UserModel.isLoginCorrect(login)) {
-      throw new Error('incorrect login');
+      throw new FormatError('incorrect login');
     }
     this.login = login;
   }
 
   setUuid(uuid) {
     if (!TokenModel.isUuidValid(uuid)) {
-      throw new Error('incorrect UUID');
+      throw new FormatError('incorrect UUID');
     }
     this.uuid = uuid;
   }
