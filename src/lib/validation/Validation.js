@@ -18,7 +18,7 @@ export default class Validation {
   // Main method
   validate(login, password, isRegistration) {
     if (this.database.open === false) {
-      throw DatabaseError('Closed database');
+      throw new DatabaseError('Closed database');
     }
     let result = '';
     if (isRegistration === true) {

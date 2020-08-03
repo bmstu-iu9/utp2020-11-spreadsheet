@@ -14,7 +14,7 @@ export default class HeaderMatcher {
 
   fetchPayload(name, value) {
     if (!this.doesHeaderMatch(name, value)) {
-      throw FormatError('Header does not match specified format');
+      throw new FormatError('Header does not match specified format');
     }
     const prefixLength = this.prefix.length;
     return value.substr(prefixLength);

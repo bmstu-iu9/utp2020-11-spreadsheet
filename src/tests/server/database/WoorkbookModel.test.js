@@ -19,6 +19,9 @@ describe('WorkbookModel', () => {
     it('should throw error because of incorrect id', () => {
       assert.throws(() => {
         new WorkbookModel(path, 'login', 'notnumber');
+      }, (err) => {
+        assert.strictEqual(err.name, 'FormatError');
+        return true;
       });
     });
   });
@@ -31,6 +34,9 @@ describe('WorkbookModel', () => {
     it('should throw error because of empty login', () => {
       const book = new WorkbookModel(path, 'login');
       assert.throws(() => book.setLogin(''));
+    }, (err) => {
+      assert.strictEqual(err.name, 'FormatError');
+      return true;
     });
   });
   describe('#setPath()', () => {
@@ -42,6 +48,9 @@ describe('WorkbookModel', () => {
     it('should throw error because of incorrect path', () => {
       const book = new WorkbookModel(path, 'login');
       assert.throws(() => book.setPath('path'));
+    }, (err) => {
+      assert.strictEqual(err.name, 'FormatError');
+      return true;
     });
   });
   describe('#fromSQLtoBooks()', () => {

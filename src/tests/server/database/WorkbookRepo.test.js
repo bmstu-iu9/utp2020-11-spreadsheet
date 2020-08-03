@@ -43,6 +43,9 @@ describe('WorkbookRepo', () => {
         database.prepare = null;
         assert.throws(() => {
           workbookRepo[method]();
+        }, (err) => {
+          assert.strictEqual(err.name, 'DatabaseError');
+          return true;
         });
         database.prepare = prepare;
       });
@@ -52,9 +55,15 @@ describe('WorkbookRepo', () => {
       database.prepare = null;
       assert.throws(() => {
         workbookRepo.save({ id: null });
+      }, (err) => {
+        assert.strictEqual(err.name, 'DatabaseError');
+        return true;
       });
       assert.throws(() => {
         workbookRepo.save({ id: 1 });
+      }, (err) => {
+        assert.strictEqual(err.name, 'DatabaseError');
+        return true;
       });
       database.prepare = prepare;
     });
@@ -73,7 +82,11 @@ describe('WorkbookRepo', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, login, bookPath);
       const id = info.lastInsertRowid;
-      assert.throws(() => workbookRepo.getById(id + 1));
+      assert.throws(() => workbookRepo.getById(id + 1),
+        (err) => {
+          assert.strictEqual(err.name, 'DatabaseError');
+          return true;
+        });
     });
   });
   describe('#detByLogin()', () => {
@@ -95,7 +108,11 @@ describe('WorkbookRepo', () => {
     it('should throw error because user don\'t has books', () => {
       database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, anotherLogin, bookPath);
-      assert.throws(() => workbookRepo.getByLogin(login));
+      assert.throws(() => workbookRepo.getByLogin(login),
+        (err) => {
+          assert.strictEqual(err.name, 'DatabaseError');
+          return true;
+        });
     });
   });
   describe('#getAllBooks()', () => {

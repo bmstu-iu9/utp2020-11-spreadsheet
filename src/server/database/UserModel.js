@@ -8,7 +8,7 @@ export default class UserModel {
       this.setPassword(password);
       this.setIsAdmin(isAdmin);
     } else {
-      throw FormatError('UserModel: wrong format of login');
+      throw new FormatError('UserModel: wrong format of login');
     }
   }
 
@@ -28,7 +28,7 @@ export default class UserModel {
     if (password.length > 0) {
       this.password = UserModel.getHashedPassword(password);
     } else {
-      throw FormatError('UserModel: wrong format of password');
+      throw new FormatError('UserModel: wrong format of password');
     }
   }
 

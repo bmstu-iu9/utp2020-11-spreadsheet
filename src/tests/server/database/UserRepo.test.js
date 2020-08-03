@@ -38,6 +38,9 @@ describe('UserRepo', () => {
         database.prepare = null;
         assert.throws(() => {
           userRepo[method]();
+        }, (err) => {
+          assert.strictEqual(err.name, 'DatabaseError');
+          return true;
         });
         database.prepare = prepare;
       });

@@ -128,6 +128,9 @@ describe('Validation', () => {
       validator.close();
       assert.throws(() => {
         validator.validate('alexis', 'omgomg', true);
+      }, (err) => {
+        assert.strictEqual(err.name, 'DatabaseError');
+        return true;
       });
     });
   });
