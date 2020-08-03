@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import UserRepo from '../../server/database/UserRepo.js';
 import UserModel from '../../server/database/UserModel.js';
+import DatabaseError from '../../Errors/DatabaseError.js';
 
 export default class Validation {
   constructor(pathToDatabase) {
@@ -17,7 +18,7 @@ export default class Validation {
   // Main method
   validate(login, password, isRegistration) {
     if (this.database.open === false) {
-      throw Error('Closed database');
+      throw DatabaseError('Closed database');
     }
     let result = '';
     if (isRegistration === true) {

@@ -1,4 +1,5 @@
 import UserModel from './UserModel.js';
+import DatabaseError from '../../Errors/DatabaseError.js';
 
 export default class UserRepo {
   constructor(database) {
@@ -9,7 +10,7 @@ export default class UserRepo {
     try {
       this.database.prepare('DROP TABLE IF EXISTS Users').run();
     } catch (err) {
-      throw Error(`Error while dropping user table: ${err}`);
+      throw DatabaseError(`Error while dropping user table: ${err}`);
     }
   }
 
@@ -24,7 +25,7 @@ export default class UserRepo {
     try {
       this.database.prepare(userTableSchema).run();
     } catch (err) {
-      throw Error(`Error while creating user table: ${err}`);
+      throw DatabaseError(`Error while creating user table: ${err}`);
     }
   }
 
@@ -36,7 +37,7 @@ export default class UserRepo {
                                                               isAdmin  = ?;`)
         .run(user.login, user.password, user.isAdmin, user.password, user.isAdmin);
     } catch (err) {
-      throw Error(`Error while inserting or updating user: ${err}`);
+      throw DatabaseError(`Error while inserting or updating user: ${err}`);
     }
   }
 
@@ -47,7 +48,7 @@ export default class UserRepo {
                               WHERE login = ?`).get(login);
       return row ? UserModel.fromSQLtoUser(row) : undefined;
     } catch (e) {
-      throw Error(`Error while get user: ${e}`);
+      throw DatabaseError(`Error while get user: ${e}`);
     }
   }
 
@@ -57,7 +58,7 @@ export default class UserRepo {
                                           FROM Users`).all();
       return UserModel.fromSQLtoUsers(rows);
     } catch (e) {
-      throw Error(`Error while get users: ${e}`);
+      throw DatabaseError(`Error while get users: ${e}`);
     }
   }
 
@@ -68,7 +69,7 @@ export default class UserRepo {
                              WHERE login = ?`)
         .run(login);
     } catch (err) {
-      throw Error(`Error while deleting user: ${err}`);
+      throw DatabaseError(`Error while deleting user: ${err}`);
     }
   }
 
@@ -78,7 +79,7 @@ export default class UserRepo {
                              FROM Users`)
         .run();
     } catch (err) {
-      throw Error(`Error while deleting users: ${err}`);
+      throw DatabaseError(`Error while deleting users: ${err}`);
     }
   }
 }

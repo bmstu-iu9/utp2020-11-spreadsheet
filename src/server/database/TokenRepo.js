@@ -1,4 +1,5 @@
 import TokenModel from './TokenModel.js';
+import DatabaseError from '../../Errors/DatabaseError.js';
 
 export default class TokenRepo {
   constructor(database) {
@@ -9,7 +10,7 @@ export default class TokenRepo {
     try {
       this.database.prepare('DROP TABLE Tokens').run();
     } catch (err) {
-      throw Error(`Error while dropping token table: ${err}`);
+      throw DatabaseError(`Error while dropping token table: ${err}`);
     }
   }
 
@@ -24,7 +25,7 @@ export default class TokenRepo {
     try {
       this.database.prepare(tokenTableSchema).run();
     } catch (err) {
-      throw Error(`Error while creating token table: ${err}`);
+      throw DatabaseError(`Error while creating token table: ${err}`);
     }
   }
 
@@ -38,7 +39,7 @@ export default class TokenRepo {
       }
       throw Error(`no token with uuid ${uuid}`);
     } catch (err) {
-      throw Error(`Error while getting token: ${err}`);
+      throw DatabaseError(`Error while getting token: ${err}`);
     }
   }
 
@@ -52,7 +53,7 @@ export default class TokenRepo {
       }
       throw Error(`no token with login: ${login}`);
     } catch (err) {
-      throw Error(`Error while getting token: ${err}`);
+      throw DatabaseError(`Error while getting token: ${err}`);
     }
   }
 
@@ -63,7 +64,7 @@ export default class TokenRepo {
         .all();
       return TokenModel.fromSQLtoTokens(rows);
     } catch (err) {
-      throw Error(`Error while getting tokens: ${err}`);
+      throw DatabaseError(`Error while getting tokens: ${err}`);
     }
   }
 
@@ -79,14 +80,14 @@ export default class TokenRepo {
         this.database.prepare('UPDATE Tokens SET login = ? WHERE uuid = ?')
           .run(token.login, token.uuid);
       } catch (err) {
-        throw Error(`Error while updating token: ${err}`);
+        throw DatabaseError(`Error while updating token: ${err}`);
       }
     } else {
       try {
         this.database.prepare('INSERT INTO Tokens VALUES (?, ?)')
           .run(token.uuid, token.login);
       } catch (err) {
-        throw Error(`Error while inserting token: ${err}`);
+        throw DatabaseError(`Error while inserting token: ${err}`);
       }
     }
     return token.uuid;
@@ -99,7 +100,7 @@ export default class TokenRepo {
                              WHERE uuid = ?`)
         .run(uuid);
     } catch (err) {
-      throw Error(`Error while deleting token: ${err}`);
+      throw DatabaseError(`Error while deleting token: ${err}`);
     }
   }
 
@@ -109,7 +110,7 @@ export default class TokenRepo {
                              FROM Tokens`)
         .run();
     } catch (e) {
-      throw Error(`Error while deleting tokens: ${e}`);
+      throw DatabaseError(`Error while deleting tokens: ${e}`);
     }
   }
 }
