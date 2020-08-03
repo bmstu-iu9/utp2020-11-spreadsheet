@@ -5,26 +5,19 @@ import NT from '../../../lib/typevalue/NumberType.js';
 describe('StringType', () => {
   describe('#constructor()', () => {
     it('should make new element', () => {
-      assert.deepStrictEqual(new ST('123').value, '123');
-      assert.deepStrictEqual(new ST('231').value, '231');
-      assert.deepStrictEqual(new ST('312').value, '312');
+      assert.deepStrictEqual(new ST('s123').value, 's123');
     });
   });
   describe('#sum()', () => {
     it('should calculate valid sum', () => {
       assert.deepStrictEqual(new ST('love').sum(new ST('iu')), new ST('loveiu'));
-      assert.deepStrictEqual(new ST('231').sum(new ST('45')), new ST('23145'));
-      assert.deepStrictEqual(new ST('312').sum(new ST('45')), new ST('31245'));
     });
     it('should calculate invalid sum', () => {
       assert.throws(() => {
         new ST('123').sum(new NT(5));
-      });
-      assert.throws(() => {
-        new ST('5').sum(new NT(0));
-      });
-      assert.throws(() => {
-        new ST('hi').sum(new NT(-7));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -36,6 +29,9 @@ describe('StringType', () => {
     it('should calculate invalid equal', () => {
       assert.throws(() => {
         new ST('123').equal(new NT(5));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -43,10 +39,14 @@ describe('StringType', () => {
     it('should calculate valid greater or equal', () => {
       assert.deepStrictEqual(new ST('love').greaterEqual(new ST('iu')), true);
       assert.deepStrictEqual(new ST('123').greaterEqual(new ST('123')), true);
+      assert.deepStrictEqual(new ST('12').greaterEqual(new ST('123')), false);
     });
     it('should calculate invalid greater or equal', () => {
       assert.throws(() => {
         new ST('123').greaterEqual(new NT(5));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -58,6 +58,9 @@ describe('StringType', () => {
     it('should calculate invalid greater', () => {
       assert.throws(() => {
         new ST('123').greater(new NT(5));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -65,21 +68,28 @@ describe('StringType', () => {
     it('should calculate valid less or equal', () => {
       assert.deepStrictEqual(new ST('love').lessEqual(new ST('iu')), false);
       assert.deepStrictEqual(new ST('123').lessEqual(new ST('123')), true);
+      assert.deepStrictEqual(new ST('12').lessEqual(new ST('123')), true);
     });
     it('should calculate invalid less or equal', () => {
       assert.throws(() => {
         new ST('123').lessEqual(new NT(5));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
   describe('#less()', () => {
     it('should calculate valid less', () => {
       assert.deepStrictEqual(new ST('love').less(new ST('iu')), false);
-      assert.deepStrictEqual(new ST('123').less(new ST('123')), false);
+      assert.deepStrictEqual(new ST('12').less(new ST('123')), true);
     });
     it('should calculate invalid less', () => {
       assert.throws(() => {
         new ST('123').less(new NT(5));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
@@ -91,6 +101,9 @@ describe('StringType', () => {
     it('should calculate invalid not equal', () => {
       assert.throws(() => {
         new ST('123').notEqual(new NT(5));
+      }, (err) => {
+        assert.strictEqual(err.name, 'TypeError');
+        return true;
       });
     });
   });
