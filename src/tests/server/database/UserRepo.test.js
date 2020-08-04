@@ -3,6 +3,7 @@ import Database from 'better-sqlite3';
 import UserModel from '../../../server/database/UserModel.js';
 import UserRepo from '../../../server/database/UserRepo.js';
 import WorkbookRepo from '../../../server/database/WorkbookRepo.js';
+import DatabaseError from '../../../lib/errors/DatabaseError.js';
 
 const path = 'database.db';
 const login = 'login';
@@ -38,7 +39,7 @@ describe('UserRepo', () => {
         database.prepare = null;
         assert.throws(() => {
           userRepo[method]();
-        });
+        }, DatabaseError);
         database.prepare = prepare;
       });
     });

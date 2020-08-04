@@ -1,4 +1,5 @@
 import WorkbookModel from './WorkbookModel.js';
+import DatabaseError from '../../lib/errors/DatabaseError.js';
 
 export default class WorkbookRepo {
   constructor(database) {
@@ -9,7 +10,7 @@ export default class WorkbookRepo {
     try {
       this.database.prepare('DROP TABLE IF EXISTS Books').run();
     } catch (err) {
-      throw Error(`Error while dropping user table: ${err}`);
+      throw new DatabaseError(`Error while dropping user table: ${err}`);
     }
   }
 
@@ -25,7 +26,7 @@ export default class WorkbookRepo {
     try {
       this.database.prepare(workbookTableSchema).run();
     } catch (err) {
-      throw Error(`Error while creating user table: ${err}`);
+      throw new DatabaseError(`Error while creating user table: ${err}`);
     }
   }
 
@@ -37,9 +38,9 @@ export default class WorkbookRepo {
       if (row) {
         return new WorkbookModel(row.path, row.login, row.id);
       }
-      throw Error(`Error while get book: no book with id ${id}`);
+      throw new DatabaseError(`no book with id ${id}`);
     } catch (err) {
-      throw Error(`Error while get workbook: ${err}`);
+      throw new DatabaseError(`Error while get workbook: ${err}`);
     }
   }
 
@@ -52,9 +53,9 @@ export default class WorkbookRepo {
       if (rows.length > 0) {
         return WorkbookModel.fromSQLtoBooks(rows);
       }
-      throw Error(`Error while get books: no books with login ${login}`);
+      throw new DatabaseError(`no books with login ${login}`);
     } catch (err) {
-      throw Error(`Error while get workbooks: ${err}`);
+      throw new DatabaseError(`Error while get workbooks: ${err}`);
     }
   }
 
@@ -65,7 +66,7 @@ export default class WorkbookRepo {
         .all();
       return WorkbookModel.fromSQLtoBooks(rows);
     } catch (err) {
-      throw Error(`Error while get workbooks: ${err}`);
+      throw new DatabaseError(`Error while get workbooks: ${err}`);
     }
   }
 
@@ -77,7 +78,7 @@ export default class WorkbookRepo {
           .run(book.login, book.path);
         return info.lastInsertRowid;
       } catch (e) {
-        throw Error(`Error while inserting book: ${e}`);
+        throw new DatabaseError(`Error while inserting book: ${e}`);
       }
     } else {
       try {
@@ -88,7 +89,7 @@ export default class WorkbookRepo {
           .run(book.path, book.login, book.id);
         return book.id;
       } catch (e) {
-        throw Error(`Error while updating book: ${e}`);
+        throw new DatabaseError(`Error while updating book: ${e}`);
       }
     }
   }
@@ -100,7 +101,7 @@ export default class WorkbookRepo {
                              WHERE id = ?`)
         .run(id);
     } catch (err) {
-      throw Error(`Error while deleting book: ${err}`);
+      throw new DatabaseError(`Error while deleting book: ${err}`);
     }
   }
 
@@ -110,7 +111,7 @@ export default class WorkbookRepo {
                              FROM Books`)
         .run();
     } catch (e) {
-      throw Error(`Error while deleting books: ${e}`);
+      throw new DatabaseError(`Error while deleting books: ${e}`);
     }
   }
 }

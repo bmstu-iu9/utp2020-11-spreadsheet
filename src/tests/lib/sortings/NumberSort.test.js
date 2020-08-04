@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import NumberSort from '../../../lib/sorting/NumberSort.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('NumberSort', () => {
   describe('#constructor()', () => {
@@ -8,7 +9,7 @@ describe('NumberSort', () => {
       assert.doesNotThrow(() => new NumberSort('A', true));
     });
     it('should throw an exception for \'A\', 5', () => {
-      assert.throws(() => new NumberSort('A', 5));
+      assert.throws(() => new NumberSort('A', 5), TypeError);
     });
   });
   describe('#compareFunction()', () => {
@@ -84,7 +85,7 @@ describe('NumberSort', () => {
       const numberSort = new NumberSort('A', true);
       assert.throws(() => {
         numberSort.run(cells);
-      });
+      }, FormatError);
     });
     it('should throw an exception for not cell value', () => {
       const cells = [new Map([
@@ -93,7 +94,7 @@ describe('NumberSort', () => {
       const numberSort = new NumberSort('A', true);
       assert.throws(() => {
         numberSort.run(cells);
-      });
+      }, TypeError);
     });
   });
 });

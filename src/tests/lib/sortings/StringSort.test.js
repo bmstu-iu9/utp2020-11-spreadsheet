@@ -9,7 +9,7 @@ describe('StringSort', () => {
     });
     it('should throw an exception for \'A\', 5', () => {
       assert.throws(() => new StringSort('A', 5));
-    });
+    }, TypeError);
   });
   describe('#compareFunction()', () => {
     const results = {

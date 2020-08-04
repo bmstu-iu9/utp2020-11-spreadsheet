@@ -1,5 +1,6 @@
 import CellColumnFilter from './CellColumnFilter.js';
 import { Cell } from '../spreadsheets/Cell.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class ColorFilter extends CellColumnFilter {
   constructor(column, colors) {
@@ -13,7 +14,7 @@ export default class ColorFilter extends CellColumnFilter {
     }
     colors.forEach((color) => {
       if (!Cell.isColorCorrect(color)) {
-        throw new Error('invalid color');
+        throw new FormatError('invalid color');
       }
     });
     this.colors = colors;

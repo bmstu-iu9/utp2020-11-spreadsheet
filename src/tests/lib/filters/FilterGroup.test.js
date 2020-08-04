@@ -4,23 +4,24 @@ import ColorFilter from '../../../lib/filters/ColorFilter.js';
 import StringValueFilter from '../../../lib/filters/StringValueFilter.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('FilterGroup', () => {
   describe('#constructor()', () => {
     it('should throw an exception for 5A:A6 interval', () => {
       assert.throws(() => {
         new FilterGroup('5A', 'A6');
-      });
+      }, FormatError);
     });
     it('should throw an exception for {} filters', () => {
       assert.throws(() => {
         new FilterGroup('A5', 'A6', {});
       });
-    });
+    }, TypeError);
     it('should throw an exception for [1] filters', () => {
       assert.throws(() => {
         new FilterGroup('A5', 'A6', [1]);
-      });
+      }, TypeError);
     });
   });
   describe('#run()', () => {
@@ -28,7 +29,7 @@ describe('FilterGroup', () => {
       const filterGroup = new FilterGroup('A1', 'A1');
       assert.throws(() => {
         filterGroup.run({});
-      });
+      }, TypeError);
     });
     it('should filter 4th and 5th rows', () => {
       const cells = new Map([
