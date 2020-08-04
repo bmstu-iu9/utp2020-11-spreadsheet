@@ -1,5 +1,6 @@
 import CellColumnFilter from './CellColumnFilter.js';
 import { valueTypes } from '../spreadsheets/Cell.js';
+import FormatError from '../errors/FormatError.js';
 
 export const operators = {
   equal: 'equal',
@@ -39,7 +40,7 @@ export class NumberComparisonFilter extends CellColumnFilter {
         operatorPredicate = (a, b) => a !== b;
         break;
       default:
-        throw new Error('unknown operator');
+        throw new FormatError('unknown operator');
     }
     this.operatorPredicate = operatorPredicate;
   }

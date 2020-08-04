@@ -21,13 +21,13 @@ describe('StringValueFilter', () => {
       const stringValueFilter = new StringValueFilter('A');
       assert.throws(() => {
         stringValueFilter.setValues(true);
-      });
+      }, TypeError);
     });
     it('should throw an exception for [true]', () => {
       const stringValueFilter = new StringValueFilter('A');
       assert.throws(() => {
         stringValueFilter.setValues([true]);
-      });
+      }, TypeError);
     });
   });
   describe('#doesCellMatch()', () => {

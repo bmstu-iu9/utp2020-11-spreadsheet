@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 const spreadsheetStandardName = 'spreadsheet';
 
@@ -23,12 +24,12 @@ describe('Spreadsheet', () => {
       cells.set('A1', {});
       assert.throws(() => {
         new Spreadsheet(spreadsheetStandardName, cells);
-      });
+      }, TypeError);
     });
     it('should throw an exception for integer name', () => {
       assert.throws(() => {
         new Spreadsheet(1);
-      });
+      }, FormatError);
     });
   });
   describe('#setName()', () => {
@@ -41,7 +42,7 @@ describe('Spreadsheet', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.setName(1);
-      });
+      }, FormatError);
     });
   });
   describe('#isNameCorrect()', () => {
@@ -70,13 +71,13 @@ describe('Spreadsheet', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.setCells(cells);
-      });
+      }, FormatError);
     });
     it('should throw an exception for a non-map object', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.setCells({});
-      });
+      }, TypeError);
     });
   });
   describe('#getCell()', () => {
@@ -95,7 +96,7 @@ describe('Spreadsheet', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.getCell('1A');
-      });
+      }, FormatError);
     });
   });
   describe('#isPositionCorrect()', () => {

@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import ColorFilter from '../../../lib/filters/ColorFilter.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('ColorFilter', () => {
   describe('#setColors()', () => {
@@ -8,7 +9,7 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', []);
       assert.throws(() => {
         colorFilter.setColors({});
-      });
+      }, TypeError);
     });
     it('should not throw an exception for []', () => {
       const colorFilter = new ColorFilter('A', []);
@@ -19,7 +20,7 @@ describe('ColorFilter', () => {
     it('should throw an exception for ["#fff"]', () => {
       const colorFilter = new ColorFilter('A', []);
       assert.throws(() => {
-        colorFilter.setColors(['#fff']);
+        colorFilter.setColors(['#fff'], FormatError);
       });
     });
     it('should not throw an exception for ["#ffffff"]', () => {
@@ -69,7 +70,7 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', ['#aaaaaa']);
       assert.throws(() => {
         colorFilter.run(cells);
-      });
+      }, FormatError);
     });
     it('should throw an exception for not cell value', () => {
       const cells = [new Map([
@@ -78,7 +79,7 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', ['#aaaaaa']);
       assert.throws(() => {
         colorFilter.run(cells);
-      });
+      }, TypeError);
     });
   });
 });

@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import TokenModel from '../../../server/database/TokenModel.js';
 import TestEnvironment from './TestEnvironment.js';
+import DatabaseError from '../../../lib/errors/DatabaseError.js';
 
 describe('TokenRepo', () => {
   let environment;
@@ -23,8 +24,8 @@ describe('TokenRepo', () => {
     });
     it('should raise an exception if table does not exist', () => {
       assert.throws(() => {
-        environment.tokenRepo.dropTable();
-      });
+        environment.dataRepo.tokenRepo.dropTable();
+      }, DatabaseError);
     });
   });
   describe('#createTable()', () => {
@@ -54,8 +55,8 @@ describe('TokenRepo', () => {
     it('should raise an exception if table exists', () => {
       environment.init();
       assert.throws(() => {
-        environment.tokenRepo.createTable();
-      });
+        environment.dataRepo.tokenRepo.createTable();
+      }, DatabaseError);
     });
   });
   describe('#getByUuid()', () => {
@@ -70,8 +71,8 @@ describe('TokenRepo', () => {
     it('should throw an exception when token not found', () => {
       environment.init();
       assert.throws(() => {
-        environment.tokenRepo.getByUuid('228');
-      });
+        environment.dataRepo.tokenRepo.getByUuid('228');
+      }, DatabaseError);
     });
   });
   describe('#getByLogin()', () => {
@@ -85,8 +86,8 @@ describe('TokenRepo', () => {
     it('should throw an exception when token not found', () => {
       environment.init();
       assert.throws(() => {
-        environment.tokenRepo.getByLogin('228');
-      });
+        environment.dataRepo.tokenRepo.getByLogin('228');
+      }, DatabaseError);
     });
   });
   describe('#getAllTokens()', () => {
@@ -98,8 +99,8 @@ describe('TokenRepo', () => {
     });
     it('should throw an exception for absent table', () => {
       assert.throws(() => {
-        environment.tokenRepo.getAllTokens();
-      });
+        environment.dataRepo.tokenRepo.getAllTokens();
+      }, DatabaseError);
     });
   });
   describe('#save()', () => {
@@ -114,8 +115,8 @@ describe('TokenRepo', () => {
     it('should throw an exception for absent table', () => {
       const token = new TokenModel('test');
       assert.throws(() => {
-        environment.tokenRepo.save(token);
-      });
+        environment.dataRepo.tokenRepo.save(token);
+      }, DatabaseError);
     });
     it('should update existing token with a new login', () => {
       environment.init();
@@ -132,8 +133,8 @@ describe('TokenRepo', () => {
       const { token } = environment.userTokens[0];
       token.login += '228';
       assert.throws(() => {
-        environment.tokenRepo.save(token);
-      });
+        environment.dataRepo.tokenRepo.save(token);
+      }, DatabaseError);
     });
   });
   describe('#delete()', () => {
@@ -147,8 +148,8 @@ describe('TokenRepo', () => {
     });
     it('should throw an exception for absent table', () => {
       assert.throws(() => {
-        environment.tokenRepo.delete('');
-      });
+        environment.dataRepo.tokenRepo.delete('');
+      }, DatabaseError);
     });
   });
   describe('#deleteAll()', () => {
@@ -161,8 +162,8 @@ describe('TokenRepo', () => {
     });
     it('should throw an exception for absent table', () => {
       assert.throws(() => {
-        environment.tokenRepo.deleteAll();
-      });
+        environment.dataRepo.tokenRepo.deleteAll();
+      }, DatabaseError);
     });
   });
 });
