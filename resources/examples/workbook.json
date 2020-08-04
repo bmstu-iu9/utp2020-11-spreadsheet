@@ -1,0 +1,35 @@
+{
+  "name": "My Table",
+  "sheets": [
+    {
+      "name": "My Sheet",
+      "cells": {
+        "A1": {
+          "color": "#ffffff",
+          "type": "number",
+          "value": 100
+        },
+        "A2": {
+          "color": "#edeef0",
+          "type": "boolean",
+          "value": true
+        }
+      }
+    },
+    {
+      "name": "My Sheet",
+      "cells": {
+        "A1": {
+          "color": "#000000",
+          "type": "formula",
+          "value": "=B2+1"
+        },
+        "B2": {
+          "color": "#aaaaaa",
+          "type": "string",
+          "value": "some string"
+        }
+      }
+    }
+  ]
+}
