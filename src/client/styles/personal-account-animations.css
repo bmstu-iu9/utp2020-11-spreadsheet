@@ -34,7 +34,7 @@ div#new-book-button-panel:hover > span {
 div#new-book-button:hover div#vertical_line {
   opacity: 0;
   animation: pulsing 3s infinite;
-  animation-delay: 1700ms;
+  animation-delay: 1500ms;
   animation-timing-function: cubic-bezier(0, 0.94, 0.4, 1.19);
   background-color: #f89a03;
 }
@@ -42,12 +42,12 @@ div#new-book-button:hover div#vertical_line {
 div#new-book-button:hover div#horizontal_line {
   opacity: 0;
   animation: pulsing 3s infinite;
-  animation-delay: 1700ms;
+  animation-delay: 1500ms;
   animation-timing-function: cubic-bezier(0, 0.94, 0.4, 1.19);
   background-color: #f89a03;
 }
 
-div#new-book-button:hover div.animation-dot{
+div#new-book-button:hover div.animation-dot {
   visibility: visible;
 }
 
@@ -71,8 +71,14 @@ div#new-book-button:hover div#bl-dot {
   0% {
     opacity: 0;
   }
-  50% {
+  16% {
     opacity: 1;
+  }
+  49% {
+    opacity: 1;
+  }
+  62% {
+    opacity: 0;
   }
   100% {
     opacity: 0;
