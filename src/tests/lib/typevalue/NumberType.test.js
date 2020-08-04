@@ -15,10 +15,7 @@ describe('NumberType', () => {
     it('should calculate invalid sum', () => {
       assert.throws(() => {
         new NT(5).sum(new ST('123'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#sub()', () => {
@@ -28,10 +25,7 @@ describe('NumberType', () => {
     it('should calculate invalid subtraction', () => {
       assert.throws(() => {
         new NT(5).sub(new ST('123'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#mul()', () => {
@@ -41,10 +35,7 @@ describe('NumberType', () => {
     it('should calculate invalid multiplication', () => {
       assert.throws(() => {
         new NT(5).mul(new ST('123'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#div()', () => {
@@ -54,10 +45,7 @@ describe('NumberType', () => {
     it('should calculate invalid division', () => {
       assert.throws(() => {
         new NT(5).div(new ST('123'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#rem()', () => {
@@ -67,10 +55,7 @@ describe('NumberType', () => {
     it('should calculate invalid remainder', () => {
       assert.throws(() => {
         new NT(5).rem(new ST('123'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#exp()', () => {
@@ -80,10 +65,7 @@ describe('NumberType', () => {
     it('should calculate invalid exponent', () => {
       assert.throws(() => {
         new NT(5).exp(new ST('123'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#unMinus()', () => {
@@ -99,10 +81,7 @@ describe('NumberType', () => {
     it('should calculate invalid equal', () => {
       assert.throws(() => {
         new NT(0).equal(new ST('5'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#greaterEqual()', () => {
@@ -115,10 +94,7 @@ describe('NumberType', () => {
       assert.throws(() => {
         new NT(0).greaterEqual(new ST('5'));
       });
-    }, (err) => {
-      assert.strictEqual(err.name, 'TypeError');
-      return true;
-    });
+    }, TypeError);
   });
   describe('#greater()', () => {
     it('should calculate valid greater', () => {
@@ -128,10 +104,7 @@ describe('NumberType', () => {
     it('should calculate invalid greater', () => {
       assert.throws(() => {
         new NT(0).greater(new ST('5'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#lessEqual()', () => {
@@ -143,10 +116,7 @@ describe('NumberType', () => {
     it('should calculate invalid less or equal', () => {
       assert.throws(() => {
         new NT(0).lessEqual(new ST('5'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#less()', () => {
@@ -157,10 +127,7 @@ describe('NumberType', () => {
     it('should calculate invalid less', () => {
       assert.throws(() => {
         new NT(0).less(new ST('5'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#notEqual()', () => {
@@ -171,10 +138,7 @@ describe('NumberType', () => {
     it('should calculate invalid not equal', () => {
       assert.throws(() => {
         new NT(0).notEqual(new ST('5'));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
 });

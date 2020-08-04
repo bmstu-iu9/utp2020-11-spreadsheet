@@ -12,10 +12,7 @@ describe('BooleanType', () => {
     it('should make error', () => {
       assert.throws(() => {
         BT.makeTypeError('makeTypeError');
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
 });

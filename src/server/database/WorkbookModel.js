@@ -1,4 +1,4 @@
-import FormatError from '../../errors/FormatError.js';
+import FormatError from '../../lib/errors/FormatError.js';
 
 export default class WorkbookModel {
   constructor(path, login = null, id = null) {

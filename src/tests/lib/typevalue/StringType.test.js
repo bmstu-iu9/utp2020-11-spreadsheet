@@ -15,10 +15,7 @@ describe('StringType', () => {
     it('should calculate invalid sum', () => {
       assert.throws(() => {
         new ST('123').sum(new NT(5));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#equal()', () => {
@@ -29,10 +26,7 @@ describe('StringType', () => {
     it('should calculate invalid equal', () => {
       assert.throws(() => {
         new ST('123').equal(new NT(5));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#greaterEqual()', () => {
@@ -44,10 +38,7 @@ describe('StringType', () => {
     it('should calculate invalid greater or equal', () => {
       assert.throws(() => {
         new ST('123').greaterEqual(new NT(5));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#greater()', () => {
@@ -58,10 +49,7 @@ describe('StringType', () => {
     it('should calculate invalid greater', () => {
       assert.throws(() => {
         new ST('123').greater(new NT(5));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#lessEqual()', () => {
@@ -73,10 +61,7 @@ describe('StringType', () => {
     it('should calculate invalid less or equal', () => {
       assert.throws(() => {
         new ST('123').lessEqual(new NT(5));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#less()', () => {
@@ -87,10 +72,7 @@ describe('StringType', () => {
     it('should calculate invalid less', () => {
       assert.throws(() => {
         new ST('123').less(new NT(5));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#notEqual()', () => {
@@ -101,10 +83,7 @@ describe('StringType', () => {
     it('should calculate invalid not equal', () => {
       assert.throws(() => {
         new ST('123').notEqual(new NT(5));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
 });

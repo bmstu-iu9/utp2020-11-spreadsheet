@@ -1,7 +1,7 @@
 import NumberType from '../typevalue/NumberType.js';
 import StringType from '../typevalue/StringType.js';
 import BooleanType from '../typevalue/BooleanType.js';
-import FormatError from '../../errors/FormatError.js';
+import FormatError from '../errors/FormatError.js';
 
 const libFunc = new Map([
   ['number', (treeRunner) => new NumberType(treeRunner.tree[1])],

@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import RegionFilter from '../../../lib/filters/RegionFilter.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('RegionFilter', () => {
   describe('#constructor()', () => {
@@ -11,18 +12,12 @@ describe('RegionFilter', () => {
     it('should throw an exception for B5, 7A', () => {
       assert.throws(() => {
         new RegionFilter('B5', '7A');
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     it('should throw an exception for 5B, A7', () => {
       assert.throws(() => {
         new RegionFilter('5B', '7A');
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#doesPositionMatch()', () => {
@@ -97,10 +92,7 @@ describe('RegionFilter', () => {
         } else {
           assert.throws(() => {
             regionFilter.doesPositionMatch(testCase.position);
-          }, (err) => {
-            assert.strictEqual(err.name, 'FormatError');
-            return true;
-          });
+          }, FormatError);
         }
       });
     });

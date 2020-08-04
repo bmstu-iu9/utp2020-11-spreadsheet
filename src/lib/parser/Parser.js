@@ -1,5 +1,5 @@
 import EW from './ExpressionWrapper.js';
-import FormatError from '../../errors/FormatError.js';
+import FormatError from '../errors/FormatError.js';
 
 const toInt = (a) => a.charCodeAt();
 

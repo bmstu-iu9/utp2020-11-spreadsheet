@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import Parser from '../../../lib/parser/Parser.js';
 import EW from '../../../lib/parser/ExpressionWrapper.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('Parser', () => {
   describe('#run()', () => {
@@ -13,22 +14,13 @@ describe('Parser', () => {
     it('should parse invalid values', () => {
       assert.throws(() => {
         new Parser('=A2B').run();
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
       assert.throws(() => {
         new Parser('=').run();
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
       assert.throws(() => {
         new Parser('=1+((5*8)').run();
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#parseBlock()', () => {
@@ -89,10 +81,7 @@ describe('Parser', () => {
       testCases.forEach((testCase) => {
         assert.throws(() => {
           new Parser(testCase.inputString).run();
-        }, (err) => {
-          assert.strictEqual(err.name, 'FormatError');
-          return true;
-        });
+        }, FormatError);
       });
     });
   });
@@ -127,10 +116,7 @@ describe('Parser', () => {
     it('should parse invalid bracket sequence', () => {
       assert.throws(() => {
         new Parser('=((1+1)+1)+1)+1').run();
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     it('should parse valid functions with unary minus', () => {
       assert.deepStrictEqual(new Parser('=-1').run(), EW.unMinus(EW.makeNumber(1)));
@@ -151,10 +137,7 @@ describe('Parser', () => {
       testCases.forEach((testCase) => {
         assert.throws(() => {
           new Parser(testCase.inputString).run();
-        }, (err) => {
-          assert.strictEqual(err.name, 'FormatError');
-          return true;
-        });
+        }, FormatError);
       });
     });
   });
@@ -172,10 +155,12 @@ describe('Parser', () => {
       testCases.forEach((testCase) => {
         assert.throws(() => {
           new Parser(testCase.inputString).run();
-        }, (err) => {
-          assert.strictEqual(err.name, 'FormatError');
-          return true;
-        });
+        }, FormatError);
+      });
+    });
+    it('should parse impossible strings', () => {
+      assert.throws(() => {
+        new Parser('a').parseStr();
       });
     });
   });
@@ -189,10 +174,7 @@ describe('Parser', () => {
       testCases.forEach((testCase) => {
         assert.throws(() => {
           new Parser(testCase.inputString).run();
-        }, (err) => {
-          assert.strictEqual(err.name, 'FormatError');
-          return true;
-        });
+        }, FormatError);
       });
     });
     it('should parse valid interval', () => {
@@ -201,16 +183,10 @@ describe('Parser', () => {
     it('should parse invalid interval', () => {
       assert.throws(() => {
         new Parser('=A2:B').run();
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
       assert.throws(() => {
         new Parser('=A2:').run();
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
 });

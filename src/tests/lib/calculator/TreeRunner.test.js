@@ -4,6 +4,7 @@ import * as assert from 'assert';
 import TreeRunner from '../../../lib/calculator/TreeRunner.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Parser from '../../../lib/parser/Parser.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 const book = new Workbook('book');
 describe('TreeRunner', () => {
@@ -30,10 +31,7 @@ describe('TreeRunner', () => {
     it('should throw error because of invalid expression', () => {
       assert.throws(() => {
         new TreeRunner(book, 0, new Parser('=СТРАННАЯФУНКЦИЯ(0/0;2;"a"/5)').run()).run();
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     const testCasesWithoutError = [{
       description: 'should calculate integer',
@@ -289,19 +287,13 @@ describe('TreeRunner', () => {
       it(testCase.description, () => {
         const tree = new Parser(testCase.parserExpression).run();
         const treeRunner = new TreeRunner(book, 0, tree);
-        assert.throws(() => treeRunner.run(), (err) => {
-          assert.strictEqual(err.name, 'TypeError');
-          return true;
-        });
+        assert.throws(() => treeRunner.run(), TypeError);
       });
     });
     it('should throw error in ЕСЛИ() because has zero arguments', () => {
       const tree = new Parser('=ЕСЛИ()').run();
       const treeRunner = new TreeRunner(book, 0, tree);
-      assert.throws(() => treeRunner.run(), (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      assert.throws(() => treeRunner.run(), FormatError);
     });
   });
 });

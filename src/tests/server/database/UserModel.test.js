@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import UserModel from '../../../server/database/UserModel.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('UserModel', () => {
   describe('#constructor()', () => {
@@ -12,26 +13,17 @@ describe('UserModel', () => {
     it('should throw error because of empty password', () => {
       assert.throws(() => {
         new UserModel('login', '', false);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     it('should throw error because of empty login', () => {
       assert.throws(() => {
         new UserModel('', 'password', true);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     it('should throw error because of invalid isAdmin', () => {
       assert.throws(() => {
         new UserModel('login', 'password', 2);
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#setPassword() && #getHashedPassword()', () => {
@@ -44,10 +36,7 @@ describe('UserModel', () => {
       assert.throws(() => {
         const user = new UserModel('login', 'password', false);
         user.setPassword('');
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#setIsAdmin()', () => {
@@ -60,10 +49,7 @@ describe('UserModel', () => {
       assert.throws(() => {
         const user = new UserModel('login', 'password', false);
         user.setIsAdmin(2);
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#fromSQLtoUser()', () => {

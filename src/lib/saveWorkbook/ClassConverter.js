@@ -1,5 +1,5 @@
 import fs from 'fs';
-import FormatError from '../../errors/FormatError.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class ClassConverter {
   static saveJson(userWorkbook, pathToWorkbooks) {

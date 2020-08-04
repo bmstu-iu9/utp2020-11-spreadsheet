@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { NumberComparisonFilter, operators } from '../../../lib/filters/NumberComparisonFilter.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('NumberComparisonFilter', () => {
   describe('#constructor()', () => {
@@ -12,10 +13,7 @@ describe('NumberComparisonFilter', () => {
     it('should throw an exception for "A", "moreOrLess", 5', () => {
       assert.throws(() => {
         new NumberComparisonFilter('A', 'moreOrLess', 5);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#doesCellMatch()', () => {

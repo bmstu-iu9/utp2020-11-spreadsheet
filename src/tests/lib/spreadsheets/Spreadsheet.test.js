@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 const spreadsheetStandardName = 'spreadsheet';
 
@@ -23,18 +24,12 @@ describe('Spreadsheet', () => {
       cells.set('A1', {});
       assert.throws(() => {
         new Spreadsheet(spreadsheetStandardName, cells);
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
     it('should throw an exception for integer name', () => {
       assert.throws(() => {
         new Spreadsheet(1);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#setName()', () => {
@@ -47,10 +42,7 @@ describe('Spreadsheet', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.setName(1);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#isNameCorrect()', () => {
@@ -79,19 +71,13 @@ describe('Spreadsheet', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.setCells(cells);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     it('should throw an exception for a non-map object', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.setCells({});
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#getCell()', () => {
@@ -110,10 +96,7 @@ describe('Spreadsheet', () => {
       const spreadsheet = new Spreadsheet(spreadsheetStandardName);
       assert.throws(() => {
         spreadsheet.getCell('1A');
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#isPositionCorrect()', () => {

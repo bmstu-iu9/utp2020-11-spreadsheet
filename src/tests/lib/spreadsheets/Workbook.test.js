@@ -2,6 +2,7 @@ import * as assert from 'assert';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
@@ -21,10 +22,7 @@ describe('Workbook', () => {
     it('should throw an error for incorrect spreadsheets', () => {
       assert.throws(() => {
         new Workbook(workbookStandardName, {});
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#setName()', () => {
@@ -37,10 +35,7 @@ describe('Workbook', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setName(20202);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#isNameCorrect()', () => {
@@ -73,19 +68,13 @@ describe('Workbook', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setSpreadsheets(new Spreadsheet(spreadsheetStandardName));
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
     it('should throw an exception for an array with objects', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setSpreadsheets([{}, {}]);
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
   describe('#getProcessedValue()', () => {

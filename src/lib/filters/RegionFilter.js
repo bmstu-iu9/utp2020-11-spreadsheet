@@ -1,6 +1,6 @@
 import PositionFilter from './PositionFilter.js';
 import Spreadsheet from '../spreadsheets/Spreadsheet.js';
-import FormatError from '../../errors/FormatError.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class RegionFilter extends PositionFilter {
   constructor(start, finish) {

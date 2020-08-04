@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import ColorFilter from '../../../lib/filters/ColorFilter.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('ColorFilter', () => {
   describe('#setColors()', () => {
@@ -8,10 +9,7 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', []);
       assert.throws(() => {
         colorFilter.setColors({});
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
     it('should not throw an exception for []', () => {
       const colorFilter = new ColorFilter('A', []);
@@ -22,10 +20,7 @@ describe('ColorFilter', () => {
     it('should throw an exception for ["#fff"]', () => {
       const colorFilter = new ColorFilter('A', []);
       assert.throws(() => {
-        colorFilter.setColors(['#fff'], (err) => {
-          assert.strictEqual(err.name, 'FormatError');
-          return true;
-        });
+        colorFilter.setColors(['#fff'], FormatError);
       });
     });
     it('should not throw an exception for ["#ffffff"]', () => {
@@ -75,10 +70,7 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', ['#aaaaaa']);
       assert.throws(() => {
         colorFilter.run(cells);
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     it('should throw an exception for not cell value', () => {
       const cells = [new Map([
@@ -87,10 +79,7 @@ describe('ColorFilter', () => {
       const colorFilter = new ColorFilter('A', ['#aaaaaa']);
       assert.throws(() => {
         colorFilter.run(cells);
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
   });
 });

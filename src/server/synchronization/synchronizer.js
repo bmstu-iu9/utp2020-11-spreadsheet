@@ -1,6 +1,6 @@
 import readWorkbook from '../../lib/readWorkbook/JsonConverter.js';
 import saveWorkbook from '../../lib/saveWorkbook/ClassConverter.js';
-import FormatError from '../../errors/FormatError.js';
+import FormatError from '../../lib/errors/FormatError.js';
 
 const setChangeType = new Set(['color', 'value']);
 

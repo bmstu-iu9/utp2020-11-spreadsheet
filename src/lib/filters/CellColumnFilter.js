@@ -1,6 +1,6 @@
 import ColumnFilter from './ColumnFilter.js';
 import { Cell } from '../spreadsheets/Cell.js';
-import FormatError from '../../errors/FormatError.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class CellColumnFilter {
   constructor(column) {

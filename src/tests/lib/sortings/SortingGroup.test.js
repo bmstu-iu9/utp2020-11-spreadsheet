@@ -4,26 +4,18 @@ import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import NumberSort from '../../../lib/sorting/NumberSort.js';
 import SortingGroup from '../../../lib/sorting/SortingGroup.js';
 import StringSort from '../../../lib/sorting/StringSort.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('SortingGroup', () => {
   describe('#constructor()', () => {
     it('should throw an exception for 5B:C7 interval', () => {
-      assert.throws(() => new SortingGroup('5B', 'C7'), (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      assert.throws(() => new SortingGroup('5B', 'C7'), FormatError);
     });
     it('should throw an exception for {} sorting', () => {
-      assert.throws(() => new SortingGroup('B5', 'C7', {}), (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      assert.throws(() => new SortingGroup('B5', 'C7', {}), TypeError);
     });
     it('should throw an exception for [1] sorting', () => {
-      assert.throws(() => new SortingGroup('B5', 'C7', [1]), (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      assert.throws(() => new SortingGroup('B5', 'C7', [1]), TypeError);
     });
   });
 
@@ -52,10 +44,7 @@ describe('SortingGroup', () => {
       const sortingGroup = new SortingGroup('A1', 'A1');
       assert.throws(() => {
         sortingGroup.run({});
-      }, (err) => {
-        assert.strictEqual(err.name, 'TypeError');
-        return true;
-      });
+      }, TypeError);
     });
     it('should sorting workbook with one sort', () => {
       const spreadsheet = new Spreadsheet('a', cells);

@@ -1,16 +1,14 @@
 import * as assert from 'assert';
 import ColumnFilter from '../../../lib/filters/ColumnFilter.js';
 import { Cell } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('ColumnFilter', () => {
   describe('#constructor()', () => {
     it('should throw an error for column A5', () => {
       assert.throws(() => {
         new ColumnFilter('A5');
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
   });
   describe('#setColumn()', () => {
@@ -18,10 +16,7 @@ describe('ColumnFilter', () => {
       const columnFilter = new ColumnFilter('A');
       assert.throws(() => {
         columnFilter.setColumn('55');
-      }, (err) => {
-        assert.strictEqual(err.name, 'FormatError');
-        return true;
-      });
+      }, FormatError);
     });
     it('should not throw an error for column ABA', () => {
       const columnFilter = new ColumnFilter('A');
