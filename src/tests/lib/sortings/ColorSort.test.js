@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import ColorSort from '../../../lib/sorting/ColorSort.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('ColorSort', () => {
   describe('#setColors()', () => {
@@ -8,7 +9,7 @@ describe('ColorSort', () => {
       const colorSort = new ColorSort('A', []);
       assert.throws(() => {
         colorSort.setColors({});
-      });
+      }, TypeError);
     });
     it('should not throw an exception for []', () => {
       const colorSort = new ColorSort('A', []);
@@ -20,7 +21,7 @@ describe('ColorSort', () => {
       const colorSort = new ColorSort('A', []);
       assert.throws(() => {
         colorSort.setColors(['#aaa']);
-      });
+      }, FormatError);
     });
     it('should not throw an exception for ["#aaaaaa"]', () => {
       const colorSort = new ColorSort('A', []);

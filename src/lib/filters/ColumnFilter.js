@@ -1,5 +1,6 @@
 import PositionFilter from './PositionFilter.js';
 import Spreadsheet from '../spreadsheets/Spreadsheet.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class ColumnFilter extends PositionFilter {
   constructor(column) {
@@ -9,7 +10,7 @@ export default class ColumnFilter extends PositionFilter {
 
   setColumn(column) {
     if (!Spreadsheet.isColumnCorrect(column)) {
-      throw new Error('invalid column');
+      throw new FormatError('invalid column');
     }
     this.regExp = new RegExp(`${column}[1-9][0-9]*`);
   }

@@ -5,10 +5,8 @@ import schema from 'jsonschema';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
-import {
-  valueTypes,
-  Cell,
-} from '../../../lib/spreadsheets/Cell.js';
+import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
@@ -30,7 +28,7 @@ describe('ClassConverter', () => {
     it('should throw an exception for an empty workbook', () => {
       assert.throws(() => {
         ClassConverter.convertToJson(null);
-      });
+      }, FormatError);
     });
   });
   describe('#saveJson()', () => {

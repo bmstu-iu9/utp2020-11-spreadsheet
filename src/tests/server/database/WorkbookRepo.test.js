@@ -4,6 +4,7 @@ import UserModel from '../../../server/database/UserModel.js';
 import WorkbookRepo from '../../../server/database/WorkbookRepo.js';
 import UserRepo from '../../../server/database/UserRepo.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
+import DatabaseError from '../../../lib/errors/DatabaseError.js';
 
 const path = 'database.db';
 const login = 'login';
@@ -43,7 +44,7 @@ describe('WorkbookRepo', () => {
         database.prepare = null;
         assert.throws(() => {
           workbookRepo[method]();
-        });
+        }, DatabaseError);
         database.prepare = prepare;
       });
     });
@@ -52,10 +53,10 @@ describe('WorkbookRepo', () => {
       database.prepare = null;
       assert.throws(() => {
         workbookRepo.save({ id: null });
-      });
+      }, DatabaseError);
       assert.throws(() => {
         workbookRepo.save({ id: 1 });
-      });
+      }, DatabaseError);
       database.prepare = prepare;
     });
   });
@@ -73,7 +74,7 @@ describe('WorkbookRepo', () => {
       const info = database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, login, bookPath);
       const id = info.lastInsertRowid;
-      assert.throws(() => workbookRepo.getById(id + 1));
+      assert.throws(() => workbookRepo.getById(id + 1), DatabaseError);
     });
   });
   describe('#detByLogin()', () => {
@@ -95,7 +96,7 @@ describe('WorkbookRepo', () => {
     it('should throw error because user don\'t has books', () => {
       database.prepare('INSERT INTO Books (id, login, path) VALUES (?, ?, ?)')
         .run(null, anotherLogin, bookPath);
-      assert.throws(() => workbookRepo.getByLogin(login));
+      assert.throws(() => workbookRepo.getByLogin(login), DatabaseError);
     });
   });
   describe('#getAllBooks()', () => {
