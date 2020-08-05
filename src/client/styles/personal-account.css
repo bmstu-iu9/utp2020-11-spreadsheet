@@ -136,14 +136,6 @@ div.lk-button {
   cursor: pointer;
 }
 
-div.lk-button:hover {
-  background-color: #fca311;
-  color: #f6f6f6;
-  opacity: 90%;
-  font-weight: bolder;
-  border-color: #fca311;
-}
-
 div.book-list-wrapper {
   margin-top: 80px;
   width: 100%;

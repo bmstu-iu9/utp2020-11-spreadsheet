@@ -138,3 +138,15 @@ div#new-book-button:hover div#bl-dot {
     margin-top: 20px;
   }
 }
+
+div.lk-button {
+  transition: font-weight 180ms cubic-bezier(0, 0, 1, 1), border-color 180ms cubic-bezier(0, 0, 1, 1), opacity 180ms cubic-bezier(0, 0, 1, 1), color 180ms cubic-bezier(0, 0, 1, 1), background-color 180ms cubic-bezier(0, 0, 1, 1);
+}
+
+div.lk-button:hover {
+  background-color: #fca311;
+  color: #f6f6f6;
+  opacity: 90%;
+  font-weight: bolder;
+  border-color: #fca311;
+}
