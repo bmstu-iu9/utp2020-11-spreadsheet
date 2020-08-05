@@ -170,6 +170,7 @@ div.book-list {
   background-color: white;
   width: inherit;
   overflow: scroll;
+  scrollbar-color: #fca311 #f1f1f1;
   overflow-y: hidden;
   display: flex;
   flex-direction: row;
