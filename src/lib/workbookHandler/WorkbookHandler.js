@@ -1,4 +1,8 @@
 import WorkbookRepo from '../../server/database/WorkbookRepo.js';
+import JsonConverter from '../readWorkbook/JsonConverter.js';
+import WorkbookModel from '../../server/database/WorkbookModel.js';
+import ClassConverter from '../saveWorkbook/ClassConverter.js';
+import fs from 'fs';
 
 export default class WorkbookHandler {
   constructor(database) {
@@ -8,10 +12,16 @@ export default class WorkbookHandler {
   get(login) {
     const workbookRepo = new WorkbookRepo(this.database);
     try {
-      const result = workbookRepo.getByLogin(login);
+      const list = workbookRepo.getByLogin(login);
+      const result = [];
+      list.forEach((wbModel) => {
+        const workbook = { id: wbModel.id };
+        workbook.push(JSON.parse(fs.readFileSync(wbModel.path)));
+        result.push(workbook);
+      });
       return {
         response: 200,
-        workbooks: result,
+        content: result,
       };
     } catch (error) {
       return { response: 401 };
