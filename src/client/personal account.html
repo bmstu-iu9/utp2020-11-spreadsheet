@@ -29,7 +29,8 @@
             <img src="img/edit-orange.png"
                  style="width: 25px; height: 25px; margin-left: -33px; margin-top: 2px; position: absolute;">
         </div>
-        <div id="new-book-button" onmouseover="hideDecorativeLine()" onmouseout="showDecorativeLine()">
+        <div id="new-book-button" onmouseover="document.getElementById('decorative-line').style.width = '210px';"
+             onmouseout="document.getElementById('decorative-line').style.width = '100%';">
             <div id="animation-dots-wrapper">
                 <div class="animation-dot" id="tl-dot"></div>
                 <div class="animation-dot" id="tr-dot"></div>
@@ -128,6 +129,5 @@
         </div>
     </div>
 </div>
-<script src="scripts/personal-account-animations.js"></script>
 </body>
 </html>
