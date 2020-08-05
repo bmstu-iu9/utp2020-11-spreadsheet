@@ -22,10 +22,60 @@ div.content {
 div.tools-wrapper {
   width: 100vw;
   height: 100px;
-  background-color: white;
+  background-color: #ebebeb;
   box-sizing: border-box;
   border-bottom: 10px solid #444c5c;
-  box-shadow: inset 0px -2px 53px -18px rgba(0,0,0,0.75);
+  /*box-shadow: inset 0px -2px 53px -18px rgba(0,0,0,0.75);*/
+}
+
+div.tools-header {
+  display: flex;
+  flex-direction: row;
+}
+
+div.tools-tabs {
+  background-color: #444c5c;
+  height: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+div.tools-tab {
+  height: 100%;
+  width: 100px;
+  background-color: #fca311;
+  transform: skew(135deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.tools-tab:hover {
+  background-color: #f89a03;
+}
+
+div.tools-tab div {
+  transform: skew(-135deg);
+  pointer-events: none;
+}
+
+div.cell-info-display {
+  height: 30px;
+  background-color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+span.cell-info {
+  margin-left: 45px;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #444c5c;
 }
 
 div.table-wrapper {
@@ -48,8 +98,8 @@ div.table-wrapper {
 
 #table td {
   border: 1px solid #d9d9d9;
-  padding: 5px 2px;
   box-sizing: border-box;
+  padding: 5px 2px;
   font-size: 14px;
   color: #1f1f1f;
   font-weight: 400;
@@ -65,6 +115,16 @@ div.table-wrapper {
   text-align: center;
   cursor: pointer;
 }
+
+#table td:hover {
+  border: 2px solid #999999;
+}
+
+#table td.column-header:hover, #table td.row-header:hover {
+  border: 1px solid #d9d9d9;
+  background-color: #fca311;
+}
+
 
 #table td.row-header {
   min-width: 70px;

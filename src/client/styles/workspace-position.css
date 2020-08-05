@@ -1,0 +1,50 @@
+@media (min-width: 320px) {
+  div.tools-tabs {
+    width: 0;
+    visibility: hidden;
+  }
+
+  div.cell-info-display {
+    width: 100vw;
+  }
+}
+
+@media (min-width: 720px) {
+  div.tools-header {
+    flex-direction: row;
+  }
+
+  div.tools-tabs {
+    visibility: visible;
+    width: 400px;
+  }
+
+  div.tools-tab {
+    width: 100px;
+  }
+
+  div.cell-info-display {
+    width: calc(100vw - 400px);
+  }
+
+  div.tools-tabs::after {
+    content: '';
+    position: absolute;
+    left: 400px;
+    border: 15px solid transparent;
+    border-left: 15px solid #444c5c;
+    border-top: 15px solid #444c5c;
+  }
+}
+
+@media (min-width: 960px) {
+
+}
+
+@media (min-width: 1140px) {
+
+}
+
+@media (min-width: 1500px) {
+
+}
