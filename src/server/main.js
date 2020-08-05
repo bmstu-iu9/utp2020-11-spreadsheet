@@ -17,7 +17,7 @@ export default class Server {
 
     app.set('view options', { layout: false });
 
-    app.use(favicon('src/client/styles/img/favicon.ico'));
+    app.use(favicon('src/client/img/favicon.ico'));
 
     if (app.get('env') === 'development') {
       app.use(morgan('dev'));
