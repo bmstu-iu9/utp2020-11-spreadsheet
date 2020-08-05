@@ -2,7 +2,6 @@ import express from 'express';
 import http from 'http';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
 
@@ -16,8 +15,6 @@ export default class Server {
     app.set('port', 3000);
 
     app.set('view options', { layout: false });
-
-    app.use(favicon('src/client/img/favicon.ico'));
 
     if (app.get('env') === 'development') {
       app.use(morgan('dev'));
