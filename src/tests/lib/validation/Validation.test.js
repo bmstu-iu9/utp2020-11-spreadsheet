@@ -4,6 +4,7 @@ import Validation from '../../../lib/validation/Validation.js';
 import UserModel from '../../../server/database/UserModel.js';
 import UserRepo from '../../../server/database/UserRepo.js';
 import WorkbookRepo from '../../../server/database/WorkbookRepo.js';
+import DatabaseError from '../../../lib/errors/DatabaseError.js';
 
 const pathToDatabase = 'database.db';
 const database = new Database(pathToDatabase);
@@ -41,7 +42,7 @@ describe('Validation', () => {
     it('should throw an exception for incorrect path to database', () => {
       assert.throws(() => {
         new Validation('~/db/database.db');
-      });
+      }, TypeError);
     });
   });
   describe('#setDatabase()', () => {
@@ -49,7 +50,7 @@ describe('Validation', () => {
       const validator = new Validation(pathToDatabase);
       assert.throws(() => {
         validator.setDatabase('~/db/database.db');
-      });
+      }, TypeError);
     });
   });
   describe('#validateRegistration()', () => {
@@ -122,7 +123,7 @@ describe('Validation', () => {
       validator.close();
       assert.throws(() => {
         validator.validate('alexis', 'omgomg', true);
-      });
+      }, DatabaseError);
     });
   });
 });

@@ -12,7 +12,7 @@ describe('BooleanType', () => {
     it('should make error', () => {
       assert.throws(() => {
         BT.makeTypeError('makeTypeError');
-      });
+      }, TypeError);
     });
   });
 });

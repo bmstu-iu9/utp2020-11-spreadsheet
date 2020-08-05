@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 const path = 'path.json';
 describe('WorkbookModel', () => {
@@ -19,7 +20,7 @@ describe('WorkbookModel', () => {
     it('should throw error because of incorrect id', () => {
       assert.throws(() => {
         new WorkbookModel(path, 'login', 'notnumber');
-      });
+      }, FormatError);
     });
   });
   describe('#setLogin()', () => {
@@ -31,7 +32,7 @@ describe('WorkbookModel', () => {
     it('should throw error because of empty login', () => {
       const book = new WorkbookModel(path, 'login');
       assert.throws(() => book.setLogin(''));
-    });
+    }, FormatError);
   });
   describe('#setPath()', () => {
     it('should set path', () => {
@@ -42,7 +43,7 @@ describe('WorkbookModel', () => {
     it('should throw error because of incorrect path', () => {
       const book = new WorkbookModel(path, 'login');
       assert.throws(() => book.setPath('path'));
-    });
+    }, FormatError);
   });
   describe('#fromSQLtoBooks()', () => {
     it('should transform sql answer to array of books', () => {
