@@ -42,6 +42,11 @@ div.content {
   margin-top: 100px;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
 ::-webkit-scrollbar {
   width: 12px;
 }

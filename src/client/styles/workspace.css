@@ -23,21 +23,21 @@ div.content {
   margin-top: 80px;
 }
 
-div.tools-wrapper {
+div.toolbar-wrapper {
   width: 100vw;
   height: 100px;
-  background-color: #ebebeb;
+  background-color: #d9d9d9;
   box-sizing: border-box;
   border-bottom: 10px solid #444c5c;
   /*box-shadow: inset 0px -2px 53px -18px rgba(0,0,0,0.75);*/
 }
 
-div.tools-header {
+div.toolbar-header {
   display: flex;
   flex-direction: row;
 }
 
-div.tools-tabs {
+div.toolbar-tabs {
   background-color: #444c5c;
   height: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -46,7 +46,7 @@ div.tools-tabs {
   justify-content: center;
 }
 
-div.tools-tab {
+div.toolbar-tab {
   height: 100%;
   width: 100px;
   background-color: #fca311;
@@ -56,13 +56,18 @@ div.tools-tab {
   align-items: center;
 }
 
-div.tools-tab:hover {
+div.toolbar-tab:hover {
   background-color: #f89a03;
 }
 
-div.tools-tab div {
+div.toolbar-tab div {
   transform: skew(-135deg);
   pointer-events: none;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: #444c5c;
 }
 
 div.cell-info-display {
@@ -80,6 +85,105 @@ span.cell-info {
   font-weight: normal;
   font-size: 18px;
   color: #444c5c;
+}
+
+div.toolbar {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+}
+
+div.toolbar-row {
+  height: 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+div#toolbar-font {
+  width: 300px;
+  border-right: 1px dashed #444c5c;
+}
+
+div#toolbar-color {
+  width: 200px;
+  border-right: 1px dashed #444c5c;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+div#toolbar-ident {
+  width: 120px;
+}
+
+div.text-input-list {
+  display: flex;
+  flex-direction: row;
+}
+
+div.text-input-list input {
+  height: 20px;
+  box-sizing: border-box;
+  border: none;
+  background-color: white;
+}
+
+div.unbar-button {
+  background-color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.unbar-button:hover {
+  background-color: #767676;
+}
+
+div.unbar-button-input {
+  width: 20px;
+  height: 20px;
+}
+
+div.unbar-button-standard {
+  width: 8px;
+  height: 20px;
+  align-items: flex-end;
+}
+
+div.unbar-button-big {
+  width: 15px;
+  height: 40px;
+  align-items: flex-end;
+}
+
+#input-font {
+  width: 160px;
+}
+
+#input-fontsize {
+  width: 40px;
+}
+
+div.tool-button-standard {
+  background-color: white;
+  width: 20px;
+  height: 20px;
+}
+
+div.tool-button-big {
+  background-color: white;
+  width: 40px;
+  height: 40px;
+}
+
+div.tool-button-standard:hover, div.tool-button-big:hover {
+  background-color: #fca311;
 }
 
 div.table-wrapper {

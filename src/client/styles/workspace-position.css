@@ -1,7 +1,15 @@
 @media (min-width: 320px) {
-  div.tools-tabs {
+  div.toolbar-tabs {
     width: 0;
     visibility: hidden;
+  }
+
+  div.toolbar {
+    visibility: hidden;
+  }
+
+  div.toolbar-wrapper {
+    height: 35px;
   }
 
   div.cell-info-display {
@@ -10,16 +18,24 @@
 }
 
 @media (min-width: 720px) {
-  div.tools-header {
+  div.toolbar {
+    visibility: visible;
+  }
+
+  div.toolbar-wrapper {
+    height: 100px;
+  }
+
+  div.toolbar-header {
     flex-direction: row;
   }
 
-  div.tools-tabs {
+  div.toolbar-tabs {
     visibility: visible;
     width: 400px;
   }
 
-  div.tools-tab {
+  div.toolbar-tab {
     width: 100px;
   }
 
@@ -27,7 +43,7 @@
     width: calc(100vw - 400px);
   }
 
-  div.tools-tabs::after {
+  div.toolbar-tabs::after {
     content: '';
     position: absolute;
     left: 400px;
