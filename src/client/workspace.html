@@ -40,32 +40,41 @@
             <div id="toolbar-font">
                 <div class="toolbar-row">
                     <div class="text-input-list">
-                        <input type="text" id="input-font">
+                        <input type="text" value="Arial" id="input-font">
                         <div class="unbar-button unbar-button-input">
                             <img src="img/unbar-button.png" width="16" height="16">
                         </div>
                     </div>
                     <div class="text-input-list">
-                        <input type="text" id="input-fontsize">
+                        <input type="text" value="13" id="input-fontsize">
                         <div class="unbar-button unbar-button-input">
                             <img src="img/unbar-button.png" width="16" height="16">
                         </div>
                     </div>
                 </div>
                 <div class="toolbar-row">
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
-                    <div class="row">
-                        <div class="tool-button-standard"></div>
-                        <div class="unbar-button unbar-button-standard">
-                            <img src="img/unbar-button.png" width="7" height="7">
-                        </div>
+                    <div class="tool-button-standard content-center base-text" id="button-bold">
+                        <span class="no-click">Ж</span>
+                    </div>
+                    <div class="tool-button-standard content-center base-text" id="button-italics">
+                        <span class="no-click">I</span>
+                    </div>
+                    <div class="tool-button-standard content-center base-text" id="button-underlined">
+                        <span class="no-click">Ч</span>
+                    </div>
+                    <div class="tool-button-standard content-center base-text" id="button-stretched">
+                        <span class="no-click">аб</span>
+                    </div>
+                    <div class="tool-button-standard content-center base-text" id="button-low-reg">
+                        <span class="no-click">А</span>
+                    </div>
+                    <div class="tool-button-standard content-center base-text" id="button-high-reg">
+                        <span class="no-click">а</span>
                     </div>
                     <div class="row">
-                        <div class="tool-button-standard"></div>
+                        <div class="tool-button-standard content-center">
+                            <div id="button-border"></div>
+                        </div>
                         <div class="unbar-button unbar-button-standard">
                             <img src="img/unbar-button.png" width="7" height="7">
                         </div>
@@ -74,19 +83,25 @@
             </div>
             <div id="toolbar-color">
                 <div class="row">
-                    <div class="tool-button-big"></div>
+                    <div class="tool-button-big content-center" id="button-text-color">
+                        <span class="no-click base-text">А</span>
+                    </div>
                     <div class="unbar-button unbar-button-big">
                         <img src="img/unbar-button.png" width="14" height="16">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="tool-button-big"></div>
+                    <div class="tool-button-big content-center">
+                        <div id="button-bg-color"></div>
+                    </div>
                     <div class="unbar-button unbar-button-big">
                         <img src="img/unbar-button.png" width="14" height="16">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="tool-button-big"></div>
+                    <div class="tool-button-big content-center">
+                        <div id="button-border-color"></div>
+                    </div>
                     <div class="unbar-button unbar-button-big">
                         <img src="img/unbar-button.png" width="14" height="16">
                     </div>

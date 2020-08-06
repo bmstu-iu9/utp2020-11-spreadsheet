@@ -127,11 +127,15 @@ div.text-input-list {
   flex-direction: row;
 }
 
-div.text-input-list input {
+div.text-input-list input[type="text"] {
   height: 20px;
   box-sizing: border-box;
   border: none;
   background-color: white;
+}
+
+div.text-input-list input[type="text"]:focus {
+  border: none;
 }
 
 div.unbar-button {
@@ -184,6 +188,48 @@ div.tool-button-big {
 
 div.tool-button-standard:hover, div.tool-button-big:hover {
   background-color: #fca311;
+}
+
+#button-bold {
+  font-weight: bold;
+}
+
+#button-italics {
+  font-style: italic;
+}
+
+#button-underlined {
+  text-decoration: underline;
+}
+
+#button-stretched {
+  text-decoration: line-through;
+}
+
+#button-border {
+  width: 15px;
+  height: 15px;
+  box-sizing: border-box;
+  border: 1px dashed black;
+  border-right: 2px solid black;
+}
+
+#button-text-color > span {
+  font-size: 38px;
+  color: orangered;
+}
+
+#button-bg-color {
+  height: 30px;
+  width: 30px;
+  background-color: steelblue;
+}
+
+#button-border-color {
+  height: 30px;
+  width: 30px;
+  box-sizing: border-box;
+  border: 5px solid lightseagreen;
 }
 
 div.table-wrapper {

@@ -47,6 +47,24 @@ div.content {
   flex-direction: row;
 }
 
+.content-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.base-text {
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  color: #444c5c;
+}
+
+.no-click {
+  pointer-events: none;
+}
+
 ::-webkit-scrollbar {
   width: 12px;
 }
