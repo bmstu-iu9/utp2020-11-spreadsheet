@@ -1,0 +1,230 @@
+div#decorative-line {
+  margin-top: 270px;
+  width: 100%;
+  height: 30px;
+  background-color: #444c5c;
+  position: absolute;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+div.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 25px;
+}
+
+div.name-panel {
+  width: 250px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: #fcfcfc;
+  opacity: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #444c5c;
+}
+
+div.name-panel > img {
+  width: 25px;
+  height: 25px;
+  float: right;
+}
+
+div#new-book-button {
+  z-index: 1;
+  width: 200px;
+  height: 130px;
+  display: flex;
+  margin-top: 45px;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+div#new-book-button-panel {
+  position: absolute;
+  width: 170px;
+  height: 90px;
+  background-color: white;
+  border: 1px solid #f6f6f6;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  box-sizing: border-box;
+  border-radius: 5px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div#new-book-button-panel > span {
+  opacity: 0;
+  color: #f89a03;
+}
+
+div#vertical_line {
+  width: 12px;
+  height: 70px;
+  background-color: #918f8f;
+  position: absolute;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+div#horizontal_line {
+  width: 70px;
+  height: 12px;
+  background-color: #c4c4c4;
+  position: absolute;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+div#animation-dots-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+div.animation-dot {
+  visibility: hidden;
+  width: 3px;
+  height: 3px;
+  border-radius: 3px;
+  z-index: 1;
+  background-color: #f89a03;
+  position: absolute;
+}
+
+div#tl-dot {
+  margin-left: 15px;
+  margin-top: 20px;
+}
+
+div#tr-dot {
+  margin-left: 180px;
+  margin-top: 20px;
+}
+
+div#bl-dot {
+  margin-left: 15px;
+  margin-top: 105px;
+}
+
+div#br-dot {
+  margin-left: 180px;
+  margin-top: 105px;
+}
+
+div.lk-button {
+  border: 1px outset grey;
+  width: 200px;
+  height: 30px;
+  margin-top: 45px;
+  padding-top: 15px;
+  border-radius: 5px;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #444c5c;
+  cursor: pointer;
+}
+
+div.book-list-wrapper {
+  margin-top: 80px;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+div.book-list-header {
+  height: 30px;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #444c5c;
+}
+
+div.book-list-nav {
+  width: inherit;
+  height: 150px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+div.book-list {
+  padding-right: 30px;
+  height: inherit;
+  background-color: white;
+  width: inherit;
+  overflow: scroll;
+  scrollbar-color: #fca311 #f1f1f1;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+div.book-icon {
+  margin: 0 30px;
+  width: 150px;
+  height: 120px;
+  background-color: #ededed;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+div.book-icon-text {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+span.book-icon-text {
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  color: #444c5c;
+}
+
+span.book-icon-text-size {
+  font-size: 35px;
+}
+
+div.filename {
+  width: inherit;
+  height: 20px;
+  background: #fedaa0;
+  border-radius: 0 0 5px 5px;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #444c5c;
+  align-content: end;
+}
+
+div.book-list-column {
+  width: 30px;
+  height: 156px;
+  background-color: #444c5c;
+  opacity: 50%;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3), -2px 0 4px rgba(0, 0, 0, 0.25);
+}
