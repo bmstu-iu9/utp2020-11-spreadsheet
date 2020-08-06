@@ -1,4 +1,8 @@
 @media (min-width: 320px) {
+  div.table-wrapper {
+    height: calc(100vh - 115px);
+  }
+
   div.toolbar-tabs {
     width: 0;
     visibility: hidden;
@@ -15,9 +19,14 @@
   div.cell-info-display {
     width: 100vw;
   }
+
 }
 
 @media (min-width: 720px) {
+  div.table-wrapper {
+    height: calc(100vh - 180px);
+  }
+
   div.toolbar {
     visibility: visible;
   }

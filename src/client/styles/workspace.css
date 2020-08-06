@@ -233,7 +233,6 @@ div.tool-button-standard:hover, div.tool-button-big:hover {
 
 div.table-wrapper {
   width: 100vw;
-  height: calc(100vh - 180px);
   box-sizing: border-box;
   overflow: scroll;
 }
