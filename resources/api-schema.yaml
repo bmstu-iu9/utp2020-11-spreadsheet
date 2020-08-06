@@ -279,10 +279,10 @@ components:
   examples:
     workbook:
       value:
-        $ref: "examples/table.json"
+        $ref: "examples/workbook.json"
     workbooks:
       value:
-        $ref: "examples/tables.json"
+        $ref: "examples/workbooks.json"
     user:
       value:
         $ref: "examples/user.json"

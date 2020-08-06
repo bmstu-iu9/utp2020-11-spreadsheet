@@ -1,3 +1,7 @@
+html {
+  scrollbar-color: #fca311 #f1f1f1;
+}
+
 body {
   background-color: #ededed;
   display: flex;
@@ -37,7 +41,50 @@ nav.header div.logo {
   border-radius: 10px;
 }
 
+div.content-wrapper {
+  width: 100%;
+}
+
 div.content {
   height: 100%;
   margin-top: 100px;
+}
+
+div.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.base-text {
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  color: #444;
+}
+
+.no-click {
+  pointer-events: none;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fca311;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #f89a03;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
