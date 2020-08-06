@@ -104,7 +104,7 @@ div.toolbar-row {
 }
 
 div#toolbar-font {
-  width: 300px;
+  width: 250px;
   border-right: 1px dashed #444c5c;
 }
 
@@ -166,7 +166,7 @@ div.unbar-button-big {
 }
 
 #input-font {
-  width: 160px;
+  width: 130px;
 }
 
 #input-fontsize {
