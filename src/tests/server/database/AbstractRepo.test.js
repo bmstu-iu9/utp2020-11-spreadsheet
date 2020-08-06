@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import AbstractRepo from '../../../server/database/AbstractRepo.js';
-import ImplementationError from '../../../lib/errors/ImplementationError.js';
+import NotImplementedError from '../../../lib/errors/NotImplementedError.js';
 import TestEnvironment from './TestEnvironment.js';
 
 class TestRepo extends AbstractRepo {
@@ -23,7 +23,7 @@ describe('AbstractRepo', () => {
     it('should throw implementation error', () => {
       assert.throws(() => {
         AbstractRepo.getTableName();
-      }, ImplementationError);
+      }, NotImplementedError);
     });
   });
   describe('#doesTableExist()', () => {

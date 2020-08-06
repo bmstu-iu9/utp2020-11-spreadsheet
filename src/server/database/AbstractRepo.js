@@ -1,4 +1,4 @@
-import ImplementationError from '../../lib/errors/ImplementationError.js';
+import NotImplementedError from '../../lib/errors/NotImplementedError.js';
 
 export default class AbstractRepo {
   constructor(database) {
@@ -12,6 +12,6 @@ export default class AbstractRepo {
   }
 
   static getTableName() {
-    throw new ImplementationError();
+    throw new NotImplementedError(this);
   }
 }
