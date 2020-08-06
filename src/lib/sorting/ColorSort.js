@@ -1,5 +1,6 @@
 import CellColumnSort from './CellColumnSort.js';
 import { Cell } from '../spreadsheets/Cell.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class ColorSort extends CellColumnSort {
   constructor(column, colors) {
@@ -13,7 +14,7 @@ export default class ColorSort extends CellColumnSort {
     }
     colors.forEach((color) => {
       if (!Cell.isColorCorrect(color)) {
-        throw new TypeError('invalid color');
+        throw new FormatError('invalid color');
       }
     });
     this.colors = colors;

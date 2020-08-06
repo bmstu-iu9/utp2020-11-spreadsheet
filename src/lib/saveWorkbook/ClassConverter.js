@@ -1,4 +1,5 @@
 import fs from 'fs';
+import FormatError from '../errors/FormatError.js';
 
 export default class ClassConverter {
   static saveJson(userWorkbook, pathToWorkbooks) {
@@ -9,7 +10,7 @@ export default class ClassConverter {
 
   static convertToJson(userWorkbook) {
     if (userWorkbook === null) {
-      throw new Error('Empty workbook');
+      throw new FormatError('Empty workbook');
     }
     const jsonWorkbook = {
       name: userWorkbook.name,

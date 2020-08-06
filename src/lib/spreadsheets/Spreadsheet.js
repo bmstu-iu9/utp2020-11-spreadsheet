@@ -1,4 +1,5 @@
 import { Cell } from './Cell.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class Spreadsheet {
   constructor(name, cells = new Map()) {
@@ -10,7 +11,7 @@ export default class Spreadsheet {
     if (Spreadsheet.isNameCorrect(name)) {
       this.name = name;
     } else {
-      throw new Error('Illegal name');
+      throw new FormatError('Illegal name');
     }
   }
 
@@ -22,15 +23,15 @@ export default class Spreadsheet {
     if (cells instanceof Map) {
       cells.forEach((cell, position) => {
         if (!Spreadsheet.isPositionCorrect(position)) {
-          throw new Error('Illegal position');
+          throw new FormatError('Illegal position');
         }
         if (!(cell instanceof Cell)) {
-          throw new Error('Map values must be cells');
+          throw new TypeError('Map values must be cells');
         }
       });
       this.cells = cells;
     } else {
-      throw new Error('Cells must be a Map');
+      throw new TypeError('Cells must be a Map');
     }
   }
 
@@ -41,7 +42,7 @@ export default class Spreadsheet {
       }
       return this.cells.get(position);
     }
-    throw new Error('Illegal position');
+    throw new FormatError('Illegal position');
   }
 
   static isPositionCorrect(position) {

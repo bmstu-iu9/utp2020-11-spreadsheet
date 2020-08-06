@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/base-position.css">
+    <link rel="stylesheet" href="styles/personal-account.css">
+    <link rel="stylesheet" href="styles/personal-account-position.css">
+    <link rel="stylesheet" href="styles/personal-account-animations.css">
+    <title>Личный кабинет</title>
+</head>
+<body>
+<nav class="header">
+    <div class="logo">
+        <span><img src="img/logo.png" alt="Unitables" width="250" height="65"> </span>
+    </div>
+</nav>
+<div class="content-wrapper">
+    <div class="row flex-center">
+        <div id="decorative-line"></div>
+    </div>
+    <div class="content">
+        <div class="row" style="margin-top: 20px;">
+            <div class="name-panel">
+                <span>USERNAME</span>
+            </div>
+            <img src="img/edit-orange.png"
+                 style="width: 25px; height: 25px; margin-left: -33px; margin-top: 2px; position: absolute;">
+        </div>
+        <div id="new-book-button" onmouseover="document.getElementById('decorative-line').style.width = '210px';"
+             onmouseout="document.getElementById('decorative-line').style.width = '100%';">
+            <div id="animation-dots-wrapper">
+                <div class="animation-dot" id="tl-dot"></div>
+                <div class="animation-dot" id="tr-dot"></div>
+                <div class="animation-dot" id="bl-dot"></div>
+                <div class="animation-dot" id="br-dot"></div>
+            </div>
+            <div id="new-book-button-panel">
+                <span class="base-text no-click">NEW BOOK</span>
+            </div>
+            <div id="vertical_line"></div>
+            <div id="horizontal_line"></div>
+        </div>
+        <div class="book-list-wrapper">
+            <div class="book-list-header">MY BOOKS</div>
+            <div class="book-list-nav">
+                <div class="book-list-column"></div>
+                <div class="book-list">
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #1</span>
+                        </div>
+                    </div>
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #2</span>
+                        </div>
+                    </div>
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #3</span>
+                        </div>
+                    </div>
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #4</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="book-list-column"></div>
+            </div>
+        </div>
+        <div class="book-list-wrapper">
+            <div class="book-list-header">MY COLLABORATIONS</div>
+            <div class="book-list-nav">
+                <div class="book-list-column"></div>
+                <div class="book-list">
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #1</span>
+                        </div>
+                    </div>
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #2</span>
+                        </div>
+                    </div>
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #3</span>
+                        </div>
+                    </div>
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #4</span>
+                        </div>
+                    </div>
+                    <div class="book-icon">
+                        <div class="book-icon-text">
+                        </div>
+                        <div class="filename">
+                            <span>FILENAME #5</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="book-list-column"></div>
+            </div>
+        </div>
+        <div class="lk-button" style="text-align: center;">
+            <span>LOG OUT</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

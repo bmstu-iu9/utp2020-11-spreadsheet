@@ -1,3 +1,5 @@
+import FormatError from '../errors/FormatError.js';
+
 export const defaultCellColor = '#ffffff';
 export const valueTypes = {
   number: 'number',
@@ -24,7 +26,7 @@ export class Cell {
       this.type = type;
       this.value = value;
     } else {
-      throw new Error('value type does not correspond to specified cell type');
+      throw new TypeError('value type does not correspond to specified cell type');
     }
   }
 
@@ -34,7 +36,7 @@ export class Cell {
     } else if (Cell.isColorCorrect(color)) {
       this.color = color;
     } else {
-      throw new Error('specified color is not a correct hexadecimal color');
+      throw new FormatError('specified color is not a correct hexadecimal color');
     }
   }
 
@@ -69,7 +71,7 @@ export class Cell {
       case valueTypes.formula:
         return '';
       default:
-        throw new Error('unknown cell type');
+        throw new FormatError('unknown cell type');
     }
   }
 }

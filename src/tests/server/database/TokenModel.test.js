@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import TokenModel from '../../../server/database/TokenModel.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 describe('TokenModel', () => {
   describe('#isUuidValid()', () => {
@@ -46,7 +47,7 @@ describe('TokenModel', () => {
       const token = new TokenModel('test');
       assert.throws(() => {
         token.setLogin('');
-      });
+      }, FormatError);
     });
   });
   describe('#setUuid()', () => {
@@ -60,7 +61,7 @@ describe('TokenModel', () => {
       const token = new TokenModel('test');
       assert.throws(() => {
         token.setUuid('');
-      });
+      }, FormatError);
     });
   });
 });

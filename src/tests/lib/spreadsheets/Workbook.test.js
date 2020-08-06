@@ -2,6 +2,7 @@ import * as assert from 'assert';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
@@ -21,7 +22,7 @@ describe('Workbook', () => {
     it('should throw an error for incorrect spreadsheets', () => {
       assert.throws(() => {
         new Workbook(workbookStandardName, {});
-      });
+      }, TypeError);
     });
   });
   describe('#setName()', () => {
@@ -34,7 +35,7 @@ describe('Workbook', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setName(20202);
-      });
+      }, FormatError);
     });
   });
   describe('#isNameCorrect()', () => {
@@ -67,13 +68,13 @@ describe('Workbook', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setSpreadsheets(new Spreadsheet(spreadsheetStandardName));
-      });
+      }, TypeError);
     });
     it('should throw an exception for an array with objects', () => {
       const workbook = new Workbook(workbookStandardName);
       assert.throws(() => {
         workbook.setSpreadsheets([{}, {}]);
-      });
+      }, TypeError);
     });
   });
   describe('#getProcessedValue()', () => {

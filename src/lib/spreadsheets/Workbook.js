@@ -1,6 +1,7 @@
 import Spreadsheet from './Spreadsheet.js';
 import Calculator from '../calculator/Calculator.js';
 import { valueTypes } from './Cell.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class Workbook {
   constructor(name, spreadsheets = []) {
@@ -12,7 +13,7 @@ export default class Workbook {
     if (Workbook.isNameCorrect(name)) {
       this.name = name;
     } else {
-      throw new Error('Illegal name');
+      throw new FormatError('Illegal name');
     }
   }
 
@@ -26,11 +27,11 @@ export default class Workbook {
 
   setSpreadsheets(spreadsheets) {
     if (!(spreadsheets instanceof Array)) {
-      throw new Error('Spreadsheets must be an array');
+      throw new TypeError('Spreadsheets must be an array');
     }
     spreadsheets.forEach((value) => {
       if (!(value instanceof Spreadsheet)) {
-        throw new Error('Spreadsheets array elements must be spreadsheets');
+        throw new TypeError('Spreadsheets array elements must be spreadsheets');
       }
     });
     this.spreadsheets = spreadsheets;

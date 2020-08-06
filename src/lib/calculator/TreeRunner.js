@@ -1,6 +1,7 @@
 import NumberType from '../typevalue/NumberType.js';
 import StringType from '../typevalue/StringType.js';
 import BooleanType from '../typevalue/BooleanType.js';
+import FormatError from '../errors/FormatError.js';
 
 const libFunc = new Map([
   ['number', (treeRunner) => new NumberType(treeRunner.tree[1])],
@@ -117,7 +118,7 @@ const libFunc = new Map([
 
   ['ЕСЛИ', (treeRunner) => {
     if (treeRunner.tree.length - 1 !== 3) {
-      treeRunner.constructor.makeTypeError('wrong number arguments in ЕСЛИ');
+      treeRunner.constructor.makeFormatError('wrong number arguments in ЕСЛИ');
     }
     const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
     if (!(res1 instanceof BooleanType)) {
@@ -138,13 +139,17 @@ export default class TreeRunner {
     throw new TypeError(`TreeRunner: ${str}`);
   }
 
+  static makeFormatError(str) {
+    throw new FormatError(`TreeRunner: ${str}`);
+  }
+
   makeTreeRunner(tree) {
     return new TreeRunner(this.book, this.page, tree);
   }
 
   run() {
     if (!libFunc.has(this.tree[0])) {
-      throw new TypeError(`undefind function ${this.tree[0]}`);
+      throw new FormatError(`undefined function ${this.tree[0]}`);
     }
     return libFunc.get(this.tree[0])(this);
   }
