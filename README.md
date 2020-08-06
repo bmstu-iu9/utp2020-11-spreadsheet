@@ -1,6 +1,8 @@
 # Unitables
 Онлайн электронные таблицы с возможностью объединять несколько таблиц в одну.
 
+![Unitables](src/client/img/logo_readme.png)
+
 ## Участники
 - Абдулзагир Шахманаев - [@shehamane](https://github.com/shehamane)
 - Алексей Егоров - [@AlexisOMG](https://github.com/AlexisOMG)
