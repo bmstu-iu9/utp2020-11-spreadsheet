@@ -1,7 +1,10 @@
+html {
+  scrollbar-color: #fca311 #f1f1f1;
+}
+
 body {
   background-color: #ededed;
   display: flex;
-  scrollbar-color: #fca311 #f1f1f1;
 }
 
 nav,
