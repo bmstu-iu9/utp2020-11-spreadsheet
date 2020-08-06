@@ -16,7 +16,9 @@ export default class WorkbookHandler {
       const result = [];
       list.forEach((wbModel) => {
         const workbook = { id: wbModel.id };
-        workbook.push(JSON.parse(fs.readFileSync(wbModel.path)));
+        const reads = JSON.parse(fs.readFileSync(wbModel.path));
+        workbook.name = reads.name;
+        workbook.sheets = reads.sheets;
         result.push(workbook);
       });
       return {
