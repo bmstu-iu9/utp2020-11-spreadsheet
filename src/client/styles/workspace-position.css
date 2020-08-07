@@ -39,7 +39,7 @@
     flex-direction: row;
   }
 
-  div.toolbar-tabs {
+  div#toolbar-tabs {
     visibility: visible;
     width: 400px;
   }
@@ -52,7 +52,7 @@
     width: calc(100vw - 400px);
   }
 
-  div.toolbar-tabs::after {
+  div#toolbar-tabs::after {
     content: '';
     position: absolute;
     left: 400px;

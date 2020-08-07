@@ -19,7 +19,7 @@
 <div class="content">
     <div class="toolbar-wrapper">
         <div class="toolbar-header">
-            <div class="toolbar-tabs">
+            <div id="toolbar-tabs">
                 <div class="toolbar-tab">
                     <div>Вид</div>
                 </div>
@@ -41,15 +41,11 @@
                 <div class="toolbar-row">
                     <div class="text-input-list">
                         <input type="text" value="Arial" id="input-font">
-                        <div class="unbar-button unbar-button-input">
-                            <img src="img/unbar-button.png" width="16" height="16">
-                        </div>
+                        <div class="unbar-button unbar-button-input"></div>
                     </div>
                     <div class="text-input-list">
                         <input type="text" value="13" id="input-fontsize">
-                        <div class="unbar-button unbar-button-input">
-                            <img src="img/unbar-button.png" width="16" height="16">
-                        </div>
+                        <div class="unbar-button unbar-button-input"></div>
                     </div>
                 </div>
                 <div class="toolbar-row">
@@ -75,9 +71,7 @@
                         <div class="tool-button-standard content-center">
                             <div id="button-border"></div>
                         </div>
-                        <div class="unbar-button unbar-button-standard">
-                            <img src="img/unbar-button.png" width="7" height="7">
-                        </div>
+                        <div class="unbar-button unbar-button-standard"></div>
                     </div>
                 </div>
             </div>
@@ -86,25 +80,20 @@
                     <div class="tool-button-big content-center" id="button-text-color">
                         <span class="no-click base-text">А</span>
                     </div>
-                    <div class="unbar-button unbar-button-big">
-                        <img src="img/unbar-button.png" width="14" height="16">
-                    </div>
+                    <div class="unbar-button unbar-button-big"></div>
                 </div>
                 <div class="row">
                     <div class="tool-button-big content-center">
                         <div id="button-bg-color"></div>
                     </div>
                     <div class="unbar-button unbar-button-big">
-                        <img src="img/unbar-button.png" width="14" height="16">
                     </div>
                 </div>
                 <div class="row">
                     <div class="tool-button-big content-center">
                         <div id="button-border-color"></div>
                     </div>
-                    <div class="unbar-button unbar-button-big">
-                        <img src="img/unbar-button.png" width="14" height="16">
-                    </div>
+                    <div class="unbar-button unbar-button-big"></div>
                 </div>
             </div>
             <div id="toolbar-ident">
@@ -123,18 +112,23 @@
         <div class="toolbar" id="toolbar-sort">
             <div id="toolbar-filter" class="content-center">
                 <div class="row">
-                    <div class="tool-button-big"></div>
+                    <div class="tool-button-big" id="button-search"></div>
                     <div class="unbar-button unbar-button-big"></div>
                 </div>
 
                 <div class="row">
-                    <div class="tool-button-big"></div>
+                    <div class="tool-button-big" id="button-erase"></div>
                     <div class="unbar-button unbar-button-big"></div>
                 </div>
-                <div class="tool-button-great"></div>
+                <div class="tool-button-great content-center">
+                    <span class="base-text content-center no-click">Настроить сортировку</span>
+                </div>
                 <div class="toolbar-column">
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
+                    <div class="tool-button-standard" id="button-sort"></div>
+                    <div class="tool-button-standard" id="button-filter"></div>
+                </div>
+                <div class="tool-button-great content-center">
+                    <span class="base-text content-center no-click">Настроить фильтрацию</span>
                 </div>
             </div>
         </div>

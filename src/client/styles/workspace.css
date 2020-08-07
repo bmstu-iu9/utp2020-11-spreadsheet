@@ -36,7 +36,7 @@ div.toolbar-header {
   flex-direction: row;
 }
 
-div.toolbar-tabs {
+div#toolbar-tabs {
   background-color: #444c5c;
   height: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -142,6 +142,10 @@ div.unbar-button {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url(../img/unbar-button.png);
+  background-repeat: no-repeat;
+  background-size: 90%;
+  background-position: bottom;
 }
 
 div.unbar-button:hover {
@@ -185,7 +189,13 @@ div.tool-button-big {
   height: 40px;
 }
 
-div.tool-button-standard:hover, div.tool-button-big:hover {
+div.tool-button-great {
+  width: 100px;
+  height: 40px;
+  background-color: white;
+}
+
+div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great:hover {
   background-color: #fca311;
 }
 
@@ -231,8 +241,36 @@ div.tool-button-standard:hover, div.tool-button-big:hover {
   border: 5px solid lightseagreen;
 }
 
+#button-search {
+  background-image: url(../img/search-icon.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px;
+}
+
+#button-erase {
+  background-image: url(../img/erase-icon.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px;
+}
+
+#button-sort {
+  background-image: url(../img/sort-icon.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 17px;
+}
+
+#button-filter {
+  background-image: url(../img/filter-icon.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 17px;
+}
+
 #toolbar-filter {
-  width: 300px;
+  width: 400px;
   justify-content: space-around;
 }
 
@@ -241,12 +279,6 @@ div.toolbar-column {
   flex-direction: column;
   justify-content: space-around;
   height: 60px;
-}
-
-#tool-button-filter {
-  width: 100px;
-  height: 40px;
-  background-color: white;
 }
 
 div.table-wrapper {
@@ -307,6 +339,11 @@ div.table-wrapper {
 
 #table td.column-header {
   min-width: 100px;
+}
+
+#table tr:nth-child(1) > td:nth-child(1):hover {
+  background-color: inherit;
+  cursor: inherit;
 }
 
 #table td.column-header:hover, #table td.row-header:hover {

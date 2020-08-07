@@ -61,6 +61,10 @@ div.content {
   align-items: center;
 }
 
+span.content-center {
+  text-align: center;
+}
+
 .flex-center {
   justify-content: center;
 }
@@ -75,6 +79,14 @@ div.content {
 
 .no-click {
   pointer-events: none;
+}
+
+div.hide {
+  display: block;
+}
+
+div.show {
+  display: none;
 }
 
 ::-webkit-scrollbar {
