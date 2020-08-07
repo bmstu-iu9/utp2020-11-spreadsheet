@@ -9,4 +9,5 @@ export default {
   },
   static: 'src/client',
   entrypoint: '/index.html',
+  database: 'database.db',
 };

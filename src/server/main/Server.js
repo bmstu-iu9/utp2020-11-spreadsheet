@@ -5,6 +5,10 @@ import cookieParser from 'cookie-parser';
 import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
+import Database from 'better-sqlite3';
+import DataRepo from '../database/DataRepo.js';
+import ConsoleLogger from '../../lib/logging/ConsoleLogger.js';
+import logLevel from '../../lib/logging/logLevel.js';
 
 export default class Server {
   constructor(config) {
@@ -20,11 +24,19 @@ export default class Server {
 
     this.app.use(favicon(this.config.favicon));
 
+    let loggerLogLevel;
     if (this.app.get('env') === 'development') {
       this.app.use(morgan('dev'));
+      loggerLogLevel = logLevel.debug;
     } else {
       this.app.use(morgan('short'));
+      loggerLogLevel = logLevel.warning;
     }
+
+    const database = new Database(this.config.database);
+    const logger = new ConsoleLogger(loggerLogLevel);
+    const dataRepo = new DataRepo(database, logger);
+    dataRepo.syncDatabaseStructure();
 
     this.app.use(cookieParser());
 
