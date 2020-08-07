@@ -53,17 +53,10 @@ div.form-choice-button:last-child {
   width: 45%;
 }
 
-div.form-choice-button:hover {
-  background-color: #fca311;
-  color: white;
-  font-weight: bolder;
-}
-
 div.sign-forms-wrapper input {
   width: 90%;
   height: 40px;
-  margin: 4%;
-  margin-top: 15px;
+  margin: 15px 4% 4%;
   padding-left: 10px;
   background: #fff;
   font-family: Lato, sans-serif;
@@ -100,4 +93,18 @@ div.sign-forms-wrapper input[type="submit"] {
 
 div.sign-forms-wrapper input[type="submit"]:hover {
   background: linear-gradient(#fca311, #f89a03);
+}
+
+div.selected {
+  background-color: #fca311;
+  color: white;
+  font-weight: bolder;
+}
+
+div.hide {
+  display: block;
+}
+
+div.show {
+  display: none;
 }
