@@ -6,14 +6,16 @@ import ConsoleLogger from '../../../lib/logging/ConsoleLogger.js';
 describe('ConsoleLogger', () => {
   describe('#addLog()', () => {
     it('should write message to stdout', () => {
-      let passed = false;
       const message = 'test message';
-      sinon.stub(process.stdout, 'write').callsFake((inputMessage) => {
-        passed = message === inputMessage;
+      let called = false;
+      sinon.stub(process.stdout, 'write').callsFake((outputMessage) => {
+        called = true;
+        assert.strictEqual(outputMessage, `${message}\n`);
       });
       const logger = new ConsoleLogger(logLevel.info);
       logger.addLog(message);
-      assert.strictEqual(passed, true);
+      assert.strictEqual(called, true);
+      sinon.restore();
     });
   });
 });
