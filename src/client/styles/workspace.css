@@ -231,6 +231,24 @@ div.tool-button-standard:hover, div.tool-button-big:hover {
   border: 5px solid lightseagreen;
 }
 
+#toolbar-filter {
+  width: 300px;
+  justify-content: space-around;
+}
+
+div.toolbar-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 60px;
+}
+
+#tool-button-filter {
+  width: 100px;
+  height: 40px;
+  background-color: white;
+}
+
 div.table-wrapper {
   width: 100vw;
   box-sizing: border-box;
@@ -275,8 +293,8 @@ div.table-wrapper {
   border-bottom: 10px solid #999;
   width: 0;
   height: 0;
-  right: 5px;
-  top: 0;
+  right: 2px;
+  bottom: 2px;
 }
 
 #table td:hover {
