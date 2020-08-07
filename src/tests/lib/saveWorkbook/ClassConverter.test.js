@@ -21,7 +21,7 @@ describe('ClassConverter', () => {
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
       const workbook = new Workbook(workbookStandardName, spreadsheets);
       assert.strictEqual(
-        schema.validate(JSON.parse(ClassConverter.convertToJson(workbook)), tableSchema).valid,
+        schema.validate(ClassConverter.convertToJson(workbook), tableSchema).valid,
         true,
       );
     });
