@@ -12,7 +12,7 @@ export default class AbstractLogger {
     this.logLevel = logLevel;
   }
 
-  acceptLog(logLevel, message) {
+  sendLog(logLevel, message) {
     if (logLevel >= this.logLevel) {
       this.addLog(message);
     }

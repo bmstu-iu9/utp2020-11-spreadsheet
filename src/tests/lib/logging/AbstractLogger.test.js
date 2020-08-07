@@ -2,17 +2,7 @@ import * as assert from 'assert';
 import NotImplementedError from '../../../lib/errors/NotImplementedError.js';
 import AbstractLogger from '../../../lib/logging/AbstractLogger.js';
 import logLevel from '../../../lib/logging/logLevel.js';
-
-class TestLogger extends AbstractLogger {
-  constructor(level) {
-    super(level);
-    this.logs = [];
-  }
-
-  addLog(message) {
-    this.logs.push(message);
-  }
-}
+import TestLogger from './TestLogger.js';
 
 describe('AbstractLogger', () => {
   describe('#constructor()', () => {
@@ -26,23 +16,23 @@ describe('AbstractLogger', () => {
       assert.strictEqual(logger.logLevel, logLevel.info);
     });
   });
-  describe('#acceptLog()', () => {
+  describe('#sendLog()', () => {
     it('should log message with the same log level', () => {
       const logger = new TestLogger(logLevel.info);
       const message = 'info message';
-      logger.acceptLog(logLevel.info, message);
+      logger.sendLog(logLevel.info, message);
       assert.deepStrictEqual(logger.logs, [message]);
     });
     it('should not log message with a lower log level', () => {
       const logger = new TestLogger(logLevel.info);
       const message = 'debug message';
-      logger.acceptLog(logLevel.debug, message);
+      logger.sendLog(logLevel.debug, message);
       assert.deepStrictEqual(logger.logs, []);
     });
     it('should log message with a higher log level', () => {
       const logger = new TestLogger(logLevel.info);
       const message = 'error message';
-      logger.acceptLog(logLevel.error, message);
+      logger.sendLog(logLevel.error, message);
       assert.deepStrictEqual(logger.logs, [message]);
     });
   });
