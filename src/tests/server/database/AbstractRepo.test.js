@@ -19,6 +19,17 @@ describe('AbstractRepo', () => {
     TestEnvironment.destroyInstance();
   });
 
+  describe('#constructor()', () => {
+    it('should create object with correct fields', () => {
+      const repo = new TestRepo(environment.database);
+      assert.strictEqual(repo.database, environment.database);
+    });
+    it('should throw an exception for non-database', () => {
+      assert.throws(() => {
+        new TestRepo({});
+      }, TypeError);
+    });
+  });
   describe('#getTableName()', () => {
     it('should throw implementation error', () => {
       assert.throws(() => {

@@ -1,7 +1,15 @@
+import Database from 'better-sqlite3';
 import NotImplementedError from '../../lib/errors/NotImplementedError.js';
 
 export default class AbstractRepo {
   constructor(database) {
+    this.setDatabase(database);
+  }
+
+  setDatabase(database) {
+    if (!(database instanceof Database)) {
+      throw new TypeError();
+    }
     this.database = database;
   }
 
