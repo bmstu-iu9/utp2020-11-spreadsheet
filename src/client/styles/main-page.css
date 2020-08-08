@@ -59,6 +59,10 @@ div.form-choice-button-selected {
   font-weight: bolder;
 }
 
+div.form-choice-button:not(.form-choice-button-selected):hover {
+  color: #fca311;
+}
+
 div.sign-forms-wrapper input {
   width: 90%;
   height: 40px;
