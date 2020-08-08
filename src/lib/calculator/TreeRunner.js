@@ -13,6 +13,9 @@ const libFunc = new Map([
     return { value: Number.isNaN(ans) ? treeRunner.tree[1] : ans };
   }],
 
+  ['Address', (treeRunner) => treeRunner
+    .book.getProcessedValue(treeRunner.tree[1], treeRunner.page)],
+
   ['+', (treeRunner) => {
     const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
     const res2 = treeRunner.makeTreeRunner(treeRunner.tree[2]).run();

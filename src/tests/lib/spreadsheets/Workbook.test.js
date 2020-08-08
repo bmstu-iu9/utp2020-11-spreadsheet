@@ -79,12 +79,34 @@ describe('Workbook', () => {
   });
   describe('#getProcessedValue()', () => {
     it('should calculate formula from cell', () => {
-      const cells = new Map();
-      cells.set('A1', new Cell(valueTypes.formula, '=(1+5^(1/2))/2'));
-      const spreadsheet = new Spreadsheet('table', cells);
-      const wb = new Workbook('book', [spreadsheet]);
-
-      assert.deepStrictEqual(wb.getProcessedValue('A1'), (1 + Math.sqrt(5)) / 2);
+      const workbook = new Workbook('book');
+      workbook.createSpreadsheet('list');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.number, 5);
+      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=2*A1');
+      workbook.spreadsheets[0].setValueInCell('A3', valueTypes.formula, '=A1+A2');
+      workbook.spreadsheets[0].setValueInCell('A4', valueTypes.formula, '=A2-1');
+      workbook.spreadsheets[0].setValueInCell('A5', valueTypes.formula, '=(1+5^(1/2))/2');
+      assert.strictEqual(workbook.getProcessedValue('A1').value, 5);
+      assert.strictEqual(workbook.getProcessedValue('A2').value, 10);
+      assert.strictEqual(workbook.getProcessedValue('A3').value, 15);
+      assert.strictEqual(workbook.getProcessedValue('A4').value, 9);
+      assert.strictEqual(workbook.getProcessedValue('A5').value, (1 + Math.sqrt(5)) / 2);
+    });
+    it('should make cyclical calculations', () => {
+      const workbook = new Workbook('book');
+      workbook.createSpreadsheet('list');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.formula, '=A2*A2');
+      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=2*A1');
+      workbook.spreadsheets[0].setValueInCell('A3', valueTypes.formula, '=5+A3');
+      assert.throws(() => {
+        workbook.getProcessedValue('A1');
+      }, FormatError);
+      assert.throws(() => {
+        workbook.getProcessedValue('A2');
+      }, FormatError);
+      assert.throws(() => {
+        workbook.getProcessedValue('A3');
+      }, FormatError);
     });
     it('should take value from cell', () => {
       const cells = new Map();
@@ -92,7 +114,7 @@ describe('Workbook', () => {
       const spreadsheet = new Spreadsheet('table', cells);
       const wb = new Workbook('book', [spreadsheet]);
 
-      assert.deepStrictEqual(wb.getProcessedValue('A1'), 23456);
+      assert.strictEqual(wb.getProcessedValue('A1').value, 23456);
     });
   });
 });

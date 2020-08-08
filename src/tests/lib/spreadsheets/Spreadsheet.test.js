@@ -2,6 +2,7 @@ import * as assert from 'assert';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 import FormatError from '../../../lib/errors/FormatError.js';
+import Workbook from '../../../lib/spreadsheets/Workbook.js';
 
 const spreadsheetStandardName = 'spreadsheet';
 
@@ -111,6 +112,31 @@ describe('Spreadsheet', () => {
     });
     it('should return false for A5A', () => {
       assert.strictEqual(Spreadsheet.isPositionCorrect('A5A'), false);
+    });
+  });
+  describe('#setValueInCell()', () => {
+    it('should set value in cell', () => {
+      const workbook = new Workbook('book');
+      workbook.createSpreadsheet('list');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.number, 5);
+      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=2*A1');
+      workbook.spreadsheets[0].setValueInCell('A3', valueTypes.formula, '=A1+A2');
+      workbook.spreadsheets[0].setValueInCell('A4', valueTypes.formula, '=A2-1');
+      workbook.spreadsheets[0].setValueInCell('A4', valueTypes.formula, '=A3*7');
+      const checkMapIn = new Map([
+        ['A1', new Set(['A2', 'A3'])],
+        ['A2', new Set(['A3'])],
+        ['A3', new Set(['A4'])],
+        ['A4', new Set()],
+      ]);
+      assert.deepStrictEqual(workbook.spreadsheets[0].treeIn, checkMapIn);
+      const checkMapOut = new Map([
+        ['A1', []],
+        ['A2', ['A1']],
+        ['A3', ['A1', 'A2']],
+        ['A4', ['A3']],
+      ]);
+      assert.deepStrictEqual(workbook.spreadsheets[0].treeOut, checkMapOut);
     });
   });
 });
