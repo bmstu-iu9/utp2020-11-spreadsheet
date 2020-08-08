@@ -1,12 +1,19 @@
-let toolbarTabs = document.querySelectorAll('div.toolbar-tab');
+const toolbarTabs = document.querySelectorAll('div.toolbar-tab');
+const toolbars = document.querySelectorAll('div.toolbar');
 
-
-for (let toolbarTab of toolbarTabs) {
-  toolbarTab.addEventListener("click", e => {
+for (const toolbarTab of toolbarTabs) {
+  toolbarTab.addEventListener('click', (e) => {
     e.preventDefault();
 
-    document.querySelector('div.toolbar-tab.toolbar-tab-active').classList.remove('toolbar-tab-active');
-    document.getElementById('toolbar-wrapper').children[1].classList.add('hide');
-
+    const currTab = document.querySelector('div.toolbar-tab.toolbar-tab-active');
+    const currToolbar = document.querySelector('div.toolbar.show-flex');
+    const newTabNum = Array.from(toolbarTabs).indexOf(toolbarTab);
+    const newToolbar = toolbars[newTabNum];
+    currTab.classList.remove('toolbar-tab-active');
+    currToolbar.classList.remove('show-flex');
+    currToolbar.classList.add('hide');
+    toolbarTab.classList.add('toolbar-tab-active');
+    newToolbar.classList.remove('hide');
+    newToolbar.classList.add('show-flex');
   });
 }
