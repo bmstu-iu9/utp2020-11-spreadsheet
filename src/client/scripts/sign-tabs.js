@@ -1,6 +1,6 @@
 function hideTabsContent(tabs, contents) {
   for (let i = 0; i < tabs.length; i += 1) {
-    tabs[i].classList.remove('selected');
+    tabs[i].classList.remove('form-choice-button-selected');
   }
   for (let i = 0; i < contents.length; i += 1) {
     contents[i].classList.remove('show');
@@ -11,7 +11,7 @@ function hideTabsContent(tabs, contents) {
 function showTabContent(tabNumber, tabs, contents) {
   if (contents[tabNumber].classList.contains('hide') || !contents[tabNumber].classList.contains('show')) {
     hideTabsContent(tabs, contents);
-    tabs[tabNumber].classList.add('selected');
+    tabs[tabNumber].classList.add('form-choice-button-selected');
     contents[tabNumber].classList.remove('hide');
     contents[tabNumber].classList.add('show');
   }
