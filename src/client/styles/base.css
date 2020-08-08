@@ -81,14 +81,6 @@ span.content-center {
   user-select: none;
 }
 
-div.hide {
-  display: block;
-}
-
-div.show {
-  display: none;
-}
-
 div.non-bg {
   background-color: inherit;
 }
