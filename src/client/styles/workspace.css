@@ -19,7 +19,7 @@ div.content {
   margin-top: 60px;
 }
 
-div.toolbar-wrapper {
+div#toolbar-wrapper {
   width: 100vw;
   height: 100px;
   background-color: #d9d9d9;
@@ -27,7 +27,7 @@ div.toolbar-wrapper {
   border-bottom: 10px solid #444c5c;
 }
 
-div.toolbar-header {
+div#toolbar-header {
   display: flex;
   flex-direction: row;
 }
@@ -50,6 +50,10 @@ div.toolbar-tab {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+div.toolbar-tab-active {
+  background-color: #f89a03;
 }
 
 div.toolbar-tab:hover {

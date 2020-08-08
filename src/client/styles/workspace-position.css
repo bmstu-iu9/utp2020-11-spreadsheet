@@ -1,5 +1,5 @@
 @media (min-width: 320px) {
-  div.toolbar-wrapper {
+  div#toolbar-wrapper {
     height: 35px;
   }
 
@@ -11,17 +11,17 @@
     display: none;
   }
 
-  div.table-wrapper {
-    height: calc(100vh - 95px);
-  }
-
   div.cell-info-display {
     width: 100vw;
+  }
+
+  div.table-wrapper {
+    height: calc(100vh - 95px);
   }
 }
 
 @media (min-width: 720px) {
-  div.toolbar-wrapper {
+  div#toolbar-wrapper {
     height: 100px;
   }
 
