@@ -51,7 +51,7 @@ export default class WorkbookHandler {
       const workbookModel = new WorkbookModel(`${pathToWorkbooks}/${workbook.name}.json`, login);
       const book = ClassConverter.convertToJson(JsonConverter.readWorkbook(workbookModel.path));
       const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
-      //  workbook.lastCommit = workbook.lastCommit;
+      workbookID.lastCommit = '00000000-0000-0000-0000-000000000000';
       workbookID.name = book.name;
       workbookID.sheets = book.sheets;
       return {
@@ -61,9 +61,5 @@ export default class WorkbookHandler {
     } catch (error) {
       return { response: 400 };
     }
-  }
-
-  close() {
-    this.database.close();
   }
 }

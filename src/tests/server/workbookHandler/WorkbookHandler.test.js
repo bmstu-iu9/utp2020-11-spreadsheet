@@ -57,7 +57,6 @@ describe('WorkbookHandler', () => {
     dataRepo.tokenRepo.dropTable();
   });
   after(() => {
-    workbookHandler.close();
     database.close();
   });
   describe('#get()', () => {
@@ -110,11 +109,15 @@ describe('WorkbookHandler', () => {
       assert.strictEqual(workbookHandler.post('alexis', 'someWorkbook', 'somePath').response, 401);
     });
     it('should give response 200 and object', () => {
+      mock({
+        './': {},
+      });
       dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
       dataRepo.tokenRepo.save(new TokenModel('alexis'));
       const result = workbookHandler.post('alexis', workbook, '.');
       assert.strictEqual(result.response, 200);
       assert.strictEqual(typeof result.content, 'object');
+      mock.restore();
     });
     it('should give response 400 for incorrect request', () => {
       dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
