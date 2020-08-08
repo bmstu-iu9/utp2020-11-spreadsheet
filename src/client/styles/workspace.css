@@ -276,7 +276,7 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
 }
 
 #toolbar-filter {
-  width: 400px;
+  width: 350px;
   margin-left: 10px;
   height: 100%;
   justify-content: space-around;
