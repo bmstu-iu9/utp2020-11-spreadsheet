@@ -15,7 +15,6 @@ export default class TestEnvironment {
   static destroyInstance() {
     this.instance.database.close();
     this.instance = null;
-    //  хз почему, но работает, только если этого нет //
     fs.unlinkSync('database.db');
   }
 

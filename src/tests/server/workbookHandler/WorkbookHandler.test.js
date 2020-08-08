@@ -31,7 +31,7 @@ describe('WorkbookHandler', () => {
   let workbookHandler;
 
   before(() => {
-    environment = new TestEnvironment();
+    environment = TestEnvironment.getInstance();
     workbookHandler = new WorkbookHandler(environment.dataRepo);
     environment.init();
     environment.dataRepo.workbookRepo.dropTable();
@@ -39,13 +39,14 @@ describe('WorkbookHandler', () => {
     environment.dataRepo.tokenRepo.dropTable();
   });
   beforeEach(() => {
-    environment = TestEnvironment.getInstance();
     environment.init();
   });
   afterEach(() => {
     environment.dataRepo.workbookRepo.dropTable();
     environment.dataRepo.userRepo.dropTable();
     environment.dataRepo.tokenRepo.dropTable();
+  });
+  after(() => {
     TestEnvironment.destroyInstance();
   });
   describe('#get()', () => {
