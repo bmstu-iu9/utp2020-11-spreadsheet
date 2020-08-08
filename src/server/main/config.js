@@ -3,7 +3,7 @@ export default {
   viewOptions: {
     layout: false,
   },
-  favicon: 'src/client/styles/img/favicon.ico',
+  favicon: 'src/client/img/logo.png',
   urlencoded: {
     extended: true,
   },

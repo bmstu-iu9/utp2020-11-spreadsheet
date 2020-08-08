@@ -1,0 +1,152 @@
+div#new-book-button-panel {
+  transition: background-color 700ms cubic-bezier(0, 0.85, 0.23, 1.01), width 160ms cubic-bezier(0, 0, 1, 1), height 160ms cubic-bezier(0, 0, 1, 1), box-shadow 160ms cubic-bezier(0, 0, 1, 1);
+}
+
+div#new-book-button-panel > span {
+  transition: opacity 300ms cubic-bezier(0.54, 0.51, 0.66, 1.4);
+}
+
+div#decorative-line {
+  transition: width 700ms cubic-bezier(0, 0.85, 0.23, 1.01);
+}
+
+div#new-book-button:hover div#new-book-button-panel {
+  width: 220px;
+  height: 130px;
+  box-shadow: none;
+  background-color: #fcfcfc;
+}
+
+div#new-book-button-panel:hover > span {
+  opacity: 1;
+  animation: pulsing 3s infinite;
+  animation-timing-function: cubic-bezier(0.25, 0.82, 0, 1.57);
+}
+
+div#new-book-button:hover div#vertical_line {
+  opacity: 0;
+  animation: pulsing 3s infinite;
+  animation-delay: 1500ms;
+  animation-timing-function: cubic-bezier(0, 0.94, 0.4, 1.19);
+  background-color: #f89a03;
+}
+
+div#new-book-button:hover div#horizontal_line {
+  opacity: 0;
+
+  animation: pulsing 3s infinite;
+  animation-delay: 1500ms;
+  animation-timing-function: cubic-bezier(0, 0.94, 0.4, 1.19);
+  background-color: #f89a03;
+}
+
+div#new-book-button:hover div.animation-dot {
+  visibility: visible;
+}
+
+div#new-book-button:hover div#tl-dot {
+  animation: dashing-tl 3s infinite;
+}
+
+div#new-book-button:hover div#br-dot {
+  animation: dashing-br 3s infinite;
+}
+
+div#new-book-button:hover div#tr-dot {
+  animation: dashing-tr 3s infinite;
+}
+
+div#new-book-button:hover div#bl-dot {
+  animation: dashing-bl 3s infinite;
+}
+
+@keyframes pulsing {
+  0% {
+    opacity: 0;
+  }
+  16% {
+    opacity: 1;
+  }
+  49% {
+    opacity: 1;
+  }
+  62% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dashing-tl {
+  0% {
+    width: 0;
+    margin-left: 15px;
+  }
+  50% {
+    width: 90px;
+    margin-left: 55px;
+  }
+  100% {
+    width: 0;
+    margin-left: 180px;
+  }
+}
+
+@keyframes dashing-br {
+  0% {
+    width: 0;
+    margin-left: 180px;
+
+  }
+  50% {
+    width: 90px;
+    margin-left: 55px;
+  }
+  100% {
+    width: 0;
+    margin-left: 15px;
+  }
+}
+
+@keyframes dashing-tr {
+  0% {
+    height: 0;
+    margin-top: 20px;
+  }
+  50% {
+    height: 60px;
+    margin-top: 35px;
+  }
+  100% {
+    height: 0;
+    margin-top: 110px;
+  }
+}
+
+@keyframes dashing-bl {
+  0% {
+    height: 0;
+    margin-top: 110px;
+  }
+  50% {
+    height: 60px;
+    margin-top: 35px;
+  }
+  100% {
+    height: 0;
+    margin-top: 20px;
+  }
+}
+
+div.lk-button {
+  transition: font-weight 180ms cubic-bezier(0, 0, 1, 1), border-color 180ms cubic-bezier(0, 0, 1, 1), opacity 180ms cubic-bezier(0, 0, 1, 1), color 180ms cubic-bezier(0, 0, 1, 1), background-color 180ms cubic-bezier(0, 0, 1, 1);
+}
+
+div.lk-button:hover {
+  background-color: #fca311;
+  color: #f6f6f6;
+  opacity: 90%;
+  font-weight: bolder;
+  border-color: #fca311;
+}
