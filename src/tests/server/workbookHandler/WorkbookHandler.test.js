@@ -125,4 +125,41 @@ describe('WorkbookHandler', () => {
       assert.strictEqual(workbookHandler.post('alexis', workbook, './').response, 400);
     });
   });
+  describe('#delete()', () => {
+    it('should give response 401 for unauthorized user', () => {
+      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', true));
+      assert.strictEqual(workbookHandler.delete('alexis', 0).response, 401);
+    });
+    it('should give response 404 for unfound book', () => {
+      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
+      dataRepo.tokenRepo.save(new TokenModel('alexis'));
+      assert.strictEqual(workbookHandler.delete('alexis', 228).response, 404);
+    });
+    it('should give response 403 for deleting book without access permission', () => {
+      mock({
+        './': {},
+      });
+      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
+      dataRepo.userRepo.save(new UserModel('OMG', 'godsky', false));
+      dataRepo.tokenRepo.save(new TokenModel('alexis'));
+      dataRepo.tokenRepo.save(new TokenModel('OMG'));
+      const workbookModel = new WorkbookModel('./test.json', 'alexis');
+      ClassConverter.saveJson(workbook, './');
+      const id = dataRepo.workbookRepo.save(workbookModel);
+      assert.strictEqual(workbookHandler.delete('OMG', id).response, 403);
+      mock.restore();
+    });
+    it('should give response 200 for successful deletion', () => {
+      mock({
+        './': {},
+      });
+      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
+      dataRepo.tokenRepo.save(new TokenModel('alexis'));
+      const workbookModel = new WorkbookModel('./test.json', 'alexis');
+      ClassConverter.saveJson(workbook, './');
+      const id = dataRepo.workbookRepo.save(workbookModel);
+      assert.strictEqual(workbookHandler.delete('alexis', id).response, 200);
+      mock.restore();
+    });
+  });
 });

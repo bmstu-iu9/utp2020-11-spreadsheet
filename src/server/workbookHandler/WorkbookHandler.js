@@ -1,3 +1,4 @@
+import fs from 'fs';
 import WorkbookModel from '../database/WorkbookModel.js';
 import FormatError from '../../lib/errors/FormatError.js';
 import ClassConverter from '../../lib/saveWorkbook/ClassConverter.js';
@@ -61,5 +62,25 @@ export default class WorkbookHandler {
     } catch (error) {
       return { response: 400 };
     }
+  }
+
+  delete(login, workbookID) {
+    try {
+      this.dataRepo.tokenRepo.getByLogin(login);
+    } catch (error) {
+      return { response: 401 };
+    }
+    let workbook;
+    try {
+      workbook = this.dataRepo.workbookRepo.getById(workbookID);
+    } catch (error) {
+      return { response: 404 };
+    }
+    if (login !== workbook.login) {
+      return { response: 403 };
+    }
+    this.dataRepo.workbookRepo.delete(workbookID);
+    fs.unlinkSync(workbook.path);
+    return { response: 200 };
   }
 }
