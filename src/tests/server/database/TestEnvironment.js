@@ -1,4 +1,4 @@
-//  import fs from 'fs';
+import fs from 'fs';
 import Database from 'better-sqlite3';
 import TokenModel from '../../../server/database/TokenModel.js';
 import DataRepo from '../../../server/database/DataRepo.js';
@@ -16,7 +16,7 @@ export default class TestEnvironment {
     this.instance.database.close();
     this.instance = null;
     //  хз почему, но работает, только если этого нет //
-    //  fs.unlinkSync('database.db');
+    fs.unlinkSync('database.db');
   }
 
   constructor() {
