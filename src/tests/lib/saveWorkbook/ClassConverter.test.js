@@ -14,20 +14,20 @@ const pathToWorkbooks = '~/workbooks/alexis';
 const tableSchema = JSON.parse(fs.readFileSync('./resources/tableSchema.json'));
 
 describe('ClassConverter', () => {
-  describe('#convertToJson()', () => {
+  describe('#readObject()', () => {
     it('should create a valid json file', () => {
       const cells = new Map();
       cells.set('A1', new Cell(valueTypes.number, 10));
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
       const workbook = new Workbook(workbookStandardName, spreadsheets);
       assert.strictEqual(
-        schema.validate(ClassConverter.convertToJson(workbook), tableSchema).valid,
+        schema.validate(ClassConverter.readObject(workbook), tableSchema).valid,
         true,
       );
     });
     it('should throw an exception for an empty workbook', () => {
       assert.throws(() => {
-        ClassConverter.convertToJson(null);
+        ClassConverter.readObject(null);
       }, FormatError);
     });
   });

@@ -3,12 +3,12 @@ import FormatError from '../errors/FormatError.js';
 
 export default class ClassConverter {
   static saveJson(userWorkbook, pathToWorkbooks) {
-    const file = JSON.stringify(this.convertToJson(userWorkbook));
+    const file = JSON.stringify(this.readObject(userWorkbook));
     fs.mkdirSync(pathToWorkbooks, { recursive: true });
     fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
   }
 
-  static convertToJson(userWorkbook) {
+  static readObject(userWorkbook) {
     if (userWorkbook === null) {
       throw new FormatError('Empty workbook');
     }
