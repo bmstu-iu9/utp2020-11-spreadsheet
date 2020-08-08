@@ -4,7 +4,9 @@ import FormatError from '../../lib/errors/FormatError.js';
 
 const setChangeType = new Set(['color', 'value']);
 
-export default class Synchronizer {
+export const zeroID = '00000000-0000-0000-0000-000000000000';
+
+export class Synchronizer {
   constructor(nameWorkbook, pathToWorkbook, page, lastChanges = [{ ID: 0 }], maxLogSize = 10) {
     this.pathToWorkbook = pathToWorkbook;
     this.workbook = readWorkbook.readWorkbook(`${this.pathToWorkbook}/${nameWorkbook}.json`);
