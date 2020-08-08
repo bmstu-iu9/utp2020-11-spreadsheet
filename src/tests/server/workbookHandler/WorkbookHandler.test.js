@@ -1,23 +1,11 @@
 import * as assert from 'assert';
 import mock from 'mock-fs';
-import Database from 'better-sqlite3';
 import WorkbookHandler from '../../../server/workbookHandler/WorkbookHandler.js';
-import Workbook from '../../../lib/spreadsheets/Workbook.js';
-import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
-import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
-import UserModel from '../../../server/database/UserModel.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import FormatError from '../../../lib/errors/FormatError.js';
-import TokenModel from '../../../server/database/TokenModel.js';
-import DataRepo from '../../../server/database/DataRepo.js';
+import TestEnvironment from '../database/TestEnvironment.js';
 
-const pathToDatabase = 'database.db';
-const workbookStandardName = 'workbook';
-const spreadsheetStandardName = 'spreadsheet';
-let dataRepo;
-let database;
-let workbookHandler;
 const workbook = {
   name: 'test',
   spreadsheets: [
@@ -39,41 +27,38 @@ const workbook = {
 };
 
 describe('WorkbookHandler', () => {
+  let environment;
+  let workbookHandler;
+
   before(() => {
-    database = new Database(pathToDatabase);
-    dataRepo = new DataRepo(database);
-    workbookHandler = new WorkbookHandler(database);
-    dataRepo.createDatabase();
-    dataRepo.workbookRepo.dropTable();
-    dataRepo.userRepo.dropTable();
-    dataRepo.tokenRepo.dropTable();
+    environment = new TestEnvironment();
+    workbookHandler = new WorkbookHandler(environment.dataRepo);
+    environment.init();
+    environment.dataRepo.workbookRepo.dropTable();
+    environment.dataRepo.userRepo.dropTable();
+    environment.dataRepo.tokenRepo.dropTable();
   });
   beforeEach(() => {
-    dataRepo.createDatabase();
+    environment = TestEnvironment.getInstance();
+    environment.init();
   });
   afterEach(() => {
-    dataRepo.workbookRepo.dropTable();
-    dataRepo.userRepo.dropTable();
-    dataRepo.tokenRepo.dropTable();
-  });
-  after(() => {
-    database.close();
+    environment.dataRepo.workbookRepo.dropTable();
+    environment.dataRepo.userRepo.dropTable();
+    environment.dataRepo.tokenRepo.dropTable();
+    TestEnvironment.destroyInstance();
   });
   describe('#get()', () => {
     it('should give response 200 and array of books', () => {
       mock({
         './': {},
       });
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
-      const cells = new Map();
-      cells.set('A1', new Cell(valueTypes.number, 10));
-      const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
-      const book = new Workbook(workbookStandardName, spreadsheets);
-      const workbookModel = new WorkbookModel(`./${workbookStandardName}.json`, 'alexis');
-      ClassConverter.saveJson(book, './');
-      dataRepo.workbookRepo.save(workbookModel);
-      assert.strictEqual(workbookHandler.get('alexis').response, 200);
-      assert.strictEqual(workbookHandler.get('alexis').content.length, 1);
+      environment.addUsers(1, true);
+      const workbookModel = new WorkbookModel('./test.json', 'test0');
+      ClassConverter.saveJson(workbook, './');
+      environment.dataRepo.workbookRepo.save(workbookModel);
+      assert.strictEqual(workbookHandler.get('test0').response, 200);
+      assert.strictEqual(workbookHandler.get('test0').content.length, 1);
       mock.restore();
     });
     it('should give response 401 for no books', () => {
@@ -105,60 +90,57 @@ describe('WorkbookHandler', () => {
       }, FormatError);
     });
     it('should give response 401 for unauthorized user', () => {
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', true));
-      assert.strictEqual(workbookHandler.post('alexis', 'someWorkbook', 'somePath').response, 401);
+      environment.addUsers(1, false);
+      assert.strictEqual(workbookHandler.post('test0', 'someWorkbook', 'somePath').response, 401);
     });
     it('should give response 200 and object', () => {
       mock({
         './': {},
       });
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
-      dataRepo.tokenRepo.save(new TokenModel('alexis'));
-      const result = workbookHandler.post('alexis', workbook, '.');
+      environment.addUsers(1, true);
+      const result = workbookHandler.post('test0', workbook, '.');
       assert.strictEqual(result.response, 200);
       assert.strictEqual(typeof result.content, 'object');
       mock.restore();
     });
     it('should give response 400 for incorrect request', () => {
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
-      dataRepo.tokenRepo.save(new TokenModel('alexis'));
-      assert.strictEqual(workbookHandler.post('alexis', workbook, './').response, 400);
+      mock({
+        './': {},
+      });
+      environment.addUsers(1, true);
+      assert.strictEqual(workbookHandler.post('test0', workbook, './').response, 400);
+      mock.restore();
     });
   });
   describe('#delete()', () => {
     it('should give response 401 for unauthorized user', () => {
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', true));
-      assert.strictEqual(workbookHandler.delete('alexis', 0).response, 401);
+      environment.addUsers(1);
+      assert.strictEqual(workbookHandler.delete('test0', 0).response, 401);
     });
     it('should give response 404 for unfound book', () => {
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
-      dataRepo.tokenRepo.save(new TokenModel('alexis'));
-      assert.strictEqual(workbookHandler.delete('alexis', 228).response, 404);
+      environment.addUsers(1, true);
+      assert.strictEqual(workbookHandler.delete('test0', 228).response, 404);
     });
     it('should give response 403 for deleting book without access permission', () => {
       mock({
         './': {},
       });
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
-      dataRepo.userRepo.save(new UserModel('OMG', 'godsky', false));
-      dataRepo.tokenRepo.save(new TokenModel('alexis'));
-      dataRepo.tokenRepo.save(new TokenModel('OMG'));
-      const workbookModel = new WorkbookModel('./test.json', 'alexis');
+      environment.addUsers(2, true);
+      const workbookModel = new WorkbookModel('./test.json', 'test0');
       ClassConverter.saveJson(workbook, './');
-      const id = dataRepo.workbookRepo.save(workbookModel);
-      assert.strictEqual(workbookHandler.delete('OMG', id).response, 403);
+      const id = environment.dataRepo.workbookRepo.save(workbookModel);
+      assert.strictEqual(workbookHandler.delete('test1', id).response, 403);
       mock.restore();
     });
     it('should give response 200 for successful deletion', () => {
       mock({
         './': {},
       });
-      dataRepo.userRepo.save(new UserModel('alexis', 'abcdef', false));
-      dataRepo.tokenRepo.save(new TokenModel('alexis'));
-      const workbookModel = new WorkbookModel('./test.json', 'alexis');
+      environment.addUsers(1, true);
+      const workbookModel = new WorkbookModel('./test.json', 'test0');
       ClassConverter.saveJson(workbook, './');
-      const id = dataRepo.workbookRepo.save(workbookModel);
-      assert.strictEqual(workbookHandler.delete('alexis', id).response, 200);
+      const id = environment.dataRepo.workbookRepo.save(workbookModel);
+      assert.strictEqual(workbookHandler.delete('test0', id).response, 200);
       mock.restore();
     });
   });

@@ -1,4 +1,4 @@
-import fs from 'fs';
+//  import fs from 'fs';
 import Database from 'better-sqlite3';
 import TokenModel from '../../../server/database/TokenModel.js';
 import DataRepo from '../../../server/database/DataRepo.js';
@@ -15,7 +15,8 @@ export default class TestEnvironment {
   static destroyInstance() {
     this.instance.database.close();
     this.instance = null;
-    fs.unlinkSync('database.db');
+    //  хз почему, но работает, только если этого нет //
+    //  fs.unlinkSync('database.db');
   }
 
   constructor() {
@@ -30,8 +31,8 @@ export default class TestEnvironment {
 
   addUsers(n, withTokens = false) {
     for (let i = 0; i < n; i += 1) {
-      const userId = this.userTokens + i;
-      const username = `test${userId.toString()}`;
+      const userId = i;
+      const username = `test${userId}`;
       const user = new UserModel(username, '123', false);
       this.dataRepo.userRepo.save(user);
       let token = null;
