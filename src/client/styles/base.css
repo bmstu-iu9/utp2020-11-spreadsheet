@@ -29,17 +29,12 @@ nav.header {
   font-size: 40px;
   line-height: 78px;
   color: #444;
+  background-image: url(../img/logo.png);
+  background-repeat: no-repeat;
+  background-size: 250px 65px;
+  background-position: 30px center;
 }
 
-nav.header div.logo {
-  position: absolute;
-  width: 250px;
-  height: 65px;
-  left: 30px;
-  top: 15px;
-  background: #444c5c;
-  border-radius: 10px;
-}
 
 div.content-wrapper {
   width: 100%;
