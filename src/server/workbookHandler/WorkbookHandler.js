@@ -10,12 +10,12 @@ export default class WorkbookHandler {
     this.dataRepo = dataRepo;
   }
 
-  get(login) {
-    if (login === undefined) {
+  get(request, response) {
+    if (request.login === undefined || request.login === '') {
       throw new FormatError('getting workbooks without login');
     }
     try {
-      const list = this.dataRepo.workbookRepo.getByLogin(login);
+      const list = this.dataRepo.workbookRepo.getByLogin(request.login);
       const result = [];
       list.forEach((wbModel) => {
         const workbook = { id: wbModel.id };
@@ -24,67 +24,72 @@ export default class WorkbookHandler {
         workbook.sheets = reads.sheets;
         result.push(workbook);
       });
-      return {
-        response: 200,
-        content: result,
-      };
+      response.response = 200;
+      response.content = result;
+      return response;
     } catch (error) {
-      return { response: 401 };
+      response.response = 401;
+      return response;
     }
   }
 
-  post(login, workbook, pathToWorkbooks) {
-    if (login === undefined || login === '') {
+  post(request, response) {
+    if (request.login === undefined || request.login === '') {
       throw new FormatError('creating workbook without login');
-    } else if (workbook === undefined) {
+    } else if (request.workbook === undefined) {
       throw new FormatError('creating workbook without workbook');
-    } else if (pathToWorkbooks === undefined || pathToWorkbooks === '') {
+    } else if (request.pathToWorkbooks === undefined || request.pathToWorkbooks === '') {
       throw new FormatError('creating workbook without path');
     }
     try {
-      this.dataRepo.tokenRepo.getByLogin(login);
+      this.dataRepo.tokenRepo.getByLogin(request.login);
     } catch (error) {
-      return { response: 401 };
+      response.response = 401;
+      return response;
     }
     try {
-      ClassConverter.saveJson(workbook, pathToWorkbooks);
-      const workbookModel = new WorkbookModel(`${pathToWorkbooks}/${workbook.name}.json`, login);
+      ClassConverter.saveJson(request.workbook, request.pathToWorkbooks);
+      const workbookModel = new WorkbookModel(`${request.pathToWorkbooks}/${request.workbook.name}.json`, request.login);
       const book = ClassConverter.readObject(JsonConverter.readWorkbook(workbookModel.path));
       const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
       workbookID.lastCommit = zeroID;
       workbookID.name = book.name;
       workbookID.sheets = book.sheets;
-      return {
-        response: 200,
-        content: workbookID,
-      };
+      response.response = 200;
+      response.content = workbookID;
+      return response;
     } catch (error) {
-      return { response: 400 };
+      response.response = 400;
+      return response;
     }
   }
 
-  delete(login, workbookID) {
-    if (login === undefined) {
+  delete(request, response) {
+    if (request.login === undefined || request.login === '') {
       throw new FormatError('deleting workbooks without login');
-    } else if (workbookID === undefined) {
+    } else if (request.workbookID === undefined) {
       throw new FormatError('deleting workbooks without book id');
     }
     try {
-      this.dataRepo.tokenRepo.getByLogin(login);
+      this.dataRepo.tokenRepo.getByLogin(request.login);
     } catch (error) {
-      return { response: 401 };
+      response.response = 401;
+      return response;
     }
     let workbook;
     try {
-      workbook = this.dataRepo.workbookRepo.getById(workbookID);
+      workbook = this.dataRepo.workbookRepo.getById(request.workbookID);
     } catch (error) {
-      return { response: 404 };
+      response.response = 404;
+      return response;
     }
-    if (login !== workbook.login) {
-      return { response: 403 };
+    if (request.login !== workbook.login) {
+      response.response = 403;
+      return response;
     }
-    this.dataRepo.workbookRepo.delete(workbookID);
+    this.dataRepo.workbookRepo.delete(request.workbookID);
     fs.unlinkSync(workbook.path);
-    return { response: 200 };
+    response.response = 200;
+    return response;
   }
 }

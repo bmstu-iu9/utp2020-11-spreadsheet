@@ -6,7 +6,7 @@ import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import FormatError from '../../../lib/errors/FormatError.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 
-const workbook = {
+const testWorkbook = {
   name: 'test',
   spreadsheets: [
     {
@@ -56,50 +56,74 @@ describe('WorkbookHandler', () => {
       });
       environment.addUsers(1, true);
       const workbookModel = new WorkbookModel('./test.json', 'test0');
-      ClassConverter.saveJson(workbook, './');
+      ClassConverter.saveJson(testWorkbook, './');
       environment.dataRepo.workbookRepo.save(workbookModel);
-      assert.strictEqual(workbookHandler.get('test0').response, 200);
-      assert.strictEqual(workbookHandler.get('test0').content.length, 1);
+      assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).response, 200);
+      assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).content.length, 1);
       mock.restore();
     });
     it('should give response 401 for no books', () => {
-      assert.strictEqual(workbookHandler.get('vabalabadabdab').response, 401);
+      assert.strictEqual(workbookHandler.get({ login: 'vabalabadabdab' }, {}).response, 401);
     });
     it('should throw an error for getting books without login', () => {
       assert.throws(() => {
-        workbookHandler.get();
+        workbookHandler.get({ login: '' }, {});
       }, FormatError);
     });
   });
   describe('#post()', () => {
     it('should throw an error for creating book without login', () => {
       assert.throws(() => {
-        let login;
-        workbookHandler.post(login, 'someWorkbook', 'somePath');
+        const request = {
+          login: '',
+          workbook: 'someWorkbook',
+          pathToWorkbooks: 'somePath',
+        };
+        workbookHandler.post(request, {});
       }, FormatError);
     });
     it('should throw an error for creating book without book', () => {
       assert.throws(() => {
         let book;
-        workbookHandler.post('alexis', book, 'somePath');
+        const request = {
+          login: 'alexis',
+          workbook: book,
+          pathToWorkbooks: 'somePath',
+        };
+        workbookHandler.post(request, {});
       }, FormatError);
     });
     it('should throw an error for creating book without path', () => {
       assert.throws(() => {
         let path;
-        workbookHandler.post('alexis', 'someWorkbook', path);
+        const request = {
+          login: 'alexis',
+          workbook: 'someWorkbook',
+          pathToWorkbooks: path,
+        };
+        workbookHandler.post(request, {});
       }, FormatError);
     });
     it('should give response 401 for unauthorized user', () => {
       environment.addUsers(1, false);
-      assert.strictEqual(workbookHandler.post('test0', 'someWorkbook', 'somePath').response, 401);
+      const request = {
+        login: 'test0',
+        workbook: 'someWorkbook',
+        pathToWorkbooks: 'somePath',
+      };
+      assert.strictEqual(workbookHandler.post(request, {}).response, 401);
     });
     it('should give response 200 and object', () => {
       mock({
         './': {},
       });
       environment.addUsers(1, true);
-      const result = workbookHandler.post('test0', workbook, '.');
+      const request = {
+        login: 'test0',
+        workbook: testWorkbook,
+        pathToWorkbooks: '.',
+      };
+      const result = workbookHandler.post(request, {});
       assert.strictEqual(result.response, 200);
       assert.strictEqual(typeof result.content, 'object');
       mock.restore();
@@ -109,18 +133,31 @@ describe('WorkbookHandler', () => {
         './': {},
       });
       environment.addUsers(1, true);
-      assert.strictEqual(workbookHandler.post('test0', workbook, './').response, 400);
+      const request = {
+        login: 'test0',
+        workbook: testWorkbook,
+        pathToWorkbooks: './',
+      };
+      assert.strictEqual(workbookHandler.post(request, {}).response, 400);
       mock.restore();
     });
   });
   describe('#delete()', () => {
     it('should give response 401 for unauthorized user', () => {
       environment.addUsers(1);
-      assert.strictEqual(workbookHandler.delete('test0', 0).response, 401);
+      const request = {
+        login: 'test0',
+        workbookID: 0,
+      };
+      assert.strictEqual(workbookHandler.delete(request, {}).response, 401);
     });
     it('should give response 404 for unfound book', () => {
       environment.addUsers(1, true);
-      assert.strictEqual(workbookHandler.delete('test0', 228).response, 404);
+      const request = {
+        login: 'test0',
+        workbookID: 228,
+      };
+      assert.strictEqual(workbookHandler.delete(request, {}).response, 404);
     });
     it('should give response 403 for deleting book without access permission', () => {
       mock({
@@ -128,9 +165,13 @@ describe('WorkbookHandler', () => {
       });
       environment.addUsers(2, true);
       const workbookModel = new WorkbookModel('./test.json', 'test0');
-      ClassConverter.saveJson(workbook, './');
+      ClassConverter.saveJson(testWorkbook, './');
       const id = environment.dataRepo.workbookRepo.save(workbookModel);
-      assert.strictEqual(workbookHandler.delete('test1', id).response, 403);
+      const request = {
+        login: 'test1',
+        workbookID: id,
+      };
+      assert.strictEqual(workbookHandler.delete(request, {}).response, 403);
       mock.restore();
     });
     it('should give response 200 for successful deletion', () => {
@@ -139,9 +180,13 @@ describe('WorkbookHandler', () => {
       });
       environment.addUsers(1, true);
       const workbookModel = new WorkbookModel('./test.json', 'test0');
-      ClassConverter.saveJson(workbook, './');
+      ClassConverter.saveJson(testWorkbook, './');
       const id = environment.dataRepo.workbookRepo.save(workbookModel);
-      assert.strictEqual(workbookHandler.delete('test0', id).response, 200);
+      const request = {
+        login: 'test0',
+        workbookID: id,
+      };
+      assert.strictEqual(workbookHandler.delete(request, {}).response, 200);
       mock.restore();
     });
   });
