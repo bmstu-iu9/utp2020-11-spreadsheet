@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/base-position.css">
     <link rel="stylesheet" href="styles/workspace.css">
     <link rel="stylesheet" href="styles/workspace-position.css">
+    <link rel="stylesheet" href="styles/script-classes.css">
     <title>Рабочее пространство</title>
 </head>
 <body>
@@ -17,10 +18,10 @@
     </div>
 </nav>
 <div class="content">
-    <div class="toolbar-wrapper">
+    <div id="toolbar-wrapper">
         <div class="toolbar-header">
             <div id="toolbar-tabs">
-                <div class="toolbar-tab">
+                <div class="toolbar-tab toolbar-tab-active">
                     <div>Вид</div>
                 </div>
                 <div class="toolbar-tab">
@@ -36,7 +37,7 @@
                 </span>
             </div>
         </div>
-        <div class="toolbar" id="toolbar-view" style="display: none;">
+        <div class="toolbar" id="toolbar-view">
             <div id="toolbar-font">
                 <div class="toolbar-row">
                     <div class="text-input-list">
@@ -109,7 +110,7 @@
                 </div>
             </div>
         </div>
-        <div class="toolbar" id="toolbar-sort">
+        <div class="toolbar hide" id="toolbar-sort">
             <div id="toolbar-filter" class="content-center">
                 <div class="row">
                     <div class="tool-button-big" id="button-search"></div>
@@ -1781,6 +1782,7 @@
         </table>
     </div>
 </div>
+<script src="scripts/toolbar.js"></script>
 </body>
 
 </html>

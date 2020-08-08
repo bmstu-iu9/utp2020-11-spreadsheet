@@ -81,14 +81,6 @@ span.content-center {
   pointer-events: none;
 }
 
-div.hide {
-  display: block;
-}
-
-div.show {
-  display: none;
-}
-
 ::-webkit-scrollbar {
   width: 12px;
 }

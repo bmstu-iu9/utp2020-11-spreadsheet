@@ -12,14 +12,13 @@
     visibility: hidden;
   }
 
-  div.toolbar-wrapper {
+  div#toolbar-wrapper {
     height: 35px;
   }
 
   div.cell-info-display {
     width: 100vw;
   }
-
 }
 
 @media (min-width: 720px) {
@@ -31,7 +30,7 @@
     visibility: visible;
   }
 
-  div.toolbar-wrapper {
+  div#toolbar-wrapper {
     height: 100px;
   }
 
