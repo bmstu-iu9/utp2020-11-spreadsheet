@@ -78,6 +78,7 @@ span.content-center {
 
 .no-click {
   pointer-events: none;
+  user-select: none;
 }
 
 div.hide {
