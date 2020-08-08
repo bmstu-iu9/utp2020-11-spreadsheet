@@ -100,6 +100,15 @@ div.toolbar-row {
   padding: 0 10px;
 }
 
+div#toolbar-main {
+  width: 140px;
+  border-right: 1px dashed #444c5c;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
 div#toolbar-font {
   width: 250px;
   border-right: 1px dashed #444c5c;
@@ -115,7 +124,7 @@ div#toolbar-color {
 }
 
 div#toolbar-ident {
-  width: 120px;
+  width: 100px;
 }
 
 div.text-input-list {
