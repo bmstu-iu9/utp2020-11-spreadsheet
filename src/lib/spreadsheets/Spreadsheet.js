@@ -54,6 +54,9 @@ export default class Spreadsheet {
   }
 
   getCell(position) {
+    if (!Spreadsheet.isPositionCorrect(position)) {
+      throw new FormatError('Illegal position');
+    }
     this.initializeCell(position);
     return this.cells.get(position);
   }

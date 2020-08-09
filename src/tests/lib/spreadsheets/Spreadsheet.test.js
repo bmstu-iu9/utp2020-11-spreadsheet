@@ -161,6 +161,10 @@ describe('Spreadsheet', () => {
         ['A4', new Set(['A3'])],
       ]);
       assert.deepStrictEqual(workbook.spreadsheets[0].dependenciesOf, checkMapOut);
+      assert.throws(() => {
+        workbook.spreadsheets[0]
+          .setValueInCell('A1', valueTypes.formula, '=A08');
+      }, FormatError);
     });
   });
 });

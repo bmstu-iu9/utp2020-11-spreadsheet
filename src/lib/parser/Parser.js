@@ -213,7 +213,7 @@ export default class Parser {
     this.checkGet('$');
     const ind1 = this.parseFromTo('A', 'Z', (res, c) => res + c, '');
     this.checkGet('$');
-    const ind2 = this.parseInt();
+    const ind2 = this.parseFromTo('0', '9', (res, c) => res + c, '');
     return EW.makeAddress(ind1, ind2);
   }
 
