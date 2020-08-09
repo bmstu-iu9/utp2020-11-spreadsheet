@@ -3,6 +3,8 @@ import Database from 'better-sqlite3';
 import TokenModel from '../../../server/database/TokenModel.js';
 import DataRepo from '../../../server/database/DataRepo.js';
 import UserModel from '../../../server/database/UserModel.js';
+import logLevel from '../../../lib/logging/logLevel.js';
+import TestLogger from '../../lib/logging/TestLogger.js';
 
 export default class TestEnvironment {
   static getInstance() {
@@ -20,12 +22,13 @@ export default class TestEnvironment {
 
   constructor() {
     this.database = new Database('database.db');
-    this.dataRepo = new DataRepo(this.database);
+    const logger = new TestLogger(logLevel.debug);
+    this.dataRepo = new DataRepo(this.database, logger);
     this.userTokens = [];
   }
 
   init() {
-    this.dataRepo.createDatabase();
+    this.dataRepo.syncDatabaseStructure();
   }
 
   addUsers(n, withTokens = false) {

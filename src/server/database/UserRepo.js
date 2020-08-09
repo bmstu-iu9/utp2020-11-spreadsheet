@@ -1,21 +1,22 @@
 import UserModel from './UserModel.js';
 import DatabaseError from '../../lib/errors/DatabaseError.js';
+import AbstractRepo from './AbstractRepo.js';
 
-export default class UserRepo {
-  constructor(database) {
-    this.database = database;
+export default class UserRepo extends AbstractRepo {
+  static getTableName() {
+    return 'Users';
   }
 
   dropTable() {
     try {
-      this.database.prepare('DROP TABLE IF EXISTS Users').run();
+      this.database.prepare(`DROP TABLE IF EXISTS ${UserRepo.getTableName()}`).run();
     } catch (err) {
       throw new DatabaseError(`Error while dropping user table: ${err}`);
     }
   }
 
   createTable() {
-    const userTableSchema = `CREATE TABLE IF NOT EXISTS Users
+    const userTableSchema = `CREATE TABLE IF NOT EXISTS ${UserRepo.getTableName()}
                              (
                                  login    TEXT    NOT NULL PRIMARY KEY,
                                  password BLOB    NOT NULL,
@@ -31,7 +32,7 @@ export default class UserRepo {
 
   save(user) {
     try {
-      this.database.prepare(`INSERT INTO Users (login, password, isAdmin)
+      this.database.prepare(`INSERT INTO ${UserRepo.getTableName()} (login, password, isAdmin)
                              VALUES (?, ?, ?)
                              ON CONFLICT(login) DO UPDATE SET password = ?,
                                                               isAdmin  = ?;`)
@@ -44,7 +45,7 @@ export default class UserRepo {
   get(login) {
     try {
       const row = this.database.prepare(`SELECT login, password, isAdmin
-                              FROM Users
+                              FROM ${UserRepo.getTableName()}
                               WHERE login = ?`).get(login);
       return row ? UserModel.fromSQLtoUser(row) : undefined;
     } catch (e) {
@@ -55,7 +56,7 @@ export default class UserRepo {
   getAllUsers() {
     try {
       const rows = this.database.prepare(`SELECT login, password, isAdmin
-                                          FROM Users`).all();
+                                          FROM ${UserRepo.getTableName()}`).all();
       return UserModel.fromSQLtoUsers(rows);
     } catch (e) {
       throw new DatabaseError(`Error while get users: ${e}`);
@@ -65,7 +66,7 @@ export default class UserRepo {
   delete(login) {
     try {
       this.database.prepare(`DELETE
-                             FROM Users
+                             FROM ${UserRepo.getTableName()}
                              WHERE login = ?`)
         .run(login);
     } catch (err) {
@@ -76,7 +77,7 @@ export default class UserRepo {
   deleteAll() {
     try {
       this.database.prepare(`DELETE
-                             FROM Users`)
+                             FROM ${UserRepo.getTableName()}`)
         .run();
     } catch (err) {
       throw new DatabaseError(`Error while deleting users: ${err}`);
