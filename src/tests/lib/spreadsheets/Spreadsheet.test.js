@@ -118,25 +118,49 @@ describe('Spreadsheet', () => {
     it('should set value in cell', () => {
       const workbook = new Workbook('book');
       workbook.createSpreadsheet('list');
-      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.number, 5);
-      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=2*A1');
-      workbook.spreadsheets[0].setValueInCell('A3', valueTypes.formula, '=A1+A2');
-      workbook.spreadsheets[0].setValueInCell('A4', valueTypes.formula, '=A2-1');
-      workbook.spreadsheets[0].setValueInCell('A4', valueTypes.formula, '=A3*7');
+      const testCases = [
+        {
+          position: 'A1',
+          type: valueTypes.number,
+          value: 5,
+        },
+        {
+          position: 'A2',
+          type: valueTypes.formula,
+          value: '=2*A1',
+        },
+        {
+          position: 'A3',
+          type: valueTypes.formula,
+          value: '=A1+A2',
+        },
+        {
+          position: 'A4',
+          type: valueTypes.formula,
+          value: '=A2-1',
+        },
+        {
+          position: 'A4',
+          type: valueTypes.formula,
+          value: '=A3*7',
+        },
+      ];
+      testCases.forEach((testCase) => workbook.spreadsheets[0]
+        .setValueInCell(testCase.position, testCase.type, testCase.value));
       const checkMapIn = new Map([
         ['A1', new Set(['A2', 'A3'])],
         ['A2', new Set(['A3'])],
         ['A3', new Set(['A4'])],
         ['A4', new Set()],
       ]);
-      assert.deepStrictEqual(workbook.spreadsheets[0].treeIn, checkMapIn);
+      assert.deepStrictEqual(workbook.spreadsheets[0].dependOn, checkMapIn);
       const checkMapOut = new Map([
         ['A1', new Set()],
         ['A2', new Set(['A1'])],
         ['A3', new Set(['A1', 'A2'])],
         ['A4', new Set(['A3'])],
       ]);
-      assert.deepStrictEqual(workbook.spreadsheets[0].treeOut, checkMapOut);
+      assert.deepStrictEqual(workbook.spreadsheets[0].dependenciesOf, checkMapOut);
     });
   });
 });

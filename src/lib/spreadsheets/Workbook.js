@@ -43,11 +43,11 @@ export default class Workbook {
     if (cell.type !== valueTypes.formula) {
       return new TreeRunner(null, null, [cell.type, cell.value]).run();
     }
-    if (cell.needCalc === undefined) {
+    if (cell.needCalc === null) {
       throw new FormatError(`Сyclical calculations (in position ${position})`);
     }
     if (cell.needCalc) {
-      cell.needCalc = undefined;
+      cell.needCalc = null;
       cell.ansCalc = new Calculator(this).calculate(position, page);
       cell.needCalc = false;
     }

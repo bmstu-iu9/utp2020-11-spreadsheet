@@ -81,11 +81,36 @@ describe('Workbook', () => {
     it('should calculate formula from cell', () => {
       const workbook = new Workbook('book');
       workbook.createSpreadsheet('list');
-      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.number, 5);
-      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=2*A1');
-      workbook.spreadsheets[0].setValueInCell('A3', valueTypes.formula, '=A1+A2');
-      workbook.spreadsheets[0].setValueInCell('A4', valueTypes.formula, '=A2-1');
-      workbook.spreadsheets[0].setValueInCell('A5', valueTypes.formula, '=(1+5^(1/2))/2');
+      const testCases = [
+        {
+          position: 'A1',
+          type: valueTypes.number,
+          value: 5,
+        },
+        {
+          position: 'A2',
+          type: valueTypes.formula,
+          value: '=2*A1',
+        },
+        {
+          position: 'A3',
+          type: valueTypes.formula,
+          value: '=A1+A2',
+        },
+        {
+          position: 'A4',
+          type: valueTypes.formula,
+          value: '=A2-1',
+        },
+        {
+          position: 'A5',
+          type: valueTypes.formula,
+          value: '=(1+5^(1/2))/2',
+        },
+      ];
+      testCases.forEach((testCase) => {
+        workbook.spreadsheets[0].setValueInCell(testCase.position, testCase.type, testCase.value);
+      });
       assert.strictEqual(workbook.getProcessedValue('A1').value, 5);
       assert.strictEqual(workbook.getProcessedValue('A2').value, 10);
       assert.strictEqual(workbook.getProcessedValue('A3').value, 15);

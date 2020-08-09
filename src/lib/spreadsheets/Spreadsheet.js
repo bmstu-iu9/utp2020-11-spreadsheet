@@ -21,8 +21,8 @@ export default class Spreadsheet {
   }
 
   setCells(cells) {
-    this.treeIn = new Map();
-    this.treeOut = new Map();
+    this.dependOn = new Map();
+    this.dependenciesOf = new Map();
     if (cells instanceof Map) {
       cells.forEach((cell, position) => {
         if (!Spreadsheet.isPositionCorrect(position)) {
@@ -33,8 +33,8 @@ export default class Spreadsheet {
         }
       });
       cells.forEach((cell, position) => {
-        this.treeIn.set(position, new Set());
-        this.treeOut.set(position, new Set());
+        this.dependOn.set(position, new Set());
+        this.dependenciesOf.set(position, new Set());
       });
       this.cells = cells;
     } else {
@@ -42,16 +42,20 @@ export default class Spreadsheet {
     }
   }
 
-  getCell(position) {
-    if (Spreadsheet.isPositionCorrect(position)) {
-      if (!this.cells.has(position)) {
-        this.cells.set(position, new Cell());
-        this.treeIn.set(position, new Set());
-        this.treeOut.set(position, new Set());
-      }
-      return this.cells.get(position);
+  initializationCell(position) {
+    if (!Spreadsheet.isPositionCorrect(position)) {
+      throw new FormatError('Illegal position');
     }
-    throw new FormatError('Illegal position');
+    if (!this.cells.has(position)) {
+      this.cells.set(position, new Cell());
+      this.dependOn.set(position, new Set());
+      this.dependenciesOf.set(position, new Set());
+    }
+  }
+
+  getCell(position) {
+    this.initializationCell(position);
+    return this.cells.get(position);
   }
 
   static isPositionCorrect(position) {
@@ -64,35 +68,37 @@ export default class Spreadsheet {
     return columnRegExp.test(column);
   }
 
+  static findAddress(arr, ans) {
+    if (arr[0] === 'Address') {
+      ans.add(arr[1]);
+    }
+    arr.forEach((element) => {
+      if (Array.isArray(element)) {
+        Spreadsheet.findAddress(element, ans);
+      }
+    });
+  }
+
+  updateNeedCalc(address) {
+    if (!this.getCell(address).needCalc) {
+      this.getCell(address).needCalc = true;
+      this.dependOn.get(address).forEach((element) => this.updateNeedCalc(element));
+    }
+  }
+
   setValueInCell(position, type, value) {
     this.getCell(position).setValue(type, value);
-    this.treeOut.get(position).forEach((element) => {
-      this.treeIn.get(element).delete(position);
+    this.dependenciesOf.get(position).forEach((element) => {
+      this.dependOn.get(element).delete(position);
     });
     const parser = (type === valueTypes.formula ? new Parser(value).run() : []);
     const ans = new Set();
-    this.treeOut.set(position, ans);
-    const findAddress = (arr) => {
-      if (arr[0] === 'Address') {
-        ans.add(arr[1]);
-      }
-      arr.forEach((element) => {
-        if (Array.isArray(element)) {
-          findAddress(element);
-        }
-      });
-    };
-    findAddress(parser);
-    this.treeOut.get(position).forEach((element) => {
-      this.getCell(element);
-      this.treeIn.get(element).add(position);
+    this.dependenciesOf.set(position, ans);
+    Spreadsheet.findAddress(parser, ans);
+    this.dependenciesOf.get(position).forEach((element) => {
+      this.initializationCell(element);
+      this.dependOn.get(element).add(position);
     });
-    const updateNeedCalc = (address) => {
-      if (!this.getCell(address).needCalc) {
-        this.getCell(address).needCalc = true;
-        this.treeIn.get(address).forEach((element) => updateNeedCalc(element));
-      }
-    };
-    updateNeedCalc(position);
+    this.updateNeedCalc(position);
   }
 }
