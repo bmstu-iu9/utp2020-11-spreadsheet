@@ -15,7 +15,6 @@ export default class Server {
     app.set('port', 3000);
 
     app.set('view options', { layout: false });
-
     if (app.get('env') === 'development') {
       app.use(morgan('dev'));
     } else {

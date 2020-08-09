@@ -1,0 +1,11 @@
+div.hide {
+  display: none;
+}
+
+.show-flex {
+  display: flex;
+}
+
+.show-block {
+  display: block;
+}

@@ -1,0 +1,52 @@
+@media (min-width: 320px) {
+  div#toolbar-wrapper {
+    height: 35px;
+  }
+
+  div#toolbar-tabs {
+    display: none;
+  }
+
+  div.toolbar {
+    display: none;
+  }
+
+  div.cell-info-display {
+    width: 100vw;
+  }
+
+  div.table-wrapper {
+    height: calc(100vh - 95px);
+  }
+}
+
+@media (min-width: 720px) {
+  div#toolbar-wrapper {
+    height: 100px;
+  }
+
+  div.toolbar {
+    display: flex;
+  }
+
+  div#toolbar-tabs {
+    display: flex;
+  }
+
+  div#toolbar-tabs::after {
+    content: '';
+    position: absolute;
+    left: 400px;
+    border: 15px solid transparent;
+    border-left: 15px solid #444c5c;
+    border-top: 15px solid #444c5c;
+  }
+
+  div.cell-info-display {
+    width: calc(100vw - 400px);
+  }
+
+  div.table-wrapper {
+    height: calc(100vh - 160px);
+  }
+}

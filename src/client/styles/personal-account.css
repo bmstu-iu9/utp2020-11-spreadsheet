@@ -66,6 +66,8 @@ div#new-book-button-panel {
 div#new-book-button-panel > span {
   opacity: 0;
   color: #f89a03;
+  font-weight: 700;
+  font-size: 20px;
 }
 
 div#vertical_line {

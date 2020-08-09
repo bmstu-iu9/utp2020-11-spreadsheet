@@ -29,16 +29,10 @@ nav.header {
   font-size: 40px;
   line-height: 78px;
   color: #444;
-}
-
-nav.header div.logo {
-  position: absolute;
-  width: 250px;
-  height: 65px;
-  left: 30px;
-  top: 15px;
-  background: #444c5c;
-  border-radius: 10px;
+  background-image: url(../img/logo.png);
+  background-repeat: no-repeat;
+  background-size: 250px 65px;
+  background-position: 30px center;
 }
 
 div.content-wrapper {
@@ -50,9 +44,24 @@ div.content {
   margin-top: 100px;
 }
 
-div.row {
+.row {
   display: flex;
   flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+span.content-center {
+  text-align: center;
 }
 
 .flex-center {
@@ -62,13 +71,18 @@ div.row {
 .base-text {
   font-family: Lato, sans-serif;
   font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  color: #444;
+  font-weight: normal;
+  font-size: 13px;
+  color: #444c5c;
 }
 
 .no-click {
   pointer-events: none;
+  user-select: none;
+}
+
+div.non-bg {
+  background-color: inherit;
 }
 
 ::-webkit-scrollbar {
