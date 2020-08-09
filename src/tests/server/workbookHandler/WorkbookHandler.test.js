@@ -168,7 +168,7 @@ describe('WorkbookHandler', () => {
       ClassConverter.saveJson(testWorkbook, './');
       const id = environment.dataRepo.workbookRepo.save(workbookModel);
       const request = {
-        login: 'test1',
+        login: 'test2',
         workbookID: id,
       };
       assert.strictEqual(workbookHandler.delete(request, {}).response, 403);

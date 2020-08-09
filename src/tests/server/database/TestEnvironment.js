@@ -30,7 +30,7 @@ export default class TestEnvironment {
 
   addUsers(n, withTokens = false) {
     for (let i = 0; i < n; i += 1) {
-      const userId = i;
+      const userId = rhis.userTokens.length + i;
       const username = `test${userId}`;
       const user = new UserModel(username, '123', false);
       this.dataRepo.userRepo.save(user);

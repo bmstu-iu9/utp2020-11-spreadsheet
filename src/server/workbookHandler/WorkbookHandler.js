@@ -10,12 +10,12 @@ export default class WorkbookHandler {
     this.dataRepo = dataRepo;
   }
 
-  get(request, response) {
-    if (request.login === undefined || request.login === '') {
-      throw new FormatError('getting workbooks without login');
+  get(req, res) {
+    if (req.user === undefined) {
+      res.sendStatus(401);
     }
     try {
-      const list = this.dataRepo.workbookRepo.getByLogin(request.login);
+      const list = this.dataRepo.workbookRepo.getByLogin(req.user.login);
       const result = [];
       list.forEach((wbModel) => {
         const workbook = { id: wbModel.id };
@@ -24,72 +24,50 @@ export default class WorkbookHandler {
         workbook.sheets = reads.sheets;
         result.push(workbook);
       });
-      response.response = 200;
-      response.content = result;
-      return response;
+      res.status(200).send(result);
     } catch (error) {
-      response.response = 401;
-      return response;
+      res.sendStatus(401);
     }
   }
 
-  post(request, response) {
-    if (request.login === undefined || request.login === '') {
-      throw new FormatError('creating workbook without login');
-    } else if (request.workbook === undefined) {
-      throw new FormatError('creating workbook without workbook');
-    } else if (request.pathToWorkbooks === undefined || request.pathToWorkbooks === '') {
-      throw new FormatError('creating workbook without path');
+  post(req, res) {
+    if (req.user === undefined) {
+      res.sendStatus(401);
+    } else if (req.body === undefined || req.params === undefined) {
+      res.sendStatus(400);
     }
     try {
-      this.dataRepo.tokenRepo.getByLogin(request.login);
-    } catch (error) {
-      response.response = 401;
-      return response;
-    }
-    try {
-      ClassConverter.saveJson(request.workbook, request.pathToWorkbooks);
-      const workbookModel = new WorkbookModel(`${request.pathToWorkbooks}/${request.workbook.name}.json`, request.login);
+      ClassConverter.saveJson(req.body, req.params.pathToWorkbooks);
+      const workbookModel = new WorkbookModel(`${req.params.pathToWorkbooks}/${req.body.name}.json`, req.user.login);
       const book = ClassConverter.readObject(JsonConverter.readWorkbook(workbookModel.path));
       const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
       workbookID.lastCommit = zeroID;
       workbookID.name = book.name;
       workbookID.sheets = book.sheets;
-      response.response = 200;
-      response.content = workbookID;
-      return response;
+      res.status(200).send(workbookID);
     } catch (error) {
-      response.response = 400;
-      return response;
+      res.sendStatus(400);
     }
   }
 
-  delete(request, response) {
-    if (request.login === undefined || request.login === '') {
-      throw new FormatError('deleting workbooks without login');
-    } else if (request.workbookID === undefined) {
-      throw new FormatError('deleting workbooks without book id');
+  delete(req, res) {
+    if (req.user === undefined) {
+      res.sendStatus(401);
     }
-    try {
-      this.dataRepo.tokenRepo.getByLogin(request.login);
-    } catch (error) {
-      response.response = 401;
-      return response;
+    if (req.params === undefined || req.params.workbookID === '') {
+      res.sendStatus(404);
     }
     let workbook;
     try {
-      workbook = this.dataRepo.workbookRepo.getById(request.workbookID);
+      workbook = this.dataRepo.workbookRepo.getById(req.params.workbookID);
     } catch (error) {
-      response.response = 404;
-      return response;
+      res.sendStatus(404);
     }
-    if (request.login !== workbook.login) {
-      response.response = 403;
-      return response;
+    if (req.user.login !== workbook.login) {
+      res.sendStatus(403);
     }
-    this.dataRepo.workbookRepo.delete(request.workbookID);
+    this.dataRepo.workbookRepo.delete(req.params.workbookID);
     fs.unlinkSync(workbook.path);
-    response.response = 200;
-    return response;
+    res.sendStatus(200);
   }
 }
