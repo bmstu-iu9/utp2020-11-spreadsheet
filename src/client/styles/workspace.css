@@ -78,13 +78,17 @@ div.cell-info-display {
   align-items: center;
 }
 
-span.cell-info {
+input.cell-info {
   margin-left: 45px;
   font-family: Lato, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   color: #444c5c;
+  border: none;
+  outline: none;
+  width: calc(100% - 45px);
+  box-sizing: border-box;
 }
 
 div.toolbar {
