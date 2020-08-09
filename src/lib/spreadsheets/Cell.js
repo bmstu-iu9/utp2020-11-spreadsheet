@@ -25,6 +25,9 @@ export class Cell {
     } else if (Cell.isValueCorrect(type, value)) {
       this.type = type;
       this.value = value;
+      if (this.type === valueTypes.formula) {
+        this.needCalc = true;
+      }
     } else {
       throw new TypeError('value type does not correspond to specified cell type');
     }

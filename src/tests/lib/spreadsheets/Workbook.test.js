@@ -79,12 +79,59 @@ describe('Workbook', () => {
   });
   describe('#getProcessedValue()', () => {
     it('should calculate formula from cell', () => {
-      const cells = new Map();
-      cells.set('A1', new Cell(valueTypes.formula, '=(1+5^(1/2))/2'));
-      const spreadsheet = new Spreadsheet('table', cells);
-      const wb = new Workbook('book', [spreadsheet]);
-
-      assert.deepStrictEqual(wb.getProcessedValue('A1'), (1 + Math.sqrt(5)) / 2);
+      const workbook = new Workbook('book');
+      workbook.createSpreadsheet('list');
+      const testCases = [
+        {
+          position: 'A1',
+          type: valueTypes.number,
+          value: 5,
+        },
+        {
+          position: 'A2',
+          type: valueTypes.formula,
+          value: '=2*A1',
+        },
+        {
+          position: 'A3',
+          type: valueTypes.formula,
+          value: '=A1+A2',
+        },
+        {
+          position: 'A4',
+          type: valueTypes.formula,
+          value: '=A2-1',
+        },
+        {
+          position: 'A5',
+          type: valueTypes.formula,
+          value: '=(1+5^(1/2))/2',
+        },
+      ];
+      testCases.forEach((testCase) => {
+        workbook.spreadsheets[0].setValueInCell(testCase.position, testCase.type, testCase.value);
+      });
+      assert.strictEqual(workbook.getProcessedValue('A1').value, 5);
+      assert.strictEqual(workbook.getProcessedValue('A2').value, 10);
+      assert.strictEqual(workbook.getProcessedValue('A3').value, 15);
+      assert.strictEqual(workbook.getProcessedValue('A4').value, 9);
+      assert.strictEqual(workbook.getProcessedValue('A5').value, (1 + Math.sqrt(5)) / 2);
+    });
+    it('should make cyclical calculations', () => {
+      const workbook = new Workbook('book');
+      workbook.createSpreadsheet('list');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.formula, '=A2*A2');
+      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=2*A1');
+      workbook.spreadsheets[0].setValueInCell('A3', valueTypes.formula, '=5+A3');
+      assert.throws(() => {
+        workbook.getProcessedValue('A1');
+      }, FormatError);
+      assert.throws(() => {
+        workbook.getProcessedValue('A2');
+      }, FormatError);
+      assert.throws(() => {
+        workbook.getProcessedValue('A3');
+      }, FormatError);
     });
     it('should take value from cell', () => {
       const cells = new Map();
@@ -92,7 +139,7 @@ describe('Workbook', () => {
       const spreadsheet = new Spreadsheet('table', cells);
       const wb = new Workbook('book', [spreadsheet]);
 
-      assert.deepStrictEqual(wb.getProcessedValue('A1'), 23456);
+      assert.strictEqual(wb.getProcessedValue('A1').value, 23456);
     });
   });
 });
