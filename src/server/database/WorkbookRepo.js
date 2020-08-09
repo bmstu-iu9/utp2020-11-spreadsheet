@@ -1,21 +1,22 @@
 import WorkbookModel from './WorkbookModel.js';
 import DatabaseError from '../../lib/errors/DatabaseError.js';
+import AbstractRepo from './AbstractRepo.js';
 
-export default class WorkbookRepo {
-  constructor(database) {
-    this.database = database;
+export default class WorkbookRepo extends AbstractRepo {
+  static getTableName() {
+    return 'Books';
   }
 
   dropTable() {
     try {
-      this.database.prepare('DROP TABLE IF EXISTS Books').run();
+      this.database.prepare(`DROP TABLE IF EXISTS ${WorkbookRepo.getTableName()}`).run();
     } catch (err) {
       throw new DatabaseError(`Error while dropping user table: ${err}`);
     }
   }
 
   createTable() {
-    const workbookTableSchema = `CREATE TABLE IF NOT EXISTS Books
+    const workbookTableSchema = `CREATE TABLE IF NOT EXISTS ${WorkbookRepo.getTableName()}
                                  (
                                      id    INTEGER PRIMARY KEY,
                                      login TEXT,
@@ -33,7 +34,7 @@ export default class WorkbookRepo {
   getById(id) {
     try {
       const row = this.database.prepare(`SELECT id, login, path
-                                         FROM Books
+                                         FROM ${WorkbookRepo.getTableName()}
                                          WHERE id = ?`).get(id);
       if (row) {
         return new WorkbookModel(row.path, row.login, row.id);
@@ -47,7 +48,7 @@ export default class WorkbookRepo {
   getByLogin(login) {
     try {
       const rows = this.database.prepare(`SELECT id, login, path
-                                          FROM Books
+                                          FROM ${WorkbookRepo.getTableName()}
                                           WHERE login = ?`)
         .all(login);
       if (rows.length > 0) {
@@ -62,7 +63,7 @@ export default class WorkbookRepo {
   getAllBooks() {
     try {
       const rows = this.database.prepare(`SELECT *
-                         FROM Books`)
+                         FROM ${WorkbookRepo.getTableName()}`)
         .all();
       return WorkbookModel.fromSQLtoBooks(rows);
     } catch (err) {
@@ -73,7 +74,7 @@ export default class WorkbookRepo {
   save(book) {
     if (book.id == null) {
       try {
-        const info = this.database.prepare(`INSERT INTO Books (login, path)
+        const info = this.database.prepare(`INSERT INTO ${WorkbookRepo.getTableName()} (login, path)
                            VALUES (?, ?)`)
           .run(book.login, book.path);
         return info.lastInsertRowid;
@@ -82,7 +83,7 @@ export default class WorkbookRepo {
       }
     } else {
       try {
-        this.database.prepare(`UPDATE Books
+        this.database.prepare(`UPDATE ${WorkbookRepo.getTableName()}
                          SET path  = ?,
                              login = ?
                          WHERE id = ?`)
@@ -97,7 +98,7 @@ export default class WorkbookRepo {
   delete(id) {
     try {
       this.database.prepare(`DELETE
-                             FROM Books
+                             FROM ${WorkbookRepo.getTableName()}
                              WHERE id = ?`)
         .run(id);
     } catch (err) {
@@ -108,7 +109,7 @@ export default class WorkbookRepo {
   deleteAll() {
     try {
       this.database.prepare(`DELETE
-                             FROM Books`)
+                             FROM ${WorkbookRepo.getTableName()}`)
         .run();
     } catch (e) {
       throw new DatabaseError(`Error while deleting books: ${e}`);

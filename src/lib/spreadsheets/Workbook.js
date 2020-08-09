@@ -2,6 +2,7 @@ import Spreadsheet from './Spreadsheet.js';
 import Calculator from '../calculator/Calculator.js';
 import { valueTypes } from './Cell.js';
 import FormatError from '../errors/FormatError.js';
+import TreeRunner from '../calculator/TreeRunner.js';
 
 export default class Workbook {
   constructor(name, spreadsheets = []) {
@@ -37,10 +38,19 @@ export default class Workbook {
     this.spreadsheets = spreadsheets;
   }
 
-  getProcessedValue(cell, page = 0) {
-    if (this.spreadsheets[page].getCell(cell).type === valueTypes.formula) {
-      return new Calculator(this).calculate(cell, page).value;
+  getProcessedValue(position, page = 0) {
+    const cell = this.spreadsheets[page].getCell(position);
+    if (cell.type !== valueTypes.formula) {
+      return new TreeRunner(null, null, [cell.type, cell.value]).run();
     }
-    return this.spreadsheets[page].getCell(cell).value;
+    if (cell.needCalc === null) {
+      throw new FormatError(`Сyclical calculations (in position ${position})`);
+    }
+    if (cell.needCalc) {
+      cell.needCalc = null;
+      cell.ansCalc = new Calculator(this).calculate(position, page);
+      cell.needCalc = false;
+    }
+    return cell.ansCalc;
   }
 }
