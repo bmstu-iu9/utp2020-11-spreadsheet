@@ -42,7 +42,7 @@ export default class Spreadsheet {
     }
   }
 
-  initializationCell(position) {
+  initializeCell(position) {
     if (!Spreadsheet.isPositionCorrect(position)) {
       throw new FormatError('Illegal position');
     }
@@ -54,7 +54,7 @@ export default class Spreadsheet {
   }
 
   getCell(position) {
-    this.initializationCell(position);
+    this.initializeCell(position);
     return this.cells.get(position);
   }
 
@@ -96,7 +96,7 @@ export default class Spreadsheet {
     this.dependenciesOf.set(position, ans);
     Spreadsheet.findAddress(parser, ans);
     this.dependenciesOf.get(position).forEach((element) => {
-      this.initializationCell(element);
+      this.initializeCell(element);
       this.dependOn.get(element).add(position);
     });
     this.updateNeedCalc(position);
