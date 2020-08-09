@@ -131,10 +131,10 @@ describe('Spreadsheet', () => {
       ]);
       assert.deepStrictEqual(workbook.spreadsheets[0].treeIn, checkMapIn);
       const checkMapOut = new Map([
-        ['A1', []],
-        ['A2', ['A1']],
-        ['A3', ['A1', 'A2']],
-        ['A4', ['A3']],
+        ['A1', new Set()],
+        ['A2', new Set(['A1'])],
+        ['A3', new Set(['A1', 'A2'])],
+        ['A4', new Set(['A3'])],
       ]);
       assert.deepStrictEqual(workbook.spreadsheets[0].treeOut, checkMapOut);
     });

@@ -34,7 +34,7 @@ export default class Spreadsheet {
       });
       cells.forEach((cell, position) => {
         this.treeIn.set(position, new Set());
-        this.treeOut.set(position, []);
+        this.treeOut.set(position, new Set());
       });
       this.cells = cells;
     } else {
@@ -47,7 +47,7 @@ export default class Spreadsheet {
       if (!this.cells.has(position)) {
         this.cells.set(position, new Cell());
         this.treeIn.set(position, new Set());
-        this.treeOut.set(position, []);
+        this.treeOut.set(position, new Set());
       }
       return this.cells.get(position);
     }
@@ -70,11 +70,11 @@ export default class Spreadsheet {
       this.treeIn.get(element).delete(position);
     });
     const parser = (type === valueTypes.formula ? new Parser(value).run() : []);
-    const ans = [];
+    const ans = new Set();
     this.treeOut.set(position, ans);
     const findAddress = (arr) => {
       if (arr[0] === 'Address') {
-        ans.push(arr[1]);
+        ans.add(arr[1]);
       }
       arr.forEach((element) => {
         if (Array.isArray(element)) {
