@@ -93,7 +93,7 @@ const libFunc = new Map([
     return new BooleanType(res1.notEqual(res2));
   }],
 
-  ['И', (treeRunner) => {
+  ['_И', (treeRunner) => {
     let pos = 1;
     let res = new BooleanType(true);
     while (res.value && pos < treeRunner.tree.length) {
@@ -106,7 +106,7 @@ const libFunc = new Map([
     return new BooleanType(res.value);
   }],
 
-  ['ИЛИ', (treeRunner) => {
+  ['_ИЛИ', (treeRunner) => {
     let pos = 1;
     let res = new BooleanType(false);
     while (!res.value && pos < treeRunner.tree.length) {
@@ -119,7 +119,7 @@ const libFunc = new Map([
     return new BooleanType(res.value);
   }],
 
-  ['ЕСЛИ', (treeRunner) => {
+  ['_ЕСЛИ', (treeRunner) => {
     if (treeRunner.tree.length - 1 !== 3) {
       treeRunner.constructor.makeFormatError('wrong number arguments in ЕСЛИ');
     }

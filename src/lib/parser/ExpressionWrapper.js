@@ -72,11 +72,11 @@ export default class ExpressionWrapper {
   }
 
   static makeFunc(func) {
-    return [func];
+    return [`_${func}`];
   }
 
   static makeFuncWithArgs(func, ...args) {
-    return [func, ...args];
+    return [`_${func}`, ...args];
   }
 
   static addArgFunc(func, arg) {
