@@ -1,9 +1,8 @@
 import fs from 'fs';
 import WorkbookModel from '../database/WorkbookModel.js';
-import FormatError from '../../lib/errors/FormatError.js';
 import ClassConverter from '../../lib/saveWorkbook/ClassConverter.js';
 import JsonConverter from '../../lib/readWorkbook/JsonConverter.js';
-import { zeroID } from '../synchronization/synchronizer.js';
+import { zeroID } from '../synchronization/Synchronizer.js';
 
 export default class WorkbookHandler {
   constructor(dataRepo) {
@@ -11,6 +10,7 @@ export default class WorkbookHandler {
   }
 
   get(req, res) {
+    console.log('hi');
     if (req.user === undefined) {
       res.sendStatus(401);
     }

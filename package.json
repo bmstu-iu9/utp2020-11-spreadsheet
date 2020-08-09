@@ -43,6 +43,7 @@
     "sinon": "^9.0.2",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
+    "supertest": "^4.0.2",
     "util.promisify": "^1.0.1"
   }
 }
