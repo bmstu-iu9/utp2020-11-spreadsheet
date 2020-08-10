@@ -1,6 +1,5 @@
 const cells = document.querySelectorAll('#table td:not(.column-header):not(.row-header) input');
 const table = document.getElementById('table');
-const tableHeight = table.children[0].children.length - 1;
 const tableWidth = table.children[0].children[0].children.length - 1;
 let selectedCellID;
 let isOnMouseDown = false;
@@ -30,8 +29,10 @@ cells.forEach((cell) => {
     }
 
     if (isSelection) {
-      for (let i = selectionStart[0]; i <= selectionEnd[0]; i += 1) {
-        for (let j = selectionStart[1]; j <= selectionEnd[1]; j += 1) {
+      for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+        i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+        for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+          j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
           cells[j * tableWidth + i].classList.remove('selected');
         }
       }
@@ -49,33 +50,49 @@ cells.forEach((cell) => {
     }
     isOnMouseDown = false;
   });
-  cell.addEventListener('mouseover', (e) => {
+  cell.addEventListener('mouseover', () => {
     if (isOnMouseDown) {
       const newSelectionEnd = getCellXY(cell);
-      if (newSelectionEnd[0] > selectionEnd[0]) {
-        for (let i = selectionStart[1]; i <= newSelectionEnd[1]; i += 1) {
-          for (let j = selectionEnd[0]; j <= newSelectionEnd[0]; j += 1) {
+      if (Math.abs(newSelectionEnd[0] - selectionStart[0])
+          > Math.abs(selectionEnd[0] - selectionStart[0])) {
+        for (let i = Math.min(selectionStart[1], newSelectionEnd[1]);
+          i <= Math.max(selectionStart[1], newSelectionEnd[1]); i += 1) {
+          for (let j = Math.min(selectionEnd[0], newSelectionEnd[0]);
+            j <= Math.max(selectionEnd[0], newSelectionEnd[0]); j += 1) {
             cells[i * tableWidth + j].classList.add('selected');
           }
         }
       }
-      if (newSelectionEnd[1] > selectionEnd[1]) {
-        for (let i = selectionStart[0]; i <= newSelectionEnd[0]; i += 1) {
-          for (let j = selectionEnd[1]; j <= newSelectionEnd[1]; j += 1) {
+      if (Math.abs(newSelectionEnd[1] - selectionStart[1])
+          > Math.abs(selectionEnd[1] - selectionStart[1])) {
+        for (let i = Math.min(selectionStart[0], newSelectionEnd[0]);
+          i <= Math.max(selectionStart[0], newSelectionEnd[0]); i += 1) {
+          for (let j = Math.min(selectionEnd[1], newSelectionEnd[1]);
+            j <= Math.max(selectionEnd[1], newSelectionEnd[1]); j += 1) {
             cells[j * tableWidth + i].classList.add('selected');
           }
         }
       }
-      if (newSelectionEnd[0] < selectionEnd[0]) {
-        for (let i = selectionStart[1]; i <= selectionEnd[1]; i += 1) {
-          for (let j = newSelectionEnd[0] + 1; j <= selectionEnd[0]; j += 1) {
+      if (Math.abs(newSelectionEnd[0] - selectionStart[0])
+          < Math.abs(selectionEnd[0] - selectionStart[0])) {
+        for (let i = Math.min(selectionStart[1], selectionEnd[1]);
+          i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
+          for (let j = Math.min(newSelectionEnd[0], selectionEnd[0])
+              + (selectionEnd[0] > selectionStart[0] ? 1 : 0);
+            j <= Math.max(newSelectionEnd[0], selectionEnd[0])
+               + (selectionEnd[0] > selectionStart[0] ? 0 : -1); j += 1) {
             cells[i * tableWidth + j].classList.remove('selected');
           }
         }
       }
-      if (newSelectionEnd[1] < selectionEnd[1]) {
-        for (let i = selectionStart[0]; i <= selectionEnd[0]; i += 1) {
-          for (let j = newSelectionEnd[1] + 1; j <= selectionEnd[1]; j += 1) {
+      if (Math.abs(newSelectionEnd[1] - selectionStart[1])
+          < Math.abs(selectionEnd[1] - selectionStart[1])) {
+        for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+          i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+          for (let j = Math.min(newSelectionEnd[1], selectionEnd[1])
+              + (selectionEnd[1] > selectionStart[1] ? 1 : 0);
+            j <= Math.max(newSelectionEnd[1], selectionEnd[1])
+               + (selectionEnd[1] > selectionStart[1] ? 0 : -1); j += 1) {
             cells[j * tableWidth + i].classList.remove('selected');
           }
         }
@@ -98,5 +115,4 @@ cells.forEach((cell) => {
 
     cell.classList.add('cursor-text');
   });
-})
-;
+});
