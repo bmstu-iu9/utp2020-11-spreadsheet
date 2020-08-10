@@ -33,8 +33,8 @@ export default class TestEnvironment {
 
   addUsers(n, withTokens = false) {
     for (let i = 0; i < n; i += 1) {
-      const userId = this.userTokens + i;
-      const username = `test${userId.toString()}`;
+      const userId = this.userTokens.length + i;
+      const username = `test${userId}`;
       const user = new UserModel(username, '123', false);
       this.dataRepo.userRepo.save(user);
       let token = null;
