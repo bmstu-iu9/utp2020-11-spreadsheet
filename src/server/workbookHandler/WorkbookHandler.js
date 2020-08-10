@@ -11,23 +11,23 @@ export default class WorkbookHandler {
 
   get(req, res) {
     if (req.user === undefined) {
-      console.log(req);
       return res.sendStatus(401);
     }
+    let list;
     try {
-      const list = this.dataRepo.workbookRepo.getByLogin(req.user.login);
-      const result = [];
-      list.forEach((wbModel) => {
-        const workbook = { id: wbModel.id };
-        const reads = ClassConverter.readObject(JsonConverter.readWorkbook(wbModel.path));
-        workbook.name = reads.name;
-        workbook.sheets = reads.sheets;
-        result.push(workbook);
-      });
-      return res.status(200).send(result);
+      list = this.dataRepo.workbookRepo.getByLogin(req.user.login);
     } catch (error) {
-      return res.sendStatus(401);
+      return res.sendStatus(404);
     }
+    const result = [];
+    list.forEach((wbModel) => {
+      const workbook = { id: wbModel.id };
+      const reads = ClassConverter.readObject(JsonConverter.readWorkbook(wbModel.path));
+      workbook.name = reads.name;
+      workbook.sheets = reads.sheets;
+      result.push(workbook);
+    });
+    return res.status(200).send(result);
   }
 
   post(req, res) {

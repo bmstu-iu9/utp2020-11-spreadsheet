@@ -53,24 +53,21 @@ describe('WorkbookHandler', () => {
       mock({
         './': {},
       });
-      app.get('/workbook/get', workbookHandler.get);
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
       const matcher = new HeaderMatcher('authorization', 'Token ');
       const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
       const authorizer = new Authorizer(authenticator);
-      const req = {
-        headers: {
-          Authorization: `Token ${token.uuid}`,
-        },
-      };
       app.use(authorizer.getMiddleware());
+      app.get('/workbook/get', (req, res) => {
+        workbookHandler.get(req, res);
+      });
       const workbookModel = new WorkbookModel('./test.json', username);
       ClassConverter.saveJson(testWorkbook, './');
       environment.dataRepo.workbookRepo.save(workbookModel);
       request(app)
         .get('/workbook/get')
-        .send(req)
+        .set('Authorization', `Token ${token.uuid}`)
         .expect(200, done);
       // assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).response, 200);
       // assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).content.length, 1);
