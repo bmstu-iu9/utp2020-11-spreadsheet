@@ -8,6 +8,9 @@ import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import FormatError from '../../../lib/errors/FormatError.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import UserModel from '../../../server/database/UserModel.js';
+import Authorizer from '../../../server/authorization/Authorizer.js';
+import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
+import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 
 const testWorkbook = {
   name: 'test',
@@ -33,11 +36,11 @@ const app = express();
 describe('WorkbookHandler', () => {
   let environment;
   let workbookHandler;
+
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
     workbookHandler = new WorkbookHandler(environment.dataRepo);
     environment.init();
-    app.get('/', workbookHandler.get);
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
@@ -46,35 +49,46 @@ describe('WorkbookHandler', () => {
     app.delete({});
   });
   describe('#get()', () => {
-    it('should give response 200 and array of books', () => {
+    it('should give response 200 and array of books', (done) => {
       mock({
         './': {},
       });
+      app.get('/workbook/get', workbookHandler.get);
       environment.addUsers(1, true);
-      const workbookModel = new WorkbookModel('./test.json', 'test0');
+      const { username, token } = environment.userTokens[0];
+      const matcher = new HeaderMatcher('authorization', 'Token ');
+      const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
+      const authorizer = new Authorizer(authenticator);
+      const req = {
+        headers: {
+          Authorization: `Token ${token.uuid}`,
+        },
+      };
+      app.use(authorizer.getMiddleware());
+      const workbookModel = new WorkbookModel('./test.json', username);
       ClassConverter.saveJson(testWorkbook, './');
       environment.dataRepo.workbookRepo.save(workbookModel);
       request(app)
-        .get('/')
-        .send(new UserModel('test0', '123', false))
-        .expect(228, [testWorkbook]);
+        .get('/workbook/get')
+        .send(req)
+        .expect(200, done);
       // assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).response, 200);
       // assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).content.length, 1);
       mock.restore();
     });
-    it('should give response 401 for no books', () => {
-      request(app)
-        .get('/')
-        .send(new UserModel('vabalabadabdab', '123', false))
-        .expect(401);
-    });
-    it('should give response 401 for getting books without login', () => {
-      let userModel;
-      request(app)
-        .get('/')
-        .send(userModel)
-        .expect(401);
-    });
+    // it('should give response 401 for no books', (done) => {
+    //   request(app)
+    //     .get('/workbook/get')
+    //     .send(new UserModel('vabalabadabdab', '123', false))
+    //     .expect(401, done);
+    // });
+    // it('should give response 401 for getting books without login', (done) => {
+    //   let userModel;
+    //   request(app)
+    //     .get('/workbook/get')
+    //     .send(userModel)
+    //     .expect(401, done);
+    // });
   });
   // describe('#post()', () => {
   //   it('should throw an error for creating book without login', () => {

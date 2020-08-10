@@ -10,9 +10,9 @@ export default class WorkbookHandler {
   }
 
   get(req, res) {
-    console.log('hi');
     if (req.user === undefined) {
-      res.sendStatus(401);
+      console.log(req);
+      return res.sendStatus(401);
     }
     try {
       const list = this.dataRepo.workbookRepo.getByLogin(req.user.login);
@@ -24,9 +24,9 @@ export default class WorkbookHandler {
         workbook.sheets = reads.sheets;
         result.push(workbook);
       });
-      res.status(200).send(result);
+      return res.status(200).send(result);
     } catch (error) {
-      res.sendStatus(401);
+      return res.sendStatus(401);
     }
   }
 
