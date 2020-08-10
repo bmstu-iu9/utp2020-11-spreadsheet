@@ -334,6 +334,7 @@ input.cell {
   box-sizing: border-box;
   outline: none;
   z-index: 0;
+  cursor: cell;
 }
 
 #table td.column-header, #table td.row-header {
@@ -357,11 +358,11 @@ input.cell {
   bottom: 2px;
 }
 
-#table td:hover {
+#table td input:hover {
   border: 2px solid #999;
 }
 
-#table td.selected {
+#table td input.selected {
   border: 2px solid #fca311;
 }
 
