@@ -19,6 +19,16 @@ cells.forEach((cell) => {
   cell.addEventListener('mousedown', (e) => {
     e.preventDefault();
 
+    const cellID = Array.from(cells).indexOf(cell);
+
+    if (cellID !== selectedCellID) {
+      if (selectedCellID !== undefined) {
+        cells[selectedCellID].classList.remove('selected');
+        cells[selectedCellID].classList.remove('cursor-text');
+        cells[selectedCellID].blur();
+      }
+    }
+
     if (isSelection) {
       for (let i = selectionStart[0]; i <= selectionEnd[0]; i += 1) {
         for (let j = selectionStart[1]; j <= selectionEnd[1]; j += 1) {
@@ -79,15 +89,8 @@ cells.forEach((cell) => {
 
     const cellID = Array.from(cells).indexOf(cell);
 
-    if (cellID !== selectedCellID) {
-      if (selectedCellID !== undefined) {
-        cells[selectedCellID].classList.remove('selected');
-        cells[selectedCellID].classList.remove('cursor-text');
-        cells[selectedCellID].blur();
-      }
-      cells[cellID].classList.add('selected');
-      selectedCellID = cellID;
-    }
+    cells[cellID].classList.add('selected');
+    selectedCellID = cellID;
   });
   cell.addEventListener('dblclick', (e) => {
     e.preventDefault();

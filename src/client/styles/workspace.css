@@ -330,6 +330,7 @@ input.cell {
   height: 25px;
   border: 0;
   padding: 0 5px;
+  text-align: center;
   background-color: #eee;
   box-sizing: border-box;
   outline: none;
@@ -351,18 +352,7 @@ input.cell {
   user-select: none;
 }
 
-.triangle {
-  position: absolute;
-  border: 10px solid transparent;
-  border-right: 10px solid #999;
-  border-bottom: 10px solid #999;
-  width: 0;
-  height: 0;
-  right: 2px;
-  bottom: 2px;
-}
-
-#table td input:hover {
+input.cell:hover {
   border: 2px solid #999;
 }
 
@@ -386,6 +376,17 @@ input.cell {
 #table td.column-header:hover, #table td.row-header:hover {
   border: 1px solid #d9d9d9;
   background-color: #fca311;
+}
+
+.triangle {
+  position: absolute;
+  border: 10px solid transparent;
+  border-right: 10px solid #999;
+  border-bottom: 10px solid #999;
+  width: 0;
+  height: 0;
+  right: 2px;
+  bottom: 2px;
 }
 
 .vertical {
