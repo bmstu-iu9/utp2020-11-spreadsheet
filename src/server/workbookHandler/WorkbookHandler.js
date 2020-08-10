@@ -32,9 +32,6 @@ export default class WorkbookHandler {
 
   post(req, res) {
     if (req.user === undefined) {
-      console.log(req.params.pathToWorkbooks);
-      //console.log(req);
-      console.log(req.body);
       return res.sendStatus(401);
     } else if (req.body === undefined || req.params === undefined) {
       return res.sendStatus(400);
