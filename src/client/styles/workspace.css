@@ -347,6 +347,10 @@ input.cell {
   cursor: pointer;
 }
 
+#table td.column-header span, #table td.row-header {
+  user-select: none;
+}
+
 .triangle {
   position: absolute;
   border: 10px solid transparent;
