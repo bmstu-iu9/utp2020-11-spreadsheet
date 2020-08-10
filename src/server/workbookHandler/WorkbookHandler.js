@@ -32,9 +32,12 @@ export default class WorkbookHandler {
 
   post(req, res) {
     if (req.user === undefined) {
-      res.sendStatus(401);
+      console.log(req.params.pathToWorkbooks);
+      //console.log(req);
+      console.log(req.body);
+      return res.sendStatus(401);
     } else if (req.body === undefined || req.params === undefined) {
-      res.sendStatus(400);
+      return res.sendStatus(400);
     }
     try {
       ClassConverter.saveJson(req.body, req.params.pathToWorkbooks);
@@ -44,30 +47,30 @@ export default class WorkbookHandler {
       workbookID.lastCommit = zeroID;
       workbookID.name = book.name;
       workbookID.sheets = book.sheets;
-      res.status(200).send(workbookID);
+      return res.status(200).send(workbookID);
     } catch (error) {
-      res.sendStatus(400);
+      return res.sendStatus(400);
     }
   }
 
   delete(req, res) {
     if (req.user === undefined) {
-      res.sendStatus(401);
+      return res.sendStatus(401);
     }
     if (req.params === undefined || req.params.workbookID === '') {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
     let workbook;
     try {
       workbook = this.dataRepo.workbookRepo.getById(req.params.workbookID);
     } catch (error) {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
     if (req.user.login !== workbook.login) {
-      res.sendStatus(403);
+      return res.sendStatus(403);
     }
     this.dataRepo.workbookRepo.delete(req.params.workbookID);
     fs.unlinkSync(workbook.path);
-    res.sendStatus(200);
+    return res.sendStatus(200);
   }
 }

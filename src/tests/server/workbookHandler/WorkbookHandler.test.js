@@ -36,11 +36,18 @@ const app = express();
 describe('WorkbookHandler', () => {
   let environment;
   let workbookHandler;
+  let matcher;
+  let authenticator;
+  let authorizer;
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
     workbookHandler = new WorkbookHandler(environment.dataRepo);
     environment.init();
+    matcher = new HeaderMatcher('authorization', 'Token ');
+    authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
+    authorizer = new Authorizer(authenticator);
+    app.use(authorizer.getMiddleware());
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
@@ -55,10 +62,6 @@ describe('WorkbookHandler', () => {
       });
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
-      const matcher = new HeaderMatcher('authorization', 'Token ');
-      const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
-      const authorizer = new Authorizer(authenticator);
-      app.use(authorizer.getMiddleware());
       app.get('/workbook/get', (req, res) => {
         workbookHandler.get(req, res);
       });
@@ -69,104 +72,108 @@ describe('WorkbookHandler', () => {
         .get('/workbook/get')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(200, done);
-      // assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).response, 200);
-      // assert.strictEqual(workbookHandler.get({ login: 'test0' }, {}).content.length, 1);
       mock.restore();
     });
-    // it('should give response 401 for no books', (done) => {
-    //   request(app)
-    //     .get('/workbook/get')
-    //     .send(new UserModel('vabalabadabdab', '123', false))
-    //     .expect(401, done);
-    // });
-    // it('should give response 401 for getting books without login', (done) => {
-    //   let userModel;
-    //   request(app)
-    //     .get('/workbook/get')
-    //     .send(userModel)
-    //     .expect(401, done);
-    // });
+    it('should give response 401 for no books', (done) => {
+      environment.addUsers(1, true);
+      const { username, token } = environment.userTokens[0];
+      app.get('/workbook/get', (req, res) => {
+        workbookHandler.get(req, res);
+      });
+      request(app)
+        .get('/workbook/get')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(401, done);
+    });
+    it('should give response 401 for getting books without login', (done) => {
+      app.get('/workbook/get', (req, res) => {
+        workbookHandler.get(req, res);
+      });
+      request(app)
+        .get('/workbook/get')
+        .expect(401, done);
+    });
   });
   // describe('#post()', () => {
-  //   it('should throw an error for creating book without login', () => {
-  //     assert.throws(() => {
-  //       const request = {
-  //         login: '',
-  //         workbook: 'someWorkbook',
-  //         pathToWorkbooks: 'somePath',
-  //       };
-  //       workbookHandler.post(request, {});
-  //     }, FormatError);
-  //   });
-  //   it('should throw an error for creating book without book', () => {
-  //     assert.throws(() => {
-  //       let book;
-  //       const request = {
-  //         login: 'alexis',
-  //         workbook: book,
-  //         pathToWorkbooks: 'somePath',
-  //       };
-  //       workbookHandler.post(request, {});
-  //     }, FormatError);
-  //   });
-  //   it('should throw an error for creating book without path', () => {
-  //     assert.throws(() => {
-  //       let path;
-  //       const request = {
-  //         login: 'alexis',
-  //         workbook: 'someWorkbook',
-  //         pathToWorkbooks: path,
-  //       };
-  //       workbookHandler.post(request, {});
-  //     }, FormatError);
-  //   });
-  //   it('should give response 401 for unauthorized user', () => {
-  //     environment.addUsers(1, false);
-  //     const request = {
-  //       login: 'test0',
-  //       workbook: 'someWorkbook',
-  //       pathToWorkbooks: 'somePath',
-  //     };
-  //     assert.strictEqual(workbookHandler.post(request, {}).response, 401);
-  //   });
-  //   it('should give response 200 and object', () => {
-  //     mock({
-  //       './': {},
+  //   it('should give response 401 for creating book without user', (done) => {
+  //     app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+  //       workbookHandler.post(req, res);
   //     });
-  //     environment.addUsers(1, true);
-  //     const request = {
-  //       login: 'test0',
-  //       workbook: testWorkbook,
-  //       pathToWorkbooks: '.',
-  //     };
-  //     const result = workbookHandler.post(request, {});
-  //     assert.strictEqual(result.response, 200);
-  //     assert.strictEqual(typeof result.content, 'object');
-  //     mock.restore();
+  //     request(app)
+  //       .post('/workbook/post/.')
+  //       //.set('body', testWorkbook)
+  //       .set(testWorkbook)
+  //       .expect(401, done);
   //   });
-  //   it('should give response 400 for incorrect request', () => {
-  //     mock({
-  //       './': {},
-  //     });
-  //     environment.addUsers(1, true);
-  //     const request = {
-  //       login: 'test0',
-  //       workbook: testWorkbook,
-  //       pathToWorkbooks: './',
-  //     };
-  //     assert.strictEqual(workbookHandler.post(request, {}).response, 400);
-  //     mock.restore();
-  //   });
-  // });
-  // describe('#delete()', () => {
-  //   it('should give response 401 for unauthorized user', () => {
-  //     environment.addUsers(1);
-  //     const request = {
-  //       login: 'test0',
-  //       workbookID: 0,
-  //     };
-  //     assert.strictEqual(workbookHandler.delete(request, {}).response, 401);
-  //   });
+    // it('should throw an error for creating book without book', () => {
+    //   assert.throws(() => {
+    //     let book;
+    //     const request = {
+    //       login: 'alexis',
+    //       workbook: book,
+    //       pathToWorkbooks: 'somePath',
+    //     };
+    //     workbookHandler.post(request, {});
+    //   }, FormatError);
+    // });
+    // it('should throw an error for creating book without path', () => {
+    //   assert.throws(() => {
+    //     let path;
+    //     const request = {
+    //       login: 'alexis',
+    //       workbook: 'someWorkbook',
+    //       pathToWorkbooks: path,
+    //     };
+    //     workbookHandler.post(request, {});
+    //   }, FormatError);
+    // });
+    // it('should give response 401 for unauthorized user', () => {
+    //   environment.addUsers(1, false);
+    //   const request = {
+    //     login: 'test0',
+    //     workbook: 'someWorkbook',
+    //     pathToWorkbooks: 'somePath',
+    //   };
+    //   assert.strictEqual(workbookHandler.post(request, {}).response, 401);
+    // });
+    // it('should give response 200 and object', () => {
+    //   mock({
+    //     './': {},
+    //   });
+    //   environment.addUsers(1, true);
+    //   const request = {
+    //     login: 'test0',
+    //     workbook: testWorkbook,
+    //     pathToWorkbooks: '.',
+    //   };
+    //   const result = workbookHandler.post(request, {});
+    //   assert.strictEqual(result.response, 200);
+    //   assert.strictEqual(typeof result.content, 'object');
+    //   mock.restore();
+    // });
+    // it('should give response 400 for incorrect request', () => {
+    //   mock({
+    //     './': {},
+    //   });
+    //   environment.addUsers(1, true);
+    //   const request = {
+    //     login: 'test0',
+    //     workbook: testWorkbook,
+    //     pathToWorkbooks: './',
+    //   };
+    //   assert.strictEqual(workbookHandler.post(request, {}).response, 400);
+    //   mock.restore();
+    // });
+  //});
+  describe('#delete()', () => {
+    it('should give response 401 for unauthorized user', (done) => {
+      app.delete('/workbook/delete/:workbookID', (req, res) => {
+        workbookHandler.delete(req, res);
+      });
+      request(app)
+        .delete('/workbook/delete/123')
+        .expect(401, done);
+    });
   //   it('should give response 404 for unfound book', () => {
   //     environment.addUsers(1, true);
   //     const request = {
@@ -205,5 +212,5 @@ describe('WorkbookHandler', () => {
   //     assert.strictEqual(workbookHandler.delete(request, {}).response, 200);
   //     mock.restore();
   //   });
-  // });
+  });
 });
