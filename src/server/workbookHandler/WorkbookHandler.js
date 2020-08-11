@@ -33,7 +33,8 @@ export default class WorkbookHandler {
   post(req, res) {
     if (req.user === undefined) {
       return res.sendStatus(401);
-    } else if (req.body === undefined || req.params === undefined) {
+    }
+    if (req.body === undefined || req.params === undefined) {
       return res.sendStatus(400);
     }
     try {
