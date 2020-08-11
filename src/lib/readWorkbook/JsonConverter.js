@@ -6,7 +6,7 @@ import Workbook from '../spreadsheets/Workbook.js';
 export default class JsonConverter {
   static readWorkbook(pathToWorkbook) {
     const file = JSON.parse(fs.readFileSync(pathToWorkbook));
-    const workbook = new Workbook(file.name, this.readSpreadsheets(file.sheets));
+    const workbook = new Workbook(file.name, this.readSpreadsheets(file.spreadsheets));
     return workbook;
   }
 

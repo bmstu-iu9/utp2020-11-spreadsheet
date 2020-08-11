@@ -21,7 +21,11 @@ export default class ClassConverter {
         name: spreadsheet.name,
       };
       const cells = {};
-      spreadsheet.cells.forEach((cell, position) => {
+      let obj = spreadsheet.cells;
+      if (!(obj instanceof Map)) {
+        obj = new Map(Object.entries(spreadsheet.cells));
+      }
+      obj.forEach((cell, position) => {
         cells[position] = {
           color: cell.color,
           type: cell.type,
@@ -31,7 +35,7 @@ export default class ClassConverter {
       sheet.cells = cells;
       sheets.push(sheet);
     });
-    jsonWorkbook.sheets = sheets;
+    jsonWorkbook.spreadsheets = sheets;
     return jsonWorkbook;
   }
 }
