@@ -368,6 +368,10 @@ input.cell:hover {
   border: 1px solid #fca311;
 }
 
+#table td input.selected:hover {
+  background-color: #d9d9d9;
+}
+
 #table td.row-header {
   min-width: 70px;
 }
@@ -383,7 +387,7 @@ input.cell:hover {
 
 #table td.column-header:hover, #table td.row-header:hover {
   border: 1px solid #d9d9d9;
-  background-color: #fca311;
+  background-color: #f89a03;
 }
 
 .triangle {
