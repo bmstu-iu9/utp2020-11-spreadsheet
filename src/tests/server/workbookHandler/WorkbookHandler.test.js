@@ -3,6 +3,7 @@ import request from 'supertest';
 import fs from 'fs';
 import WorkbookHandler from '../../../server/workbookHandler/WorkbookHandler.js';
 import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
+import JsonConverter from '../../../lib/readWorkbook/JsonConverter.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
@@ -88,77 +89,44 @@ describe('WorkbookHandler', () => {
         .expect(401, done);
     });
   });
-  // describe('#post()', () => {
-  //   it('should give response 401 for creating book without user', (done) => {
-  //     app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
-  //       workbookHandler.post(req, res);
-  //     });
-  //     request(app)
-  //       .post('/workbook/post/.')
-  //       //.set('body', testWorkbook)
-  //       .set(testWorkbook)
-  //       .expect(401, done);
-  //   });
-  // it('should throw an error for creating book without book', () => {
-  //   assert.throws(() => {
-  //     let book;
-  //     const request = {
-  //       login: 'alexis',
-  //       workbook: book,
-  //       pathToWorkbooks: 'somePath',
-  //     };
-  //     workbookHandler.post(request, {});
-  //   }, FormatError);
-  // });
-  // it('should throw an error for creating book without path', () => {
-  //   assert.throws(() => {
-  //     let path;
-  //     const request = {
-  //       login: 'alexis',
-  //       workbook: 'someWorkbook',
-  //       pathToWorkbooks: path,
-  //     };
-  //     workbookHandler.post(request, {});
-  //   }, FormatError);
-  // });
-  // it('should give response 401 for unauthorized user', () => {
-  //   environment.addUsers(1, false);
-  //   const request = {
-  //     login: 'test0',
-  //     workbook: 'someWorkbook',
-  //     pathToWorkbooks: 'somePath',
-  //   };
-  //   assert.strictEqual(workbookHandler.post(request, {}).response, 401);
-  // });
-  // it('should give response 200 and object', () => {
-  //   mock({
-  //     './': {},
-  //   });
-  //   environment.addUsers(1, true);
-  //   const request = {
-  //     login: 'test0',
-  //     workbook: testWorkbook,
-  //     pathToWorkbooks: '.',
-  //   };
-  //   const result = workbookHandler.post(request, {});
-  //   assert.strictEqual(result.response, 200);
-  //   assert.strictEqual(typeof result.content, 'object');
-  //   mock.restore();
-  // });
-  // it('should give response 400 for incorrect request', () => {
-  //   mock({
-  //     './': {},
-  //   });
-  //   environment.addUsers(1, true);
-  //   const request = {
-  //     login: 'test0',
-  //     workbook: testWorkbook,
-  //     pathToWorkbooks: './',
-  //   };
-  //   assert.strictEqual(workbookHandler.post(request, {}).response, 400);
-  //   mock.restore();
-  // });
-  // });
+  describe('#post()', () => {
+    it('should give response 401 for creating book without user', (done) => {
+      app.use(express.json());
+      app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+        workbookHandler.post(req, res);
+      });
+      const obj = ClassConverter.readObject(JsonConverter.readWorkbook('test.json'));
+      request(app)
+        .post('/workbook/post/.')
+        .send(obj)
+        .expect(401, done);
+    });
+    it('should give response 400 for creating book without book', (done) => {
+      environment.addUsers(1, true);
+      const { token } = environment.userTokens[0];
+      app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+        workbookHandler.post(req, res);
+      });
+      request(app)
+        .post('/workbook/post/.')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(400, done);
+    });
+    it('should give response 200 and object', (done) => {
+      environment.addUsers(1, true);
+      const { token } = environment.userTokens[0];
+      app.use(express.json());
+      app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+        workbookHandler.post(req, res);
+      });
+      const obj = ClassConverter.readObject(JsonConverter.readWorkbook('test.json'));
+      request(app)
+        .post('/workbook/post/.')
+        .set('Authorization', `Token ${token.uuid}`)
+        .send(obj)
+        .expect(200, done);
+    });
+  });
   describe('#delete()', () => {
     it('should give response 401 for unauthorized user', (done) => {
       app.delete('/workbook/delete/:workbookID', (req, res) => {

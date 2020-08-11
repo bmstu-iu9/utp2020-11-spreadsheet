@@ -24,7 +24,7 @@ export default class WorkbookHandler {
       const workbook = { id: wbModel.id };
       const reads = ClassConverter.readObject(JsonConverter.readWorkbook(wbModel.path));
       workbook.name = reads.name;
-      workbook.sheets = reads.sheets;
+      workbook.spreadsheets = reads.spreadsheets;
       result.push(workbook);
     });
     return res.status(200).send(result);
@@ -34,21 +34,16 @@ export default class WorkbookHandler {
     if (req.user === undefined) {
       return res.sendStatus(401);
     }
-    if (req.body === undefined || req.params === undefined) {
+    if (req.body === undefined) {
       return res.sendStatus(400);
     }
-    try {
-      ClassConverter.saveJson(req.body, req.params.pathToWorkbooks);
-      const workbookModel = new WorkbookModel(`${req.params.pathToWorkbooks}/${req.body.name}.json`, req.user.login);
-      const book = ClassConverter.readObject(JsonConverter.readWorkbook(workbookModel.path));
-      const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
-      workbookID.lastCommit = zeroID;
-      workbookID.name = book.name;
-      workbookID.sheets = book.sheets;
-      return res.status(200).send(workbookID);
-    } catch (error) {
-      return res.sendStatus(400);
-    }
+    ClassConverter.saveJson(req.body, req.params.pathToWorkbooks);
+    const workbookModel = new WorkbookModel(`${req.params.pathToWorkbooks}/${req.body.name}.json`, req.user.login);
+    const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
+    workbookID.lastCommit = zeroID;
+    workbookID.name = req.body.name;
+    workbookID.spreadsheets = req.body.spreadsheets;
+    return res.status(200).send(workbookID);
   }
 
   delete(req, res) {
