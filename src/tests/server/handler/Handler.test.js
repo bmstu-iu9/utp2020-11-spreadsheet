@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import fs from 'fs';
-import WorkbookHandler from '../../../server/workbookHandler/WorkbookHandler.js';
+import { WorkbookHandler } from '../../../server/handler/Handler.js';
 import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
 import JsonConverter from '../../../lib/readWorkbook/JsonConverter.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
