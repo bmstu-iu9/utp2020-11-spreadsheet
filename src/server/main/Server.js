@@ -56,7 +56,9 @@ export default class Server {
   }
 
   configureDataRepo() {
-    fs.mkdirSync(this.config.dataPath);
+    fs.mkdirSync(this.config.dataPath, {
+      recursive: true,
+    });
     const databasePath = `${this.config.dataPath}/${this.config.databaseName}`;
     const database = new Database(databasePath);
     this.dataRepo = new DataRepo(database, this.logger);
