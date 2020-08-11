@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="styles/workspace.css">
     <link rel="stylesheet" href="styles/workspace-position.css">
     <link rel="stylesheet" href="styles/script-classes.css">
+
+    <script src="https://code.iconify.design/1/1.0.6/iconify.min.js"></script>
+    <script src="https://kit.fontawesome.com/ebf1e0944f.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <title>Рабочее пространство</title>
 </head>
 <body>
@@ -41,16 +47,28 @@
             <div id="toolbar-main">
                 <div class="column" style="width: 70px;">
                     <div class="toolbar-row">
-                        <div class="tool-button-standard"></div>
-                        <div class="tool-button-standard"></div>
+                        <div class="tool-button-standard" id="button-copy">
+                            <i class="material-icons" style="font-size: 20px">content_copy</i>
+                        </div>
+                        <div class="tool-button-standard" id="button-paste">
+                            <i class="material-icons" style="font-size: 20px">content_paste</i>
+                        </div>
                     </div>
                     <div class="toolbar-row">
-                        <div class="tool-button-standard"></div>
-                        <div class="tool-button-standard"></div>
+                        <div class="tool-button-standard" id="button-cut">
+                            <i class="material-icons" style="font-size: 20px">content_cut</i>
+                        </div>
+                        <div class="tool-button-standard" id="button-clear">
+                            <i class="material-icons" style="font-size: 20px">clear</i>
+                        </div>
                     </div>
                 </div>
-                <div class="tool-button-standard"></div>
-                <div class="tool-button-standard"></div>
+                <div class="tool-button-standard" id="button-undo">
+                    <i class="material-icons" style="font-size: 20px">undo</i>
+                </div>
+                <div class="tool-button-standard" id="button-redo">
+                    <i class="material-icons" style="font-size: 20px">redo</i>
+                </div>
             </div>
             <div id="toolbar-font">
                 <div class="toolbar-row">
@@ -65,26 +83,28 @@
                 </div>
                 <div class="toolbar-row">
                     <div class="tool-button-standard content-center base-text" id="button-bold">
-                        <span class="no-click">Ж</span>
+                        <i class="material-icons" style="font-size: 20px">format_bold</i>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-italics">
-                        <span class="no-click">I</span>
+                        <i class="material-icons" style="font-size: 20px">format_italic</i>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-underlined">
-                        <span class="no-click">Ч</span>
+                        <i class="material-icons" style="font-size: 20px">format_underline</i>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-stretched">
-                        <span class="no-click">аб</span>
-                    </div>
-                    <div class="tool-button-standard content-center base-text" id="button-low-reg">
-                        <span class="no-click">А</span>
+                        <i class="material-icons" style="font-size: 20px">strikethrough_s</i>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-high-reg">
-                        <span class="no-click">а</span>
+                        <span class="iconify" data-inline="false" data-icon="mdi:format-letter-case-upper"></span>
+                    </div>
+                    <div class="tool-button-standard content-center base-text" id="button-low-reg">
+                        <span class="iconify" data-inline="false" data-icon="mdi:format-letter-case-lower"></span>
                     </div>
                     <div class="row">
                         <div class="tool-button-standard content-center">
-                            <div id="button-border"></div>
+                            <div id="button-border">
+                                <i class="fas fa-border-style"></i>
+                            </div>
                         </div>
                         <div class="unbar-button unbar-button-standard"></div>
                     </div>
@@ -93,33 +113,43 @@
             <div id="toolbar-color">
                 <div class="row">
                     <div class="tool-button-big content-center" id="button-text-color">
-                        <span class="no-click base-text">А</span>
+                        <span class="iconify" data-inline="false" data-icon="ic:sharp-format-color-text"></span>
                     </div>
                     <div class="unbar-button unbar-button-big"></div>
                 </div>
                 <div class="row">
-                    <div class="tool-button-big content-center">
-                        <div id="button-bg-color"></div>
+                    <div class="tool-button-big content-center" id="button-bg-color">
+                            <span class="iconify" data-inline="false" data-icon="ic:outline-format-color-fill"></span>
                     </div>
                     <div class="unbar-button unbar-button-big">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="tool-button-big content-center">
-                        <div id="button-border-color"></div>
+                    <div class="tool-button-big content-center" id="button-border-color">
+                            <span class="iconify" data-inline="false" data-icon="ic:outline-border-color"></span>
                     </div>
                     <div class="unbar-button unbar-button-big"></div>
                 </div>
             </div>
             <div id="toolbar-ident">
                 <div class="toolbar-row">
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
+                    <div class="tool-button-standard" id="button-align-left">
+                        <i class="material-icons" style="font-size: 20px">format_align_left</i>
+                    </div>
+                    <div class="tool-button-standard" id="button-align-center">
+                        <i class="material-icons" style="font-size: 20px">format_align_center</i>
+                    </div>
+                    <div class="tool-button-standard" id="button-align-justify">
+                        <i class="material-icons" style="font-size: 20px">format_align_justify</i>
+                    </div>
                 </div>
                 <div class="toolbar-row">
-                    <div class="tool-button-standard"></div>
-                    <div class="tool-button-standard"></div>
+                    <div class="tool-button-standard" id="button-indent-increase">
+                        <i class="material-icons" style="font-size: 20px">format_indent_increase</i>
+                    </div>
+                    <div class="tool-button-standard" id="button-indent-decrease">
+                        <i class="material-icons" style="font-size: 20px">format_indent_decrease</i>
+                    </div>
                     <div class="tool-button-standard"></div>
                 </div>
             </div>

@@ -22,7 +22,7 @@ div.content {
 div#toolbar-wrapper {
   width: 100vw;
   height: 100px;
-  background-color: #d9d9d9;
+  background-color: #eee;
   box-sizing: border-box;
   border-bottom: 10px solid #444c5c;
 }
@@ -192,7 +192,7 @@ div.unbar-button-big {
 }
 
 div.tool-button-standard {
-  background-color: white;
+  background-color: transparent;
   width: 20px;
   height: 20px;
 }
@@ -213,46 +213,79 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   background-color: #fca311;
 }
 
+#button-copy {
+  color: #444c5c;
+}
+
+#button-paste {
+  color: #444c5c;
+}
+
+#button-cut {
+  color: #444c5c;
+}
+
+#button-clear {
+  color: #444c5c;
+}
+
+#button-undo {
+  color: #444c5c;
+}
+
+#button-redo {
+  color: #444c5c;
+  font-size: 20px;
+}
+
 #button-bold {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 #button-italics {
-  font-style: italic;
+  font-style: normal;
 }
 
 #button-underlined {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 #button-stretched {
-  text-decoration: line-through;
+  text-decoration: none;
 }
 
 #button-border {
   width: 15px;
   height: 15px;
   box-sizing: border-box;
-  border: 1px dashed #444c5c;
-  border-right: 2px solid #444c5c;
+  color: #444c5c;
 }
 
-#button-text-color > span {
-  font-size: 38px;
-  color: orangered;
+#button-high-reg {
+  color: #444c5c;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#button-low-reg {
+  color: #444c5c;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#button-text-color {
+  color: #444c5c;
+  font-size: 30px;
 }
 
 #button-bg-color {
-  height: 30px;
-  width: 30px;
-  background-color: steelblue;
+  color: #444c5c;
+  font-size: 30px;
 }
 
 #button-border-color {
-  height: 30px;
-  width: 30px;
-  box-sizing: border-box;
-  border: 5px solid lightseagreen;
+  color: #444c5c;
+  font-size: 30px;
 }
 
 #button-search {
@@ -267,6 +300,26 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   background-repeat: no-repeat;
   background-position: center;
   background-size: 30px;
+}
+
+#button-align-left {
+  color: #444c5c;
+}
+
+#button-align-center {
+  color: #444c5c;
+}
+
+#button-align-justify {
+  color: #444c5c;
+}
+
+#button-indent-increase {
+  color: #444c5c;
+}
+
+#button-indent-decrease {
+  color: #444c5c;
 }
 
 #button-sort {
@@ -318,6 +371,7 @@ div#table-wrapper {
   width: 100px;
   border: 1px solid #d9d9d9;
   box-sizing: border-box;
+  font-family: Lato, sans-serif;
   font-size: 14px;
   color: #1f1f1f;
   font-weight: 400;
@@ -330,8 +384,7 @@ input.cell {
   height: 25px;
   border: 0;
   padding: 0 5px;
-  text-align: center;
-  background-color: #eee;
+  background-color: #f3f3f3;
   box-sizing: border-box;
   outline: none;
   z-index: 0;
@@ -341,14 +394,12 @@ input.cell {
 #table td.column-header, #table td.row-header {
   padding: 5px 2px;
   position: relative;
-  background: #f3f3f3;
+  background: #eee;
+  font-family: Lato, sans-serif;
   font-weight: 600;
   color: #444c5c;
   text-align: center;
   cursor: pointer;
-}
-
-#table td.column-header, #table td.row-header {
   user-select: none;
 }
 
@@ -358,14 +409,17 @@ input.cell {
 
 input.cell:hover {
   border: 2px solid #999;
+  padding: 0 3px;
 }
 
 #table td input.selection {
   border: 1px dashed #999;
+  padding: 0 4px;
 }
 
 #table td input.selected {
   border: 1px solid #fca311;
+  padding: 0 4px;
 }
 
 #table td input.selected:hover {
