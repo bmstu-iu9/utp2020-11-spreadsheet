@@ -53,8 +53,21 @@ cells.forEach((cell) => {
     cellsInputs[cellID].classList.add('selection');
     isOnMouseDown = true;
     selectedCellID = Array.from(cells).indexOf(cell);
-    // eslint-disable-next-line no-multi-assign
-    selectionStart = selectionEnd = getCellXY(cell);
+    selectionEnd = getCellXY(cell);
+    if (e.shiftKey) {
+      for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+           i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+        for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+             j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+          cellsInputs[j * tableWidth + i].classList.remove('selection');
+          cellsInputs[j * tableWidth + i].classList.add('selected');
+          rowHeaders[j].classList.add('header-selected');
+          columnHeaders[i].classList.add('header-selected');
+        }
+      }
+    } else {
+      selectionStart = selectionEnd;
+    }
   });
   cell.addEventListener('mouseup', (e) => {
     e.preventDefault();
