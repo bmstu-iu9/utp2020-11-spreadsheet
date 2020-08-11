@@ -6,6 +6,7 @@ import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
 import Database from 'better-sqlite3';
+import fs from 'fs';
 import HeaderMatcher from '../authorization/HeaderMatcher.js';
 import TokenAuthenticator from '../authorization/TokenAuthenticator.js';
 import Authorizer from '../authorization/Authorizer.js';
@@ -55,7 +56,9 @@ export default class Server {
   }
 
   configureDataRepo() {
-    const database = new Database(this.config.database);
+    fs.mkdirSync(this.config.dataPath);
+    const databasePath = `${this.config.dataPath}/${this.config.databaseName}`;
+    const database = new Database(databasePath);
     this.dataRepo = new DataRepo(database, this.logger);
     this.dataRepo.syncDatabaseStructure();
   }
