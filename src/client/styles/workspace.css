@@ -132,7 +132,7 @@ div#toolbar-color {
 }
 
 div#toolbar-ident {
-  width: 100px;
+  width: 140px;
 }
 
 div.text-input-list {
@@ -145,6 +145,7 @@ div.text-input-list input[type="text"] {
   box-sizing: border-box;
   border: none;
   background-color: white;
+  color: #444c5c;
 }
 
 div.text-input-list input[type="text"]:focus {
@@ -152,7 +153,7 @@ div.text-input-list input[type="text"]:focus {
 }
 
 div.unbar-button {
-  background-color: #f3f3f3;
+  background-color: #d9d9d9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -195,6 +196,7 @@ div.tool-button-standard {
   background-color: transparent;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 div.tool-button-big {
@@ -210,33 +212,32 @@ div.tool-button-great {
 }
 
 div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great:hover {
-  background-color: #fca311;
+  color: #fca311;
 }
 
-#button-copy {
-  color: #444c5c;
-}
+/*#button-copy {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-paste {
-  color: #444c5c;
-}
+/*#button-paste {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-cut {
-  color: #444c5c;
-}
+/*#button-cut {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-clear {
-  color: #444c5c;
-}
+/*#button-clear {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-undo {
-  color: #444c5c;
-}
+/*#button-undo {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-redo {
-  color: #444c5c;
-  font-size: 20px;
-}
+/*#button-redo {*/
+/*  color: #444c5c;*/
+/*}*/
 
 #button-bold {
   font-weight: normal;
@@ -254,37 +255,34 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   text-decoration: none;
 }
 
-#button-border {
-  width: 15px;
-  height: 15px;
-  box-sizing: border-box;
-  color: #444c5c;
-}
+/*#button-border {*/
+/*  color: #444c5c;*/
+/*}*/
 
 #button-high-reg {
-  color: #444c5c;
+  /*color: #444c5c;*/
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-low-reg {
-  color: #444c5c;
+  /*color: #444c5c;*/
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-text-color {
-  color: #444c5c;
+  /*color: #444c5c;*/
   font-size: 30px;
 }
 
 #button-bg-color {
-  color: #444c5c;
+  /*color: #444c5c;*/
  font-size: 30px;
 }
 
 #button-border-color {
-  color: #444c5c;
+  /*color: #444c5c;*/
   font-size: 30px;
 }
 
@@ -302,25 +300,29 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   background-size: 30px;
 }
 
-#button-align-left {
-  color: #444c5c;
-}
+/*#button-align-left {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-align-center {
-  color: #444c5c;
-}
+/*#button-align-center {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-align-justify {
-  color: #444c5c;
-}
+/*#button-align-right {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-indent-increase {
-  color: #444c5c;
-}
+/*#button-align-justify {*/
+/*  color: #444c5c;*/
+/*}*/
 
-#button-indent-decrease {
-  color: #444c5c;
-}
+/*#button-indent-increase {*/
+/*  color: #444c5c;*/
+/*}*/
+
+/*#button-indent-decrease {*/
+/*  color: #444c5c;*/
+/*}*/
 
 #button-sort {
   background-image: url(../img/sort-icon.png);
