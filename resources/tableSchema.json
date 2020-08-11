@@ -6,7 +6,7 @@
         "name": {
             "type": "string"
         },
-        "sheets": {
+        "spreadsheets": {
             "type": "array",
             "items": {
                 "type": "object",
@@ -58,6 +58,6 @@
         }
     },
     "required": [
-        "sheets"
+        "spreadsheets"
     ]
 }

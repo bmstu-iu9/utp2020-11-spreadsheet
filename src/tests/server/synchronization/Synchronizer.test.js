@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import mock from 'mock-fs';
-import Synchronizer from '../../../server/synchronization/Synchronizer.js';
+import { Synchronizer } from '../../../server/synchronization/Synchronizer.js';
 import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
 
 const workbook = {
