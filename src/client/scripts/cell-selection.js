@@ -128,11 +128,11 @@ rowHeaders.forEach((rowHeader, id) => {
     }
     for (let i = Math.min(selectionStart[1], id);
       i <= Math.max(selectionStart[1], id); i += 1) {
+      rowHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableWidth; j += 1) {
         cellsInputs[i * tableWidth + j].classList.add('selected');
       }
     }
-    rowHeader.classList.add('header-selected');
     isSelection = true;
   });
 });
@@ -148,11 +148,11 @@ columnHeaders.forEach((columnHeader, id) => {
     }
     for (let i = Math.min(selectionStart[0], id);
       i <= Math.max(selectionStart[0], id); i += 1) {
+      columnHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableHeight; j += 1) {
         cellsInputs[j * tableWidth + i].classList.add('selected');
       }
     }
-    columnHeader.classList.add('header-selected');
     isSelection = true;
   });
 });
