@@ -297,7 +297,7 @@ div.toolbar-column {
   height: 60px;
 }
 
-div.table-wrapper {
+div#table-wrapper {
   width: 100vw;
   box-sizing: border-box;
   overflow: scroll;
@@ -354,6 +354,10 @@ input.cell {
 
 input.cell:hover {
   border: 2px solid #999;
+}
+
+#table td input.selection {
+  border: 2px dashed #fca311;
 }
 
 #table td input.selected {

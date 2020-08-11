@@ -1,5 +1,7 @@
-const cells = document.querySelectorAll('#table td:not(.column-header):not(.row-header) input');
+const cells = document.querySelectorAll('#table td:not(.column-header):not(.row-header)');
+const cellsInputs = document.querySelectorAll('#table td:not(.column-header):not(.row-header) input');
 const table = document.getElementById('table');
+const tableWrapper = document.getElementById('table-wrapper');
 const tableHeight = table.children[0].children.length - 1;
 const tableWidth = table.children[0].children[0].children.length - 1;
 let selectedCellID;
@@ -15,36 +17,46 @@ function getCellXY(cell) {
   return [X, Y];
 }
 
+
 cells.forEach((cell) => {
   cell.addEventListener('mousedown', (e) => {
     e.preventDefault();
 
     const cellID = Array.from(cells).indexOf(cell);
 
-    if (cellID !== selectedCellID) {
-      if (selectedCellID !== undefined) {
-        cells[selectedCellID].classList.remove('selected');
-        cells[selectedCellID].classList.remove('cursor-text');
-        cells[selectedCellID].blur();
-      }
+    if (cellID !== selectedCellID && selectedCellID !== undefined && !e.ctrlKey) {
+      cellsInputs[selectedCellID].classList.remove('selected');
+      cellsInputs[selectedCellID].classList.remove('cursor-text');
+      cellsInputs[selectedCellID].blur();
     }
 
     if (isSelection) {
-      for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-        i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-        for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-          j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
-          cells[j * tableWidth + i].classList.remove('selected');
+      for (let i = 0; i < tableHeight; i += 1) {
+        for (let j = 0; j < tableWidth; j += 1) {
+          if (!e.ctrlKey) {
+            cellsInputs[i * tableWidth + j].classList.remove('selected');
+          }
+          cellsInputs[i * tableWidth + j].classList.remove('selection');
         }
       }
     }
-    cell.classList.add('selected');
+    cellsInputs[cellID].classList.add('selection');
     isOnMouseDown = true;
+    selectedCellID = Array.from(cells).indexOf(cell);
     // eslint-disable-next-line no-multi-assign
     selectionStart = selectionEnd = getCellXY(cell);
   });
   cell.addEventListener('mouseup', (e) => {
     e.preventDefault();
+
+    for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+         i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+      for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+           j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+        cellsInputs[j * tableWidth + i].classList.remove('selection');
+        cellsInputs[j * tableWidth + i].classList.add('selected');
+      }
+    }
 
     if (isOnMouseDown) {
       isSelection = true;
@@ -60,29 +72,20 @@ cells.forEach((cell) => {
               && j <= Math.max(selectionStart[0], selectionEnd[0])
               && i >= Math.min(selectionStart[1], selectionEnd[1])
               && i <= Math.max(selectionStart[1], selectionEnd[1])) {
-            if (!cells[i * tableWidth + j].classList.contains('selected')) {
-              cells[i * tableWidth + j].classList.add('selected');
+            if (!cellsInputs[i * tableWidth + j].classList.contains('selection')) {
+              cellsInputs[i * tableWidth + j].classList.add('selection');
             }
-          } else if (cells[i * tableWidth + j].classList.contains('selected')) {
-            cells[i * tableWidth + j].classList.remove('selected');
+          } else if (cellsInputs[i * tableWidth + j].classList.contains('selection')) {
+            cellsInputs[i * tableWidth + j].classList.remove('selection');
           }
         }
       }
     }
   });
-
-  cell.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    const cellID = Array.from(cells).indexOf(cell);
-
-    cells[cellID].classList.add('selected');
-    selectedCellID = cellID;
-  });
   cell.addEventListener('dblclick', (e) => {
     e.preventDefault();
-    cell.focus();
+    cell.children[0].focus();
 
-    cell.classList.add('cursor-text');
+    cell.children[0].classList.add('cursor-text');
   });
 });
