@@ -3,7 +3,6 @@ const cellsInputs = document.querySelectorAll('#table td:not(.column-header):not
 const rowHeaders = document.querySelectorAll('td.row-header:not(#triangle-cell)');
 const columnHeaders = document.querySelectorAll('td.column-header:not(#triangle-cell)');
 const table = document.getElementById('table');
-const tableWrapper = document.getElementById('table-wrapper');
 const tableHeight = table.children[0].children.length - 1;
 const tableWidth = table.children[0].children[0].children.length - 1;
 let selectedCellID;
