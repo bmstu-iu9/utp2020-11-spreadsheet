@@ -204,16 +204,5 @@ describe('WorkbookHandler', () => {
         .set('Authorization', `Token ${token.uuid}`)
         .expect(200, done);
     });
-    it('should give response 404 for empty workbookID', (done) => {
-      environment.addUsers(1, true);
-      const { token } = environment.userTokens[0];
-      app.get('/workbook/delete/:workbookID', (req, res) => {
-        workbookHandler.delete(req, res);
-      });
-      request(app)
-        .get('/workbook/delete/')
-        .set('Authorization', `Token ${token.uuid}`)
-        .expect(404, done);
-    });
   });
 });

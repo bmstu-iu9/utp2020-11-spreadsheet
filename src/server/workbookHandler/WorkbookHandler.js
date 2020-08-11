@@ -55,9 +55,6 @@ export default class WorkbookHandler {
     if (req.user === undefined) {
       return res.sendStatus(401);
     }
-    if (req.params === undefined || req.params.workbookID === '') {
-      return res.sendStatus(404);
-    }
     let workbook;
     try {
       workbook = this.dataRepo.workbookRepo.getById(req.params.workbookID);
