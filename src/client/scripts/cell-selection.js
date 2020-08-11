@@ -1,7 +1,7 @@
 const cells = document.querySelectorAll('#table td:not(.column-header):not(.row-header)');
 const cellsInputs = document.querySelectorAll('#table td:not(.column-header):not(.row-header) input');
-const rowHeaders = document.querySelectorAll('.row-header:not(#triangle-cell)');
-const columnHeaders = document.querySelectorAll('.column-header:not(#triangle-cell)');
+const rowHeaders = document.querySelectorAll('td.row-header:not(#triangle-cell)');
+const columnHeaders = document.querySelectorAll('td.column-header:not(#triangle-cell)');
 const table = document.getElementById('table');
 const tableWrapper = document.getElementById('table-wrapper');
 const tableHeight = table.children[0].children.length - 1;
@@ -19,6 +19,24 @@ function getCellXY(cell) {
   return [X, Y];
 }
 
+function removeSelection(ctrl) {
+  if (!ctrl) {
+    for (let i = 0; i < tableHeight; i += 1) {
+      rowHeaders[i].classList.remove('header-selected');
+    }
+    for (let i = 0; i < tableWidth; i += 1) {
+      columnHeaders[i].classList.remove('header-selected');
+    }
+  }
+  for (let i = 0; i < tableHeight; i += 1) {
+    for (let j = 0; j < tableWidth; j += 1) {
+      if (!ctrl) {
+        cellsInputs[i * tableWidth + j].classList.remove('selected');
+      }
+      cellsInputs[i * tableWidth + j].classList.remove('selection');
+    }
+  }
+}
 
 cells.forEach((cell) => {
   cell.addEventListener('mousedown', (e) => {
@@ -33,22 +51,7 @@ cells.forEach((cell) => {
     }
 
     if (isSelection) {
-      if (!e.ctrlKey) {
-        for (let i = 0; i < tableHeight; i += 1) {
-          rowHeaders[i].classList.remove('header-selected');
-        }
-        for (let i = 0; i < tableWidth; i += 1) {
-          columnHeaders[i].classList.remove('header-selected');
-        }
-      }
-      for (let i = 0; i < tableHeight; i += 1) {
-        for (let j = 0; j < tableWidth; j += 1) {
-          if (!e.ctrlKey) {
-            cellsInputs[i * tableWidth + j].classList.remove('selected');
-          }
-          cellsInputs[i * tableWidth + j].classList.remove('selection');
-        }
-      }
+      removeSelection(e.ctrlKey);
     }
     cellsInputs[cellID].classList.add('selection');
     isOnMouseDown = true;
@@ -56,9 +59,9 @@ cells.forEach((cell) => {
     selectionEnd = getCellXY(cell);
     if (e.shiftKey) {
       for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-           i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+        i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
         for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-             j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+          j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
           cellsInputs[j * tableWidth + i].classList.remove('selection');
           cellsInputs[j * tableWidth + i].classList.add('selected');
           rowHeaders[j].classList.add('header-selected');
@@ -73,9 +76,9 @@ cells.forEach((cell) => {
     e.preventDefault();
 
     for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-         i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+      i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
       for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-           j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+        j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
         cellsInputs[j * tableWidth + i].classList.remove('selection');
         cellsInputs[j * tableWidth + i].classList.add('selected');
         rowHeaders[j].classList.add('header-selected');
@@ -112,5 +115,45 @@ cells.forEach((cell) => {
     cell.children[0].focus();
 
     cell.children[0].classList.add('cursor-text');
+  });
+});
+
+rowHeaders.forEach((rowHeader, id) => {
+  rowHeader.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    if (isSelection) {
+      removeSelection(e.ctrlKey);
+    }
+    if (!e.shiftKey) {
+      selectionStart = [0, id];
+    }
+    for (let i = Math.min(selectionStart[1], id);
+      i <= Math.max(selectionStart[1], id); i += 1) {
+      for (let j = 0; j < tableWidth; j += 1) {
+        cellsInputs[i * tableWidth + j].classList.add('selected');
+      }
+    }
+    rowHeader.classList.add('header-selected');
+    isSelection = true;
+  });
+});
+
+columnHeaders.forEach((columnHeader, id) => {
+  columnHeader.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    if (isSelection) {
+      removeSelection(e.ctrlKey);
+    }
+    if (!e.shiftKey) {
+      selectionStart = [id, 0];
+    }
+    for (let i = Math.min(selectionStart[0], id);
+      i <= Math.max(selectionStart[0], id); i += 1) {
+      for (let j = 0; j < tableHeight; j += 1) {
+        cellsInputs[j * tableWidth + i].classList.add('selected');
+      }
+    }
+    columnHeader.classList.add('header-selected');
+    isSelection = true;
   });
 });

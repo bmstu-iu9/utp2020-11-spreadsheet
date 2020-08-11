@@ -348,7 +348,7 @@ input.cell {
   cursor: pointer;
 }
 
-#table td.column-header span, #table td.row-header {
+#table td.column-header, #table td.row-header {
   user-select: none;
 }
 
