@@ -4,7 +4,7 @@ import ClassConverter from '../../lib/saveWorkbook/ClassConverter.js';
 import JsonConverter from '../../lib/readWorkbook/JsonConverter.js';
 import { zeroID } from '../synchronization/Synchronizer.js';
 
-export class WorkbookHandler {
+export default class WorkbookHandler {
   constructor(dataRepo) {
     this.dataRepo = dataRepo;
   }
