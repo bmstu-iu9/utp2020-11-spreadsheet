@@ -361,11 +361,11 @@ input.cell:hover {
 }
 
 #table td input.selection {
-  border: 2px dashed #fca311;
+  border: 1px dashed #999;
 }
 
 #table td input.selected {
-  border: 2px solid #fca311;
+  border: 1px solid #fca311;
 }
 
 #table td.row-header {
