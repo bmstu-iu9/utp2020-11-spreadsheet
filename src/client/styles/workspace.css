@@ -352,6 +352,10 @@ input.cell {
   user-select: none;
 }
 
+#table td.header-selected {
+  background-color: #fca311;
+}
+
 input.cell:hover {
   border: 2px solid #999;
 }

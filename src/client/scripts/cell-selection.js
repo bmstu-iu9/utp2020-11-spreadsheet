@@ -1,5 +1,7 @@
 const cells = document.querySelectorAll('#table td:not(.column-header):not(.row-header)');
 const cellsInputs = document.querySelectorAll('#table td:not(.column-header):not(.row-header) input');
+const rowHeaders = document.querySelectorAll('.row-header:not(#triangle-cell)');
+const columnHeaders = document.querySelectorAll('.column-header:not(#triangle-cell)');
 const table = document.getElementById('table');
 const tableWrapper = document.getElementById('table-wrapper');
 const tableHeight = table.children[0].children.length - 1;
@@ -31,6 +33,14 @@ cells.forEach((cell) => {
     }
 
     if (isSelection) {
+      if (!e.ctrlKey) {
+        for (let i = 0; i < tableHeight; i += 1) {
+          rowHeaders[i].classList.remove('header-selected');
+        }
+        for (let i = 0; i < tableWidth; i += 1) {
+          columnHeaders[i].classList.remove('header-selected');
+        }
+      }
       for (let i = 0; i < tableHeight; i += 1) {
         for (let j = 0; j < tableWidth; j += 1) {
           if (!e.ctrlKey) {
@@ -55,6 +65,8 @@ cells.forEach((cell) => {
            j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
         cellsInputs[j * tableWidth + i].classList.remove('selection');
         cellsInputs[j * tableWidth + i].classList.add('selected');
+        rowHeaders[j].classList.add('header-selected');
+        columnHeaders[i].classList.add('header-selected');
       }
     }
 
