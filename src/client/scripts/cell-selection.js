@@ -1,5 +1,6 @@
 const cells = document.querySelectorAll('#table td:not(.column-header):not(.row-header) input');
 const table = document.getElementById('table');
+const tableHeight = table.children[0].children.length - 1;
 const tableWidth = table.children[0].children[0].children.length - 1;
 let selectedCellID;
 let isOnMouseDown = false;
@@ -52,52 +53,21 @@ cells.forEach((cell) => {
   });
   cell.addEventListener('mouseover', () => {
     if (isOnMouseDown) {
-      const newSelectionEnd = getCellXY(cell);
-      if (Math.abs(newSelectionEnd[0] - selectionStart[0])
-          > Math.abs(selectionEnd[0] - selectionStart[0])) {
-        for (let i = Math.min(selectionStart[1], newSelectionEnd[1]);
-          i <= Math.max(selectionStart[1], newSelectionEnd[1]); i += 1) {
-          for (let j = Math.min(selectionEnd[0], newSelectionEnd[0]);
-            j <= Math.max(selectionEnd[0], newSelectionEnd[0]); j += 1) {
-            cells[i * tableWidth + j].classList.add('selected');
-          }
-        }
-      }
-      if (Math.abs(newSelectionEnd[1] - selectionStart[1])
-          > Math.abs(selectionEnd[1] - selectionStart[1])) {
-        for (let i = Math.min(selectionStart[0], newSelectionEnd[0]);
-          i <= Math.max(selectionStart[0], newSelectionEnd[0]); i += 1) {
-          for (let j = Math.min(selectionEnd[1], newSelectionEnd[1]);
-            j <= Math.max(selectionEnd[1], newSelectionEnd[1]); j += 1) {
-            cells[j * tableWidth + i].classList.add('selected');
-          }
-        }
-      }
-      if (Math.abs(newSelectionEnd[0] - selectionStart[0])
-          < Math.abs(selectionEnd[0] - selectionStart[0])) {
-        for (let i = Math.min(selectionStart[1], selectionEnd[1]);
-          i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
-          for (let j = Math.min(newSelectionEnd[0], selectionEnd[0])
-              + (selectionEnd[0] > selectionStart[0] ? 1 : 0);
-            j <= Math.max(newSelectionEnd[0], selectionEnd[0])
-               + (selectionEnd[0] > selectionStart[0] ? 0 : -1); j += 1) {
+      selectionEnd = getCellXY(cell);
+      for (let i = 0; i < tableHeight; i += 1) {
+        for (let j = 0; j < tableWidth; j += 1) {
+          if (j >= Math.min(selectionStart[0], selectionEnd[0])
+              && j <= Math.max(selectionStart[0], selectionEnd[0])
+              && i >= Math.min(selectionStart[1], selectionEnd[1])
+              && i <= Math.max(selectionStart[1], selectionEnd[1])) {
+            if (!cells[i * tableWidth + j].classList.contains('selected')) {
+              cells[i * tableWidth + j].classList.add('selected');
+            }
+          } else if (cells[i * tableWidth + j].classList.contains('selected')) {
             cells[i * tableWidth + j].classList.remove('selected');
           }
         }
       }
-      if (Math.abs(newSelectionEnd[1] - selectionStart[1])
-          < Math.abs(selectionEnd[1] - selectionStart[1])) {
-        for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-          i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-          for (let j = Math.min(newSelectionEnd[1], selectionEnd[1])
-              + (selectionEnd[1] > selectionStart[1] ? 1 : 0);
-            j <= Math.max(newSelectionEnd[1], selectionEnd[1])
-               + (selectionEnd[1] > selectionStart[1] ? 0 : -1); j += 1) {
-            cells[j * tableWidth + i].classList.remove('selected');
-          }
-        }
-      }
-      selectionEnd = newSelectionEnd;
     }
   });
 
