@@ -3,12 +3,12 @@ import FormatError from '../errors/FormatError.js';
 
 export default class ClassConverter {
   static saveJson(userWorkbook, pathToWorkbooks) {
-    const file = this.convertToJson(userWorkbook);
+    const file = JSON.stringify(this.readObject(userWorkbook));
     fs.mkdirSync(pathToWorkbooks, { recursive: true });
     fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
   }
 
-  static convertToJson(userWorkbook) {
+  static readObject(userWorkbook) {
     if (userWorkbook === null) {
       throw new FormatError('Empty workbook');
     }
@@ -21,7 +21,11 @@ export default class ClassConverter {
         name: spreadsheet.name,
       };
       const cells = {};
-      spreadsheet.cells.forEach((cell, position) => {
+      let obj = spreadsheet.cells;
+      if (!(obj instanceof Map)) {
+        obj = new Map(Object.entries(spreadsheet.cells));
+      }
+      obj.forEach((cell, position) => {
         cells[position] = {
           color: cell.color,
           type: cell.type,
@@ -31,7 +35,7 @@ export default class ClassConverter {
       sheet.cells = cells;
       sheets.push(sheet);
     });
-    jsonWorkbook.sheets = sheets;
-    return JSON.stringify(jsonWorkbook);
+    jsonWorkbook.spreadsheets = sheets;
+    return jsonWorkbook;
   }
 }

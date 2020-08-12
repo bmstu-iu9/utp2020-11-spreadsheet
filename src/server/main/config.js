@@ -9,7 +9,8 @@ export default {
   },
   static: 'src/client',
   entrypoint: '/index.html',
-  database: 'database.db',
+  dataPath: 'data',
+  databaseName: 'database.db',
   headerMatcher: {
     name: 'authorization',
     prefix: 'Token ',

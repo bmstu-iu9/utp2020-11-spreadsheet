@@ -110,3 +110,6 @@ dist
 database.db
 #PHPstorm directory
 .idea/
+
+# Runtime data directory
+data
