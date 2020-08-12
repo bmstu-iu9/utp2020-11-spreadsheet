@@ -29,7 +29,7 @@ describe('WorkbookIdHandler', () => {
     TestEnvironment.destroyInstance();
   });
 
-  describe('get', () => {
+  describe('#get()', () => {
     it('should return 401 for unauthorized request', () => request(app)
       .get('/1')
       .expect(401));

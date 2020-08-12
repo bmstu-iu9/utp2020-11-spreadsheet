@@ -5,6 +5,7 @@ export default class WorkbookIdHandler extends EndpointHandler {
   get(req, res) {
     if (req.user === undefined) {
       res.sendStatus(401);
+      return;
     }
     let workbook;
     try {
