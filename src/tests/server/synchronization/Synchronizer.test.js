@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import mock from 'mock-fs';
 import { Synchronizer } from '../../../server/synchronization/Synchronizer.js';
-import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
+import WorkbookSerializer from '../../../server/serialization/WorkbookSerializer.js';
 
 const workbook = {
   name: 'test',
@@ -57,7 +57,7 @@ describe('Synchronizer', () => {
   });
   describe('#constructor()', () => {
     it('should make new element', () => {
-      ClassConverter.saveJson(workbook, './synchronizer');
+      WorkbookSerializer.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       assert.strictEqual(sz.workbook.name, workbook.name);
       assert.strictEqual(sz.workbook.spreadsheets.length, workbook.spreadsheets.length);
@@ -74,14 +74,14 @@ describe('Synchronizer', () => {
   });
   describe('#addArrayLogs()', () => {
     it('should add valid log (change color)', () => {
-      ClassConverter.saveJson(workbook, './synchronizer');
+      WorkbookSerializer.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       assert.deepStrictEqual(sz.addArrayLogs([log1], 0), true);
       assert.deepStrictEqual(sz.workbook.spreadsheets[0]
         .cells.get(log1.cellAddress).color, log1.color);
     });
     it('should add valid log (change value)', () => {
-      ClassConverter.saveJson(workbook, './synchronizer');
+      WorkbookSerializer.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       assert.deepStrictEqual(sz.addArrayLogs([log2], 0), true);
       assert.deepStrictEqual(sz.workbook.spreadsheets[0]
@@ -90,7 +90,7 @@ describe('Synchronizer', () => {
         .cells.get(log2.cellAddress).value, log2.value);
     });
     it('should add invalid log', () => {
-      ClassConverter.saveJson(workbook, './synchronizer');
+      WorkbookSerializer.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       assert.throws(() => {
         sz.addArrayLogs([log3], 0);
@@ -101,7 +101,7 @@ describe('Synchronizer', () => {
       });
     });
     it('should add collision log', () => {
-      ClassConverter.saveJson(workbook, './synchronizer');
+      WorkbookSerializer.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       sz.addArrayLogs([log2], 0);
       assert.deepStrictEqual(sz.addArrayLogs([log4], 0), [log2]);
@@ -109,7 +109,7 @@ describe('Synchronizer', () => {
   });
   describe('#clearCheckChanges()', () => {
     it('should clear check changes', () => {
-      ClassConverter.saveJson(workbook, './synchronizer');
+      WorkbookSerializer.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       sz.addArrayLogs([log1, log2], 0);
       sz.clearCheckChanges();
@@ -118,7 +118,7 @@ describe('Synchronizer', () => {
   });
   describe('#synchronize()', () => {
     it('should synchronize', () => {
-      ClassConverter.saveJson(workbook, './synchronizer');
+      WorkbookSerializer.saveJson(workbook, './synchronizer');
       const sz = new Synchronizer('test', './synchronizer', 0);
       sz.synchronize();
     });

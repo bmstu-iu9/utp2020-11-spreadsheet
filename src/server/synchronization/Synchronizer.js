@@ -1,5 +1,5 @@
-import readWorkbook from '../../lib/readWorkbook/JsonConverter.js';
-import saveWorkbook from '../../lib/saveWorkbook/ClassConverter.js';
+import readWorkbook from '../serialization/WorkbookDeserializer.js';
+import saveWorkbook from '../serialization/WorkbookSerializer.js';
 import FormatError from '../../lib/errors/FormatError.js';
 
 const setChangeType = new Set(['color', 'value']);

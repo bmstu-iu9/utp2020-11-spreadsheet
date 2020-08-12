@@ -3,7 +3,7 @@ import express from 'express';
 import request from 'supertest';
 import mock from 'mock-fs';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
-import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
+import WorkbookSerializer from '../../../server/serialization/WorkbookSerializer.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import TokenAuthencticator from '../../../server/authorization/TokenAuthenticator.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
@@ -50,7 +50,7 @@ describe('WorkbookIdHandler', () => {
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
       const workbook = new Workbook('test');
-      ClassConverter.saveJson(workbook, './');
+      WorkbookSerializer.saveJson(workbook, './');
       const workbookModel = new WorkbookModel('./test.json', username);
       environment.dataRepo.workbookRepo.save(workbookModel);
       return request(app)

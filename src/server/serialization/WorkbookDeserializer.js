@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { Cell } from '../spreadsheets/Cell.js';
-import Spreadsheet from '../spreadsheets/Spreadsheet.js';
-import Workbook from '../spreadsheets/Workbook.js';
+import { Cell } from '../../lib/spreadsheets/Cell.js';
+import Spreadsheet from '../../lib/spreadsheets/Spreadsheet.js';
+import Workbook from '../../lib/spreadsheets/Workbook.js';
 
-export default class JsonConverter {
+export default class WorkbookDeserializer {
   static readWorkbook(pathToWorkbook) {
     const file = JSON.parse(fs.readFileSync(pathToWorkbook));
     const workbook = new Workbook(file.name, this.readSpreadsheets(file.spreadsheets));

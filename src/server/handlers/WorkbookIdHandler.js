@@ -1,5 +1,5 @@
 import EndpointHandler from './EndpointHandler.js';
-import JsonConverter from '../../lib/readWorkbook/JsonConverter.js';
+import JsonConverter from '../serialization/WorkbookDeserializer.js';
 
 export default class WorkbookIdHandler extends EndpointHandler {
   get(req, res) {

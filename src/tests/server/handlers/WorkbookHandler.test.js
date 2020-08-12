@@ -2,8 +2,8 @@ import express from 'express';
 import request from 'supertest';
 import fs from 'fs';
 import WorkbookHandler from '../../../server/handlers/WorkbookHandler.js';
-import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
-import JsonConverter from '../../../lib/readWorkbook/JsonConverter.js';
+import WorkbookSerializer from '../../../server/serialization/WorkbookSerializer.js';
+import WorkbookDeserializer from '../../../server/serialization/WorkbookDeserializer.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
@@ -47,7 +47,7 @@ describe('WorkbookHandler', () => {
     authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
     authorizer = new Authorizer(authenticator);
     app.use(authorizer.getMiddleware());
-    ClassConverter.saveJson(testWorkbook, '.');
+    WorkbookSerializer.saveJson(testWorkbook, '.');
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
@@ -95,7 +95,7 @@ describe('WorkbookHandler', () => {
       app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const obj = ClassConverter.readObject(JsonConverter.readWorkbook('test.json'));
+      const obj = WorkbookSerializer.readObject(WorkbookDeserializer.readWorkbook('test.json'));
       request(app)
         .post('/workbook/post/.')
         .send(obj)
@@ -119,7 +119,7 @@ describe('WorkbookHandler', () => {
       app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const obj = ClassConverter.readObject(JsonConverter.readWorkbook('test.json'));
+      const obj = WorkbookSerializer.readObject(WorkbookDeserializer.readWorkbook('test.json'));
       request(app)
         .post('/workbook/post/.')
         .set('Authorization', `Token ${token.uuid}`)

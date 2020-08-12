@@ -1,7 +1,7 @@
 import fs from 'fs';
 import WorkbookModel from '../database/WorkbookModel.js';
-import ClassConverter from '../../lib/saveWorkbook/ClassConverter.js';
-import JsonConverter from '../../lib/readWorkbook/JsonConverter.js';
+import WorkbookSerializer from '../serialization/WorkbookSerializer.js';
+import WorkbookDeserializer from '../serialization/WorkbookDeserializer.js';
 import { zeroID } from '../synchronization/Synchronizer.js';
 import EndpointHandler from './EndpointHandler.js';
 
@@ -19,7 +19,7 @@ export default class WorkbookHandler extends EndpointHandler {
     const result = [];
     list.forEach((wbModel) => {
       const workbook = { id: wbModel.id };
-      const reads = ClassConverter.readObject(JsonConverter.readWorkbook(wbModel.path));
+      const reads = WorkbookSerializer.readObject(WorkbookDeserializer.readWorkbook(wbModel.path));
       workbook.name = reads.name;
       workbook.spreadsheets = reads.spreadsheets;
       result.push(workbook);
@@ -34,7 +34,7 @@ export default class WorkbookHandler extends EndpointHandler {
     if (req.body === undefined) {
       return res.sendStatus(400);
     }
-    ClassConverter.saveJson(req.body, req.params.pathToWorkbooks);
+    WorkbookSerializer.saveJson(req.body, req.params.pathToWorkbooks);
     const workbookModel = new WorkbookModel(`${req.params.pathToWorkbooks}/${req.body.name}.json`, req.user.login);
     const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
     workbookID.lastCommit = zeroID;

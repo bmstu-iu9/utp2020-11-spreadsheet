@@ -4,7 +4,7 @@ import mock from 'mock-fs';
 import schema from 'jsonschema';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
-import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
+import WorkbookSerializer from '../../../server/serialization/WorkbookSerializer.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 import FormatError from '../../../lib/errors/FormatError.js';
 
@@ -21,13 +21,13 @@ describe('ClassConverter', () => {
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
       const workbook = new Workbook(workbookStandardName, spreadsheets);
       assert.strictEqual(
-        schema.validate(ClassConverter.readObject(workbook), tableSchema).valid,
+        schema.validate(WorkbookSerializer.readObject(workbook), tableSchema).valid,
         true,
       );
     });
     it('should throw an exception for an empty workbook', () => {
       assert.throws(() => {
-        ClassConverter.readObject(null);
+        WorkbookSerializer.readObject(null);
       }, FormatError);
     });
   });
@@ -40,7 +40,7 @@ describe('ClassConverter', () => {
       mock({
         '~/workbooks': {},
       });
-      ClassConverter.saveJson(workbook, pathToWorkbooks);
+      WorkbookSerializer.saveJson(workbook, pathToWorkbooks);
       assert.strictEqual(fs.existsSync(`${pathToWorkbooks}/${workbookStandardName}.json`), true);
       mock.restore();
     });
@@ -54,7 +54,7 @@ describe('ClassConverter', () => {
         }),
       });
       assert.throws(() => {
-        ClassConverter.saveJson(workbook, pathToWorkbooks);
+        WorkbookSerializer.saveJson(workbook, pathToWorkbooks);
       });
       mock.restore();
     });

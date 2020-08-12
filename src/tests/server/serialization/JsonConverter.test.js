@@ -3,8 +3,8 @@ import mock from 'mock-fs';
 import fs from 'fs';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
-import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
-import JsonConverter from '../../../lib/readWorkbook/JsonConverter.js';
+import WorkbookSerializer from '../../../server/serialization/WorkbookSerializer.js';
+import WorkbookDeserializer from '../../../server/serialization/WorkbookDeserializer.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 
 const workbookStandardName = 'workbook';
@@ -31,7 +31,7 @@ describe('JsonConverter', () => {
           value: 13,
         },
       };
-      cells = JsonConverter.readCells(cells);
+      cells = WorkbookDeserializer.readCells(cells);
       const testCells = new Map();
       testCells.set('A1', new Cell(valueTypes.number, 10));
       testCells.set('A2', new Cell(valueTypes.number, 11));
@@ -39,7 +39,9 @@ describe('JsonConverter', () => {
       assert.strictEqual(JSON.stringify(cells), JSON.stringify(testCells));
     });
     it('should return an empty map', () => {
-      assert.strictEqual(JSON.stringify(JsonConverter.readCells({})), JSON.stringify(new Map()));
+      assert.strictEqual(
+        JSON.stringify(WorkbookDeserializer.readCells({})), JSON.stringify(new Map()),
+      );
     });
   });
   describe('#readSpreadsheets()', () => {
@@ -66,7 +68,7 @@ describe('JsonConverter', () => {
           },
         },
       ];
-      spreadsheets = JsonConverter.readSpreadsheets(spreadsheets);
+      spreadsheets = WorkbookDeserializer.readSpreadsheets(spreadsheets);
       const testSpreadsheets = [
         new Spreadsheet('Sheet1', new Map([['A1', new Cell(valueTypes.number, 10)]])),
         new Spreadsheet('Sheet2', new Map([['A2', new Cell(valueTypes.boolean, true)]])),
@@ -74,7 +76,9 @@ describe('JsonConverter', () => {
       assert.strictEqual(JSON.stringify(spreadsheets), JSON.stringify(testSpreadsheets));
     });
     it('should return an empty array', () => {
-      assert.strictEqual(JSON.stringify(JsonConverter.readSpreadsheets([])), JSON.stringify([]));
+      assert.strictEqual(
+        JSON.stringify(WorkbookDeserializer.readSpreadsheets([])), JSON.stringify([]),
+      );
     });
   });
   describe('#readWorkbook()', () => {
@@ -86,8 +90,8 @@ describe('JsonConverter', () => {
       cells.set('A1', new Cell(valueTypes.number, 10));
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
       const workbook = new Workbook(workbookStandardName, spreadsheets);
-      ClassConverter.saveJson(workbook, pathToWorkbooks);
-      const testWorkbook = JsonConverter.readWorkbook(`${pathToWorkbooks}/${workbookStandardName}.json`);
+      WorkbookSerializer.saveJson(workbook, pathToWorkbooks);
+      const testWorkbook = WorkbookDeserializer.readWorkbook(`${pathToWorkbooks}/${workbookStandardName}.json`);
       assert.strictEqual(JSON.stringify(workbook), JSON.stringify(testWorkbook));
       mock.restore();
     });
@@ -97,7 +101,7 @@ describe('JsonConverter', () => {
       });
       fs.mkdirSync(pathToWorkbooks, { recursive: true });
       assert.throws(() => {
-        JsonConverter.readWorkbook(`${pathToWorkbooks}/${workbookStandardName}.json`);
+        WorkbookDeserializer.readWorkbook(`${pathToWorkbooks}/${workbookStandardName}.json`);
       });
       mock.restore();
     });

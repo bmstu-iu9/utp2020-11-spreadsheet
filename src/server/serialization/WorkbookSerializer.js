@@ -1,7 +1,7 @@
 import fs from 'fs';
-import FormatError from '../errors/FormatError.js';
+import FormatError from '../../lib/errors/FormatError.js';
 
-export default class ClassConverter {
+export default class WorkbookSerializer {
   static saveJson(userWorkbook, pathToWorkbooks) {
     const file = JSON.stringify(this.readObject(userWorkbook));
     fs.mkdirSync(pathToWorkbooks, { recursive: true });
