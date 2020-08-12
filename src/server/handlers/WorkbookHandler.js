@@ -3,12 +3,9 @@ import WorkbookModel from '../database/WorkbookModel.js';
 import ClassConverter from '../../lib/saveWorkbook/ClassConverter.js';
 import JsonConverter from '../../lib/readWorkbook/JsonConverter.js';
 import { zeroID } from '../synchronization/Synchronizer.js';
+import EndpointHandler from './EndpointHandler.js';
 
-export default class WorkbookHandler {
-  constructor(dataRepo) {
-    this.dataRepo = dataRepo;
-  }
-
+export default class WorkbookHandler extends EndpointHandler {
   get(req, res) {
     if (req.user === undefined) {
       return res.sendStatus(401);
