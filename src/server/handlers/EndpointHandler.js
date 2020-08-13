@@ -3,8 +3,9 @@
 import DataRepo from '../database/DataRepo.js';
 
 export default class EndpointHandler {
-  constructor(dataRepo) {
+  constructor(dataRepo, config) {
     this.setDataRepo(dataRepo);
+    this.config = config;
   }
 
   setDataRepo(dataRepo) {
