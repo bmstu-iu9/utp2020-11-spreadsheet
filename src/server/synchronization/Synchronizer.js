@@ -33,11 +33,10 @@ export class Synchronizer {
     this.spreadsheet = spreadsheet;
   }
 
-  // в userID желательно записывать Math.random() и userID должен быть записан во все arrayLogs
-  addArrayLogs(arrayLogs, userID) {
+  addArrayLogs(arrayLogs, lastCommitId) {
     let lastPos = -1;
     for (let i = this.lastChanges.length - 1; i >= 0; i -= 1) {
-      if (userID === this.lastChanges[i].ID) {
+      if (lastCommitId === this.lastChanges[i].ID) {
         lastPos = i;
         break;
       }
