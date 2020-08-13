@@ -3,13 +3,13 @@ import express from 'express';
 import request from 'supertest';
 import mock from 'mock-fs';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
-import WorkbookSerializer from '../../../server/serialization/WorkbookSerializer.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import TokenAuthencticator from '../../../server/authorization/TokenAuthenticator.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
+import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
 
 describe('WorkbookIdHandler', () => {
   let environment;
@@ -17,13 +17,17 @@ describe('WorkbookIdHandler', () => {
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
-    const handler = new WorkbookIdHandler(environment.dataRepo);
+    environment.init();
+    const handler = new WorkbookIdHandler(environment.dataRepo, {
+      pathToWorkbooks: '.',
+    });
     const matcher = new HeaderMatcher('authorization', 'Token ');
     const authenticator = new TokenAuthencticator(matcher, environment.dataRepo);
     const authorizer = new Authorizer(authenticator);
     app = express();
     app.use(authorizer.getMiddleware());
     app.get('/:id', (req, res) => handler.get(req, res));
+    app.delete('/:id', (req, res) => handler.delete(req, res));
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
@@ -34,7 +38,6 @@ describe('WorkbookIdHandler', () => {
       .get('/1')
       .expect(401));
     it('should return 404 if workbook was not found', () => {
-      environment.init();
       environment.addUsers(1, true);
       const { token } = environment.userTokens[0];
       return request(app)
@@ -44,14 +47,14 @@ describe('WorkbookIdHandler', () => {
     });
     it('should return a workbook', () => {
       mock({
-        './test.json': '',
+        './1.json': '',
       });
-      environment.init();
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
       const workbook = new Workbook('test');
-      WorkbookSerializer.saveJson(workbook, './');
-      const workbookModel = new WorkbookModel('./test.json', username);
+      const saver = new WorkbookSaver('.');
+      saver.save(workbook, 1);
+      const workbookModel = new WorkbookModel(username);
       environment.dataRepo.workbookRepo.save(workbookModel);
       return request(app)
         .get('/1')
@@ -64,6 +67,42 @@ describe('WorkbookIdHandler', () => {
         .finally(() => {
           mock.restore();
         });
+    });
+  });
+  describe('#delete()', () => {
+    it('should give response 401 for unauthorized user', (done) => {
+      request(app)
+        .delete('/123')
+        .expect(401, done);
+    });
+    it('should give response 404 for unfound book', (done) => {
+      environment.addUsers(1, true);
+      const { token } = environment.userTokens[0];
+      request(app)
+        .delete('/123')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(404, done);
+    });
+    it('should give response 403 for deleting book without access permission', (done) => {
+      environment.addUsers(2, true);
+      const workbookModel = new WorkbookModel('test0');
+      const id = environment.dataRepo.workbookRepo.save(workbookModel);
+      request(app)
+        .delete(`/${id.toString()}`)
+        .set('Authorization', `Token ${environment.userTokens[1].token.uuid}`)
+        .expect(403, done);
+    });
+    it('should give response 200 for successful deletion', (done) => {
+      environment.addUsers(1, true);
+      const workbookModel = new WorkbookModel('test0');
+      const id = environment.dataRepo.workbookRepo.save(workbookModel);
+      const saver = new WorkbookSaver('.');
+      saver.save(new Workbook('test'), id);
+      const { token } = environment.userTokens[0];
+      request(app)
+        .delete(`/${id.toString()}`)
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(200, done);
     });
   });
 });
