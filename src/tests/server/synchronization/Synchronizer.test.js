@@ -1,126 +1,94 @@
 import * as assert from 'assert';
-import mock from 'mock-fs';
-import { Synchronizer } from '../../../server/synchronization/Synchronizer.js';
-import WorkbookSerializer from '../../../server/serialization/WorkbookSerializer.js';
+import { Synchronizer, zeroID } from '../../../server/synchronization/Synchronizer.js';
+import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
+import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
+import FormatError from '../../../lib/errors/FormatError.js';
 
-const workbook = {
-  name: 'test',
-  spreadsheets: [
-    {
-      name: 'My Sheet',
-      cells: new Map([
-        ['A5', {
-          color: '#ffffff',
-          type: 'number',
-          value: 100,
-        }],
-        ['A6', {
-          color: '#edeef0',
-          type: 'boolean',
-          value: true,
-        }]]),
-    },
-  ],
-};
+const spreadsheet = new Spreadsheet('test', new Map([
+  ['A5', new Cell(valueTypes.number, 100, '#ffffff')],
+  ['A6', new Cell(valueTypes.boolean, true, '#edeef0')],
+]));
+
 const log1 = {
-  ID: 1,
+  ID: 'cf3c1cf6-be2f-4a6a-b69b-97b9c1126065',
   changeType: 'color',
   cellAddress: 'A1',
   color: '#aaaaaa',
 };
 const log2 = {
-  ID: 2,
+  ID: 'a67a8ec6-4741-4fbc-b8e9-3ac69ec96559',
   changeType: 'value',
   cellAddress: 'A2',
   type: 'formula',
   value: '=2+2',
 };
 const log3 = {
-  ID: 3,
+  ID: '65d0104f-b9af-4de4-acc3-1c696bd0c715',
   changeType: 'pupailupa',
 };
 const log4 = {
-  ID: 4,
+  ID: 'd1150ba6-488f-440c-82c0-02f8c53910b5',
   changeType: 'value',
   cellAddress: 'A2',
   type: 'formula',
   value: '=4',
 };
+
+const lastChanges = [{ ID: zeroID }];
+
 describe('Synchronizer', () => {
-  beforeEach(() => {
-    mock({
-      './synchronizer': {},
-    });
-  });
-  afterEach(() => {
-    mock.restore();
-  });
   describe('#constructor()', () => {
     it('should make new element', () => {
-      WorkbookSerializer.saveJson(workbook, './synchronizer');
-      const sz = new Synchronizer('test', './synchronizer', 0);
-      assert.strictEqual(sz.workbook.name, workbook.name);
-      assert.strictEqual(sz.workbook.spreadsheets.length, workbook.spreadsheets.length);
-      assert.strictEqual(sz.workbook.spreadsheets[0].name, workbook.spreadsheets[0].name);
-      sz.workbook.spreadsheets[0].cells.forEach((cell, position) => {
-        const cellFromSz = cell;
-        const cellFromJSON = workbook.spreadsheets[0].cells.get(position);
-        assert.strictEqual(cellFromSz.type, cellFromJSON.type);
-        assert.strictEqual(cellFromSz.value, cellFromJSON.value);
-        assert.strictEqual(cellFromSz.color, cellFromJSON.color);
+      const sz = new Synchronizer(spreadsheet);
+      assert.strictEqual(sz.spreadsheet, spreadsheet);
+      assert.deepStrictEqual(sz.lastChanges, lastChanges);
+      assert.strictEqual(sz.maxLogSize, 10);
+    });
+    it('should throw an exception for non-spreadsheet', () => {
+      assert.throws(() => {
+        new Synchronizer({});
+      }, TypeError);
+    });
+    it('should throw an exception for non-array', () => {
+      assert.throws(() => {
+        new Synchronizer(spreadsheet, {});
       });
-      assert.deepStrictEqual(sz.page, 0);
+    });
+    it('should throw an exception for non-integer', () => {
+      assert.throws(() => {
+        new Synchronizer(spreadsheet, lastChanges, 23.4);
+      });
     });
   });
   describe('#addArrayLogs()', () => {
     it('should add valid log (change color)', () => {
-      WorkbookSerializer.saveJson(workbook, './synchronizer');
-      const sz = new Synchronizer('test', './synchronizer', 0);
-      assert.deepStrictEqual(sz.addArrayLogs([log1], 0), true);
-      assert.deepStrictEqual(sz.workbook.spreadsheets[0]
+      const sz = new Synchronizer(spreadsheet);
+      assert.deepStrictEqual(sz.addArrayLogs([log1], zeroID), true);
+      assert.deepStrictEqual(sz.spreadsheet
         .cells.get(log1.cellAddress).color, log1.color);
     });
     it('should add valid log (change value)', () => {
-      WorkbookSerializer.saveJson(workbook, './synchronizer');
-      const sz = new Synchronizer('test', './synchronizer', 0);
-      assert.deepStrictEqual(sz.addArrayLogs([log2], 0), true);
-      assert.deepStrictEqual(sz.workbook.spreadsheets[0]
+      const sz = new Synchronizer(spreadsheet);
+      assert.deepStrictEqual(sz.addArrayLogs([log2], zeroID), true);
+      assert.deepStrictEqual(sz.spreadsheet
         .cells.get(log2.cellAddress).formula, log2.formula);
-      assert.deepStrictEqual(sz.workbook.spreadsheets[0]
+      assert.deepStrictEqual(sz.spreadsheet
         .cells.get(log2.cellAddress).value, log2.value);
     });
     it('should add invalid log', () => {
-      WorkbookSerializer.saveJson(workbook, './synchronizer');
-      const sz = new Synchronizer('test', './synchronizer', 0);
+      const sz = new Synchronizer(spreadsheet);
       assert.throws(() => {
-        sz.addArrayLogs([log3], 0);
-      });
-      sz.addArrayLogs([log1], 0);
+        sz.addArrayLogs([log3], zeroID);
+      }, FormatError);
+      sz.addArrayLogs([log1], zeroID);
       assert.throws(() => {
-        sz.addArrayLogs([log3], -1);
+        sz.addArrayLogs([log3], log1.ID);
       });
     });
     it('should add collision log', () => {
-      WorkbookSerializer.saveJson(workbook, './synchronizer');
-      const sz = new Synchronizer('test', './synchronizer', 0);
-      sz.addArrayLogs([log2], 0);
-      assert.deepStrictEqual(sz.addArrayLogs([log4], 0), [log2]);
-    });
-  });
-  describe('#clearCheckChanges()', () => {
-    it('should clear check changes', () => {
-      WorkbookSerializer.saveJson(workbook, './synchronizer');
-      const sz = new Synchronizer('test', './synchronizer', 0);
-      sz.addArrayLogs([log1, log2], 0);
-      sz.clearCheckChanges();
-      assert.deepStrictEqual(sz.lastChanges, [{ ID: 0 }]);
-    });
-  });
-  describe('#synchronize()', () => {
-    it('should synchronize', () => {
-      WorkbookSerializer.saveJson(workbook, './synchronizer');
-      const sz = new Synchronizer('test', './synchronizer', 0);
-      sz.synchronize();
+      const sz = new Synchronizer(spreadsheet);
+      sz.addArrayLogs([log2], zeroID);
+      assert.deepStrictEqual(sz.addArrayLogs([log4], zeroID), [log2]);
     });
   });
 });

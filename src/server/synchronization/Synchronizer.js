@@ -1,18 +1,36 @@
-import readWorkbook from '../serialization/WorkbookDeserializer.js';
-import saveWorkbook from '../serialization/WorkbookSerializer.js';
 import FormatError from '../../lib/errors/FormatError.js';
+import Spreadsheet from '../../lib/spreadsheets/Spreadsheet.js';
 
 const setChangeType = new Set(['color', 'value']);
 
 export const zeroID = '00000000-0000-0000-0000-000000000000';
 
 export class Synchronizer {
-  constructor(nameWorkbook, pathToWorkbook, page, lastChanges = [{ ID: 0 }], maxLogSize = 10) {
-    this.pathToWorkbook = pathToWorkbook;
-    this.workbook = readWorkbook.readWorkbook(`${this.pathToWorkbook}/${nameWorkbook}.json`);
-    this.page = page;
-    this.lastChanges = lastChanges;
+  constructor(spreadsheet, lastChanges = [{ ID: zeroID }], maxLogSize = 10) {
+    this.setSpreadsheet(spreadsheet);
+    this.setLastChanges(lastChanges);
+    this.setMaxLogSize(maxLogSize);
+  }
+
+  setMaxLogSize(maxLogSize) {
+    if (!Number.isInteger(maxLogSize)) {
+      throw new TypeError('maxLogSize must be an integer');
+    }
     this.maxLogSize = maxLogSize;
+  }
+
+  setLastChanges(lastChanges) {
+    if (!(lastChanges instanceof Array)) {
+      throw new TypeError('lastChanges must be an array');
+    }
+    this.lastChanges = lastChanges;
+  }
+
+  setSpreadsheet(spreadsheet) {
+    if (!(spreadsheet instanceof Spreadsheet)) {
+      throw new TypeError('spreadsheet must be a Spreadsheet instance');
+    }
+    this.spreadsheet = spreadsheet;
   }
 
   // в userID желательно записывать Math.random() и userID должен быть записан во все arrayLogs
@@ -42,25 +60,16 @@ export class Synchronizer {
     if (errAns.length > 0) {
       return errAns;
     }
-    const spreadsheet = this.workbook.spreadsheets[this.page];
     arrayLogs.forEach((log) => {
       if (log.changeType === 'color') {
-        const cell = spreadsheet.getCell(log.cellAddress);
+        const cell = this.spreadsheet.getCell(log.cellAddress);
         cell.setColor(log.color);
       } else {
-        const cell = spreadsheet.getCell(log.cellAddress);
+        const cell = this.spreadsheet.getCell(log.cellAddress);
         cell.setValue(log.type, log.value);
       }
       this.lastChanges.push(log);
     });
     return true;
-  }
-
-  clearCheckChanges() {
-    this.lastChanges = [{ ID: 0 }];
-  }
-
-  synchronize() {
-    saveWorkbook.saveJson(this.workbook, `${this.pathToWorkbook}/../`);
   }
 }
