@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import UserModel from './UserModel.js';
 import FormatError from '../../lib/errors/FormatError.js';
+import UuidValidator from '../../lib/uuid/UuidValidator.js';
 
 export default class TokenModel {
-  constructor(login, uuid = TokenModel.generateUuid()) {
+  constructor(login, uuid = uuidv4()) {
     this.setLogin(login);
     this.setUuid(uuid);
   }
@@ -16,7 +17,7 @@ export default class TokenModel {
   }
 
   setUuid(uuid) {
-    if (!TokenModel.isUuidValid(uuid)) {
+    if (!UuidValidator.isUuidValid(uuid)) {
       throw new FormatError('incorrect UUID');
     }
     this.uuid = uuid;
@@ -33,16 +34,5 @@ export default class TokenModel {
       result.push(TokenModel.fromSQLtoToken(row));
     });
     return result;
-  }
-
-  static generateUuid() {
-    return uuidv4();
-  }
-
-  static isUuidValid(uuid) {
-    const regExp = new RegExp(
-      '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
-    );
-    return regExp.test(uuid);
   }
 }
