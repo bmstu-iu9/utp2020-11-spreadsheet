@@ -10,7 +10,8 @@ export default class WorkbookIdHandler extends EndpointHandler {
       res.sendStatus(401);
       return;
     }
-    const loader = new WorkbookLoader(this.config.pathToWorkbooks);
+    const pathGenerator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
+    const loader = new WorkbookLoader(pathGenerator);
     let content;
     try {
       content = loader.load(id);

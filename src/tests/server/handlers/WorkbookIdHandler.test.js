@@ -10,6 +10,7 @@ import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
+import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
 
 describe('WorkbookIdHandler', () => {
   let environment;
@@ -52,7 +53,8 @@ describe('WorkbookIdHandler', () => {
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
       const workbook = new Workbook('test');
-      const saver = new WorkbookSaver('.');
+      const generator = new WorkbookPathGenerator('.');
+      const saver = new WorkbookSaver(generator);
       saver.save(workbook, 1);
       const workbookModel = new WorkbookModel(username);
       environment.dataRepo.workbookRepo.save(workbookModel);
@@ -96,7 +98,8 @@ describe('WorkbookIdHandler', () => {
       environment.addUsers(1, true);
       const workbookModel = new WorkbookModel('test0');
       const id = environment.dataRepo.workbookRepo.save(workbookModel);
-      const saver = new WorkbookSaver('.');
+      const generator = new WorkbookPathGenerator('.');
+      const saver = new WorkbookSaver(generator);
       saver.save(new Workbook('test'), id);
       const { token } = environment.userTokens[0];
       request(app)

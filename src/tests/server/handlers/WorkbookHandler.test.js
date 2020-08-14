@@ -10,6 +10,7 @@ import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import WorkbookJsonSerializer from '../../../lib/serialization/WorkbookSerializer.js';
 import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
+import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
 
 const testWorkbook = {
   name: 'test',
@@ -51,7 +52,8 @@ describe('WorkbookHandler', () => {
     authorizer = new Authorizer(authenticator);
     app.use(authorizer.getMiddleware());
     const serialized = WorkbookJsonSerializer.serialize(testWorkbook);
-    const saver = new WorkbookSaver('.');
+    const generator = new WorkbookPathGenerator('.');
+    const saver = new WorkbookSaver(generator);
     saver.save(serialized, 1);
   });
   afterEach(() => {
@@ -100,7 +102,8 @@ describe('WorkbookHandler', () => {
       app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const loader = new WorkbookLoader('.');
+      const pathGenerator = new WorkbookPathGenerator('.');
+      const loader = new WorkbookLoader(pathGenerator);
       const obj = loader.load(1);
       request(app)
         .post('/workbook/post/.')
@@ -125,7 +128,8 @@ describe('WorkbookHandler', () => {
       app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const loader = new WorkbookLoader('.');
+      const pathGenerator = new WorkbookPathGenerator('.');
+      const loader = new WorkbookLoader(pathGenerator);
       const obj = loader.load(1);
       request(app)
         .post('/workbook/post/.')

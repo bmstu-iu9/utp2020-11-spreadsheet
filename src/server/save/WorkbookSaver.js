@@ -1,22 +1,10 @@
 import fs from 'fs';
-import WorkbookPathGenerator from './WorkbookPathGenerator.js';
 import WorkbookJsonSerializer from '../../lib/serialization/WorkbookSerializer.js';
+import WorkbookPathManipulator from './WorkbookPathManipulator.js';
 
-export default class WorkbookSaver {
-  constructor(pathToWorkbooks) {
-    this.setPathToWorkbooks(pathToWorkbooks);
-  }
-
-  setPathToWorkbooks(pathToWorkbooks) {
-    if (typeof pathToWorkbooks !== 'string') {
-      throw new TypeError('pathToWorkbooks must be a string');
-    }
-    this.pathToWorkbooks = pathToWorkbooks;
-  }
-
+export default class WorkbookSaver extends WorkbookPathManipulator {
   save(workbook, workbookId) {
-    const generator = new WorkbookPathGenerator(this.pathToWorkbooks);
-    const path = generator.generate(workbookId);
+    const path = this.workbookPathGenerator.generate(workbookId);
     const serialized = WorkbookJsonSerializer.serialize(workbook);
     const content = JSON.stringify(serialized);
     fs.writeFileSync(path, content);

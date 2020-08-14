@@ -5,6 +5,7 @@ import EndpointHandler from './EndpointHandler.js';
 import WorkbookLoader from '../save/WorkbookLoader.js';
 import WorkbookSaver from '../save/WorkbookSaver.js';
 import WorkbookJsonDeserializer from '../../lib/serialization/WorkbookDeserializer.js';
+import WorkbookPathGenerator from '../save/WorkbookPathGenerator.js';
 
 export default class WorkbookHandler extends EndpointHandler {
   get(req, res) {
@@ -20,7 +21,8 @@ export default class WorkbookHandler extends EndpointHandler {
     const result = [];
     list.forEach((wbModel) => {
       const workbook = { id: wbModel.id };
-      const loader = new WorkbookLoader(this.config.pathToWorkbooks);
+      const pathGenerator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
+      const loader = new WorkbookLoader(pathGenerator);
       const reads = loader.load(wbModel.id);
       workbook.name = reads.name;
       workbook.spreadsheets = reads.spreadsheets;
@@ -39,7 +41,8 @@ export default class WorkbookHandler extends EndpointHandler {
     const deserialized = WorkbookJsonDeserializer.deserialize(req.body);
     const workbookModel = new WorkbookModel(req.user.login);
     const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
-    const saver = new WorkbookSaver(this.config.pathToWorkbooks);
+    const generator = new WorkbookPathGenerator('.');
+    const saver = new WorkbookSaver(generator);
     saver.save(deserialized, workbookID.id);
     workbookID.lastCommit = zeroID;
     workbookID.name = req.body.name;
