@@ -10,6 +10,11 @@ let isOnMouseDown = false;
 let isSelection = false;
 let selectionStart;
 let selectionEnd;
+let isBold;
+let isItalic;
+let isUnderline;
+let isLineThrough;
+let selectionEvent = new Event('selection');
 
 function getCellXY(cell) {
   const cellID = Array.from(cells).indexOf(cell);
@@ -26,6 +31,10 @@ function removeSelection(ctrl) {
     for (let i = 0; i < tableWidth; i += 1) {
       columnHeaders[i].classList.remove('header-selected');
     }
+    isBold = false;
+    isUnderline = false;
+    isItalic = false;
+    isLineThrough = false;
   }
   for (let i = 0; i < tableHeight; i += 1) {
     for (let j = 0; j < tableWidth; j += 1) {
@@ -58,33 +67,64 @@ cells.forEach((cell) => {
     selectionEnd = getCellXY(cell);
     if (e.shiftKey) {
       for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-        i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+           i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
         for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-          j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+             j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
           cellsInputs[j * tableWidth + i].classList.remove('selection');
           cellsInputs[j * tableWidth + i].classList.add('selected');
           rowHeaders[j].classList.add('header-selected');
           columnHeaders[i].classList.add('header-selected');
+          if (cellsInputs[j * tableWidth + i].classList.contains('bold')) {
+            isBold = true;
+          }
+          if (cellsInputs[j * tableWidth + i].classList.contains('italic')) {
+            isItalic = true;
+          }
+          if (cellsInputs[j * tableWidth + i].classList.contains('underline')) {
+            isUnderline = true;
+          }
+          if (cellsInputs[j * tableWidth + i].classList.contains('line-through')) {
+            isLineThrough = true;
+          }
         }
       }
     } else {
       selectionStart = selectionEnd;
     }
+    boldBtn.dispatchEvent(selectionEvent);
+    italicBtn.dispatchEvent(selectionEvent);
+    underlineBtn.dispatchEvent(selectionEvent);
+    stretchBtn.dispatchEvent(selectionEvent);
   });
   cell.addEventListener('mouseup', (e) => {
     e.preventDefault();
 
     for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-      i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+         i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
       for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-        j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+           j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
         cellsInputs[j * tableWidth + i].classList.remove('selection');
         cellsInputs[j * tableWidth + i].classList.add('selected');
         rowHeaders[j].classList.add('header-selected');
         columnHeaders[i].classList.add('header-selected');
+        if (cellsInputs[j * tableWidth + i].classList.contains('bold')) {
+          isBold = true;
+        }
+        if (cellsInputs[j * tableWidth + i].classList.contains('italic')) {
+          isItalic = true;
+        }
+        if (cellsInputs[j * tableWidth + i].classList.contains('underline')) {
+          isUnderline = true;
+        }
+        if (cellsInputs[j * tableWidth + i].classList.contains('line-through')) {
+          isLineThrough = true;
+        }
       }
     }
-
+    boldBtn.dispatchEvent(selectionEvent);
+    italicBtn.dispatchEvent(selectionEvent);
+    underlineBtn.dispatchEvent(selectionEvent);
+    stretchBtn.dispatchEvent(selectionEvent);
     if (isOnMouseDown) {
       isSelection = true;
     }
@@ -127,7 +167,7 @@ rowHeaders.forEach((rowHeader, id) => {
       selectionStart = [0, id];
     }
     for (let i = Math.min(selectionStart[1], id);
-      i <= Math.max(selectionStart[1], id); i += 1) {
+         i <= Math.max(selectionStart[1], id); i += 1) {
       rowHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableWidth; j += 1) {
         cellsInputs[i * tableWidth + j].classList.add('selected');
@@ -147,7 +187,7 @@ columnHeaders.forEach((columnHeader, id) => {
       selectionStart = [id, 0];
     }
     for (let i = Math.min(selectionStart[0], id);
-      i <= Math.max(selectionStart[0], id); i += 1) {
+         i <= Math.max(selectionStart[0], id); i += 1) {
       columnHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableHeight; j += 1) {
         cellsInputs[j * tableWidth + i].classList.add('selected');
@@ -155,4 +195,106 @@ columnHeaders.forEach((columnHeader, id) => {
     }
     isSelection = true;
   });
+});
+
+function applyStyle(style) {
+  for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      cellsInputs[j * tableWidth + i].classList.add(style);
+    }
+  }
+}
+
+function removeStyle(style) {
+  for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      cellsInputs[j * tableWidth + i].classList.remove(style);
+    }
+  }
+}
+
+
+const boldBtn = document.getElementById('button-bold');
+const italicBtn = document.getElementById('button-italics');
+const underlineBtn = document.getElementById('button-underlined');
+const stretchBtn = document.getElementById('button-stretched');
+
+boldBtn.addEventListener('click', (e) => {
+  if (isBold) {
+    removeStyle('bold');
+    isBold = false;
+  } else {
+    applyStyle('bold');
+    isBold = true;
+  }
+  boldBtn.dispatchEvent(selectionEvent);
+});
+
+italicBtn.addEventListener('click', (e) => {
+  if (isItalic) {
+    removeStyle('italic');
+    isItalic = false;
+  } else {
+    applyStyle('italic');
+    isItalic = true;
+  }
+  italicBtn.dispatchEvent(selectionEvent);
+});
+
+underlineBtn.addEventListener('click', (e) => {
+  if (isUnderline) {
+    removeStyle('underline');
+    isItalic = false;
+  } else {
+    applyStyle('underline');
+    isUnderline = true;
+  }
+  underlineBtn.dispatchEvent(selectionEvent);
+});
+
+stretchBtn.addEventListener('click', (e) => {
+  if (isLineThrough) {
+    removeStyle('line-through');
+    isLineThrough = false;
+  } else {
+    applyStyle('line-through');
+    isLineThrough = true;
+  }
+  stretchBtn.dispatchEvent(selectionEvent);
+});
+
+boldBtn.addEventListener('selection', (e) => {
+  if (isBold) {
+    boldBtn.classList.add('button-active');
+  } else {
+    boldBtn.classList.remove('button-active');
+  }
+});
+
+italicBtn.addEventListener('selection', (e) => {
+  if (isItalic) {
+    italicBtn.classList.add('button-active');
+  } else {
+    italicBtn.classList.remove('button-active');
+  }
+});
+
+underlineBtn.addEventListener('selection', (e) => {
+  if (isUnderline) {
+    underlineBtn.classList.add('button-active');
+  } else {
+    underlineBtn.classList.remove('button-active');
+  }
+});
+
+stretchBtn.addEventListener('selection', (e) => {
+  if (isLineThrough) {
+    stretchBtn.classList.add('button-active');
+  } else {
+    stretchBtn.classList.remove('button-active');
+  }
 });

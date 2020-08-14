@@ -213,6 +213,10 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   background-color: #fca311;
 }
 
+div.button-active {
+  background-color: #fca311;
+}
+
 #button-copy {
   color: #444c5c;
 }
