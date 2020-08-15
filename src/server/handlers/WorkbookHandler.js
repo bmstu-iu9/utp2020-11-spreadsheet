@@ -1,4 +1,3 @@
-import fs from 'fs';
 import WorkbookModel from '../database/WorkbookModel.js';
 import { zeroID } from '../synchronization/Synchronizer.js';
 import EndpointHandler from './EndpointHandler.js';
