@@ -139,7 +139,7 @@ describe('WorkbookIdHandler', () => {
       .set('Authorization', `Token ${token.uuid}`)
       .expect(404);
   });
-  it('should return 404 for absent commit', () => {
+  it('should return 409 for absent commit', () => {
     mock({
       '1.commits.json': JSON.stringify([{ ID: zeroID }]),
     });
@@ -148,7 +148,7 @@ describe('WorkbookIdHandler', () => {
     return request(app)
       .get('/1?after=6fdc5457-d4bc-4e3e-81ba-bc9f3b49ba7b')
       .set('Authorization', `Token ${token.uuid}`)
-      .expect(404)
+      .expect(409)
       .then(() => {
         mock.restore();
       });
