@@ -1,5 +1,6 @@
 import FormatError from '../../lib/errors/FormatError.js';
 import Spreadsheet from '../../lib/spreadsheets/Spreadsheet.js';
+import CommitFinder from './CommitFinder.js';
 
 const setChangeType = new Set(['color', 'value']);
 
@@ -33,33 +34,27 @@ export class Synchronizer {
     this.spreadsheet = spreadsheet;
   }
 
-  addArrayLogs(arrayLogs, lastCommitId) {
-    let lastPos = -1;
-    for (let i = this.lastChanges.length - 1; i >= 0; i -= 1) {
-      if (lastCommitId === this.lastChanges[i].ID) {
-        lastPos = i;
-        break;
-      }
-    }
+  addArrayLogs(commits, lastCommitId) {
+    const lastPos = new CommitFinder(this.lastChanges).find(lastCommitId);
     if (this.lastChanges.length !== 0 && lastPos === -1) {
       throw new FormatError('invalid log ID');
     }
     const errAns = [];
-    for (let i = 0; i < arrayLogs.length; i += 1) {
+    for (let i = 0; i < commits.length; i += 1) {
       for (let j = lastPos + 1; j < this.lastChanges.length; j += 1) {
-        if (arrayLogs[i].cellAddress === this.lastChanges[j].cellAddress
-          && arrayLogs[i].changeType === this.lastChanges[j].changeType) {
+        if (commits[i].cellAddress === this.lastChanges[j].cellAddress
+          && commits[i].changeType === this.lastChanges[j].changeType) {
           errAns.push(this.lastChanges[j]);
         }
       }
-      if (!setChangeType.has(arrayLogs[0].changeType)) {
-        throw new FormatError(`invalid log change type, find ${arrayLogs[i].changeType}`);
+      if (!setChangeType.has(commits[0].changeType)) {
+        throw new FormatError(`invalid commit change type, find ${commits[i].changeType}`);
       }
     }
     if (errAns.length > 0) {
       return errAns;
     }
-    arrayLogs.forEach((log) => {
+    commits.forEach((log) => {
       if (log.changeType === 'color') {
         const cell = this.spreadsheet.getCell(log.cellAddress);
         cell.setColor(log.color);
