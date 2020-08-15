@@ -68,7 +68,6 @@ describe('Synchronizer', () => {
         .cells.get(log1.cellAddress).color, log1.color);
     });
     it('should add valid log (change value)', () => {
-      const sz = new Synchronizer(spreadsheet);
       assert.deepStrictEqual(sz.addArrayLogs([log2], zeroID), true);
       assert.deepStrictEqual(sz.spreadsheet
         .cells.get(log2.cellAddress).formula, log2.formula);
@@ -76,7 +75,6 @@ describe('Synchronizer', () => {
         .cells.get(log2.cellAddress).value, log2.value);
     });
     it('should add invalid log', () => {
-      const sz = new Synchronizer(spreadsheet);
       assert.throws(() => {
         sz.addArrayLogs([log3], zeroID);
       }, FormatError);
@@ -86,7 +84,6 @@ describe('Synchronizer', () => {
       });
     });
     it('should add collision log', () => {
-      const sz = new Synchronizer(spreadsheet);
       sz.addArrayLogs([log2], zeroID);
       assert.deepStrictEqual(sz.addArrayLogs([log4], zeroID), [log2]);
     });

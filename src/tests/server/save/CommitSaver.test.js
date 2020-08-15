@@ -25,7 +25,7 @@ describe('CommitSaver', () => {
           '1.commmits.json': '',
         },
       });
-      const commits = [{ID:1}];
+      const commits = [{ ID: 1 }];
       saver.save(1, commits);
       const content = fs.readFileSync('commits/1.commits.json');
       const testCommits = JSON.parse(content);

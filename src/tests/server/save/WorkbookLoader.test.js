@@ -2,7 +2,6 @@ import * as assert from 'assert';
 import mock from 'mock-fs';
 import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
 import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
-import Workbook from '../../../lib/spreadsheets/Workbook.js';
 
 describe('WorkbookLoader', () => {
   describe('#constructor()', () => {

@@ -1,4 +1,4 @@
-import FormatError from '../../lib/errors/FormatError.js';
+import FormatError from '../errors/FormatError.js';
 
 export default class WorkbookJsonSerializer {
   static serialize(userWorkbook) {
