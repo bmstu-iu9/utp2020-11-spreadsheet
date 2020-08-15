@@ -2,6 +2,9 @@ import * as assert from 'assert';
 import express from 'express';
 import request from 'supertest';
 import mock from 'mock-fs';
+import fs from 'fs';
+import CommitSaver from '../../../server/save/CommitSaver.js';
+import { zeroID } from '../../../server/synchronization/Synchronizer.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import TokenAuthencticator from '../../../server/authorization/TokenAuthenticator.js';
@@ -11,6 +14,7 @@ import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
 import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
+import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
 
 describe('WorkbookIdHandler', () => {
   let environment;
@@ -32,6 +36,7 @@ describe('WorkbookIdHandler', () => {
     environment.init();
     const handler = new WorkbookIdHandler(environment.dataRepo, {
       pathToWorkbooks: '.',
+      pathToCommits: '.',
     });
     const matcher = new HeaderMatcher('authorization', 'Token ');
     const authenticator = new TokenAuthencticator(matcher, environment.dataRepo);
@@ -56,6 +61,19 @@ describe('WorkbookIdHandler', () => {
         .get('/1')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(404);
+    });
+    it('should return 404 for absent workbook file', () => {
+      mock({
+        '1.json': '',
+      });
+      createWorkbook();
+      fs.unlinkSync('1.json');
+      const { token } = environment.userTokens[0];
+      return request(app)
+        .get('/1')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(404)
+        .then(mock.restore);
     });
     it('should return a workbook', () => {
       mock({
@@ -84,6 +102,56 @@ describe('WorkbookIdHandler', () => {
         .set('Authorization', `Token ${token.uuid}`)
         .expect(403);
     });
+    it('should return commits', () => {
+      createWorkbook();
+      mock({
+        '1.commits.json': '',
+      });
+      const commits = [
+        {
+          ID: zeroID,
+        },
+        {
+          ID: 'd0aab9a8-152f-434e-b833-b76104503617',
+        },
+      ];
+      const { token } = environment.userTokens[0];
+      const generator = new CommitPathGenerator('.');
+      const saver = new CommitSaver(generator);
+      saver.save(1, commits);
+      return request(app)
+        .get(`/1?after=${zeroID}`)
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(200)
+        .then((response) => {
+          assert.deepStrictEqual(response.body, commits.slice(1));
+        })
+        .finally(() => {
+          mock.restore();
+        });
+    });
+  });
+  it('should return 404 for absent file', () => {
+    createWorkbook();
+    const { token } = environment.userTokens[0];
+    return request(app)
+      .get(`/1?after=${zeroID}`)
+      .set('Authorization', `Token ${token.uuid}`)
+      .expect(404);
+  });
+  it('should return 404 for absent commit', () => {
+    mock({
+      '1.commits.json': JSON.stringify([{ ID: zeroID }]),
+    });
+    createWorkbook();
+    const { token } = environment.userTokens[0];
+    return request(app)
+      .get('/1?after=6fdc5457-d4bc-4e3e-81ba-bc9f3b49ba7b')
+      .set('Authorization', `Token ${token.uuid}`)
+      .expect(404)
+      .then(() => {
+        mock.restore();
+      });
   });
   describe('#delete()', () => {
     it('should give response 401 for unauthorized user', (done) => {

@@ -2,13 +2,12 @@ import fs from 'fs';
 import EndpointHandler from './EndpointHandler.js';
 import WorkbookLoader from '../save/WorkbookLoader.js';
 import WorkbookPathGenerator from '../save/WorkbookPathGenerator.js';
+import CommitLoader from '../save/CommitLoader.js';
+import CommitPathGenerator from '../save/CommitPathGenerator.js';
+import CommitFinder from '../synchronization/CommitFinder.js';
 
 export default class WorkbookIdHandler extends EndpointHandler {
   get(req, res) {
-    return this.getWorkbook(req, res);
-  }
-
-  getWorkbook(req, res) {
     const id = Number.parseInt(req.params.id, 10);
     if (req.user === undefined) {
       res.sendStatus(401);
@@ -25,6 +24,14 @@ export default class WorkbookIdHandler extends EndpointHandler {
       res.sendStatus(403);
       return;
     }
+    if (req.query.after === undefined) {
+      this.getWorkbook(id, res);
+    } else {
+      this.getCommits(id, req, res);
+    }
+  }
+
+  getWorkbook(id, res) {
     const pathGenerator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
     const loader = new WorkbookLoader(pathGenerator);
     let content;
@@ -36,6 +43,25 @@ export default class WorkbookIdHandler extends EndpointHandler {
     }
     content.id = id;
     res.status(200).json(content);
+  }
+
+  getCommits(id, req, res) {
+    const pathGenerator = new CommitPathGenerator(this.config.pathToCommits);
+    const loader = new CommitLoader(pathGenerator);
+    let commits;
+    try {
+      commits = loader.load(id);
+    } catch {
+      res.sendStatus(404);
+      return;
+    }
+    const finder = new CommitFinder(commits);
+    const afterPosition = finder.find(req.query.after);
+    if (afterPosition === -1) {
+      res.sendStatus(404);
+      return;
+    }
+    res.status(200).json(commits.slice(afterPosition + 1));
   }
 
   delete(req, res) {

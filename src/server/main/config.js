@@ -11,6 +11,8 @@ export default {
   entrypoint: '/index.html',
   dataPath: 'data',
   databaseName: 'database.db',
+  pathToWorkbooks: 'data/workbooks',
+  pathToCommits: 'data/commits',
   headerMatcher: {
     name: 'authorization',
     prefix: 'Token ',

@@ -183,10 +183,10 @@ paths:
           format: int64
     get:
       parameters:
-        - name: "from"
+        - name: "after"
           in: "query"
           required: false
-          description: "ID коммита, начиная с которого требуются изменения."
+          description: "ID коммита, после которого требуются изменения."
           schema:
             type: string
       description: "Получение книги с заданным ID"
