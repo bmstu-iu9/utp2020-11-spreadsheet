@@ -5,9 +5,24 @@ import WorkbookPathGenerator from '../save/WorkbookPathGenerator.js';
 
 export default class WorkbookIdHandler extends EndpointHandler {
   get(req, res) {
+    return this.getWorkbook(req, res);
+  }
+
+  getWorkbook(req, res) {
     const id = Number.parseInt(req.params.id, 10);
     if (req.user === undefined) {
       res.sendStatus(401);
+      return;
+    }
+    let workbook;
+    try {
+      workbook = this.dataRepo.workbookRepo.getById(id);
+    } catch {
+      res.sendStatus(404);
+      return;
+    }
+    if (workbook.login !== req.user.login) {
+      res.sendStatus(403);
       return;
     }
     const pathGenerator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
@@ -15,7 +30,7 @@ export default class WorkbookIdHandler extends EndpointHandler {
     let content;
     try {
       content = loader.load(id);
-    } catch (error) {
+    } catch {
       res.sendStatus(404);
       return;
     }

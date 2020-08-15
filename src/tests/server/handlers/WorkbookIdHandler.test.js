@@ -16,6 +16,17 @@ describe('WorkbookIdHandler', () => {
   let environment;
   let app;
 
+  const createWorkbook = () => {
+    environment.addUsers(1, true);
+    const { username } = environment.userTokens[0];
+    const workbook = new Workbook('test');
+    const generator = new WorkbookPathGenerator('.');
+    const saver = new WorkbookSaver(generator);
+    saver.save(workbook, 1);
+    const workbookModel = new WorkbookModel(username);
+    environment.dataRepo.workbookRepo.save(workbookModel);
+  };
+
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
     environment.init();
@@ -50,14 +61,8 @@ describe('WorkbookIdHandler', () => {
       mock({
         './1.json': '',
       });
-      environment.addUsers(1, true);
-      const { username, token } = environment.userTokens[0];
-      const workbook = new Workbook('test');
-      const generator = new WorkbookPathGenerator('.');
-      const saver = new WorkbookSaver(generator);
-      saver.save(workbook, 1);
-      const workbookModel = new WorkbookModel(username);
-      environment.dataRepo.workbookRepo.save(workbookModel);
+      createWorkbook();
+      const { token } = environment.userTokens[0];
       return request(app)
         .get('/1')
         .set('Authorization', `Token ${token.uuid}`)
@@ -69,6 +74,15 @@ describe('WorkbookIdHandler', () => {
         .finally(() => {
           mock.restore();
         });
+    });
+    it('should return 403', () => {
+      createWorkbook();
+      environment.addUsers(1, true);
+      const { token } = environment.userTokens[1];
+      return request(app)
+        .get('/1')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(403);
     });
   });
   describe('#delete()', () => {
