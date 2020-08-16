@@ -1,5 +1,5 @@
 import FormatError from '../../lib/errors/FormatError.js';
-import Spreadsheet from '../../lib/spreadsheets/Spreadsheet.js';
+import Workbook from '../../lib/spreadsheets/Workbook.js';
 import CommitFinder from './CommitFinder.js';
 
 const setChangeType = new Set(['color', 'value']);
@@ -7,8 +7,8 @@ const setChangeType = new Set(['color', 'value']);
 export const zeroID = '00000000-0000-0000-0000-000000000000';
 
 export class Synchronizer {
-  constructor(spreadsheet, lastChanges = [{ ID: zeroID }], maxLogSize = 10) {
-    this.setSpreadsheet(spreadsheet);
+  constructor(workbook, lastChanges = [{ ID: zeroID }], maxLogSize = 10) {
+    this.setWorkbook(workbook);
     this.setLastChanges(lastChanges);
     this.setMaxLogSize(maxLogSize);
   }
@@ -27,11 +27,11 @@ export class Synchronizer {
     this.lastChanges = lastChanges;
   }
 
-  setSpreadsheet(spreadsheet) {
-    if (!(spreadsheet instanceof Spreadsheet)) {
-      throw new TypeError('spreadsheet must be a Spreadsheet instance');
+  setWorkbook(workbook) {
+    if (!(workbook instanceof Workbook)) {
+      throw new TypeError('spreadsheet must be a Workbook instance');
     }
-    this.spreadsheet = spreadsheet;
+    this.workbook = workbook;
   }
 
   addArrayLogs(commits, lastCommitId) {
@@ -42,12 +42,11 @@ export class Synchronizer {
     const errAns = [];
     for (let i = 0; i < commits.length; i += 1) {
       for (let j = lastPos + 1; j < this.lastChanges.length; j += 1) {
-        if (commits[i].cellAddress === this.lastChanges[j].cellAddress
-          && commits[i].changeType === this.lastChanges[j].changeType) {
+        if (Synchronizer.doCommitsConflict(commits[i], this.lastChanges[j])) {
           errAns.push(this.lastChanges[j]);
         }
       }
-      if (!setChangeType.has(commits[0].changeType)) {
+      if (!setChangeType.has(commits[i].changeType)) {
         throw new FormatError(`invalid commit change type, find ${commits[i].changeType}`);
       }
     }
@@ -55,15 +54,24 @@ export class Synchronizer {
       return errAns;
     }
     commits.forEach((log) => {
-      if (log.changeType === 'color') {
-        const cell = this.spreadsheet.getCell(log.cellAddress);
-        cell.setColor(log.color);
-      } else {
-        const cell = this.spreadsheet.getCell(log.cellAddress);
-        cell.setValue(log.type, log.value);
-      }
-      this.lastChanges.push(log);
+      const cell = this.workbook.spreadsheets[log.page].getCell(log.cellAddress);
+      this.applyCommitToCell(log, cell);
     });
     return true;
+  }
+
+  applyCommitToCell(commit, cell) {
+    if (commit.changeType === 'color') {
+      cell.setColor(commit.color);
+    }
+    else {
+      cell.setValue(commit.type, commit.value);
+    }
+    this.lastChanges.push(commit);
+  }
+
+  static doCommitsConflict(first, second) {
+    return first.cellAddress === second.cellAddress
+          && first.changeType === second.changeType;
   }
 }

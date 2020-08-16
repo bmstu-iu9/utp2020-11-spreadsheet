@@ -3,17 +3,14 @@ import { Synchronizer, zeroID } from '../../../server/synchronization/Synchroniz
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 import FormatError from '../../../lib/errors/FormatError.js';
-
-const spreadsheet = new Spreadsheet('test', new Map([
-  ['A5', new Cell(valueTypes.number, 100, '#ffffff')],
-  ['A6', new Cell(valueTypes.boolean, true, '#edeef0')],
-]));
+import Workbook from '../../../lib/spreadsheets/Workbook.js';
 
 const log1 = {
   ID: 'cf3c1cf6-be2f-4a6a-b69b-97b9c1126065',
   changeType: 'color',
   cellAddress: 'A1',
   color: '#aaaaaa',
+  page: 0,
 };
 const log2 = {
   ID: 'a67a8ec6-4741-4fbc-b8e9-3ac69ec96559',
@@ -21,10 +18,12 @@ const log2 = {
   cellAddress: 'A2',
   type: 'formula',
   value: '=2+2',
+  page: 0,
 };
 const log3 = {
   ID: '65d0104f-b9af-4de4-acc3-1c696bd0c715',
   changeType: 'pupailupa',
+  page: 0,
 };
 const log4 = {
   ID: 'd1150ba6-488f-440c-82c0-02f8c53910b5',
@@ -32,18 +31,30 @@ const log4 = {
   cellAddress: 'A2',
   type: 'formula',
   value: '=4',
+  page: 0,
 };
 
 const lastChanges = [{ ID: zeroID }];
-const sz = new Synchronizer(spreadsheet);
 
 describe('Synchronizer', () => {
+  const getSynchronizer = () => {
+    const spreadsheet = new Spreadsheet('test', new Map([
+      ['A5', new Cell(valueTypes.number, 100, '#ffffff')],
+      ['A6', new Cell(valueTypes.boolean, true, '#edeef0')],
+    ]));
+    const workbook = new Workbook('workbook', [spreadsheet]);
+    return {
+      sz: new Synchronizer(workbook),
+      workbook,
+    };
+  };
+
   describe('#constructor()', () => {
     it('should make new element', () => {
-      const sync = new Synchronizer(spreadsheet);
-      assert.strictEqual(sync.spreadsheet, spreadsheet);
-      assert.deepStrictEqual(sync.lastChanges, lastChanges);
-      assert.strictEqual(sync.maxLogSize, 10);
+      const { sz, workbook } = getSynchronizer();
+      assert.strictEqual(sz.workbook, workbook);
+      assert.deepStrictEqual(sz.lastChanges, lastChanges);
+      assert.strictEqual(sz.maxLogSize, 10);
     });
     it('should throw an exception for non-spreadsheet', () => {
       assert.throws(() => {
@@ -51,30 +62,35 @@ describe('Synchronizer', () => {
       }, TypeError);
     });
     it('should throw an exception for non-array', () => {
+      const { workbook } = getSynchronizer();
       assert.throws(() => {
-        new Synchronizer(spreadsheet, {});
+        new Synchronizer(workbook, {});
       });
     });
     it('should throw an exception for non-integer', () => {
+      const { workbook } = getSynchronizer();
       assert.throws(() => {
-        new Synchronizer(spreadsheet, lastChanges, 23.4);
+        new Synchronizer(workbook, lastChanges, 23.4);
       });
     });
   });
   describe('#addArrayLogs()', () => {
     it('should add valid log (change color)', () => {
+      const { sz } = getSynchronizer();
       assert.deepStrictEqual(sz.addArrayLogs([log1], zeroID), true);
-      assert.deepStrictEqual(sz.spreadsheet
+      assert.strictEqual(sz.workbook.spreadsheets[0]
         .cells.get(log1.cellAddress).color, log1.color);
     });
     it('should add valid log (change value)', () => {
+      const { sz } = getSynchronizer();
       assert.deepStrictEqual(sz.addArrayLogs([log2], zeroID), true);
-      assert.deepStrictEqual(sz.spreadsheet
+      assert.deepStrictEqual(sz.workbook.spreadsheets[0]
         .cells.get(log2.cellAddress).formula, log2.formula);
-      assert.deepStrictEqual(sz.spreadsheet
+      assert.deepStrictEqual(sz.workbook.spreadsheets[0]
         .cells.get(log2.cellAddress).value, log2.value);
     });
     it('should add invalid log', () => {
+      const { sz } = getSynchronizer();
       assert.throws(() => {
         sz.addArrayLogs([log3], zeroID);
       }, FormatError);
@@ -84,10 +100,12 @@ describe('Synchronizer', () => {
       });
     });
     it('should add collision log', () => {
+      const { sz } = getSynchronizer();
       sz.addArrayLogs([log2], zeroID);
       assert.deepStrictEqual(sz.addArrayLogs([log4], zeroID), [log2]);
     });
     it('should add log with invalid ID', () => {
+      const { sz } = getSynchronizer();
       assert.throws(() => {
         sz.addArrayLogs(log1, '2448c5f7-0649-4994-80f7-d9de4883574d');
       }, FormatError);
