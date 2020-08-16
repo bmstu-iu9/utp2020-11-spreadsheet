@@ -33,16 +33,25 @@ const log4 = {
   value: '=4',
   page: 0,
 };
+const log5 = {
+  ID: '7cc880c8-2579-421e-9bff-4e35ff7e536c',
+  changeType: 'value',
+  cellAddress: 'A2',
+  type: 'formula',
+  value: '=5',
+  page: 1,
+};
 
 const lastChanges = [{ ID: zeroID }];
 
 describe('Synchronizer', () => {
   const getSynchronizer = () => {
-    const spreadsheet = new Spreadsheet('test', new Map([
+    const spreadsheet1 = new Spreadsheet('test', new Map([
       ['A5', new Cell(valueTypes.number, 100, '#ffffff')],
       ['A6', new Cell(valueTypes.boolean, true, '#edeef0')],
     ]));
-    const workbook = new Workbook('workbook', [spreadsheet]);
+    const spreadsheet2 = new Spreadsheet('test2');
+    const workbook = new Workbook('workbook', [spreadsheet1, spreadsheet2]);
     return {
       sz: new Synchronizer(workbook),
       workbook,
@@ -107,8 +116,13 @@ describe('Synchronizer', () => {
     it('should add log with invalid ID', () => {
       const { sz } = getSynchronizer();
       assert.throws(() => {
-        sz.addArrayLogs(log1, '2448c5f7-0649-4994-80f7-d9de4883574d');
+        sz.addArrayLogs([log1], '2448c5f7-0649-4994-80f7-d9de4883574d');
       }, FormatError);
+    });
+    it('should successfully add logs for different pages', () => {
+      const { sz } = getSynchronizer();
+      assert.strictEqual(sz.addArrayLogs([log4], zeroID), true);
+      assert.strictEqual(sz.addArrayLogs([log5], zeroID), true);
     });
   });
 });

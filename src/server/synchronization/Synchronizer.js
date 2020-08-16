@@ -71,7 +71,8 @@ export class Synchronizer {
   }
 
   static doCommitsConflict(first, second) {
-    return first.cellAddress === second.cellAddress
+    return first.page === second.page
+          && first.cellAddress === second.cellAddress
           && first.changeType === second.changeType;
   }
 }
