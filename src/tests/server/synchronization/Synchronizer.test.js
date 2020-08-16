@@ -42,8 +42,6 @@ const log5 = {
   page: 1,
 };
 
-const lastChanges = [{ ID: zeroID }];
-
 describe('Synchronizer', () => {
   const getSynchronizer = () => {
     const spreadsheet1 = new Spreadsheet('test', new Map([
@@ -62,8 +60,7 @@ describe('Synchronizer', () => {
     it('should make new element', () => {
       const { sz, workbook } = getSynchronizer();
       assert.strictEqual(sz.workbook, workbook);
-      assert.deepStrictEqual(sz.lastChanges, lastChanges);
-      assert.strictEqual(sz.maxLogSize, 10);
+      assert.deepStrictEqual(sz.acceptedCommits, [{ ID: zeroID }]);
     });
     it('should throw an exception for non-spreadsheet', () => {
       assert.throws(() => {
@@ -76,53 +73,47 @@ describe('Synchronizer', () => {
         new Synchronizer(workbook, {});
       });
     });
-    it('should throw an exception for non-integer', () => {
-      const { workbook } = getSynchronizer();
-      assert.throws(() => {
-        new Synchronizer(workbook, lastChanges, 23.4);
-      });
-    });
   });
-  describe('#addArrayLogs()', () => {
+  describe('#addCommits()', () => {
     it('should add valid log (change color)', () => {
       const { sz } = getSynchronizer();
-      assert.deepStrictEqual(sz.addArrayLogs([log1], zeroID), true);
+      assert.deepStrictEqual(sz.addCommits([log1], zeroID), []);
       assert.strictEqual(sz.workbook.spreadsheets[0]
         .cells.get(log1.cellAddress).color, log1.color);
     });
     it('should add valid log (change value)', () => {
       const { sz } = getSynchronizer();
-      assert.deepStrictEqual(sz.addArrayLogs([log2], zeroID), true);
-      assert.deepStrictEqual(sz.workbook.spreadsheets[0]
+      assert.deepStrictEqual(sz.addCommits([log2], zeroID), []);
+      assert.strictEqual(sz.workbook.spreadsheets[0]
         .cells.get(log2.cellAddress).formula, log2.formula);
-      assert.deepStrictEqual(sz.workbook.spreadsheets[0]
+      assert.strictEqual(sz.workbook.spreadsheets[0]
         .cells.get(log2.cellAddress).value, log2.value);
     });
     it('should add invalid log', () => {
       const { sz } = getSynchronizer();
       assert.throws(() => {
-        sz.addArrayLogs([log3], zeroID);
+        sz.addCommits([log3], zeroID);
       }, FormatError);
-      sz.addArrayLogs([log1], zeroID);
+      sz.addCommits([log1], zeroID);
       assert.throws(() => {
-        sz.addArrayLogs([log3], log1.ID);
+        sz.addCommits([log3], log1.ID);
       });
     });
     it('should add collision log', () => {
       const { sz } = getSynchronizer();
-      sz.addArrayLogs([log2], zeroID);
-      assert.deepStrictEqual(sz.addArrayLogs([log4], zeroID), [log2]);
+      sz.addCommits([log2], zeroID);
+      assert.deepStrictEqual(sz.addCommits([log4], zeroID), [log2]);
     });
     it('should add log with invalid ID', () => {
       const { sz } = getSynchronizer();
       assert.throws(() => {
-        sz.addArrayLogs([log1], '2448c5f7-0649-4994-80f7-d9de4883574d');
+        sz.addCommits([log1], '2448c5f7-0649-4994-80f7-d9de4883574d');
       }, FormatError);
     });
     it('should successfully add logs for different pages', () => {
       const { sz } = getSynchronizer();
-      assert.strictEqual(sz.addArrayLogs([log4], zeroID), true);
-      assert.strictEqual(sz.addArrayLogs([log5], zeroID), true);
+      assert.deepStrictEqual(sz.addCommits([log4], zeroID), []);
+      assert.deepStrictEqual(sz.addCommits([log5], zeroID), []);
     });
   });
 });

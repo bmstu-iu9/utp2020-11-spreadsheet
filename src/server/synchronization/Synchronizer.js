@@ -7,24 +7,16 @@ const setChangeType = new Set(['color', 'value']);
 export const zeroID = '00000000-0000-0000-0000-000000000000';
 
 export class Synchronizer {
-  constructor(workbook, lastChanges = [{ ID: zeroID }], maxLogSize = 10) {
+  constructor(workbook, acceptedCommits = [{ ID: zeroID }]) {
     this.setWorkbook(workbook);
-    this.setLastChanges(lastChanges);
-    this.setMaxLogSize(maxLogSize);
+    this.setAcceptedCommits(acceptedCommits);
   }
 
-  setMaxLogSize(maxLogSize) {
-    if (!Number.isInteger(maxLogSize)) {
-      throw new TypeError('maxLogSize must be an integer');
+  setAcceptedCommits(acceptedCommits) {
+    if (!(acceptedCommits instanceof Array)) {
+      throw new TypeError('acceptedCommits must be an array');
     }
-    this.maxLogSize = maxLogSize;
-  }
-
-  setLastChanges(lastChanges) {
-    if (!(lastChanges instanceof Array)) {
-      throw new TypeError('lastChanges must be an array');
-    }
-    this.lastChanges = lastChanges;
+    this.acceptedCommits = acceptedCommits;
   }
 
   setWorkbook(workbook) {
@@ -34,43 +26,42 @@ export class Synchronizer {
     this.workbook = workbook;
   }
 
-  addArrayLogs(commits, lastCommitId) {
-    const lastPos = new CommitFinder(this.lastChanges).find(lastCommitId);
-    if (this.lastChanges.length !== 0 && lastPos === -1) {
+  addCommits(commits, lastCommitId) {
+    const lastPos = new CommitFinder(this.acceptedCommits).find(lastCommitId);
+    if (this.acceptedCommits.length !== 0 && lastPos === -1) {
       throw new FormatError('invalid log ID');
     }
-    const errAns = [];
-    for (let i = 0; i < commits.length; i += 1) {
-      for (let j = lastPos + 1; j < this.lastChanges.length; j += 1) {
-        if (Synchronizer.doCommitsConflict(commits[i], this.lastChanges[j])) {
-          errAns.push(this.lastChanges[j]);
+    const conflictingCommits = [];
+    commits.forEach((commit) => {
+      for (let j = lastPos + 1; j < this.acceptedCommits.length; j += 1) {
+        if (Synchronizer.areCommitsConflicting(commit, this.acceptedCommits[j])) {
+          conflictingCommits.push(this.acceptedCommits[j]);
         }
       }
-      if (!setChangeType.has(commits[i].changeType)) {
-        throw new FormatError(`invalid commit change type, find ${commits[i].changeType}`);
+      if (!setChangeType.has(commit.changeType)) {
+        throw new FormatError(`invalid commit change type: ${commit.changeType}`);
       }
-    }
-    if (errAns.length > 0) {
-      return errAns;
+    });
+    if (conflictingCommits.length > 0) {
+      return conflictingCommits;
     }
     commits.forEach((log) => {
       const cell = this.workbook.spreadsheets[log.page].getCell(log.cellAddress);
       this.applyCommitToCell(log, cell);
     });
-    return true;
+    return [];
   }
 
   applyCommitToCell(commit, cell) {
     if (commit.changeType === 'color') {
       cell.setColor(commit.color);
-    }
-    else {
+    } else {
       cell.setValue(commit.type, commit.value);
     }
-    this.lastChanges.push(commit);
+    this.acceptedCommits.push(commit);
   }
 
-  static doCommitsConflict(first, second) {
+  static areCommitsConflicting(first, second) {
     return first.page === second.page
           && first.cellAddress === second.cellAddress
           && first.changeType === second.changeType;
