@@ -31,6 +31,21 @@ export class Synchronizer {
     if (this.acceptedCommits.length !== 0 && lastPos === -1) {
       throw new FormatError('invalid log ID');
     }
+    commits.forEach((commit) => {
+      Synchronizer.validateCommit(commit);
+    });
+    const conflictingCommits = this.findConflictingCommits(commits, lastPos);
+    if (conflictingCommits.length > 0) {
+      return conflictingCommits;
+    }
+    commits.forEach((commit) => {
+      const cell = this.workbook.spreadsheets[commit.page].getCell(commit.cellAddress);
+      this.applyCommitToCell(commit, cell);
+    });
+    return [];
+  }
+
+  findConflictingCommits(commits, lastPos) {
     const conflictingCommits = [];
     commits.forEach((commit) => {
       for (let j = lastPos + 1; j < this.acceptedCommits.length; j += 1) {
@@ -38,18 +53,14 @@ export class Synchronizer {
           conflictingCommits.push(this.acceptedCommits[j]);
         }
       }
-      if (!setChangeType.has(commit.changeType)) {
-        throw new FormatError(`invalid commit change type: ${commit.changeType}`);
-      }
     });
-    if (conflictingCommits.length > 0) {
-      return conflictingCommits;
+    return conflictingCommits;
+  }
+
+  static validateCommit(commit) {
+    if (!setChangeType.has(commit.changeType)) {
+      throw new FormatError(`invalid commit change type: ${commit.changeType}`);
     }
-    commits.forEach((log) => {
-      const cell = this.workbook.spreadsheets[log.page].getCell(log.cellAddress);
-      this.applyCommitToCell(log, cell);
-    });
-    return [];
   }
 
   applyCommitToCell(commit, cell) {
