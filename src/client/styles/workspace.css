@@ -299,6 +299,7 @@ div.table-wrapper {
 }
 
 #table {
+  position: relative;
   table-layout: fixed;
   border-collapse: collapse;
   border: 1px solid #d9d9d9;
@@ -309,7 +310,7 @@ div.table-wrapper {
   height: 22px;
 }
 
-#table td {
+#table td, th {
   width: 100px;
   border: 1px solid #d9d9d9;
   box-sizing: border-box;
@@ -332,15 +333,27 @@ input.cell {
   z-index: 0;
 }
 
-#table td.column-header, #table td.row-header {
+#table th.column-header {
   padding: 5px 2px;
-  position: relative;
-  background: #eeeeee;
+  position: sticky;
+  top: 0;
+  background: #eee;
   font-family: Lato, sans-serif;
   font-weight: 600;
   color: #444c5c;
   text-align: center;
   cursor: pointer;
+  user-select: none;
+}
+
+#table th.row-header {
+  padding: 5px 2px;
+  position: relative;
+  position: sticky;
+  left: 0;
+  background: #eee;
+  font-family: Lato, sans-serif;
+  font-weight: 600;
 }
 
 input.cell:hover {
@@ -351,20 +364,20 @@ input.cell:hover {
   border: 2px solid #fca311;
 }
 
-#table td.row-header {
+#table th.row-header {
   min-width: 70px;
 }
 
-#table td.column-header {
+#table th.column-header {
   min-width: 100px;
 }
 
-#table tr:nth-child(1) > td:nth-child(1):hover {
+#table tr:nth-child(1) > th:nth-child(1):hover {
   background-color: inherit;
   cursor: inherit;
 }
 
-#table td.column-header:hover, #table td.row-header:hover {
+#table th.column-header:hover, #table th.row-header:hover {
   border: 1px solid #d9d9d9;
   background-color: #fca311;
 }
