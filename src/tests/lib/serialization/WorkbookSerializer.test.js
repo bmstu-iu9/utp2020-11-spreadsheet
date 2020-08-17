@@ -11,7 +11,7 @@ const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
 const tableSchema = JSON.parse(fs.readFileSync('./resources/tableSchema.json'));
 
-describe('WorkbookJsonSerializer', () => {
+describe('WorkbookSerializer', () => {
   describe('#serialize()', () => {
     it('should create a valid json file', () => {
       const cells = new Map();

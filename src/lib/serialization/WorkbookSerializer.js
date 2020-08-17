@@ -1,6 +1,6 @@
 import FormatError from '../errors/FormatError.js';
 
-export default class WorkbookJsonSerializer {
+export default class WorkbookSerializer {
   static serialize(userWorkbook) {
     if (userWorkbook === null) {
       throw new FormatError('Empty workbook');

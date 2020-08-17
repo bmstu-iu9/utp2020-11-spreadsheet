@@ -8,7 +8,7 @@ import TestEnvironment from '../database/TestEnvironment.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
 import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
-import WorkbookJsonSerializer from '../../../lib/serialization/WorkbookSerializer.js';
+import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
 import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
 import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
 
@@ -51,7 +51,7 @@ describe('WorkbookHandler', () => {
     authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
     authorizer = new Authorizer(authenticator);
     app.use(authorizer.getMiddleware());
-    const serialized = WorkbookJsonSerializer.serialize(testWorkbook);
+    const serialized = WorkbookSerializer.serialize(testWorkbook);
     const generator = new WorkbookPathGenerator('.');
     const saver = new WorkbookSaver(generator);
     saver.save(serialized, 1);
