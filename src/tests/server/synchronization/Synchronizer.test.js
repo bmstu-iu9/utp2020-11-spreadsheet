@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { Synchronizer, zeroID } from '../../../server/synchronization/Synchronizer.js';
+import { Synchronizer, zeroID } from '../../../lib/synchronization/Synchronizer.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 import FormatError from '../../../lib/errors/FormatError.js';

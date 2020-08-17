@@ -4,8 +4,8 @@ import WorkbookLoader from '../save/WorkbookLoader.js';
 import WorkbookPathGenerator from '../save/WorkbookPathGenerator.js';
 import CommitLoader from '../save/CommitLoader.js';
 import CommitPathGenerator from '../save/CommitPathGenerator.js';
-import CommitFinder from '../synchronization/CommitFinder.js';
-import { Synchronizer } from '../synchronization/Synchronizer.js';
+import CommitFinder from '../../lib/synchronization/CommitFinder.js';
+import { Synchronizer } from '../../lib/synchronization/Synchronizer.js';
 import WorkbookSaver from '../save/WorkbookSaver.js';
 import CommitSaver from '../save/CommitSaver.js';
 

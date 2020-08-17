@@ -4,7 +4,7 @@ import request from 'supertest';
 import mock from 'mock-fs';
 import fs from 'fs';
 import CommitSaver from '../../../server/save/CommitSaver.js';
-import { zeroID } from '../../../server/synchronization/Synchronizer.js';
+import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import TokenAuthencticator from '../../../server/authorization/TokenAuthenticator.js';

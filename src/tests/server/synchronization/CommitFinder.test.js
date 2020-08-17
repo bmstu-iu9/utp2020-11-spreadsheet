@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import CommitFinder from '../../../server/synchronization/CommitFinder.js';
+import CommitFinder from '../../../lib/synchronization/CommitFinder.js';
 
 describe('CommitFinder', () => {
   const commits = [

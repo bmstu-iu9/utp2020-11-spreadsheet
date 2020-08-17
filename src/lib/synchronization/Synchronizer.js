@@ -1,5 +1,5 @@
-import FormatError from '../../lib/errors/FormatError.js';
-import Workbook from '../../lib/spreadsheets/Workbook.js';
+import FormatError from '../errors/FormatError.js';
+import Workbook from '../spreadsheets/Workbook.js';
 import CommitFinder from './CommitFinder.js';
 
 const setChangeType = new Set(['color', 'value']);

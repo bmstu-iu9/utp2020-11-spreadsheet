@@ -1,5 +1,5 @@
 import WorkbookModel from '../database/WorkbookModel.js';
-import { zeroID } from '../synchronization/Synchronizer.js';
+import { zeroID } from '../../lib/synchronization/Synchronizer.js';
 import EndpointHandler from './EndpointHandler.js';
 import WorkbookLoader from '../save/WorkbookLoader.js';
 import WorkbookSaver from '../save/WorkbookSaver.js';
