@@ -3,7 +3,7 @@ import fs from 'fs';
 import mock from 'mock-fs';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
-import WorkbookJsonDeserializer from '../../../lib/serialization/WorkbookDeserializer.js';
+import WorkbookDeserializer from '../../../lib/serialization/WorkbookDeserializer.js';
 import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
 
 const pathGenerator = new WorkbookPathGenerator('.');
@@ -29,7 +29,7 @@ describe('WorkbookSaver', () => {
       const saver = new WorkbookSaver(pathGenerator);
       saver.save(workbook, 1);
       const content = fs.readFileSync('./1.json');
-      const testWorkbook = WorkbookJsonDeserializer.deserialize(JSON.parse(content));
+      const testWorkbook = WorkbookDeserializer.deserialize(JSON.parse(content));
       assert.deepStrictEqual(testWorkbook, workbook);
       mock.restore();
     });

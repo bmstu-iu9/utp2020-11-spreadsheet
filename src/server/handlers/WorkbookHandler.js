@@ -3,7 +3,7 @@ import { zeroID } from '../../lib/synchronization/Synchronizer.js';
 import EndpointHandler from './EndpointHandler.js';
 import WorkbookLoader from '../save/WorkbookLoader.js';
 import WorkbookSaver from '../save/WorkbookSaver.js';
-import WorkbookJsonDeserializer from '../../lib/serialization/WorkbookDeserializer.js';
+import WorkbookDeserializer from '../../lib/serialization/WorkbookDeserializer.js';
 import WorkbookPathGenerator from '../save/WorkbookPathGenerator.js';
 
 export default class WorkbookHandler extends EndpointHandler {
@@ -37,7 +37,7 @@ export default class WorkbookHandler extends EndpointHandler {
     if (req.body === undefined) {
       return res.sendStatus(400);
     }
-    const deserialized = WorkbookJsonDeserializer.deserialize(req.body);
+    const deserialized = WorkbookDeserializer.deserialize(req.body);
     const workbookModel = new WorkbookModel(req.user.login);
     const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
     const generator = new WorkbookPathGenerator(this.config.pathToWorkbooks);

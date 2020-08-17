@@ -3,14 +3,14 @@ import mock from 'mock-fs';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
-import WorkbookJsonDeserializer from '../../../lib/serialization/WorkbookDeserializer.js';
+import WorkbookDeserializer from '../../../lib/serialization/WorkbookDeserializer.js';
 import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
 const pathToWorkbooks = './workbooks/alexis';
 
-describe('WorkbookJsonDeserializer', () => {
+describe('WorkbookDeserializer', () => {
   describe('#deserializeCells()', () => {
     it('should return a map of cells', () => {
       let cells = {
@@ -30,7 +30,7 @@ describe('WorkbookJsonDeserializer', () => {
           value: 13,
         },
       };
-      cells = WorkbookJsonDeserializer.deserializeCells(cells);
+      cells = WorkbookDeserializer.deserializeCells(cells);
       const testCells = new Map();
       testCells.set('A1', new Cell(valueTypes.number, 10));
       testCells.set('A2', new Cell(valueTypes.number, 11));
@@ -39,7 +39,7 @@ describe('WorkbookJsonDeserializer', () => {
     });
     it('should return an empty map', () => {
       assert.strictEqual(
-        JSON.stringify(WorkbookJsonDeserializer.deserializeCells({})), JSON.stringify(new Map()),
+        JSON.stringify(WorkbookDeserializer.deserializeCells({})), JSON.stringify(new Map()),
       );
     });
   });
@@ -67,7 +67,7 @@ describe('WorkbookJsonDeserializer', () => {
           },
         },
       ];
-      spreadsheets = WorkbookJsonDeserializer.deserializeSpreadsheets(spreadsheets);
+      spreadsheets = WorkbookDeserializer.deserializeSpreadsheets(spreadsheets);
       const testSpreadsheets = [
         new Spreadsheet('Sheet1', new Map([['A1', new Cell(valueTypes.number, 10)]])),
         new Spreadsheet('Sheet2', new Map([['A2', new Cell(valueTypes.boolean, true)]])),
@@ -76,7 +76,7 @@ describe('WorkbookJsonDeserializer', () => {
     });
     it('should return an empty array', () => {
       assert.strictEqual(
-        JSON.stringify(WorkbookJsonDeserializer.deserializeSpreadsheets([])), JSON.stringify([]),
+        JSON.stringify(WorkbookDeserializer.deserializeSpreadsheets([])), JSON.stringify([]),
       );
     });
   });
@@ -90,7 +90,7 @@ describe('WorkbookJsonDeserializer', () => {
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
       const workbook = new Workbook(workbookStandardName, spreadsheets);
       const serialized = WorkbookSerializer.serialize(workbook, pathToWorkbooks);
-      const testWorkbook = WorkbookJsonDeserializer.deserialize(serialized);
+      const testWorkbook = WorkbookDeserializer.deserialize(serialized);
       assert.strictEqual(JSON.stringify(workbook), JSON.stringify(testWorkbook));
       mock.restore();
     });

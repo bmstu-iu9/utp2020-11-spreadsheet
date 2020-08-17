@@ -2,7 +2,7 @@ import { Cell } from '../spreadsheets/Cell.js';
 import Spreadsheet from '../spreadsheets/Spreadsheet.js';
 import Workbook from '../spreadsheets/Workbook.js';
 
-export default class WorkbookJsonDeserializer {
+export default class WorkbookDeserializer {
   static deserialize(serializedWorkbook) {
     return new Workbook(
       serializedWorkbook.name,
