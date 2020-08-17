@@ -1,3 +1,4 @@
+import * as assert from 'assert';
 import express from 'express';
 import request from 'supertest';
 import fs from 'fs';
@@ -121,7 +122,7 @@ describe('WorkbookHandler', () => {
         .set('Authorization', `Token ${token.uuid}`)
         .expect(400, done);
     });
-    it('should give response 200 and object', (done) => {
+    it('should give response 200 and object', () => {
       environment.addUsers(1, true);
       const { token } = environment.userTokens[0];
       app.use(express.json());
@@ -131,11 +132,14 @@ describe('WorkbookHandler', () => {
       const pathGenerator = new WorkbookPathGenerator('.');
       const loader = new WorkbookLoader(pathGenerator);
       const obj = loader.load(1);
-      request(app)
+      return request(app)
         .post('/workbook/post')
         .set('Authorization', `Token ${token.uuid}`)
         .send(obj)
-        .expect(200, done);
+        .expect(200)
+        .then((response) => {
+          assert.strictEqual(response.body.name, obj.name);
+        });
     });
   });
 });
