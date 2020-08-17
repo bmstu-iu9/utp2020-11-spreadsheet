@@ -11,13 +11,14 @@ import CommitSaver from '../save/CommitSaver.js';
 
 export default class WorkbookIdHandler extends EndpointHandler {
   get(req, res) {
-    if (this.validateAccess(req, res)) {
-      if (req.query.after === undefined) {
-        this.getWorkbook(req, res);
-      } else {
-        this.getCommits(req, res);
-      }
+    const validationResult = this.validateAccess(req, res);
+    if (validationResult !== true) {
+      return validationResult;
     }
+    if (req.query.after === undefined) {
+      return this.getWorkbook(req, res);
+    }
+    return this.getCommits(req, res);
   }
 
   patch(req, res) {
