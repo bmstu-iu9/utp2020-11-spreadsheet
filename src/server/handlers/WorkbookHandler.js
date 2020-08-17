@@ -40,7 +40,7 @@ export default class WorkbookHandler extends EndpointHandler {
     const deserialized = WorkbookJsonDeserializer.deserialize(req.body);
     const workbookModel = new WorkbookModel(req.user.login);
     const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
-    const generator = new WorkbookPathGenerator('.');
+    const generator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
     const saver = new WorkbookSaver(generator);
     saver.save(deserialized, workbookID.id);
     workbookID.lastCommit = zeroID;
