@@ -21,29 +21,29 @@ export default class WorkbookIdHandler extends EndpointHandler {
   }
 
   patch(req, res) {
-    if (this.validateAccess(req, res)) {
-      const id = Number.parseInt(req.params.id, 10);
-      const workbook = this.fetchWorkbook(id);
-      const commits = this.fetchCommits(id);
-      const synchronizer = new Synchronizer(workbook, commits);
-      let conflicts;
-      try {
-        conflicts = synchronizer.addCommits(
-          req.body.changes,
-          req.body.lastSynchronizedCommit,
-        );
-      } catch {
-        res.sendStatus(400);
-        return;
-      }
-      if (conflicts.length !== 0) {
-        res.status(409).json(conflicts);
-        return;
-      }
-      this.saveCommits(synchronizer.acceptedCommits);
-      this.saveWorkbook(synchronizer.workbook);
-      res.sendStatus(200);
+    const validationResult = this.validateAccess(req, res);
+    if (validationResult !== true) {
+      return validationResult;
     }
+    const id = Number.parseInt(req.params.id, 10);
+    const workbook = this.fetchWorkbook(id);
+    const commits = this.fetchCommits(id);
+    const synchronizer = new Synchronizer(workbook, commits);
+    let conflicts;
+    try {
+      conflicts = synchronizer.addCommits(
+        req.body.changes,
+        req.body.lastSynchronizedCommit,
+      );
+    } catch {
+      return res.sendStatus(400);
+    }
+    if (conflicts.length !== 0) {
+      return res.status(409).json(conflicts);
+    }
+    this.saveCommits(synchronizer.acceptedCommits);
+    this.saveWorkbook(synchronizer.workbook);
+    return res.sendStatus(200);
   }
 
   saveCommits(commits) {
@@ -59,32 +59,31 @@ export default class WorkbookIdHandler extends EndpointHandler {
   }
 
   delete(req, res) {
-    if (this.validateAccess(req, res)) {
-      const id = Number.parseInt(req.params.id, 10);
-      this.dataRepo.workbookRepo.delete(id);
-      const generator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
-      const path = generator.generate(id);
-      fs.unlinkSync(path);
-      res.sendStatus(200);
+    const validationResult = this.validateAccess(req, res);
+    if (validationResult !== true) {
+      return validationResult;
     }
+    const id = Number.parseInt(req.params.id, 10);
+    this.dataRepo.workbookRepo.delete(id);
+    const generator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
+    const path = generator.generate(id);
+    fs.unlinkSync(path);
+    return res.sendStatus(200);
   }
 
   validateAccess(req, res) {
     const id = Number.parseInt(req.params.id, 10);
     if (req.user === undefined) {
-      res.sendStatus(401);
-      return false;
+      return res.sendStatus(401);
     }
     let workbook;
     try {
       workbook = this.dataRepo.workbookRepo.getById(id);
     } catch {
-      res.sendStatus(404);
-      return false;
+      return res.sendStatus(404);
     }
     if (workbook.login !== req.user.login) {
-      res.sendStatus(403);
-      return false;
+      return res.sendStatus(403);
     }
     return true;
   }
@@ -93,27 +92,24 @@ export default class WorkbookIdHandler extends EndpointHandler {
     const id = Number.parseInt(req.params.id, 10);
     const content = this.fetchWorkbook(id);
     if (content === undefined) {
-      res.sendStatus(404);
-      return;
+      return res.sendStatus(404);
     }
     content.id = id;
-    res.status(200).json(content);
+    return res.status(200).json(content);
   }
 
   getCommits(req, res) {
     const id = Number.parseInt(req.params.id, 10);
     const commits = this.fetchCommits(id);
     if (commits === undefined) {
-      res.sendStatus(404);
-      return;
+      return res.sendStatus(404);
     }
     const finder = new CommitFinder(commits);
     const afterPosition = finder.find(req.query.after);
     if (afterPosition === -1) {
-      res.sendStatus(409);
-      return;
+      return res.sendStatus(409);
     }
-    res.status(200).json(commits.slice(afterPosition + 1));
+    return res.status(200).json(commits.slice(afterPosition + 1));
   }
 
   fetchWorkbook(id) {
