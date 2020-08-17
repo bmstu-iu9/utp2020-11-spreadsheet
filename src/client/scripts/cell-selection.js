@@ -13,6 +13,13 @@ const fontNames = document.querySelectorAll('#tool-font li')
 const fontDisplay = document.getElementById('input-font');
 let fontIsDropped = false;
 
+const fontsizeBlock = document.getElementById('tool-fontsize');
+const fontsizeUnbarBtn = fontsizeBlock.children[0].children[1];
+const fontsizeList = fontsizeBlock.children[1];
+const fontsizeNames = document.querySelectorAll('#tool-fontsize li');
+const fontsizeDisplay = document.getElementById('input-fontsize');
+let fontsizeIsDropped = false;
+
 const boldBtn = document.getElementById('button-bold');
 const italicBtn = document.getElementById('button-italics');
 const underlineBtn = document.getElementById('button-underlined');
@@ -58,6 +65,8 @@ function updateButtons() {
   italicBtn.dispatchEvent(selectionEvent);
   underlineBtn.dispatchEvent(selectionEvent);
   stretchBtn.dispatchEvent(selectionEvent);
+  fontDisplay.value = cellsInputs[selectionStart[1] * tableWidth + selectionStart[0]].style.fontFamily || 'Arial';
+  fontsizeDisplay.value = cellsInputs[selectionStart[1] * tableWidth + selectionStart[0]].style.fontSize.slice(0, -2) || '13';
 }
 
 function changeSelection() {
@@ -120,6 +129,7 @@ cells.forEach((cell) => {
   cell.addEventListener('mousedown', (e) => {
     e.preventDefault();
     fontDisplay.blur();
+    fontsizeDisplay.blur();
     isOnMouseDown = true;
     removeSelection(e.ctrlKey);
     selectionEnd = getCellXY(cell);
@@ -131,7 +141,6 @@ cells.forEach((cell) => {
   });
   cell.addEventListener('mouseup', (e) => {
     e.preventDefault();
-
     applySelection();
     updateButtons();
     isOnMouseDown = false;
@@ -311,7 +320,6 @@ fontNames.forEach((font) => {
     fontIsDropped = false;
 
     reduceCells((cell) => {
-      console.log(1);
       // eslint-disable-next-line no-param-reassign
       cell.style.fontFamily = font.innerHTML;
     });
@@ -323,6 +331,38 @@ fontDisplay.addEventListener(('keydown'), (e) => {
     reduceCells((cell) => {
       // eslint-disable-next-line no-param-reassign
       cell.style.fontFamily = fontDisplay.value;
+    });
+  }
+});
+
+fontsizeUnbarBtn.addEventListener('click', () => {
+  if (fontsizeIsDropped) {
+    fontsizeList.classList.add('invisible');
+    fontsizeIsDropped = false;
+  } else {
+    fontsizeList.classList.remove('invisible');
+    fontsizeIsDropped = true;
+  }
+});
+
+fontsizeNames.forEach((fontsize) => {
+  fontsize.addEventListener('click', () => {
+    fontsizeDisplay.value = fontsize.innerHTML;
+    fontsizeList.classList.add('invisible');
+    fontsizeIsDropped = false;
+
+    reduceCells((cell) => {
+      // eslint-disable-next-line no-param-reassign
+      cell.style.fontSize = `${fontsize.innerHTML}px`;
+    });
+  });
+});
+
+fontsizeDisplay.addEventListener(('keydown'), (e) => {
+  if (e.key === 'Enter') {
+    reduceCells((cell) => {
+      // eslint-disable-next-line no-param-reassign
+      cell.style.fontSize = `${fontsizeDisplay.value}px`;
     });
   }
 });
