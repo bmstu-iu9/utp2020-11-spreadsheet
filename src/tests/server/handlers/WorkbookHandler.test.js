@@ -113,11 +113,11 @@ describe('WorkbookHandler', () => {
     it('should give response 400 for creating book without book', (done) => {
       environment.addUsers(1, true);
       const { token } = environment.userTokens[0];
-      app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+      app.post('/workbook/post', (req, res) => {
         workbookHandler.post(req, res);
       });
       request(app)
-        .post('/workbook/post/.')
+        .post('/workbook/post')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(400, done);
     });
@@ -125,14 +125,14 @@ describe('WorkbookHandler', () => {
       environment.addUsers(1, true);
       const { token } = environment.userTokens[0];
       app.use(express.json());
-      app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+      app.post('/workbook/post', (req, res) => {
         workbookHandler.post(req, res);
       });
       const pathGenerator = new WorkbookPathGenerator('.');
       const loader = new WorkbookLoader(pathGenerator);
       const obj = loader.load(1);
       request(app)
-        .post('/workbook/post/.')
+        .post('/workbook/post')
         .set('Authorization', `Token ${token.uuid}`)
         .send(obj)
         .expect(200, done);
