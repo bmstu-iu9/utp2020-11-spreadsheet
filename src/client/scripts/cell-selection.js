@@ -10,6 +10,8 @@ const boldBtn = document.getElementById('button-bold');
 const italicBtn = document.getElementById('button-italics');
 const underlineBtn = document.getElementById('button-underlined');
 const stretchBtn = document.getElementById('button-stretched');
+const lowercaseBtn = document.getElementById('button-low-reg');
+const uppercaseBtn = document.getElementById('button-high-reg');
 
 let isOnMouseDown = false;
 let selectionStart;
@@ -46,9 +48,9 @@ function checkStyles(cell) {
 
 function changeSelection() {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.add('selection');
     }
   }
@@ -56,17 +58,17 @@ function changeSelection() {
 
 function applySelection() {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     columnHeaders[i].classList.add('header-selected');
   }
   for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-       j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+    j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
     rowHeaders[j].classList.add('header-selected');
   }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.remove('selection');
       cellsInputs[j * tableWidth + i].classList.add('selected');
       checkStyles(cellsInputs[j * tableWidth + i]);
@@ -147,7 +149,7 @@ rowHeaders.forEach((rowHeader, id) => {
       selectionStart = [0, id];
     }
     for (let i = Math.min(selectionStart[1], id);
-         i <= Math.max(selectionStart[1], id); i += 1) {
+      i <= Math.max(selectionStart[1], id); i += 1) {
       rowHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableWidth; j += 1) {
         cellsInputs[i * tableWidth + j].classList.add('selected');
@@ -164,7 +166,7 @@ columnHeaders.forEach((columnHeader, id) => {
       selectionStart = [id, 0];
     }
     for (let i = Math.min(selectionStart[0], id);
-         i <= Math.max(selectionStart[0], id); i += 1) {
+      i <= Math.max(selectionStart[0], id); i += 1) {
       columnHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableHeight; j += 1) {
         cellsInputs[j * tableWidth + i].classList.add('selected');
@@ -173,32 +175,22 @@ columnHeaders.forEach((columnHeader, id) => {
   });
 });
 
-function applyStyle(style) {
+function reduceCells(func) {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
-      cellsInputs[j * tableWidth + i].classList.add(style);
-    }
-  }
-}
-
-function removeStyle(style) {
-  for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-    for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
-      cellsInputs[j * tableWidth + i].classList.remove(style);
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      func(cellsInputs[j * tableWidth + i]);
     }
   }
 }
 
 boldBtn.addEventListener('click', () => {
   if (isBold) {
-    removeStyle('bold');
+    reduceCells((cell) => (cell.classList.remove('bold')));
     isBold = false;
   } else {
-    applyStyle('bold');
+    reduceCells((cell) => (cell.classList.add('bold')));
     isBold = true;
   }
   boldBtn.dispatchEvent(selectionEvent);
@@ -206,10 +198,10 @@ boldBtn.addEventListener('click', () => {
 
 italicBtn.addEventListener('click', () => {
   if (isItalic) {
-    removeStyle('italic');
+    reduceCells((cell) => (cell.classList.remove('italic')));
     isItalic = false;
   } else {
-    applyStyle('italic');
+    reduceCells((cell) => (cell.classList.add('italic')));
     isItalic = true;
   }
   italicBtn.dispatchEvent(selectionEvent);
@@ -218,18 +210,18 @@ italicBtn.addEventListener('click', () => {
 underlineBtn.addEventListener('click', () => {
   if (isUnderline) {
     if (isLineThrough) {
-      removeStyle('underline-line-through');
-      applyStyle('line-through');
+      reduceCells((cell) => (cell.classList.remove('underline-line-through')));
+      reduceCells((cell) => (cell.classList.add('line-through')));
     } else {
-      removeStyle('underline');
+      reduceCells((cell) => (cell.classList.remove('underline')));
     }
     isUnderline = false;
   } else if (isLineThrough) {
-    removeStyle('line-through');
-    applyStyle('underline-line-through');
+    reduceCells((cell) => (cell.classList.remove('line-through')));
+    reduceCells((cell) => (cell.classList.add('underline-line-through')));
     isUnderline = true;
   } else {
-    applyStyle('underline');
+    reduceCells((cell) => (cell.classList.add('underline')));
     isUnderline = true;
   }
   underlineBtn.dispatchEvent(selectionEvent);
@@ -238,18 +230,18 @@ underlineBtn.addEventListener('click', () => {
 stretchBtn.addEventListener('click', () => {
   if (isLineThrough) {
     if (isUnderline) {
-      removeStyle('underline-line-through');
-      applyStyle('underline');
+      reduceCells((cell) => (cell.classList.remove('underline-line-through')));
+      reduceCells((cell) => (cell.classList.add('underline')));
     } else {
-      removeStyle('line-through');
+      reduceCells((cell) => (cell.classList.remove('line-through')));
     }
     isLineThrough = false;
   } else if (isUnderline) {
-    removeStyle('underline');
-    applyStyle('underline-line-through');
+    reduceCells((cell) => (cell.classList.remove('underline')));
+    reduceCells((cell) => (cell.classList.add('underline-line-through')));
     isLineThrough = true;
   } else {
-    applyStyle('line-through');
+    reduceCells((cell) => (cell.classList.add('line-through')));
     isLineThrough = true;
   }
   stretchBtn.dispatchEvent(selectionEvent);
@@ -285,4 +277,18 @@ stretchBtn.addEventListener('selection', () => {
   } else {
     stretchBtn.classList.remove('button-active');
   }
+});
+
+lowercaseBtn.addEventListener('click', () => {
+  reduceCells((cell) => {
+    // eslint-disable-next-line no-param-reassign
+    cell.value = cell.value.toLowerCase();
+  });
+});
+
+uppercaseBtn.addEventListener('click', () => {
+  reduceCells((cell) => {
+    // eslint-disable-next-line no-param-reassign
+    cell.value = cell.value.toUpperCase();
+  });
 });
