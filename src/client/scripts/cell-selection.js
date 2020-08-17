@@ -38,10 +38,10 @@ function checkStyles(cell) {
   if (cell.classList.contains('italic')) {
     isItalic = true;
   }
-  if (cell.classList.contains('underline')) {
+  if (cell.classList.contains('underline') || cell.classList.contains('underline-line-through')) {
     isUnderline = true;
   }
-  if (cell.classList.contains('line-through')) {
+  if (cell.classList.contains('line-through') || cell.classList.contains('underline-line-through')) {
     isLineThrough = true;
   }
 }
