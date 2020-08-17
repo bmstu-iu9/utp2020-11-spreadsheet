@@ -12,6 +12,9 @@ import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
 import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
 import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
+import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
+import CommitLoader from '../../../server/save/CommitLoader.js';
+import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 
 const testWorkbook = {
   name: 'test',
@@ -45,6 +48,7 @@ describe('WorkbookHandler', () => {
     environment = TestEnvironment.getInstance();
     workbookHandler = new WorkbookHandler(environment.dataRepo, {
       pathToWorkbooks: '.',
+      pathToCommits: '.',
     });
     environment.init();
     app = express();
@@ -61,6 +65,9 @@ describe('WorkbookHandler', () => {
     TestEnvironment.destroyInstance();
     if (fs.existsSync('./1.json')) {
       fs.unlinkSync('./1.json');
+    }
+    if (fs.existsSync('./1.commits.json')) {
+      fs.unlinkSync('./1.commits.json');
     }
   });
   describe('#get()', () => {
@@ -139,6 +146,12 @@ describe('WorkbookHandler', () => {
         .expect(200)
         .then((response) => {
           assert.deepStrictEqual(response.body.name, obj.name);
+        })
+        .then(() => {
+          const commitGenerator = new CommitPathGenerator('.');
+          const commitLoader = new CommitLoader(commitGenerator);
+          const commits = commitLoader.load(1);
+          assert.deepStrictEqual(commits, [{ ID: zeroID }]);
         });
     });
   });

@@ -5,6 +5,8 @@ import WorkbookLoader from '../save/WorkbookLoader.js';
 import WorkbookSaver from '../save/WorkbookSaver.js';
 import WorkbookDeserializer from '../../lib/serialization/WorkbookDeserializer.js';
 import WorkbookPathGenerator from '../save/WorkbookPathGenerator.js';
+import CommitPathGenerator from '../save/CommitPathGenerator.js';
+import CommitSaver from '../save/CommitSaver.js';
 
 export default class WorkbookHandler extends EndpointHandler {
   get(req, res) {
@@ -40,12 +42,15 @@ export default class WorkbookHandler extends EndpointHandler {
     const deserialized = WorkbookDeserializer.deserialize(req.body);
     const workbookModel = new WorkbookModel(req.user.login);
     const workbookID = { id: this.dataRepo.workbookRepo.save(workbookModel) };
-    const generator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
-    const saver = new WorkbookSaver(generator);
-    saver.save(deserialized, workbookID.id);
+    const workbookPathGenerator = new WorkbookPathGenerator(this.config.pathToWorkbooks);
+    const workbookSaver = new WorkbookSaver(workbookPathGenerator);
+    workbookSaver.save(deserialized, workbookID.id);
     workbookID.lastCommit = zeroID;
     workbookID.name = req.body.name;
     workbookID.spreadsheets = req.body.spreadsheets;
+    const commitPathGenerator = new CommitPathGenerator(this.config.pathToCommits);
+    const commitSaver = new CommitSaver(commitPathGenerator);
+    commitSaver.save(1, [{ID: zeroID}]);
     return res.status(200).send(workbookID);
   }
 }
