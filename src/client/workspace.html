@@ -15,7 +15,8 @@
     <script src="https://kit.fontawesome.com/ebf1e0944f.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+          rel="stylesheet">
     <title>Рабочее пространство</title>
 </head>
 <body>
@@ -49,33 +50,48 @@
                 <div class="column" style="width: 70px;">
                     <div class="toolbar-row">
                         <div class="tool-button-standard content-center base-text" id="button-copy">
-                            <span class="no-click"><i class="material-icons" style="font-size: 20px">content_copy</i></span>
+                            <span class="no-click"><i class="material-icons"
+                                                      style="font-size: 20px;">content_copy</i></span>
                         </div>
                         <div class="tool-button-standard content-center base-text" id="button-paste">
-                            <span class="no-click"><i class="material-icons" style="font-size: 20px">content_paste</i></span>
+                            <span class="no-click"><i class="material-icons"
+                                                      style="font-size: 20px;">content_paste</i></span>
                         </div>
                     </div>
                     <div class="toolbar-row">
                         <div class="tool-button-standard content-center base-text" id="button-cut">
-                            <span class="no-click"><i class="material-icons" style="font-size: 20px">content_cut</i></span>
+                            <span class="no-click"><i class="material-icons"
+                                                      style="font-size: 20px;">content_cut</i></span>
                         </div>
                         <div class="tool-button-standard content-center base-text" id="button-clear">
-                            <span class="no-click"><i class="material-icons" style="font-size: 20px">clear</i></span>
+                            <span class="no-click"><i class="material-icons" style="font-size: 20px;">clear</i></span>
                         </div>
                     </div>
                 </div>
                 <div class="tool-button-standard content-center base-text" id="button-undo">
-                    <span class="no-click"><i class="material-icons" style="font-size: 20px">undo</i></span>
+                    <span class="no-click"><i class="material-icons" style="font-size: 20px;" ;>ndo</i></span>
                 </div>
                 <div class="tool-button-standard content-center base-text" id="button-redo">
-                    <span class="no-click"><i class="material-icons" style="font-size: 20px">redo</i></span>
+                    <span class="no-click"><i class="material-icons" style="font-size: 20px;">redo</i></span>
                 </div>
             </div>
             <div id="toolbar-font">
                 <div class="toolbar-row">
-                    <div class="text-input-list">
-                        <input type="text" value="Arial" id="input-font">
-                        <div class="unbar-button unbar-button-input"></div>
+                    <div class="drop-down-list-wrapper" id="tool-font">
+                        <div class="text-input-list">
+                            <input type="text" value="Arial" id="input-font">
+                            <div class="unbar-button unbar-button-input"></div>
+                        </div>
+                        <div class="drop-down-list base-text invisible">
+                            <ol>
+                                <li>Arial</li>
+                                <li>Abyssinica SIL</li>
+                                <li>Century Schoolbook L</li>
+                                <li>Roboto</li>
+                                <li>DejaVu Sans</li>
+                                <li>Gubbi</li>
+                            </ol>
+                        </div>
                     </div>
                     <div class="text-input-list">
                         <input type="text" value="13" id="input-fontsize">
@@ -84,16 +100,19 @@
                 </div>
                 <div class="toolbar-row">
                     <div class="tool-button-standard content-center base-text" id="button-bold">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_bold</i></span>
+                        <span class="no-click"><i class="material-icons" style="font-size: 20px;">format_bold</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-italics">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_italic</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">format_italic</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-underlined">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_underline</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">format_underline</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-stretched">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">strikethrough_s</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">strikethrough_s</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-high-reg">
                         <span class="iconify" data-inline="false" data-icon="mdi:format-letter-case-upper"></span>
@@ -104,7 +123,8 @@
                     <div class="row">
                         <div class="tool-button-standard content-center base-text">
                             <div id="button-border">
-                                <span class="no-click"><i class="material-icons" style="font-size: 20px">border_style</i></span>
+                                <span class="no-click"><i class="material-icons"
+                                                          style="font-size: 20px;">border_style</i></span>
                             </div>
                         </div>
                         <div class="unbar-button unbar-button-standard"></div>
@@ -120,14 +140,14 @@
                 </div>
                 <div class="row">
                     <div class="tool-button-big content-center base-text" id="button-bg-color">
-                            <span class="iconify" data-inline="false" data-icon="ic:outline-format-color-fill"></span>
+                        <span class="iconify" data-inline="false" data-icon="ic:outline-format-color-fill"></span>
                     </div>
                     <div class="unbar-button unbar-button-big">
                     </div>
                 </div>
                 <div class="row">
                     <div class="tool-button-big content-center base-text" id="button-border-color">
-                            <span class="iconify" data-inline="false" data-icon="ic:outline-border-color"></span>
+                        <span class="iconify" data-inline="false" data-icon="ic:outline-border-color"></span>
                     </div>
                     <div class="unbar-button unbar-button-big"></div>
                 </div>
@@ -135,24 +155,29 @@
             <div id="toolbar-ident">
                 <div class="toolbar-row">
                     <div class="tool-button-standard content-center base-text" id="button-align-left">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_align_left</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">format_align_left</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-align-center">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_align_center</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">format_align_center</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-align-right">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_align_right</i></span>
+                        <span class="no-click"><i class="material-icons" style="font-size: 20px;">format_align_right</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-align-justify">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_align_justify</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">format_align_justify</i></span>
                     </div>
                 </div>
                 <div class="toolbar-row">
                     <div class="tool-button-standard content-center base-text" id="button-indent-increase">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_indent_increase</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">format_indent_increase</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text" id="button-indent-decrease">
-                        <span class="no-click"><i class="material-icons" style="font-size: 20px">format_indent_decrease</i></span>
+                        <span class="no-click"><i class="material-icons"
+                                                  style="font-size: 20px;">format_indent_decrease</i></span>
                     </div>
                     <div class="tool-button-standard content-center base-text"></div>
                     <div class="tool-button-standard content-center base-text"></div>
@@ -181,7 +206,6 @@
             </div>
         </div>
         <div class="toolbar hide" id="toolbar-file">
-
         </div>
     </div>
 
@@ -193,7 +217,7 @@
                 <td class="row-header" id="triangle-cell">
                     <div class="triangle"></div>
                 </td>
-                <td class="column-header" style="z-index: 255;">A
+                <td class="column-header">A
                     <div class="vertical"></div>
                 </td>
                 <td class="column-header">B
@@ -205,75 +229,75 @@
                 <td class="column-header">D
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 251;">E
+                <td class="column-header">E
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 250;">F
+                <td class="column-header">F
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 249;">G
+                <td class="column-header">G
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 248;">H
+                <td class="column-header">H
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 247;">I
+                <td class="column-header">I
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 246;">J
+                <td class="column-header">J
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 245;">K
+                <td class="column-header">K
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 244;">L
+                <td class="column-header"L
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 243;">M
+                <td class="column-header">M
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 242;">N
+                <td class="column-header">N
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 241;">O
+                <td class="column-header">O
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 240;">P
+                <td class="column-header">P
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 239;">Q
+                <td class="column-header">Q
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 238;">R
+                <td class="column-header">R
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 237;">S
+                <td class="column-header">S
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 236;">T
+                <td class="column-header">T
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 235;">U
+                <td class="column-header">U
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 234;">V
+                <td class="column-header">V
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 233;">W
+                <td class="column-header">W
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 232;">X
+                <td class="column-header">X
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 231;">Y
+                <td class="column-header">Y
                     <div class="vertical"></div>
                 </td>
-                <td class="column-header" style="z-index: 230;">Z
+                <td class="column-header">Z
                     <div class="vertical"></div>
                 </td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">1
+                <td class="row-header">1
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell test"></td>
@@ -304,7 +328,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">2
+                <td class="row-header">2
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -335,7 +359,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">3
+                <td class="row-header">3
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -366,7 +390,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">4
+                <td class="row-header">4
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -397,7 +421,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">5
+                <td class="row-header">5
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -428,7 +452,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">6
+                <td class="row-header">6
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -459,7 +483,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">7
+                <td class="row-header">7
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -490,7 +514,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">8
+                <td class="row-header">8
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -521,7 +545,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">9
+                <td class="row-header">9
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -552,7 +576,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">10
+                <td class="row-header">10
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -583,7 +607,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">11
+                <td class="row-header">11
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -614,7 +638,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">12
+                <td class="row-header">12
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -645,7 +669,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">13
+                <td class="row-header">13
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -676,7 +700,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">14
+                <td class="row-header">14
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -707,7 +731,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">15
+                <td class="row-header">15
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -738,7 +762,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">16
+                <td class="row-header">16
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -769,7 +793,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">17
+                <td class="row-header">17
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -800,7 +824,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">18
+                <td class="row-header">18
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -831,7 +855,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">19
+                <td class="row-header">19
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -862,7 +886,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">20
+                <td class="row-header">20
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -893,7 +917,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">21
+                <td class="row-header">21
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -924,7 +948,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">22
+                <td class="row-header">22
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -955,7 +979,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">23
+                <td class="row-header">23
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -986,7 +1010,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">24
+                <td class="row-header">24
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1017,7 +1041,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">25
+                <td class="row-header">25
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1048,7 +1072,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">26
+                <td class="row-header">26
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1079,7 +1103,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">27
+                <td class="row-header">27
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1110,7 +1134,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">28
+                <td class="row-header">28
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1141,7 +1165,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">29
+                <td class="row-header">29
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1172,7 +1196,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">30
+                <td class="row-header">30
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1203,7 +1227,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">31
+                <td class="row-header">31
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1234,7 +1258,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">32
+                <td class="row-header">32
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1265,7 +1289,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">33
+                <td class="row-header">33
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1296,7 +1320,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">34
+                <td class="row-header">34
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1327,7 +1351,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">35
+                <td class="row-header">35
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1358,7 +1382,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">36
+                <td class="row-header">36
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1389,7 +1413,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">37
+                <td class="row-header">37
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1420,7 +1444,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">38
+                <td class="row-header">38
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>
@@ -1451,7 +1475,7 @@
                 <td><input type="text" class="cell"></td>
             </tr>
             <tr>
-                <td class="row-header" style="z-index: 32766;">39
+                <td class="row-header">39
                     <div class="horizontal"></div>
                 </td>
                 <td><input type="text" class="cell"></td>

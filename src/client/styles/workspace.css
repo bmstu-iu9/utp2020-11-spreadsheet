@@ -135,6 +135,33 @@ div#toolbar-ident {
   width: 140px;
 }
 
+div.drop-down-list-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+div.drop-down-list {
+  width: 150px;
+  margin-top: 20px;
+  z-index: 1;
+  height: max-content;
+  background-color: white;
+  position: absolute;
+}
+
+div.drop-down-list ol {
+  padding: 2px 2px;
+}
+
+div.drop-down-list li {
+  padding: 2px 0;
+  user-select: none;
+}
+
+div.drop-down-list li:hover {
+  background-color: #918f8f;
+}
+
 div.text-input-list {
   display: flex;
   flex-direction: row;
@@ -219,30 +246,6 @@ div.button-active {
   color: #fca311;
 }
 
-/*#button-copy {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-paste {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-cut {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-clear {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-undo {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-redo {*/
-/*  color: #444c5c;*/
-/*}*/
-
 #button-bold {
   font-weight: normal;
 }
@@ -259,39 +262,25 @@ div.button-active {
   text-decoration: none;
 }
 
-/*#button-border {*/
-/*  color: #444c5c;*/
-/*}*/
-
 #button-high-reg {
-  /*color: #444c5c;*/
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-low-reg {
-  /*color: #444c5c;*/
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-text-color {
-  /*color: #444c5c;*/
   font-size: 30px;
 }
 
 #button-bg-color {
-<<<<<<< HEAD
-  color: #444c5c;
   font-size: 30px;
-=======
-  /*color: #444c5c;*/
- font-size: 30px;
->>>>>>> workspace-designfix
 }
 
 #button-border-color {
-  /*color: #444c5c;*/
   font-size: 30px;
 }
 
@@ -308,30 +297,6 @@ div.button-active {
   background-position: center;
   background-size: 30px;
 }
-
-/*#button-align-left {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-align-center {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-align-right {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-align-justify {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-indent-increase {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-indent-decrease {*/
-/*  color: #444c5c;*/
-/*}*/
 
 #button-sort {
   background-image: url(../img/sort-icon.png);

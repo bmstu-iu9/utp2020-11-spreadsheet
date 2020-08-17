@@ -6,6 +6,13 @@ const table = document.getElementById('table');
 const tableHeight = table.children[0].children.length - 1;
 const tableWidth = table.children[0].children[0].children.length - 1;
 
+const fontBlock = document.getElementById('tool-font');
+const fontUnbarBtn = fontBlock.children[0].children[1];
+const fontList = fontBlock.children[1];
+const fontNames = document.querySelectorAll('#tool-font li')
+const fontDisplay = document.getElementById('input-font');
+let fontIsDropped = false;
+
 const boldBtn = document.getElementById('button-bold');
 const italicBtn = document.getElementById('button-italics');
 const underlineBtn = document.getElementById('button-underlined');
@@ -55,9 +62,9 @@ function updateButtons() {
 
 function changeSelection() {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.add('selection');
     }
   }
@@ -65,17 +72,17 @@ function changeSelection() {
 
 function applySelection() {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     columnHeaders[i].classList.add('header-selected');
   }
   for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-    j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+       j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
     rowHeaders[j].classList.add('header-selected');
   }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.remove('selection');
       cellsInputs[j * tableWidth + i].classList.add('selected');
       checkStyles(cellsInputs[j * tableWidth + i]);
@@ -170,9 +177,9 @@ columnHeaders.forEach((columnHeader, id) => {
 
 function reduceCells(func) {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       func(cellsInputs[j * tableWidth + i]);
     }
   }
@@ -283,5 +290,29 @@ uppercaseBtn.addEventListener('click', () => {
   reduceCells((cell) => {
     // eslint-disable-next-line no-param-reassign
     cell.value = cell.value.toUpperCase();
+  });
+});
+
+fontUnbarBtn.addEventListener('click', () => {
+  if (fontIsDropped) {
+    fontList.classList.add('invisible');
+    fontIsDropped = false;
+  } else {
+    fontList.classList.remove('invisible');
+    fontIsDropped = true;
+  }
+});
+
+fontNames.forEach((font) => {
+  font.addEventListener('click', () => {
+    fontDisplay.value = font.innerHTML;
+    fontList.classList.add('invisible');
+    fontIsDropped = false;
+
+    reduceCells((cell) => {
+      console.log(1);
+      // eslint-disable-next-line no-param-reassign
+      cell.style.fontFamily = font.innerHTML;
+    });
   });
 });
