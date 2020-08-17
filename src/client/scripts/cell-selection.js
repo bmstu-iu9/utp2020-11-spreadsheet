@@ -5,16 +5,22 @@ const columnHeaders = document.querySelectorAll('td.column-header:not(#triangle-
 const table = document.getElementById('table');
 const tableHeight = table.children[0].children.length - 1;
 const tableWidth = table.children[0].children[0].children.length - 1;
-let selectedCellID;
+
+const boldBtn = document.getElementById('button-bold');
+const italicBtn = document.getElementById('button-italics');
+const underlineBtn = document.getElementById('button-underlined');
+const stretchBtn = document.getElementById('button-stretched');
+
 let isOnMouseDown = false;
-let isSelection = false;
 let selectionStart;
 let selectionEnd;
+let focusedXY;
+const selectionEvent = new Event('selection');
+
 let isBold;
 let isItalic;
 let isUnderline;
 let isLineThrough;
-let selectionEvent = new Event('selection');
 
 function getCellXY(cell) {
   const cellID = Array.from(cells).indexOf(cell);
@@ -23,7 +29,55 @@ function getCellXY(cell) {
   return [X, Y];
 }
 
+function checkStyles(cell) {
+  if (cell.classList.contains('bold')) {
+    isBold = true;
+  }
+  if (cell.classList.contains('italic')) {
+    isItalic = true;
+  }
+  if (cell.classList.contains('underline')) {
+    isUnderline = true;
+  }
+  if (cell.classList.contains('line-through')) {
+    isLineThrough = true;
+  }
+}
+
+function changeSelection() {
+  for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      cellsInputs[j * tableWidth + i].classList.add('selection');
+    }
+  }
+}
+
+function applySelection() {
+  for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    columnHeaders[i].classList.add('header-selected');
+  }
+  for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+    j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+    rowHeaders[j].classList.add('header-selected');
+  }
+  for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    for (let j = Math.min(selectionStart[1], selectionEnd[1]);
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      cellsInputs[j * tableWidth + i].classList.remove('selection');
+      cellsInputs[j * tableWidth + i].classList.add('selected');
+      checkStyles(cellsInputs[j * tableWidth + i]);
+    }
+  }
+}
+
 function removeSelection(ctrl) {
+  if (focusedXY !== undefined) {
+    cellsInputs[focusedXY[1] * tableWidth + focusedXY[0]].blur();
+  }
   if (!ctrl) {
     for (let i = 0; i < tableHeight; i += 1) {
       rowHeaders[i].classList.remove('header-selected');
@@ -49,48 +103,13 @@ function removeSelection(ctrl) {
 cells.forEach((cell) => {
   cell.addEventListener('mousedown', (e) => {
     e.preventDefault();
-
-    const cellID = Array.from(cells).indexOf(cell);
-
-    if (cellID !== selectedCellID && selectedCellID !== undefined && !e.ctrlKey) {
-      cellsInputs[selectedCellID].classList.remove('selected');
-      cellsInputs[selectedCellID].classList.remove('cursor-text');
-      cellsInputs[selectedCellID].blur();
-    }
-
-    if (isSelection) {
-      removeSelection(e.ctrlKey);
-    }
-    cellsInputs[cellID].classList.add('selection');
     isOnMouseDown = true;
-    selectedCellID = Array.from(cells).indexOf(cell);
+    removeSelection(e.ctrlKey);
     selectionEnd = getCellXY(cell);
-    if (e.shiftKey) {
-      for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-           i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-        for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-             j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
-          cellsInputs[j * tableWidth + i].classList.remove('selection');
-          cellsInputs[j * tableWidth + i].classList.add('selected');
-          rowHeaders[j].classList.add('header-selected');
-          columnHeaders[i].classList.add('header-selected');
-          if (cellsInputs[j * tableWidth + i].classList.contains('bold')) {
-            isBold = true;
-          }
-          if (cellsInputs[j * tableWidth + i].classList.contains('italic')) {
-            isItalic = true;
-          }
-          if (cellsInputs[j * tableWidth + i].classList.contains('underline')) {
-            isUnderline = true;
-          }
-          if (cellsInputs[j * tableWidth + i].classList.contains('line-through')) {
-            isLineThrough = true;
-          }
-        }
-      }
-    } else {
+    if (!e.shiftKey) {
       selectionStart = selectionEnd;
     }
+    changeSelection();
     boldBtn.dispatchEvent(selectionEvent);
     italicBtn.dispatchEvent(selectionEvent);
     underlineBtn.dispatchEvent(selectionEvent);
@@ -99,109 +118,66 @@ cells.forEach((cell) => {
   cell.addEventListener('mouseup', (e) => {
     e.preventDefault();
 
-    for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-         i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-      for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-           j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
-        cellsInputs[j * tableWidth + i].classList.remove('selection');
-        cellsInputs[j * tableWidth + i].classList.add('selected');
-        rowHeaders[j].classList.add('header-selected');
-        columnHeaders[i].classList.add('header-selected');
-        if (cellsInputs[j * tableWidth + i].classList.contains('bold')) {
-          isBold = true;
-        }
-        if (cellsInputs[j * tableWidth + i].classList.contains('italic')) {
-          isItalic = true;
-        }
-        if (cellsInputs[j * tableWidth + i].classList.contains('underline')) {
-          isUnderline = true;
-        }
-        if (cellsInputs[j * tableWidth + i].classList.contains('line-through')) {
-          isLineThrough = true;
-        }
-      }
-    }
+    applySelection();
     boldBtn.dispatchEvent(selectionEvent);
     italicBtn.dispatchEvent(selectionEvent);
     underlineBtn.dispatchEvent(selectionEvent);
     stretchBtn.dispatchEvent(selectionEvent);
-    if (isOnMouseDown) {
-      isSelection = true;
-    }
     isOnMouseDown = false;
   });
   cell.addEventListener('mouseover', () => {
     if (isOnMouseDown) {
       selectionEnd = getCellXY(cell);
-      for (let i = 0; i < tableHeight; i += 1) {
-        for (let j = 0; j < tableWidth; j += 1) {
-          if (j >= Math.min(selectionStart[0], selectionEnd[0])
-              && j <= Math.max(selectionStart[0], selectionEnd[0])
-              && i >= Math.min(selectionStart[1], selectionEnd[1])
-              && i <= Math.max(selectionStart[1], selectionEnd[1])) {
-            if (!cellsInputs[i * tableWidth + j].classList.contains('selection')) {
-              cellsInputs[i * tableWidth + j].classList.add('selection');
-            }
-          } else if (cellsInputs[i * tableWidth + j].classList.contains('selection')) {
-            cellsInputs[i * tableWidth + j].classList.remove('selection');
-          }
-        }
-      }
+      changeSelection();
     }
   });
   cell.addEventListener('dblclick', (e) => {
     e.preventDefault();
     cell.children[0].focus();
-
     cell.children[0].classList.add('cursor-text');
+    focusedXY = getCellXY(cell);
   });
 });
 
 rowHeaders.forEach((rowHeader, id) => {
   rowHeader.addEventListener('dblclick', (e) => {
     e.preventDefault();
-    if (isSelection) {
-      removeSelection(e.ctrlKey);
-    }
+    removeSelection(e.ctrlKey);
     if (!e.shiftKey) {
       selectionStart = [0, id];
     }
     for (let i = Math.min(selectionStart[1], id);
-         i <= Math.max(selectionStart[1], id); i += 1) {
+      i <= Math.max(selectionStart[1], id); i += 1) {
       rowHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableWidth; j += 1) {
         cellsInputs[i * tableWidth + j].classList.add('selected');
       }
     }
-    isSelection = true;
   });
 });
 
 columnHeaders.forEach((columnHeader, id) => {
   columnHeader.addEventListener('dblclick', (e) => {
     e.preventDefault();
-    if (isSelection) {
-      removeSelection(e.ctrlKey);
-    }
+    removeSelection(e.ctrlKey);
     if (!e.shiftKey) {
       selectionStart = [id, 0];
     }
     for (let i = Math.min(selectionStart[0], id);
-         i <= Math.max(selectionStart[0], id); i += 1) {
+      i <= Math.max(selectionStart[0], id); i += 1) {
       columnHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableHeight; j += 1) {
         cellsInputs[j * tableWidth + i].classList.add('selected');
       }
     }
-    isSelection = true;
   });
 });
 
 function applyStyle(style) {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.add(style);
     }
   }
@@ -209,21 +185,15 @@ function applyStyle(style) {
 
 function removeStyle(style) {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.remove(style);
     }
   }
 }
 
-
-const boldBtn = document.getElementById('button-bold');
-const italicBtn = document.getElementById('button-italics');
-const underlineBtn = document.getElementById('button-underlined');
-const stretchBtn = document.getElementById('button-stretched');
-
-boldBtn.addEventListener('click', (e) => {
+boldBtn.addEventListener('click', () => {
   if (isBold) {
     removeStyle('bold');
     isBold = false;
@@ -234,7 +204,7 @@ boldBtn.addEventListener('click', (e) => {
   boldBtn.dispatchEvent(selectionEvent);
 });
 
-italicBtn.addEventListener('click', (e) => {
+italicBtn.addEventListener('click', () => {
   if (isItalic) {
     removeStyle('italic');
     isItalic = false;
@@ -245,7 +215,7 @@ italicBtn.addEventListener('click', (e) => {
   italicBtn.dispatchEvent(selectionEvent);
 });
 
-underlineBtn.addEventListener('click', (e) => {
+underlineBtn.addEventListener('click', () => {
   if (isUnderline) {
     removeStyle('underline');
     isItalic = false;
@@ -256,7 +226,7 @@ underlineBtn.addEventListener('click', (e) => {
   underlineBtn.dispatchEvent(selectionEvent);
 });
 
-stretchBtn.addEventListener('click', (e) => {
+stretchBtn.addEventListener('click', () => {
   if (isLineThrough) {
     removeStyle('line-through');
     isLineThrough = false;
@@ -267,7 +237,7 @@ stretchBtn.addEventListener('click', (e) => {
   stretchBtn.dispatchEvent(selectionEvent);
 });
 
-boldBtn.addEventListener('selection', (e) => {
+boldBtn.addEventListener('selection', () => {
   if (isBold) {
     boldBtn.classList.add('button-active');
   } else {
@@ -275,7 +245,7 @@ boldBtn.addEventListener('selection', (e) => {
   }
 });
 
-italicBtn.addEventListener('selection', (e) => {
+italicBtn.addEventListener('selection', () => {
   if (isItalic) {
     italicBtn.classList.add('button-active');
   } else {
@@ -283,7 +253,7 @@ italicBtn.addEventListener('selection', (e) => {
   }
 });
 
-underlineBtn.addEventListener('selection', (e) => {
+underlineBtn.addEventListener('selection', () => {
   if (isUnderline) {
     underlineBtn.classList.add('button-active');
   } else {
@@ -291,7 +261,7 @@ underlineBtn.addEventListener('selection', (e) => {
   }
 });
 
-stretchBtn.addEventListener('selection', (e) => {
+stretchBtn.addEventListener('selection', () => {
   if (isLineThrough) {
     stretchBtn.classList.add('button-active');
   } else {
