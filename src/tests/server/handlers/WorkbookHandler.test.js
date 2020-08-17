@@ -138,7 +138,7 @@ describe('WorkbookHandler', () => {
         .send(obj)
         .expect(200)
         .then((response) => {
-          assert.strictEqual(response.body.name, obj.name);
+          assert.deepStrictEqual(response.body.name, obj.name);
         });
     });
   });

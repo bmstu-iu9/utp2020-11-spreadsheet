@@ -109,6 +109,9 @@ describe('WorkbookIdHandler', () => {
         workbooks: {
           '1.json': '',
         },
+        commits: {
+          '1.commits.json': `[{"ID":"${zeroID}"}]`,
+        },
       });
       createWorkbook();
       const { token } = environment.userTokens[0];
@@ -119,6 +122,7 @@ describe('WorkbookIdHandler', () => {
         .then((response) => {
           assert.strictEqual(response.body.name, 'test');
           assert.strictEqual(response.body.id, 1);
+          assert.strictEqual(response.body.lastCommitId, zeroID);
         })
         .then(mock.restore);
     });
