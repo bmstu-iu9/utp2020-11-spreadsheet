@@ -46,9 +46,9 @@ function checkStyles(cell) {
 
 function changeSelection() {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.add('selection');
     }
   }
@@ -56,17 +56,17 @@ function changeSelection() {
 
 function applySelection() {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     columnHeaders[i].classList.add('header-selected');
   }
   for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-    j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+       j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
     rowHeaders[j].classList.add('header-selected');
   }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.remove('selection');
       cellsInputs[j * tableWidth + i].classList.add('selected');
       checkStyles(cellsInputs[j * tableWidth + i]);
@@ -147,7 +147,7 @@ rowHeaders.forEach((rowHeader, id) => {
       selectionStart = [0, id];
     }
     for (let i = Math.min(selectionStart[1], id);
-      i <= Math.max(selectionStart[1], id); i += 1) {
+         i <= Math.max(selectionStart[1], id); i += 1) {
       rowHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableWidth; j += 1) {
         cellsInputs[i * tableWidth + j].classList.add('selected');
@@ -164,7 +164,7 @@ columnHeaders.forEach((columnHeader, id) => {
       selectionStart = [id, 0];
     }
     for (let i = Math.min(selectionStart[0], id);
-      i <= Math.max(selectionStart[0], id); i += 1) {
+         i <= Math.max(selectionStart[0], id); i += 1) {
       columnHeaders[i].classList.add('header-selected');
       for (let j = 0; j < tableHeight; j += 1) {
         cellsInputs[j * tableWidth + i].classList.add('selected');
@@ -175,9 +175,9 @@ columnHeaders.forEach((columnHeader, id) => {
 
 function applyStyle(style) {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.add(style);
     }
   }
@@ -185,9 +185,9 @@ function applyStyle(style) {
 
 function removeStyle(style) {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
       cellsInputs[j * tableWidth + i].classList.remove(style);
     }
   }
@@ -217,8 +217,17 @@ italicBtn.addEventListener('click', () => {
 
 underlineBtn.addEventListener('click', () => {
   if (isUnderline) {
-    removeStyle('underline');
-    isItalic = false;
+    if (isLineThrough) {
+      removeStyle('underline-line-through');
+      applyStyle('line-through');
+    } else {
+      removeStyle('underline');
+    }
+    isUnderline = false;
+  } else if (isLineThrough) {
+    removeStyle('line-through');
+    applyStyle('underline-line-through');
+    isUnderline = true;
   } else {
     applyStyle('underline');
     isUnderline = true;
@@ -228,8 +237,17 @@ underlineBtn.addEventListener('click', () => {
 
 stretchBtn.addEventListener('click', () => {
   if (isLineThrough) {
-    removeStyle('line-through');
+    if (isUnderline) {
+      removeStyle('underline-line-through');
+      applyStyle('underline');
+    } else {
+      removeStyle('line-through');
+    }
     isLineThrough = false;
+  } else if (isUnderline) {
+    removeStyle('underline');
+    applyStyle('underline-line-through');
+    isLineThrough = true;
   } else {
     applyStyle('line-through');
     isLineThrough = true;
