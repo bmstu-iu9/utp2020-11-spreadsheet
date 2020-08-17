@@ -13,6 +13,8 @@ import Authorizer from '../authorization/Authorizer.js';
 import DataRepo from '../database/DataRepo.js';
 import ConsoleLogger from '../../lib/logging/ConsoleLogger.js';
 import logLevel from '../../lib/logging/logLevel.js';
+import WorkbookHandler from '../handlers/WorkbookHandler.js';
+import WorkbookIdHandler from '../handlers/WorkbookIdHandler.js';
 
 export default class Server {
   constructor(config) {
@@ -21,7 +23,22 @@ export default class Server {
     this.configureLogging();
     this.configureDataRepo();
     this.configureMiddleware();
+    this.configureEndpoints();
     this.configureServer();
+  }
+
+  configureEndpoints() {
+    const endpoints = {
+      '/workbook': WorkbookHandler,
+      '/workbook/:id': WorkbookIdHandler,
+    };
+    Object.keys(endpoints).forEach((path) => {
+      const handler = new endpoints[path](this.dataRepo, this.config);
+      this.app.get(path, (req, res) => handler.get(req, res));
+      this.app.post(path, (req, res) => handler.post(req, res));
+      this.app.patch(path, (req, res) => handler.patch(req, res));
+      this.app.delete(path, (req, res) => handler.delete(req, res));
+    });
   }
 
   run() {
