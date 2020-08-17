@@ -259,7 +259,7 @@ components:
       bearerFormat: "Bearer mF_9.B5f-4.1JqM"
   schemas:
     workbook:
-      $ref: "tableSchema.json"
+      $ref: "workbookSchema.json"
     user:
       type: "object"
     users:

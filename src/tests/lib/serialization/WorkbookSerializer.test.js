@@ -9,7 +9,7 @@ import FormatError from '../../../lib/errors/FormatError.js';
 
 const workbookStandardName = 'workbook';
 const spreadsheetStandardName = 'spreadsheet';
-const tableSchema = JSON.parse(fs.readFileSync('./resources/tableSchema.json'));
+const workbookSchema = JSON.parse(fs.readFileSync('./resources/workbookSchema.json'));
 
 describe('WorkbookSerializer', () => {
   describe('#serialize()', () => {
@@ -19,7 +19,7 @@ describe('WorkbookSerializer', () => {
       const spreadsheets = [new Spreadsheet(spreadsheetStandardName, cells)];
       const workbook = new Workbook(workbookStandardName, spreadsheets);
       assert.strictEqual(
-        schema.validate(WorkbookSerializer.serialize(workbook), tableSchema).valid,
+        schema.validate(WorkbookSerializer.serialize(workbook), workbookSchema).valid,
         true,
       );
     });
