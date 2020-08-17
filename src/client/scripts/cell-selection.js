@@ -147,6 +147,7 @@ cells.forEach((cell) => {
   });
   cell.addEventListener('mouseover', () => {
     if (isOnMouseDown) {
+      removeSelection();
       selectionEnd = getCellXY(cell);
       changeSelection();
     }
