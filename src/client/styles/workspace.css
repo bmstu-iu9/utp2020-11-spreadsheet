@@ -215,30 +215,6 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   color: #fca311;
 }
 
-/*#button-copy {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-paste {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-cut {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-clear {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-undo {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-redo {*/
-/*  color: #444c5c;*/
-/*}*/
-
 #button-bold {
   font-weight: normal;
 }
@@ -255,87 +231,26 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   text-decoration: none;
 }
 
-/*#button-border {*/
-/*  color: #444c5c;*/
-/*}*/
-
 #button-high-reg {
-  /*color: #444c5c;*/
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-low-reg {
-  /*color: #444c5c;*/
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-text-color {
-  /*color: #444c5c;*/
   font-size: 30px;
 }
 
 #button-bg-color {
-  /*color: #444c5c;*/
  font-size: 30px;
 }
 
 #button-border-color {
-  /*color: #444c5c;*/
   font-size: 30px;
-}
-
-#button-search {
-  background-image: url(../img/search-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 30px;
-}
-
-#button-erase {
-  background-image: url(../img/erase-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 30px;
-}
-
-/*#button-align-left {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-align-center {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-align-right {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-align-justify {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-indent-increase {*/
-/*  color: #444c5c;*/
-/*}*/
-
-/*#button-indent-decrease {*/
-/*  color: #444c5c;*/
-/*}*/
-
-#button-sort {
-  background-image: url(../img/sort-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 17px;
-}
-
-#button-filter {
-  background-image: url(../img/filter-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 17px;
 }
 
 #toolbar-filter {
@@ -343,6 +258,31 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   margin-left: 10px;
   height: 100%;
   justify-content: space-around;
+}
+
+#button-merger {
+font-size: 15px;
+}
+
+#toolbar-file {
+  width: 400px;
+  margin-left: 10px;
+  height: 100%;
+  justify-content: space-around;
+}
+
+div.filename-container {
+  font-family: Lato, sans-serif;
+  color: #444c5c;
+  border-color: #444c5c;
+}
+
+#toolbar-file div.tool-button-big {
+  background-color: transparent;
+}
+
+#button-export-file {
+  transform: rotate(180deg);
 }
 
 div.toolbar-column {
