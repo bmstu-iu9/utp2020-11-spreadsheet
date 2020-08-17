@@ -119,6 +119,7 @@ function removeSelection(ctrl) {
 cells.forEach((cell) => {
   cell.addEventListener('mousedown', (e) => {
     e.preventDefault();
+    fontDisplay.blur();
     isOnMouseDown = true;
     removeSelection(e.ctrlKey);
     selectionEnd = getCellXY(cell);
@@ -315,4 +316,13 @@ fontNames.forEach((font) => {
       cell.style.fontFamily = font.innerHTML;
     });
   });
+});
+
+fontDisplay.addEventListener(('keydown'), (e) => {
+  if (e.key === 'Enter') {
+    reduceCells((cell) => {
+      // eslint-disable-next-line no-param-reassign
+      cell.style.fontFamily = fontDisplay.value;
+    });
+  }
 });
