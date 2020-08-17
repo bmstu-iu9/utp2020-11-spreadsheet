@@ -1,14 +1,7 @@
-import fs from 'fs';
 import FormatError from '../errors/FormatError.js';
 
-export default class ClassConverter {
-  static saveJson(userWorkbook, pathToWorkbooks) {
-    const file = JSON.stringify(this.readObject(userWorkbook));
-    fs.mkdirSync(pathToWorkbooks, { recursive: true });
-    fs.writeFileSync(`${pathToWorkbooks}/${userWorkbook.name}.json`, file);
-  }
-
-  static readObject(userWorkbook) {
+export default class WorkbookSerializer {
+  static serialize(userWorkbook) {
     if (userWorkbook === null) {
       throw new FormatError('Empty workbook');
     }

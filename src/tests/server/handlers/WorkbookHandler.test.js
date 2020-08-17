@@ -1,14 +1,20 @@
+import * as assert from 'assert';
 import express from 'express';
 import request from 'supertest';
 import fs from 'fs';
-import WorkbookHandler from '../../../server/handler/Handler.js';
-import ClassConverter from '../../../lib/saveWorkbook/ClassConverter.js';
-import JsonConverter from '../../../lib/readWorkbook/JsonConverter.js';
+import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
+import WorkbookHandler from '../../../server/handlers/WorkbookHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
 import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
+import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
+import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
+import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
+import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
+import CommitLoader from '../../../server/save/CommitLoader.js';
+import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 
 const testWorkbook = {
   name: 'test',
@@ -40,19 +46,28 @@ describe('WorkbookHandler', () => {
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
-    workbookHandler = new WorkbookHandler(environment.dataRepo);
+    workbookHandler = new WorkbookHandler(environment.dataRepo, {
+      pathToWorkbooks: '.',
+      pathToCommits: '.',
+    });
     environment.init();
     app = express();
     matcher = new HeaderMatcher('authorization', 'Token ');
     authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
     authorizer = new Authorizer(authenticator);
     app.use(authorizer.getMiddleware());
-    ClassConverter.saveJson(testWorkbook, '.');
+    const serialized = WorkbookSerializer.serialize(testWorkbook);
+    const generator = new WorkbookPathGenerator('.');
+    const saver = new WorkbookSaver(generator);
+    saver.save(serialized, 1);
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
-    if (fs.existsSync('./test.json')) {
-      fs.unlinkSync('./test.json');
+    if (fs.existsSync('./1.json')) {
+      fs.unlinkSync('./1.json');
+    }
+    if (fs.existsSync('./1.commits.json')) {
+      fs.unlinkSync('./1.commits.json');
     }
   });
   describe('#get()', () => {
@@ -62,7 +77,7 @@ describe('WorkbookHandler', () => {
       app.get('/workbook/get', (req, res) => {
         workbookHandler.get(req, res);
       });
-      const workbookModel = new WorkbookModel('./test.json', username);
+      const workbookModel = new WorkbookModel(username);
       environment.dataRepo.workbookRepo.save(workbookModel);
       request(app)
         .get('/workbook/get')
@@ -95,7 +110,9 @@ describe('WorkbookHandler', () => {
       app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const obj = ClassConverter.readObject(JsonConverter.readWorkbook('test.json'));
+      const pathGenerator = new WorkbookPathGenerator('.');
+      const loader = new WorkbookLoader(pathGenerator);
+      const obj = loader.load(1);
       request(app)
         .post('/workbook/post/.')
         .send(obj)
@@ -104,73 +121,38 @@ describe('WorkbookHandler', () => {
     it('should give response 400 for creating book without book', (done) => {
       environment.addUsers(1, true);
       const { token } = environment.userTokens[0];
-      app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+      app.post('/workbook/post', (req, res) => {
         workbookHandler.post(req, res);
       });
       request(app)
-        .post('/workbook/post/.')
+        .post('/workbook/post')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(400, done);
     });
-    it('should give response 200 and object', (done) => {
+    it('should give response 200 and object', () => {
       environment.addUsers(1, true);
       const { token } = environment.userTokens[0];
       app.use(express.json());
-      app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
+      app.post('/workbook/post', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const obj = ClassConverter.readObject(JsonConverter.readWorkbook('test.json'));
-      request(app)
-        .post('/workbook/post/.')
+      const pathGenerator = new WorkbookPathGenerator('.');
+      const loader = new WorkbookLoader(pathGenerator);
+      const obj = loader.load(1);
+      return request(app)
+        .post('/workbook/post')
         .set('Authorization', `Token ${token.uuid}`)
         .send(obj)
-        .expect(200, done);
-    });
-  });
-  describe('#delete()', () => {
-    it('should give response 401 for unauthorized user', (done) => {
-      app.delete('/workbook/delete/:workbookID', (req, res) => {
-        workbookHandler.delete(req, res);
-      });
-      request(app)
-        .delete('/workbook/delete/123')
-        .expect(401, done);
-    });
-    it('should give response 404 for unfound book', (done) => {
-      environment.addUsers(1, true);
-      const { token } = environment.userTokens[0];
-      app.get('/workbook/delete/:workbookID', (req, res) => {
-        workbookHandler.delete(req, res);
-      });
-      request(app)
-        .get('/workbook/delete/123')
-        .set('Authorization', `Token ${token.uuid}`)
-        .expect(404, done);
-    });
-    it('should give response 403 for deleting book without access permission', (done) => {
-      environment.addUsers(2, true);
-      const workbookModel = new WorkbookModel('./test.json', 'test0');
-      const id = environment.dataRepo.workbookRepo.save(workbookModel);
-      app.get('/workbook/delete/:workbookID', (req, res) => {
-        workbookHandler.delete(req, res);
-      });
-      request(app)
-        .get(`/workbook/delete/${id.toString()}`)
-        .set('Authorization', `Token ${environment.userTokens[1].token.uuid}`)
-        .expect(403, done);
-    });
-    it('should give response 200 for successful deletion', (done) => {
-      environment.addUsers(1, true);
-      const workbookModel = new WorkbookModel('test.json', 'test0');
-      const id = environment.dataRepo.workbookRepo.save(workbookModel);
-      const { token } = environment.userTokens[0];
-      app.get('/workbook/delete/:workbookID', (req, res) => {
-        workbookHandler.delete(req, res);
-      });
-      request(app)
-        .get(`/workbook/delete/${id.toString()}`)
-        .set('Authorization', `Token ${token.uuid}`)
-        .expect(200, done);
+        .expect(200)
+        .then((response) => {
+          assert.deepStrictEqual(response.body.name, obj.name);
+        })
+        .then(() => {
+          const commitGenerator = new CommitPathGenerator('.');
+          const commitLoader = new CommitLoader(commitGenerator);
+          const commits = commitLoader.load(1);
+          assert.deepStrictEqual(commits, [{ ID: zeroID }]);
+        });
     });
   });
 });

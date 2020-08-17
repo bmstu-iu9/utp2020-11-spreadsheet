@@ -1,9 +1,8 @@
 import FormatError from '../../lib/errors/FormatError.js';
 
 export default class WorkbookModel {
-  constructor(path, login = null, id = null) {
+  constructor(login = null, id = null) {
     if (WorkbookModel.idIsCorrect(id)) {
-      this.setPath(path);
       this.id = id;
       this.setLogin(login);
     } else {
@@ -23,19 +22,10 @@ export default class WorkbookModel {
     }
   }
 
-  setPath(path) {
-    const pathRegExp = new RegExp('^(~|\\.?)\\/?((\\d|\\w)+\\/)*(\\d|\\w)+\\.json+$');
-    if (pathRegExp.test(path)) {
-      this.path = path;
-    } else {
-      throw new FormatError('WorkbookModel: wrong format of path');
-    }
-  }
-
   static fromSQLtoBooks(rows) {
     const result = [];
     rows.forEach((row) => {
-      result.push(new WorkbookModel(row.path, row.login, row.id));
+      result.push(new WorkbookModel(row.login, row.id));
     });
     return result;
   }

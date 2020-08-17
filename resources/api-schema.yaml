@@ -183,10 +183,10 @@ paths:
           format: int64
     get:
       parameters:
-        - name: "from"
+        - name: "after"
           in: "query"
           required: false
-          description: "ID коммита, начиная с которого требуются изменения."
+          description: "ID коммита, после которого требуются изменения."
           schema:
             type: string
       description: "Получение книги с заданным ID"
@@ -223,6 +223,8 @@ paths:
       responses:
         "200":
           description: "Книга была успешно изменена"
+        "400":
+          description: "Некорректный запрос"
         "401":
           description: "Неавторизованный запрос"
         "403":
@@ -257,7 +259,7 @@ components:
       bearerFormat: "Bearer mF_9.B5f-4.1JqM"
   schemas:
     workbook:
-      $ref: "tableSchema.json"
+      $ref: "workbookSchema.json"
     user:
       type: "object"
     users:
