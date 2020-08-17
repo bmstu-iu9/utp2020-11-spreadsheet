@@ -21,10 +21,24 @@ export default class Server {
     this.setConfig(config);
     this.configureApp();
     this.configureLogging();
+    this.configureDataDirs();
     this.configureDataRepo();
     this.configureMiddleware();
     this.configureEndpoints();
     this.configureServer();
+  }
+
+  configureDataDirs() {
+    const dataDirs = [
+      this.config.dataPath,
+      this.config.pathToWorkbooks,
+      this.config.pathToCommits,
+    ];
+    dataDirs.forEach((dir) => {
+      fs.mkdirSync(dir, {
+        recursive: true,
+      });
+    });
   }
 
   configureEndpoints() {
@@ -73,9 +87,6 @@ export default class Server {
   }
 
   configureDataRepo() {
-    fs.mkdirSync(this.config.dataPath, {
-      recursive: true,
-    });
     const databasePath = `${this.config.dataPath}/${this.config.databaseName}`;
     const database = new Database(databasePath);
     this.dataRepo = new DataRepo(database, this.logger);
