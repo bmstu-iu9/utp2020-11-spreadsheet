@@ -102,6 +102,7 @@ function applySelection() {
 function removeSelection(ctrl) {
   if (focusedXY !== undefined) {
     cellsInputs[focusedXY[1] * tableWidth + focusedXY[0]].blur();
+    cellsInputs[focusedXY[1] * tableWidth + focusedXY[0]].classList.remove('cursor-text');
   }
   if (!ctrl) {
     for (let i = 0; i < tableHeight; i += 1) {
