@@ -46,6 +46,13 @@ function checkStyles(cell) {
   }
 }
 
+function updateButtons() {
+  boldBtn.dispatchEvent(selectionEvent);
+  italicBtn.dispatchEvent(selectionEvent);
+  underlineBtn.dispatchEvent(selectionEvent);
+  stretchBtn.dispatchEvent(selectionEvent);
+}
+
 function changeSelection() {
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
@@ -112,19 +119,13 @@ cells.forEach((cell) => {
       selectionStart = selectionEnd;
     }
     changeSelection();
-    boldBtn.dispatchEvent(selectionEvent);
-    italicBtn.dispatchEvent(selectionEvent);
-    underlineBtn.dispatchEvent(selectionEvent);
-    stretchBtn.dispatchEvent(selectionEvent);
+    updateButtons();
   });
   cell.addEventListener('mouseup', (e) => {
     e.preventDefault();
 
     applySelection();
-    boldBtn.dispatchEvent(selectionEvent);
-    italicBtn.dispatchEvent(selectionEvent);
-    underlineBtn.dispatchEvent(selectionEvent);
-    stretchBtn.dispatchEvent(selectionEvent);
+    updateButtons();
     isOnMouseDown = false;
   });
   cell.addEventListener('mouseover', () => {
@@ -145,16 +146,12 @@ rowHeaders.forEach((rowHeader, id) => {
   rowHeader.addEventListener('dblclick', (e) => {
     e.preventDefault();
     removeSelection(e.ctrlKey);
+    selectionStart = [0, id];
     if (!e.shiftKey) {
-      selectionStart = [0, id];
+      selectionEnd = [tableWidth - 1, id];
     }
-    for (let i = Math.min(selectionStart[1], id);
-      i <= Math.max(selectionStart[1], id); i += 1) {
-      rowHeaders[i].classList.add('header-selected');
-      for (let j = 0; j < tableWidth; j += 1) {
-        cellsInputs[i * tableWidth + j].classList.add('selected');
-      }
-    }
+    applySelection();
+    updateButtons();
   });
 });
 
@@ -162,16 +159,12 @@ columnHeaders.forEach((columnHeader, id) => {
   columnHeader.addEventListener('dblclick', (e) => {
     e.preventDefault();
     removeSelection(e.ctrlKey);
+    selectionStart = [id, 0];
     if (!e.shiftKey) {
-      selectionStart = [id, 0];
+      selectionEnd = [id, tableHeight - 1];
     }
-    for (let i = Math.min(selectionStart[0], id);
-      i <= Math.max(selectionStart[0], id); i += 1) {
-      columnHeaders[i].classList.add('header-selected');
-      for (let j = 0; j < tableHeight; j += 1) {
-        cellsInputs[j * tableWidth + i].classList.add('selected');
-      }
-    }
+    applySelection();
+    updateButtons();
   });
 });
 
