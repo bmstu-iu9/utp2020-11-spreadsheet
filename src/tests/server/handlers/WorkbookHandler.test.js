@@ -63,12 +63,17 @@ describe('WorkbookHandler', () => {
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
-    if (fs.existsSync('./1.json')) {
-      fs.unlinkSync('./1.json');
-    }
-    if (fs.existsSync('./1.commits.json')) {
-      fs.unlinkSync('./1.commits.json');
-    }
+    const testFiles = [
+      './1.json',
+      './1.commits.json',
+      './2.json',
+      './2.commits.json',
+    ];
+    testFiles.forEach((file) => {
+      if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+      }
+    });
   });
   describe('#get()', () => {
     it('should give response 200 and array of books', (done) => {
@@ -152,6 +157,27 @@ describe('WorkbookHandler', () => {
           const commitLoader = new CommitLoader(commitGenerator);
           const commits = commitLoader.load(1);
           assert.deepStrictEqual(commits, [{ ID: zeroID }]);
+        });
+    });
+    it('should create 2.commits.json', () => {
+      environment.addUsers(1, true);
+      const { token, username } = environment.userTokens[0];
+      const workbookModel = new WorkbookModel(username);
+      environment.dataRepo.workbookRepo.save(workbookModel);
+      app.use(express.json());
+      app.post('/workbook/post', (req, res) => {
+        workbookHandler.post(req, res);
+      });
+      return request(app)
+        .post('/workbook/post')
+        .set('Authorization', `Token ${token.uuid}`)
+        .send({
+          name: 'test',
+          spreadsheets: [],
+        })
+        .expect(200)
+        .then(() => {
+          assert.strictEqual(fs.existsSync('2.commits.json'), true);
         });
     });
   });

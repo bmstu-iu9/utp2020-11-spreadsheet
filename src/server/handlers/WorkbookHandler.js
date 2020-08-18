@@ -50,7 +50,7 @@ export default class WorkbookHandler extends EndpointHandler {
     workbookID.spreadsheets = req.body.spreadsheets;
     const commitPathGenerator = new CommitPathGenerator(this.config.pathToCommits);
     const commitSaver = new CommitSaver(commitPathGenerator);
-    commitSaver.save(1, [{ ID: zeroID }]);
+    commitSaver.save(workbookID.id, [{ ID: zeroID }]);
     return res.status(200).send(workbookID);
   }
 }
