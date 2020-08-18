@@ -81,7 +81,7 @@ describe('WorkbookHandler', () => {
     it('should give response 200 and array of books', () => {
       const commitPathGenerator = new CommitPathGenerator('.');
       const commitSaver = new CommitSaver(commitPathGenerator);
-      commitSaver.save(1, [{ID: zeroID}]);
+      commitSaver.save(1, [{ ID: zeroID }]);
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
       app.get('/workbook/get', (req, res) => {
