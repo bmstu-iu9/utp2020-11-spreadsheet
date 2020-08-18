@@ -19,6 +19,7 @@ export class Cell {
   }
 
   setValue(type, value = null) {
+    this.needCalc = false;
     if (value === null) {
       this.value = Cell.getDefaultValue(type);
       this.type = type;

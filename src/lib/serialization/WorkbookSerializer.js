@@ -23,6 +23,7 @@ export default class WorkbookSerializer {
           color: cell.color,
           type: cell.type,
           value: cell.value,
+          needCalc: cell.needCalc,
         };
       });
       sheet.cells = cells;

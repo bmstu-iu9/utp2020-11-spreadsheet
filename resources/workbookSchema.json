@@ -48,6 +48,9 @@
                                             "boolean",
                                             "string"
                                         ]
+                                    },
+                                    "needCalc": {
+                                      "type": "boolean"
                                     }
                                 }
                             }

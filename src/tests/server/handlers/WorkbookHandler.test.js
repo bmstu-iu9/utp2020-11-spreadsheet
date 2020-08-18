@@ -26,11 +26,13 @@ const testWorkbook = {
           color: '#ffffff',
           type: 'number',
           value: 100,
+          needCalc: false,
         }],
         ['A6', {
           color: '#edeef0',
           type: 'boolean',
           value: true,
+          needCalc: false,
         }]]),
     },
   ],
