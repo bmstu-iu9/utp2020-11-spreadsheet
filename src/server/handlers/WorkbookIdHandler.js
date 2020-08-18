@@ -8,6 +8,7 @@ import CommitFinder from '../../lib/synchronization/CommitFinder.js';
 import { Synchronizer } from '../../lib/synchronization/Synchronizer.js';
 import WorkbookSaver from '../save/WorkbookSaver.js';
 import CommitSaver from '../save/CommitSaver.js';
+import WorkbookIdSerializer from '../../lib/serialization/WorkbookIdSerializer.js';
 
 export default class WorkbookIdHandler extends EndpointHandler {
   get(req, res) {
@@ -91,14 +92,14 @@ export default class WorkbookIdHandler extends EndpointHandler {
 
   getWorkbook(req, res) {
     const id = Number.parseInt(req.params.id, 10);
-    const content = this.fetchWorkbook(id);
+    const workbook = this.fetchWorkbook(id);
     const commits = this.fetchCommits(id);
-    if (content === undefined || commits === undefined) {
+    if (workbook === undefined || commits === undefined) {
       return res.sendStatus(404);
     }
-    content.id = id;
-    content.lastCommitId = commits[commits.length - 1].ID;
-    return res.status(200).json(content);
+    const lastCommitId = commits[commits.length - 1].ID;
+    const workbookId = WorkbookIdSerializer.serialize(workbook, id, lastCommitId);
+    return res.status(200).json(workbookId);
   }
 
   getCommits(req, res) {
