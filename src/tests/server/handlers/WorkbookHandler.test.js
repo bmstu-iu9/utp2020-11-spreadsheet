@@ -15,23 +15,26 @@ import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js
 import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
 import CommitLoader from '../../../server/save/CommitLoader.js';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
+import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
+import CommitSaver from '../../../server/save/CommitSaver.js';
 
 const testWorkbook = {
   name: 'test',
   spreadsheets: [
     {
       name: 'My Sheet',
-      cells: new Map([
-        ['A5', {
+      cells: {
+        A5: {
           color: '#ffffff',
           type: 'number',
           value: 100,
-        }],
-        ['A6', {
+        },
+        A6: {
           color: '#edeef0',
           type: 'boolean',
           value: true,
-        }]]),
+        },
+      },
     },
   ],
 };
@@ -39,10 +42,8 @@ const testWorkbook = {
 describe('WorkbookHandler', () => {
   let environment;
   let workbookHandler;
-  let matcher;
-  let authenticator;
-  let authorizer;
   let app;
+  let workbookId;
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
@@ -52,14 +53,15 @@ describe('WorkbookHandler', () => {
     });
     environment.init();
     app = express();
-    matcher = new HeaderMatcher('authorization', 'Token ');
-    authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
-    authorizer = new Authorizer(authenticator);
+    const matcher = new HeaderMatcher('authorization', 'Token ');
+    const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
+    const authorizer = new Authorizer(authenticator);
     app.use(authorizer.getMiddleware());
     const serialized = WorkbookSerializer.serialize(testWorkbook);
     const generator = new WorkbookPathGenerator('.');
     const saver = new WorkbookSaver(generator);
     saver.save(serialized, 1);
+    workbookId = WorkbookIdSerializer.serialize(testWorkbook, 1, zeroID);
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
@@ -76,7 +78,10 @@ describe('WorkbookHandler', () => {
     });
   });
   describe('#get()', () => {
-    it('should give response 200 and array of books', (done) => {
+    it('should give response 200 and array of books', () => {
+      const commitPathGenerator = new CommitPathGenerator('.');
+      const commitSaver = new CommitSaver(commitPathGenerator);
+      commitSaver.save(1, [{ ID: zeroID }]);
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
       app.get('/workbook/get', (req, res) => {
@@ -84,10 +89,13 @@ describe('WorkbookHandler', () => {
       });
       const workbookModel = new WorkbookModel(username);
       environment.dataRepo.workbookRepo.save(workbookModel);
-      request(app)
+      return request(app)
         .get('/workbook/get')
         .set('Authorization', `Token ${token.uuid}`)
-        .expect(200, done);
+        .expect(200)
+        .then((res) => {
+          assert.deepStrictEqual(res.body, [workbookId]);
+        });
     });
     it('should give response 404 for no books', (done) => {
       environment.addUsers(1, true);
@@ -141,16 +149,13 @@ describe('WorkbookHandler', () => {
       app.post('/workbook/post', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const pathGenerator = new WorkbookPathGenerator('.');
-      const loader = new WorkbookLoader(pathGenerator);
-      const obj = loader.load(1);
       return request(app)
         .post('/workbook/post')
         .set('Authorization', `Token ${token.uuid}`)
-        .send(obj)
+        .send(testWorkbook)
         .expect(200)
         .then((response) => {
-          assert.deepStrictEqual(response.body.name, obj.name);
+          assert.deepStrictEqual(response.body, workbookId);
         })
         .then(() => {
           const commitGenerator = new CommitPathGenerator('.');
