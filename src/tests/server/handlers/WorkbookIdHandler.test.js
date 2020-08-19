@@ -13,6 +13,7 @@ import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
+import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
 import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
 import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
@@ -22,6 +23,7 @@ import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
 describe('WorkbookIdHandler', () => {
   let environment;
   let app;
+  const initialCommits = [{ ID: zeroID }];
 
   const createWorkbook = () => {
     environment.addUsers(1, true);
@@ -35,10 +37,9 @@ describe('WorkbookIdHandler', () => {
   };
 
   const createCommits = () => {
-    const commits = [{ ID: zeroID }];
     const commitPathGenerator = new CommitPathGenerator('commits');
     const commitSaver = new CommitSaver(commitPathGenerator);
-    commitSaver.save(1, commits);
+    commitSaver.save(1, initialCommits);
   };
 
   beforeEach(() => {
@@ -110,19 +111,24 @@ describe('WorkbookIdHandler', () => {
           '1.json': '',
         },
         commits: {
-          '1.commits.json': `[{"ID":"${zeroID}"}]`,
+          '1.commits.json': '',
         },
       });
       createWorkbook();
+      createCommits();
+      const generator = new WorkbookPathGenerator('workbooks');
+      const loader = new WorkbookLoader(generator);
+      const workbook = loader.load(1);
+      const workbookId = WorkbookIdSerializer.serialize(
+        workbook, 1, initialCommits[initialCommits.length - 1].ID,
+      );
       const { token } = environment.userTokens[0];
       return request(app)
         .get('/1')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(200)
         .then((response) => {
-          assert.strictEqual(response.body.name, 'test');
-          assert.strictEqual(response.body.id, 1);
-          assert.strictEqual(response.body.lastCommitId, zeroID);
+          assert.deepStrictEqual(response.body, workbookId);
         })
         .then(mock.restore);
     });
@@ -243,7 +249,7 @@ describe('WorkbookIdHandler', () => {
     });
   });
   describe('#patch', () => {
-    const commits = {
+    const requestBody = {
       lastSynchronizedCommit: zeroID,
       changes: [{
         ID: 'cf3c1cf6-be2f-4a6a-b69b-97b9c1126065',
@@ -279,13 +285,13 @@ describe('WorkbookIdHandler', () => {
       return request(app)
         .patch('/1')
         .set('Authorization', `Token ${token.uuid}`)
-        .send(JSON.stringify(commits))
+        .send(JSON.stringify(requestBody))
         .expect(200)
         .then(() => {
           const generator = new CommitPathGenerator('commits');
           const loader = new CommitLoader(generator);
           const actualCommits = loader.load(1);
-          assert.deepStrictEqual(actualCommits[1], commits.changes[0]);
+          assert.deepStrictEqual(actualCommits[1], requestBody.changes[0]);
         })
         .then(() => {
           const generator = new WorkbookPathGenerator('workbooks');
@@ -328,16 +334,16 @@ describe('WorkbookIdHandler', () => {
       const saver = new CommitSaver(generator);
       saver.save(1, [
         { ID: zeroID },
-        ...commits.changes,
+        ...requestBody.changes,
       ]);
       const { token } = environment.userTokens[0];
       return request(app)
         .patch('/1')
         .set('Authorization', `Token ${token.uuid}`)
-        .send(JSON.stringify(commits))
+        .send(JSON.stringify(requestBody))
         .expect(409)
         .then((res) => {
-          assert.deepStrictEqual(res.body, commits.changes);
+          assert.deepStrictEqual(res.body, requestBody.changes);
         })
         .then(mock.restore);
     });
