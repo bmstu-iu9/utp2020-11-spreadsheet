@@ -38,7 +38,7 @@ export default class WorkbookIdHandler extends EndpointHandler {
       return res.status(409).json(conflicts);
     }
     this.saveSystem.commitSaver.save(id, synchronizer.acceptedCommits);
-    this.saveSystem.workbookSaver.save(synchronizer.workbook, id);
+    this.saveSystem.workbookSaver.save(id, synchronizer.workbook);
     return res.sendStatus(200);
   }
 

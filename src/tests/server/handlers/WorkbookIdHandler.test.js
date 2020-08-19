@@ -2,8 +2,6 @@ import * as assert from 'assert';
 import express from 'express';
 import request from 'supertest';
 import mock from 'mock-fs';
-import fs from 'fs';
-import CommitSaver from '../../../server/save/CommitSaver.js';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
@@ -12,13 +10,8 @@ import Authorizer from '../../../server/authorization/Authorizer.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
-import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
 import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
-import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
-import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
-import CommitLoader from '../../../server/save/CommitLoader.js';
-import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
 import SaveSystem from '../../../server/save/SaveSystem.js';
 
 describe('WorkbookIdHandler', () => {
@@ -31,7 +24,7 @@ describe('WorkbookIdHandler', () => {
     environment.addUsers(1, true);
     const { username } = environment.userTokens[0];
     const workbook = new Workbook('test', [new Spreadsheet('test')]);
-    saveSystem.workbookSaver.save(workbook, 1);
+    saveSystem.workbookSaver.save(1, workbook);
     const workbookModel = new WorkbookModel(username);
     environment.dataRepo.workbookRepo.save(workbookModel);
   };

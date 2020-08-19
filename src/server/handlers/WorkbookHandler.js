@@ -36,7 +36,7 @@ export default class WorkbookHandler extends EndpointHandler {
     const deserialized = WorkbookDeserializer.deserialize(req.body);
     const workbookModel = new WorkbookModel(req.user.login);
     const id = this.dataRepo.workbookRepo.save(workbookModel);
-    this.saveSystem.workbookSaver.save(deserialized, id);
+    this.saveSystem.workbookSaver.save(id, deserialized);
     this.saveSystem.commitSaver.save(id, [{ ID: zeroID }]);
     const workbookId = WorkbookIdSerializer.serialize(deserialized, id, zeroID);
     return res.status(200).send(workbookId);

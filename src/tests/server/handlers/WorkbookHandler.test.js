@@ -51,7 +51,7 @@ describe('WorkbookHandler', () => {
     const authorizer = new Authorizer(authenticator);
     app.use(authorizer.getMiddleware());
     const serialized = WorkbookSerializer.serialize(testWorkbook);
-    saveSystem.workbookSaver.save(serialized, 1);
+    saveSystem.workbookSaver.save(1, serialized);
     workbookId = WorkbookIdSerializer.serialize(testWorkbook, 1, zeroID);
   });
   afterEach(() => {
