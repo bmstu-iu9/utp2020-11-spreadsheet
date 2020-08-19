@@ -2,7 +2,6 @@ import * as assert from 'assert';
 import express from 'express';
 import request from 'supertest';
 import fs from 'fs';
-import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
 import WorkbookHandler from '../../../server/handlers/WorkbookHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
 import TestEnvironment from '../database/TestEnvironment.js';
@@ -10,13 +9,9 @@ import Authorizer from '../../../server/authorization/Authorizer.js';
 import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
-import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
-import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
-import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
-import CommitLoader from '../../../server/save/CommitLoader.js';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
-import CommitSaver from '../../../server/save/CommitSaver.js';
+import SaveSystem from '../../../server/save/SaveSystem.js';
 
 const testWorkbook = {
   name: 'test',
@@ -40,6 +35,7 @@ const testWorkbook = {
 };
 
 describe('WorkbookHandler', () => {
+  const saveSystem = new SaveSystem('.', '.');
   let environment;
   let workbookHandler;
   let app;
@@ -47,10 +43,7 @@ describe('WorkbookHandler', () => {
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
-    workbookHandler = new WorkbookHandler(environment.dataRepo, {
-      pathToWorkbooks: '.',
-      pathToCommits: '.',
-    });
+    workbookHandler = new WorkbookHandler(environment.dataRepo, saveSystem);
     environment.init();
     app = express();
     const matcher = new HeaderMatcher('authorization', 'Token ');
@@ -58,9 +51,7 @@ describe('WorkbookHandler', () => {
     const authorizer = new Authorizer(authenticator);
     app.use(authorizer.getMiddleware());
     const serialized = WorkbookSerializer.serialize(testWorkbook);
-    const generator = new WorkbookPathGenerator('.');
-    const saver = new WorkbookSaver(generator);
-    saver.save(serialized, 1);
+    saveSystem.workbookSaver.save(1, serialized);
     workbookId = WorkbookIdSerializer.serialize(testWorkbook, 1, zeroID);
   });
   afterEach(() => {
@@ -79,9 +70,7 @@ describe('WorkbookHandler', () => {
   });
   describe('#get()', () => {
     it('should give response 200 and array of books', () => {
-      const commitPathGenerator = new CommitPathGenerator('.');
-      const commitSaver = new CommitSaver(commitPathGenerator);
-      commitSaver.save(1, [{ ID: zeroID }]);
+      saveSystem.commitSaver.save(1, [{ ID: zeroID }]);
       environment.addUsers(1, true);
       const { username, token } = environment.userTokens[0];
       app.get('/workbook/get', (req, res) => {
@@ -123,12 +112,10 @@ describe('WorkbookHandler', () => {
       app.post('/workbook/post/:pathToWorkbooks', (req, res) => {
         workbookHandler.post(req, res);
       });
-      const pathGenerator = new WorkbookPathGenerator('.');
-      const loader = new WorkbookLoader(pathGenerator);
-      const obj = loader.load(1);
+      const workbook = saveSystem.workbookLoader.load(1);
       request(app)
         .post('/workbook/post/.')
-        .send(obj)
+        .send(workbook)
         .expect(401, done);
     });
     it('should give response 400 for creating book without book', (done) => {
@@ -158,9 +145,7 @@ describe('WorkbookHandler', () => {
           assert.deepStrictEqual(response.body, workbookId);
         })
         .then(() => {
-          const commitGenerator = new CommitPathGenerator('.');
-          const commitLoader = new CommitLoader(commitGenerator);
-          const commits = commitLoader.load(1);
+          const commits = saveSystem.commitLoader.load(1);
           assert.deepStrictEqual(commits, [{ ID: zeroID }]);
         });
     });

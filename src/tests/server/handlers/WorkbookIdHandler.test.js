@@ -2,8 +2,6 @@ import * as assert from 'assert';
 import express from 'express';
 import request from 'supertest';
 import mock from 'mock-fs';
-import fs from 'fs';
-import CommitSaver from '../../../server/save/CommitSaver.js';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
@@ -12,15 +10,12 @@ import Authorizer from '../../../server/authorization/Authorizer.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
-import WorkbookSaver from '../../../server/save/WorkbookSaver.js';
 import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
-import WorkbookPathGenerator from '../../../server/save/WorkbookPathGenerator.js';
-import CommitPathGenerator from '../../../server/save/CommitPathGenerator.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
-import CommitLoader from '../../../server/save/CommitLoader.js';
-import WorkbookLoader from '../../../server/save/WorkbookLoader.js';
+import SaveSystem from '../../../server/save/SaveSystem.js';
 
 describe('WorkbookIdHandler', () => {
+  const saveSystem = new SaveSystem('workbooks', 'commits');
   let environment;
   let app;
   const initialCommits = [{ ID: zeroID }];
@@ -29,26 +24,19 @@ describe('WorkbookIdHandler', () => {
     environment.addUsers(1, true);
     const { username } = environment.userTokens[0];
     const workbook = new Workbook('test', [new Spreadsheet('test')]);
-    const generator = new WorkbookPathGenerator('workbooks');
-    const saver = new WorkbookSaver(generator);
-    saver.save(workbook, 1);
+    saveSystem.workbookSaver.save(1, workbook);
     const workbookModel = new WorkbookModel(username);
     environment.dataRepo.workbookRepo.save(workbookModel);
   };
 
   const createCommits = () => {
-    const commitPathGenerator = new CommitPathGenerator('commits');
-    const commitSaver = new CommitSaver(commitPathGenerator);
-    commitSaver.save(1, initialCommits);
+    saveSystem.commitSaver.save(1, initialCommits);
   };
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
     environment.init();
-    const handler = new WorkbookIdHandler(environment.dataRepo, {
-      pathToWorkbooks: 'workbooks',
-      pathToCommits: 'commits',
-    });
+    const handler = new WorkbookIdHandler(environment.dataRepo, saveSystem);
     const matcher = new HeaderMatcher('authorization', 'Token ');
     const authenticator = new TokenAuthencticator(matcher, environment.dataRepo);
     const authorizer = new Authorizer(authenticator);
@@ -90,21 +78,6 @@ describe('WorkbookIdHandler', () => {
         .set('Authorization', `Token ${token.uuid}`)
         .expect(404);
     });
-    it('should return 404 for absent workbook file', () => {
-      mock({
-        workbooks: {
-          '1.json': '',
-        },
-      });
-      createWorkbook();
-      fs.unlinkSync('workbooks/1.json');
-      const { token } = environment.userTokens[0];
-      return request(app)
-        .get('/1')
-        .set('Authorization', `Token ${token.uuid}`)
-        .expect(404)
-        .then(mock.restore);
-    });
     it('should return a workbook', () => {
       mock({
         workbooks: {
@@ -116,9 +89,7 @@ describe('WorkbookIdHandler', () => {
       });
       createWorkbook();
       createCommits();
-      const generator = new WorkbookPathGenerator('workbooks');
-      const loader = new WorkbookLoader(generator);
-      const workbook = loader.load(1);
+      const workbook = saveSystem.workbookLoader.load(1);
       const workbookId = WorkbookIdSerializer.serialize(
         workbook, 1, initialCommits[initialCommits.length - 1].ID,
       );
@@ -166,9 +137,7 @@ describe('WorkbookIdHandler', () => {
         },
       ];
       const { token } = environment.userTokens[0];
-      const generator = new CommitPathGenerator('commits');
-      const saver = new CommitSaver(generator);
-      saver.save(1, commits);
+      saveSystem.commitSaver.save(1, commits);
       return request(app)
         .get(`/1?after=${zeroID}`)
         .set('Authorization', `Token ${token.uuid}`)
@@ -178,20 +147,6 @@ describe('WorkbookIdHandler', () => {
         })
         .then(mock.restore);
     });
-  });
-  it('should return 404 for absent file', () => {
-    mock({
-      workbooks: {
-        '1.json': '',
-      },
-    });
-    createWorkbook();
-    const { token } = environment.userTokens[0];
-    return request(app)
-      .get(`/1?after=${zeroID}`)
-      .set('Authorization', `Token ${token.uuid}`)
-      .expect(404)
-      .then(mock.restore);
   });
   it('should return 409 for absent commit', () => {
     mock({
@@ -288,15 +243,11 @@ describe('WorkbookIdHandler', () => {
         .send(JSON.stringify(requestBody))
         .expect(200)
         .then(() => {
-          const generator = new CommitPathGenerator('commits');
-          const loader = new CommitLoader(generator);
-          const actualCommits = loader.load(1);
+          const actualCommits = saveSystem.commitLoader.load(1);
           assert.deepStrictEqual(actualCommits[1], requestBody.changes[0]);
         })
         .then(() => {
-          const generator = new WorkbookPathGenerator('workbooks');
-          const loader = new WorkbookLoader(generator);
-          const workbook = loader.load(1);
+          const workbook = saveSystem.workbookLoader.load(1);
           assert.strictEqual(workbook.spreadsheets[0].cells.get('A1').color, '#aaaaaa');
         })
         .then(mock.restore);
@@ -330,9 +281,7 @@ describe('WorkbookIdHandler', () => {
         },
       });
       createWorkbook();
-      const generator = new CommitPathGenerator('commits');
-      const saver = new CommitSaver(generator);
-      saver.save(1, [
+      saveSystem.commitSaver.save(1, [
         { ID: zeroID },
         ...requestBody.changes,
       ]);
