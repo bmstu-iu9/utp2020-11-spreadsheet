@@ -12,14 +12,14 @@ export default class SaveSystem {
   }
 
   instantiateCommitSubsystem(pathToCommits) {
-    const commitPathGenerator = new CommitPathGenerator(pathToCommits);
-    this.commitLoader = new CommitLoader(commitPathGenerator);
-    this.commitSaver = new CommitSaver(commitPathGenerator);
+    this.commitPathGenerator = new CommitPathGenerator(pathToCommits);
+    this.commitLoader = new CommitLoader(this.commitPathGenerator);
+    this.commitSaver = new CommitSaver(this.commitPathGenerator);
   }
 
   instantiateWorkbookSubsystem(pathToWorkbooks) {
-    const workbookPathGenerator = new WorkbookPathGenerator(pathToWorkbooks);
-    this.workbookLoader = new WorkbookLoader(workbookPathGenerator);
-    this.workbookSaver = new WorkbookSaver(workbookPathGenerator);
+    this.workbookPathGenerator = new WorkbookPathGenerator(pathToWorkbooks);
+    this.workbookLoader = new WorkbookLoader(this.workbookPathGenerator);
+    this.workbookSaver = new WorkbookSaver(this.workbookPathGenerator);
   }
 }
