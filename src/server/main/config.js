@@ -10,7 +10,10 @@ export default {
   static: 'src/client',
   entrypoint: '/index.html',
   dataPath: 'data',
+  env: 'development',
   databaseName: 'database.db',
+  pathToWorkbooks: 'data/workbooks',
+  pathToCommits: 'data/commits',
   headerMatcher: {
     name: 'authorization',
     prefix: 'Token ',

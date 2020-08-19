@@ -20,7 +20,6 @@ export default class WorkbookRepo extends AbstractRepo {
                                  (
                                      id    INTEGER PRIMARY KEY,
                                      login TEXT,
-                                     path  VARCHAR(30) NOT NULL,
                                      FOREIGN KEY (login) REFERENCES Users (login)
                                          ON DELETE CASCADE
                                  )`;
@@ -33,11 +32,11 @@ export default class WorkbookRepo extends AbstractRepo {
 
   getById(id) {
     try {
-      const row = this.database.prepare(`SELECT id, login, path
+      const row = this.database.prepare(`SELECT id, login
                                          FROM ${WorkbookRepo.getTableName()}
                                          WHERE id = ?`).get(id);
       if (row) {
-        return new WorkbookModel(row.path, row.login, row.id);
+        return new WorkbookModel(row.login, row.id);
       }
       throw new DatabaseError(`no book with id ${id}`);
     } catch (err) {
@@ -47,7 +46,7 @@ export default class WorkbookRepo extends AbstractRepo {
 
   getByLogin(login) {
     try {
-      const rows = this.database.prepare(`SELECT id, login, path
+      const rows = this.database.prepare(`SELECT id, login
                                           FROM ${WorkbookRepo.getTableName()}
                                           WHERE login = ?`)
         .all(login);
@@ -74,9 +73,9 @@ export default class WorkbookRepo extends AbstractRepo {
   save(book) {
     if (book.id == null) {
       try {
-        const info = this.database.prepare(`INSERT INTO ${WorkbookRepo.getTableName()} (login, path)
-                           VALUES (?, ?)`)
-          .run(book.login, book.path);
+        const info = this.database.prepare(`INSERT INTO ${WorkbookRepo.getTableName()} (login)
+                           VALUES (?)`)
+          .run(book.login);
         return info.lastInsertRowid;
       } catch (e) {
         throw new DatabaseError(`Error while inserting book: ${e}`);
@@ -84,10 +83,8 @@ export default class WorkbookRepo extends AbstractRepo {
     } else {
       try {
         this.database.prepare(`UPDATE ${WorkbookRepo.getTableName()}
-                         SET path  = ?,
-                             login = ?
-                         WHERE id = ?`)
-          .run(book.path, book.login, book.id);
+                         SET login = ? WHERE id = ?`)
+          .run(book.login, book.id);
         return book.id;
       } catch (e) {
         throw new DatabaseError(`Error while updating book: ${e}`);

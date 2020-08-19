@@ -1,24 +1,26 @@
-import fs from 'fs';
 import { Cell } from '../spreadsheets/Cell.js';
 import Spreadsheet from '../spreadsheets/Spreadsheet.js';
 import Workbook from '../spreadsheets/Workbook.js';
 
-export default class JsonConverter {
-  static readWorkbook(pathToWorkbook) {
-    const file = JSON.parse(fs.readFileSync(pathToWorkbook));
-    const workbook = new Workbook(file.name, this.readSpreadsheets(file.spreadsheets));
-    return workbook;
+export default class WorkbookDeserializer {
+  static deserialize(serializedWorkbook) {
+    return new Workbook(
+      serializedWorkbook.name,
+      this.deserializeSpreadsheets(serializedWorkbook.spreadsheets),
+    );
   }
 
-  static readSpreadsheets(spreadsheets = []) {
+  static deserializeSpreadsheets(spreadsheets = []) {
     const resultSpreadsheets = [];
     spreadsheets.forEach((spreadsheet) => {
-      resultSpreadsheets.push(new Spreadsheet(spreadsheet.name, this.readCells(spreadsheet.cells)));
+      resultSpreadsheets.push(
+        new Spreadsheet(spreadsheet.name, this.deserializeCells(spreadsheet.cells)),
+      );
     });
     return resultSpreadsheets;
   }
 
-  static readCells(cells = {}) {
+  static deserializeCells(cells = {}) {
     const resultCells = new Map();
     const keys = Object.keys(cells);
     keys.forEach((key) => {

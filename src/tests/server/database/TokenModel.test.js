@@ -1,39 +1,14 @@
 import * as assert from 'assert';
 import TokenModel from '../../../server/database/TokenModel.js';
 import FormatError from '../../../lib/errors/FormatError.js';
+import UuidValidator from '../../../lib/uuid/UuidValidator.js';
 
 describe('TokenModel', () => {
-  describe('#isUuidValid()', () => {
-    const testCases = [
-      {
-        uuid: 'efe926c9-b247-4768-a185-9de4cfc58012',
-        expected: true,
-      },
-      {
-        uuid: '74b5077d-6dca-4d69-876f-22dafe6440be',
-        expected: true,
-      },
-      {
-        uuid: '74b5077d-6dca-4d69-876f-22dafe6440b',
-        expected: false,
-      },
-      {
-        uuid: '74b5077d-6dca-4d69-876f-22dafe6440bee',
-        expected: false,
-      },
-    ];
-    testCases.forEach((testCase) => {
-      const description = `should return ${testCase.expected} for ${testCase.uuid}`;
-      it(description, () => {
-        assert.strictEqual(TokenModel.isUuidValid(testCase.uuid), testCase.expected);
-      });
-    });
-  });
   describe('#constructor()', () => {
     it('should create token for test user', () => {
       const token = new TokenModel('test');
       assert.strictEqual(token.login, 'test');
-      const isUuidValid = TokenModel.isUuidValid(token.uuid);
+      const isUuidValid = UuidValidator.isUuidValid(token.uuid);
       assert.strictEqual(isUuidValid, true);
     });
   });
