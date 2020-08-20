@@ -341,42 +341,19 @@ div#table-wrapper {
 
 #table {
   table-layout: fixed;
-  border-collapse: collapse;
   border: 1px solid #d9d9d9;
-  border-radius: inherit;
-}
-
-#table tr {
-  height: 22px;
+  border-collapse: separate;
 }
 
 #table td {
-  height: 25px;
-  width: 100px;
-  border: 1px solid #d9d9d9;
   box-sizing: border-box;
-  font-family: Lato, sans-serif;
-  font-size: 14px;
-  color: #1f1f1f;
-  font-weight: 400;
   white-space: nowrap;
   cursor: cell;
-}
-
-input.cell {
-  width: 100%;
-  height: 25px;
-  border: 0;
-  padding: 0 5px;
+  border: 1px solid #d9d9d9;
   background-color: #f3f3f3;
-  box-sizing: border-box;
-  outline: none;
-  z-index: 0;
-  cursor: cell;
 }
 
 #table td.column-header, #table td.row-header {
-  padding: 5px 2px;
   position: relative;
   background: #eee;
   font-family: Lato, sans-serif;
@@ -391,22 +368,63 @@ input.cell {
   background-color: #fca311;
 }
 
-input.cell:hover {
-  border: 2px solid #999;
-  padding: 0 3px;
+input.cell {
+  width: 100px;
+  min-height: 25px;
+  height: 100%;
+  border: 0;
+  padding: 0 5px;
+  background-color: #f3f3f3;
+  box-sizing: border-box;
+  outline: none;
+  z-index: 0;
+  cursor: cell;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #1f1f1f;
 }
 
-#table td input.selection {
+#table td:hover {
+  border: 1px solid #999;
+}
+
+#table td.selection {
   border: 1px dashed #999;
-  padding: 0 4px;
 }
 
-#table td input.selected {
+#table td.selected {
   border: 1px solid #fca311;
-  padding: 0 4px;
 }
 
-#table td input.selected:hover {
+#table td.selection-right {
+  border-right: 1px dashed #999;
+}
+
+#table td.selection-bottom {
+  border-bottom: 1px dashed #999;
+}
+
+#table td.selection-left {
+  border-left: 1px dashed #999;
+}
+
+#table td.selection-top {
+  border-top: 1px dashed #999;
+}
+
+#table td.selected-right {
+  border-right: 1px solid #fca311;
+}
+
+#table td.selected-bottom {
+  border-bottom: 1px solid #fca311;
+}
+
+#table td.selected:hover {
+  background-color: #d9d9d9;
+}
+
+#table td.selected:hover > input.cell {
   background-color: #d9d9d9;
 }
 

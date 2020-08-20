@@ -9,7 +9,7 @@ const tableWidth = table.children[0].children[0].children.length - 1;
 const fontBlock = document.getElementById('tool-font');
 const fontUnbarBtn = fontBlock.children[0].children[1];
 const fontList = fontBlock.children[1];
-const fontNames = document.querySelectorAll('#tool-font li')
+const fontNames = document.querySelectorAll('#tool-font li');
 const fontDisplay = document.getElementById('input-font');
 let fontIsDropped = false;
 
@@ -37,6 +37,17 @@ let isBold;
 let isItalic;
 let isUnderline;
 let isLineThrough;
+
+table.addEventListener('mouseover', () => {
+  if (fontIsDropped) {
+    fontIsDropped = false;
+    fontList.classList.add('invisible');
+  }
+  if (fontsizeIsDropped) {
+    fontsizeIsDropped = false;
+    fontsizeList.classList.add('invisible');
+  }
+});
 
 function getCellXY(cell) {
   const cellID = Array.from(cells).indexOf(cell);
@@ -70,30 +81,66 @@ function updateButtons() {
 }
 
 function changeSelection() {
+  // if (Math.min(selectionStart[1], selectionEnd[1]) > 0) {
+  //   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+  //     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+  //     cells[(Math.min(selectionStart[1], selectionEnd[1]) - 1) * tableWidth + i].classList.add('selection-bottom');
+  //   }
+  // }
+  // if (Math.min(selectionStart[0], selectionEnd[0]) > 0) {
+  //   for (let i = Math.min(selectionStart[1], selectionEnd[1]);
+  //     i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
+  //     cells[i * tableWidth + Math.min(selectionStart[0], selectionEnd[0]) - 1].classList.add('selection-right');
+  //   }
+  // }
+  // if (Math.max(selectionStart[1], selectionEnd[1]) < tableHeight - 1) {
+  //   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+  //     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+  //     cells[(Math.max(selectionStart[1], selectionEnd[1]) + 1) * tableWidth + i].classList.add('selection-top');
+  //   }
+  // }
+  // if (Math.max(selectionStart[0], selectionEnd[0]) < tableWidth - 1) {
+  //   for (let i = Math.min(selectionStart[1], selectionEnd[1]);
+  //     i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
+  //     cells[i * tableWidth + Math.max(selectionStart[0], selectionEnd[0]) + 1].classList.add('selection-left');
+  //   }
+  // }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
-      cellsInputs[j * tableWidth + i].classList.add('selection');
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      cells[j * tableWidth + i].classList.add('selection');
     }
   }
 }
 
 function applySelection() {
+  // if (Math.min(selectionStart[1], selectionEnd[1]) > 0) {
+  //   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
+  //     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+  //     cells[(Math.min(selectionStart[1], selectionEnd[1]) - 1) * tableWidth + i].classList.add('selected-bottom');
+  //   }
+  // }
+  // if (Math.min(selectionStart[0], selectionEnd[0]) > 0) {
+  //   for (let i = Math.min(selectionStart[1], selectionEnd[1]);
+  //     i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
+  //     cells[i * tableWidth + Math.min(selectionStart[0], selectionEnd[0]) - 1].classList.add('selected-right');
+  //   }
+  // }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     columnHeaders[i].classList.add('header-selected');
   }
   for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-       j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+    j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
     rowHeaders[j].classList.add('header-selected');
   }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
+    i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
-      cellsInputs[j * tableWidth + i].classList.remove('selection');
-      cellsInputs[j * tableWidth + i].classList.add('selected');
+      j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+      cells[j * tableWidth + i].classList.remove('selection');
+      cells[j * tableWidth + i].classList.add('selected');
       checkStyles(cellsInputs[j * tableWidth + i]);
     }
   }
@@ -119,9 +166,13 @@ function removeSelection(ctrl) {
   for (let i = 0; i < tableHeight; i += 1) {
     for (let j = 0; j < tableWidth; j += 1) {
       if (!ctrl) {
-        cellsInputs[i * tableWidth + j].classList.remove('selected');
+        cells[i * tableWidth + j].classList.remove('selected');
+        // cells[i * tableWidth + j].classList.remove('selected-right');
+        // cells[i * tableWidth + j].classList.remove('selected-bottom');
       }
-      cellsInputs[i * tableWidth + j].classList.remove('selection');
+      cells[i * tableWidth + j].classList.remove('selection');
+      // cells[i * tableWidth + j].classList.remove('selection-right');
+      // cells[i * tableWidth + j].classList.remove('selection-bottom');
     }
   }
 }
@@ -187,11 +238,11 @@ columnHeaders.forEach((columnHeader, id) => {
   });
 });
 
-function reduceCells(func) {
-  for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-       i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-    for (let j = Math.min(selectionStart[1], selectionEnd[1]);
-         j <= Math.max(selectionStart[1], selectionEnd[1]); j += 1) {
+function reduceCells(func, start = selectionStart, end = selectionEnd) {
+  for (let i = Math.min(start[0], end[0]);
+    i <= Math.max(start[0], end[0]); i += 1) {
+    for (let j = Math.min(start[1], end[1]);
+      j <= Math.max(start[1], end[1]); j += 1) {
       func(cellsInputs[j * tableWidth + i]);
     }
   }
