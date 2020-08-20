@@ -362,6 +362,7 @@ div#table-wrapper {
   text-align: center;
   cursor: pointer;
   user-select: none;
+  line-height: 25px;
 }
 
 #table td.header-selected {
@@ -433,7 +434,7 @@ input.cell {
 }
 
 #table td.column-header {
-  min-width: 100px;
+  height: 25px;
 }
 
 #table tr:nth-child(1) > td:nth-child(1):hover {
