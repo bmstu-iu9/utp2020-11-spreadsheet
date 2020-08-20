@@ -197,9 +197,9 @@ cells.forEach((cell) => {
     updateButtons();
     isOnMouseDown = false;
   });
-  cell.addEventListener('mouseover', () => {
+  cell.addEventListener('mouseover', (e) => {
     if (isOnMouseDown) {
-      removeSelection();
+      removeSelection(e.ctrlKey);
       selectionEnd = getCellXY(cell);
       changeSelection();
     }
