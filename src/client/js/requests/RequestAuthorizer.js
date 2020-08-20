@@ -1,6 +1,6 @@
 import UuidValidator from '../../../lib/uuid/UuidValidator.js';
 
-export default class XhrAuthorizer {
+export default class RequestAuthorizer {
   constructor(token) {
     this.setToken(token);
   }

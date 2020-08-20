@@ -1,25 +1,25 @@
 import * as assert from 'assert';
 import sinon from 'sinon';
-import XhrAuthorizer from '../../../client/js/requests/XhrAuthorizer.js';
+import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
 
-describe('XhrAuthorizer', () => {
+describe('RequestAuthorizer', () => {
   const token = 'eab90c8c-1b47-42f9-8109-868b558353b0';
 
-  beforeEach(() => {
+  before(() => {
     global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
   });
-  afterEach(() => {
+  after(() => {
     global.XMLHttpRequest.restore();
   });
 
   describe('#constructor()', () => {
     it('should create object with correct fields', () => {
-      const authorizer = new XhrAuthorizer(token);
+      const authorizer = new RequestAuthorizer(token);
       assert.strictEqual(authorizer.token, token);
     });
     it('should throw an exception for non-UUID', () => {
       assert.throws(() => {
-        new XhrAuthorizer('111');
+        new RequestAuthorizer('111');
       }, TypeError);
     });
   });
@@ -34,7 +34,7 @@ describe('XhrAuthorizer', () => {
         assert.strictEqual(value, expectedValue);
         called = true;
       });
-      const authorizer = new XhrAuthorizer(token);
+      const authorizer = new RequestAuthorizer(token);
       authorizer.authorize(request);
       assert.strictEqual(called, true);
     });
