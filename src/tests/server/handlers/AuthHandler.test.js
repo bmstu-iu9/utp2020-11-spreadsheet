@@ -23,7 +23,7 @@ describe('AuthHandler', () => {
   });
   describe('#post', () => {
     it('should give response 200 and token', () => {
-      const user = new UserModel('login', '123', false);
+      const user = new UserModel('login', '1234567', false);
       environment.dataRepo.userRepo.save(user);
       app.post('/auth/test', (req, res) => {
         authHandler.post(req, res);
@@ -31,8 +31,8 @@ describe('AuthHandler', () => {
       return request(app)
         .post('/auth/test')
         .send({
-          login: user.login,
-          password: '123',
+          username: user.login,
+          password: '1234567',
         })
         .expect(200)
         .then((response) => {
@@ -46,13 +46,13 @@ describe('AuthHandler', () => {
       return request(app)
         .post('/auth/test')
         .send({
-          login: 'login',
-          password: '123',
+          username: 'login',
+          password: '1234567',
         })
         .expect(403);
     });
     it('should give response 403 because of incorrect password', () => {
-      const user = new UserModel('login', '123', false);
+      const user = new UserModel('login', '1234567', false);
       environment.dataRepo.userRepo.save(user);
       app.post('/auth/test', (req, res) => {
         authHandler.post(req, res);
@@ -60,14 +60,12 @@ describe('AuthHandler', () => {
       return request(app)
         .post('/auth/test')
         .send({
-          login: user.login,
-          password: '321',
+          username: user.login,
+          password: '7654321',
         })
         .expect(403);
     });
     it('should give response 403 because of incorrect request', () => {
-      const user = new UserModel('login', '123', false);
-      environment.dataRepo.userRepo.save(user);
       app.post('/auth/test', (req, res) => {
         authHandler.post(req, res);
       });
