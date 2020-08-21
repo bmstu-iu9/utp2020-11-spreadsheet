@@ -27,7 +27,7 @@ describe('WorkbookSaver', () => {
       });
       const workbook = new Workbook('test');
       const saver = new WorkbookSaver(pathGenerator);
-      saver.save(workbook, 1);
+      saver.save(1, workbook);
       const content = fs.readFileSync('./1.json');
       const testWorkbook = WorkbookDeserializer.deserialize(JSON.parse(content));
       assert.deepStrictEqual(testWorkbook, workbook);

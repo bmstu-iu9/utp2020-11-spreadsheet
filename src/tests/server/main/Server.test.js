@@ -10,5 +10,14 @@ describe('Server', () => {
         server.close();
       }
     });
+    it('should launch successfully with env = production', () => {
+      const configCopy = {
+        ...config,
+      };
+      configCopy.env = 'production';
+      const server = new Server(configCopy);
+      server.run();
+      server.close();
+    });
   });
 });

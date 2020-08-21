@@ -1,11 +1,19 @@
 // Necessary to make inheritance possible
 /* eslint-disable class-methods-use-this */
 import DataRepo from '../database/DataRepo.js';
+import SaveSystem from '../save/SaveSystem.js';
 
 export default class EndpointHandler {
-  constructor(dataRepo, config) {
+  constructor(dataRepo, saveSystem) {
     this.setDataRepo(dataRepo);
-    this.config = config;
+    this.setSaveSystem(saveSystem);
+  }
+
+  setSaveSystem(saveSystem) {
+    if (!(saveSystem instanceof SaveSystem)) {
+      throw new TypeError('saveSystem must be a SaveSystem instance');
+    }
+    this.saveSystem = saveSystem;
   }
 
   setDataRepo(dataRepo) {

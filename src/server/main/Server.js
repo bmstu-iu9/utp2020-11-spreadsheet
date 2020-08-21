@@ -15,6 +15,7 @@ import ConsoleLogger from '../../lib/logging/ConsoleLogger.js';
 import logLevel from '../../lib/logging/logLevel.js';
 import WorkbookHandler from '../handlers/WorkbookHandler.js';
 import WorkbookIdHandler from '../handlers/WorkbookIdHandler.js';
+import SaveSystem from '../save/SaveSystem.js';
 
 export default class Server {
   constructor(config) {
@@ -46,8 +47,9 @@ export default class Server {
       '/workbook': WorkbookHandler,
       '/workbook/:id': WorkbookIdHandler,
     };
+    const saveSystem = new SaveSystem(this.config.pathToWorkbooks, this.config.pathToCommits);
     Object.keys(endpoints).forEach((path) => {
-      const handler = new endpoints[path](this.dataRepo, this.config);
+      const handler = new endpoints[path](this.dataRepo, saveSystem);
       this.app.get(path, (req, res) => handler.get(req, res));
       this.app.post(path, (req, res) => handler.post(req, res));
       this.app.patch(path, (req, res) => handler.patch(req, res));
@@ -72,6 +74,7 @@ export default class Server {
     this.app = express();
     this.app.set('port', this.config.port);
     this.app.set('view options', this.config.viewOptions);
+    this.app.set('env', this.config.env);
   }
 
   configureLogging() {
