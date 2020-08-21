@@ -16,6 +16,9 @@ import logLevel from '../../lib/logging/logLevel.js';
 import WorkbookHandler from '../handlers/WorkbookHandler.js';
 import WorkbookIdHandler from '../handlers/WorkbookIdHandler.js';
 import SaveSystem from '../save/SaveSystem.js';
+import UserHandler from '../handlers/UserHandler.js';
+import UsernameHandler from '../handlers/UsernameHandler.js';
+import AuthHandler from '../handlers/AuthHandler.js';
 
 export default class Server {
   constructor(config) {
@@ -46,6 +49,9 @@ export default class Server {
     const endpoints = {
       '/workbook': WorkbookHandler,
       '/workbook/:id': WorkbookIdHandler,
+      '/user': UserHandler,
+      '/user/:username': UsernameHandler,
+      '/auth': AuthHandler
     };
     const saveSystem = new SaveSystem(this.config.pathToWorkbooks, this.config.pathToCommits);
     Object.keys(endpoints).forEach((path) => {
