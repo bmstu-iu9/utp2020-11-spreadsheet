@@ -49,4 +49,19 @@ export default class UserModel {
     });
     return result;
   }
+
+  static fromUserToSQL(user) {
+    return {
+      isAdmin: Boolean(user.isAdmin),
+      username: user.login,
+    };
+  }
+
+  static fromUsersToSQL(users) {
+    const result = [];
+    users.forEach((user) => {
+      result.push(UserModel.fromUserToSQL(user));
+    });
+    return result;
+  }
 }

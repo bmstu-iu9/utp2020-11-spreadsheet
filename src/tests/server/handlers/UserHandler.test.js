@@ -4,6 +4,9 @@ import request from 'supertest';
 import TestEnvironment from '../database/TestEnvironment.js';
 import UserModel from '../../../server/database/UserModel.js';
 import UserHandler from '../../../server/handlers/UserHandler.js';
+import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
+import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
+import Authorizer from '../../../server/authorization/Authorizer.js';
 
 describe('UserHandler', () => {
   let environment;
@@ -73,6 +76,54 @@ describe('UserHandler', () => {
       return request(app)
         .post('/user/post')
         .expect(400);
+    });
+  });
+  describe('#get', () => {
+    beforeEach(() => {
+      const matcher = new HeaderMatcher('authorization', 'Token ');
+      const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
+      const authorizer = new Authorizer(authenticator);
+      app.use(authorizer.getMiddleware());
+    });
+    it('should give response 200 and list of users', () => {
+      app.get('/user/get', (req, res) => {
+        userHandler.get(req, res);
+      });
+      environment.addUsers(2, true);
+      const { token } = environment.userTokens[1];
+      return request(app)
+        .get('/user/get')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(200)
+        .then((response) => {
+          assert.deepStrictEqual(response.body, [{
+            isAdmin: false,
+            username: 'test0',
+          },
+          {
+            isAdmin: true,
+            username: 'test2',
+          }]);
+        });
+    });
+    it('should give response 403 because of lack of rights', () => {
+      app.get('/user/get', (req, res) => {
+        userHandler.get(req, res);
+      });
+      environment.addUsers(2, true);
+      const { token } = environment.userTokens[0];
+      return request(app)
+        .get('/user/get')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(403);
+    });
+    it('should give response 401 because of unauthorized', () => {
+      app.get('/user/get', (req, res) => {
+        userHandler.get(req, res);
+      });
+      return request(app)
+        .get('/user/get')
+        .expect(401);
     });
   });
 });

@@ -13,11 +13,22 @@ export default class UserHandler extends EndpointHandler {
     if (validationResult === result.ok) {
       const user = new UserModel(req.body.username, req.body.password, false);
       this.dataRepo.userRepo.save(user);
-      return res.status(200).send({ isAdmin: Boolean(user.isAdmin), username: user.login });
+      return res.status(200).send(UserModel.fromUserToSQL(user));
     }
     if (validationResult === result.loginUnavailable) {
       return res.sendStatus(409);
     }
     return res.sendStatus(400);
+  }
+
+  get(req, res) {
+    if (req.user === undefined) {
+      return res.sendStatus(401);
+    }
+    if (req.user.isAdmin === 1) {
+      const list = UserModel.fromUsersToSQL(this.dataRepo.userRepo.getAllUsers());
+      return res.status(200).send(list);
+    }
+    return res.sendStatus(403);
   }
 }
