@@ -27,7 +27,15 @@ const stretchBtn = document.getElementById('button-stretched');
 const lowercaseBtn = document.getElementById('button-low-reg');
 const uppercaseBtn = document.getElementById('button-high-reg');
 
+const textcolorBtn = document.getElementById('button-text-color');
+const bgcolorBtn = document.getElementById('button-bg-color');
+const bordercolorBtn = document.getElementById('button-border-color');
+const textcolorInput = document.getElementById('input-text-color');
+const bgcolorInput = document.getElementById('input-bg-color');
+const bordercolorInput = document.getElementById('input-border-color');
+
 let isOnMouseDown = false;
+let isSelection = false;
 let selectionStart;
 let selectionEnd;
 let focusedXY;
@@ -91,6 +99,7 @@ function changeSelection() {
 }
 
 function applySelection() {
+  isSelection = true;
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     columnHeaders[i].classList.add('header-selected');
@@ -199,11 +208,13 @@ columnHeaders.forEach((columnHeader, id) => {
 });
 
 function reduceCells(func, start = selectionStart, end = selectionEnd) {
-  for (let i = Math.min(start[0], end[0]);
-    i <= Math.max(start[0], end[0]); i += 1) {
-    for (let j = Math.min(start[1], end[1]);
-      j <= Math.max(start[1], end[1]); j += 1) {
-      func(cellsInputs[j * tableWidth + i]);
+  if (isSelection) {
+    for (let i = Math.min(start[0], end[0]);
+      i <= Math.max(start[0], end[0]); i += 1) {
+      for (let j = Math.min(start[1], end[1]);
+        j <= Math.max(start[1], end[1]); j += 1) {
+        func(cellsInputs[j * tableWidth + i]);
+      }
     }
   }
 }
@@ -378,4 +389,51 @@ fontsizeDisplay.addEventListener(('keydown'), (e) => {
       cell.style.fontSize = `${fontsizeDisplay.value}px`;
     });
   }
+});
+
+textcolorBtn.addEventListener('click', () => {
+  reduceCells((cell) => {
+    // eslint-disable-next-line no-param-reassign
+    cell.style.color = textcolorInput.value;
+  });
+});
+
+textcolorInput.addEventListener('input', () => {
+  reduceCells((cell) => {
+    textcolorBtn.style.color = textcolorInput.value;
+    // eslint-disable-next-line no-param-reassign
+    cell.style.color = textcolorInput.value;
+  });
+});
+
+bgcolorBtn.addEventListener('click', () => {
+  reduceCells((cell) => {
+    // eslint-disable-next-line no-param-reassign
+    cell.style.backgroundColor = bgcolorInput.value;
+  });
+});
+
+bgcolorInput.addEventListener('input', () => {
+  reduceCells((cell) => {
+    bgcolorBtn.style.color = bgcolorInput.value;
+    // eslint-disable-next-line no-param-reassign
+    cell.style.backgroundColor = bgcolorInput.value;
+  });
+});
+
+bordercolorBtn.addEventListener('click', () => {
+  reduceCells((cell) => {
+    // eslint-disable-next-line no-param-reassign
+    cell.style.borderColor = bordercolorInput.value;
+  });
+});
+
+bordercolorInput.addEventListener('input', () => {
+  reduceCells((cell) => {
+    bordercolorBtn.style.color = bordercolorInput.value;
+    // eslint-disable-next-line no-param-reassign
+    cell.parentNode.classList.remove('selected');
+    // eslint-disable-next-line no-param-reassign
+    cell.parentNode.style.borderColor = bordercolorInput.value;
+  });
 });

@@ -186,7 +186,7 @@ div.text-input-list input[type="text"]:focus {
   border: none;
 }
 
-div.unbar-button {
+.unbar-button {
   background-color: #d9d9d9;
   display: flex;
   justify-content: center;
@@ -197,25 +197,40 @@ div.unbar-button {
   background-position: bottom;
 }
 
-div.unbar-button:hover {
+.unbar-button:hover {
   background-color: #767676;
 }
 
-div.unbar-button-input {
+.unbar-button-input {
   width: 20px;
   height: 20px;
 }
 
-div.unbar-button-standard {
+.unbar-button-standard {
   width: 8px;
   height: 20px;
   align-items: flex-end;
 }
 
-div.unbar-button-big {
+.unbar-button-big {
   width: 15px;
   height: 40px;
   align-items: flex-end;
+}
+
+input[type="color"] {
+  border: 0;
+  outline: none;
+  opacity: 0;
+  width: 15px;
+  height: 40px;
+  position: absolute;
+  margin-left: 40px;
+  padding: 0;
+}
+
+input[type="color"]:hover + div.unbar-button {
+  background-color: #767676;
 }
 
 #input-font {
@@ -386,15 +401,15 @@ input.cell {
 }
 
 #table td:hover {
-  border: 1px solid #999;
+  border: 1px solid #999 !important;
 }
 
 #table td.selection {
-  border: 1px dashed #999;
+  border: 1px dashed #999 !important;
 }
 
 #table td.selected {
-  border: 1px solid #fca311;
+  border: 1px solid #fca311 !important;
 }
 
 #table td.selected:hover {
