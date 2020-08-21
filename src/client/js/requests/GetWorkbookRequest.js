@@ -1,5 +1,6 @@
 import Request from './Request.js';
 import UnauthorizedError from '../../../lib/errors/UnanuthorizedError.js';
+import WorkbookIdDeserializer from '../../../lib/serialization/WorkbookIdDeserializer.js';
 
 export default class GetWorkbookRequest extends Request {
   send() {
@@ -10,6 +11,7 @@ export default class GetWorkbookRequest extends Request {
     if (xhr.status === 401) {
       throw new UnauthorizedError();
     }
-    return JSON.parse(xhr.response);
+    return JSON.parse(xhr.response)
+      .map((serialized) => WorkbookIdDeserializer.deserialize(serialized));
   }
 }

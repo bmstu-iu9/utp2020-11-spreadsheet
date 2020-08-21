@@ -5,6 +5,7 @@ import GetWorkbookRequest from '../../../client/js/requests/GetWorkbookRequest.j
 import Request from '../../../client/js/requests/Request.js';
 import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
 import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
+import WorkbookId from '../../../lib/spreadsheets/WorkbookId.js';
 import UnauthorizedError from '../../../lib/errors/UnanuthorizedError.js';
 
 describe('GetWorkbookRequest', () => {
@@ -25,6 +26,7 @@ describe('GetWorkbookRequest', () => {
       const workbook = new Workbook('test');
       const id = 1;
       const lastCommitId = '2c8c1483-377f-4f5f-a0e9-5a846f19e8c6';
+      const workbookId = new WorkbookId(id, lastCommitId, workbook.name);
       const serialized = [WorkbookIdSerializer.serialize(workbook, id, lastCommitId)];
       global.XMLHttpRequest.onCreate = (req) => {
         req.send = () => {
@@ -35,7 +37,7 @@ describe('GetWorkbookRequest', () => {
         };
       };
       const response = request.send();
-      assert.deepStrictEqual(response, serialized);
+      assert.deepStrictEqual(response, [workbookId]);
     });
     it('should throw UnauthorizedError', () => {
       global.XMLHttpRequest.onCreate = (req) => {
