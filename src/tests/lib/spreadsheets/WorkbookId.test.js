@@ -5,25 +5,28 @@ import WorkbookId from '../../../lib/spreadsheets/WorkbookId.js';
 describe('WorkbookId', () => {
   const id = 1;
   const lastCommitId = 'efe926c9-b247-4768-a185-9de4cfc58012';
+  const workbook = new Workbook('test');
 
-  it('should be a child of Workbook', () => {
-    const workbook = new WorkbookId(id, lastCommitId, 'test');
-    assert.strictEqual(workbook instanceof Workbook, true);
-  });
   describe('#constructor()', () => {
     it('should set ID and lastCommitId', () => {
-      const workbook = new WorkbookId(id, lastCommitId, 'test');
-      assert.strictEqual(workbook.id, id);
-      assert.strictEqual(workbook.lastCommitId, lastCommitId);
+      const workbookId = new WorkbookId(workbook, id, lastCommitId);
+      assert.strictEqual(workbookId.workbook, workbook);
+      assert.strictEqual(workbookId.id, id);
+      assert.strictEqual(workbookId.lastCommitId, lastCommitId);
+    });
+    it('should throw an exception for non-Workbook', () => {
+      assert.throws(() => {
+        new WorkbookId({}, id, lastCommitId);
+      }, TypeError);
     });
     it('should throw an exception for non-integer', () => {
       assert.throws(() => {
-        new WorkbookId(1.23, lastCommitId, 'test');
+        new WorkbookId(workbook, 1.23, lastCommitId);
       }, TypeError);
     });
     it('should throw an exception for non-uuid', () => {
       assert.throws(() => {
-        new WorkbookId(id, `${lastCommitId}a`, 'test');
+        new WorkbookId(workbook, id, `${lastCommitId}a`);
       });
     });
   });

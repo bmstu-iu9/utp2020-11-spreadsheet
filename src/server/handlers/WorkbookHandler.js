@@ -21,7 +21,9 @@ export default class WorkbookHandler extends EndpointHandler {
       const workbook = this.saveSystem.workbookLoader.load(wbModel.id);
       const commits = this.saveSystem.commitLoader.load(wbModel.id);
       const lastCommitId = commits[commits.length - 1].ID;
-      const workbookId = new WorkbookId(wbModel.id, lastCommitId, workbook.name, workbook.spreadsheets);
+      const workbookId = new WorkbookId(
+        workbook, wbModel.id, lastCommitId,
+      );
       const serialized = WorkbookIdSerializer.serialize(workbookId);
       result.push(serialized);
     });
@@ -40,7 +42,7 @@ export default class WorkbookHandler extends EndpointHandler {
     const id = this.dataRepo.workbookRepo.save(workbookModel);
     this.saveSystem.workbookSaver.save(id, deserialized);
     this.saveSystem.commitSaver.save(id, [{ ID: zeroID }]);
-    const workbookId = new WorkbookId(id, zeroID, deserialized.name, deserialized.spreadsheets);
+    const workbookId = new WorkbookId(deserialized, id, zeroID);
     const serialized = WorkbookIdSerializer.serialize(workbookId);
     return res.status(200).send(serialized);
   }

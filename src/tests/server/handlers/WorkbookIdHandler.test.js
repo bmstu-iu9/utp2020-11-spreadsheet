@@ -92,7 +92,7 @@ describe('WorkbookIdHandler', () => {
       createCommits();
       const workbook = saveSystem.workbookLoader.load(1);
       const workbookId = new WorkbookId(
-        1, initialCommits[initialCommits.length - 1].ID, workbook.name, workbook.spreadsheets,
+        workbook, 1, initialCommits[initialCommits.length - 1].ID,
       );
       const serialized = WorkbookIdSerializer.serialize(workbookId);
       const { token } = environment.userTokens[0];

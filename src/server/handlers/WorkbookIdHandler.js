@@ -77,7 +77,7 @@ export default class WorkbookIdHandler extends EndpointHandler {
     const workbook = this.saveSystem.workbookLoader.load(id);
     const commits = this.saveSystem.commitLoader.load(id);
     const lastCommitId = commits[commits.length - 1].ID;
-    const workbookId = new WorkbookId(id, lastCommitId, workbook.name, workbook.spreadsheets);
+    const workbookId = new WorkbookId(workbook, id, lastCommitId);
     const serialized = WorkbookIdSerializer.serialize(workbookId);
     return res.status(200).json(serialized);
   }

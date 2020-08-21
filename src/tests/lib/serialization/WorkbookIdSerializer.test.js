@@ -13,7 +13,7 @@ describe('WorkbookIdSerialzier', () => {
       normallySerialized.id = 228;
       const lastCommitId = 'ad0d0058-babd-4e75-ad24-7a8d0ed4cbd3';
       normallySerialized.lastCommitId = lastCommitId;
-      const workbookId = new WorkbookId(id, lastCommitId, workbook.name);
+      const workbookId = new WorkbookId(workbook, id, lastCommitId);
       const serialized = WorkbookIdSerialzier.serialize(workbookId);
       assert.deepStrictEqual(serialized, normallySerialized);
     });

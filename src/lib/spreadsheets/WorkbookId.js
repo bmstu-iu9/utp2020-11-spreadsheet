@@ -1,11 +1,18 @@
 import Workbook from './Workbook.js';
 import UuidValidator from '../uuid/UuidValidator.js';
 
-export default class WorkbookId extends Workbook {
-  constructor(id, lastCommitId, ...params) {
-    super(...params);
+export default class WorkbookId {
+  constructor(workbook, id, lastCommitId) {
+    this.setWorkbook(workbook);
     this.setId(id);
     this.setLastCommitId(lastCommitId);
+  }
+
+  setWorkbook(workbook) {
+    if (!(workbook instanceof Workbook)) {
+      throw new TypeError('workbook must be a Workbook instance');
+    }
+    this.workbook = workbook;
   }
 
   setLastCommitId(lastCommitId) {

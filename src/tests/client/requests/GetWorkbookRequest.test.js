@@ -26,7 +26,7 @@ describe('GetWorkbookRequest', () => {
       const workbook = new Workbook('test');
       const id = 1;
       const lastCommitId = '2c8c1483-377f-4f5f-a0e9-5a846f19e8c6';
-      const workbookId = new WorkbookId(id, lastCommitId, workbook.name);
+      const workbookId = new WorkbookId(workbook, id, lastCommitId);
       const serialized = [WorkbookIdSerializer.serialize(workbookId)];
       global.XMLHttpRequest.onCreate = (req) => {
         req.send = () => {

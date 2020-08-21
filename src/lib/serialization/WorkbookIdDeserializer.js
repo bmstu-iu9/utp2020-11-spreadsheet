@@ -5,10 +5,9 @@ export default class WorkbookIdDeserializer {
   static deserialize(serializedWorkbookId) {
     const workbook = WorkbookDeserializer.deserialize(serializedWorkbookId);
     return new WorkbookId(
+      workbook,
       serializedWorkbookId.id,
       serializedWorkbookId.lastCommitId,
-      workbook.name,
-      workbook.spreadsheets,
     );
   }
 }

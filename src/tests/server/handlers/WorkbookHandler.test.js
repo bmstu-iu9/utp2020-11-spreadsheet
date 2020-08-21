@@ -10,10 +10,7 @@ import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
-import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
-import WorkbookId from '../../../lib/spreadsheets/WorkbookId.js';
 import SaveSystem from '../../../server/save/SaveSystem.js';
-import WorkbookIdDeserializer from '../../../lib/serialization/WorkbookIdDeserializer.js';
 
 const testWorkbook = {
   name: 'test',
