@@ -7,7 +7,7 @@ export default class GetWorkbookRequest extends Request {
     xhr.open('GET', `${this.baseUrl}/workbook`);
     this.authorizer.authorize(xhr);
     xhr.send();
-    Request.validateStatusCode(xhr.status);
+    GetWorkbookRequest.validateStatusCode(xhr.status);
     return JSON.parse(xhr.response)
       .map((serialized) => WorkbookIdDeserializer.deserialize(serialized));
   }
