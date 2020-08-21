@@ -7,15 +7,17 @@ import UserHandler from '../../../server/handlers/UserHandler.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
+import SaveSystem from '../../../server/save/SaveSystem.js';
 
 describe('UserHandler', () => {
   let environment;
   let userHandler;
   let app;
+  const saveSystem = new SaveSystem('.', '.');
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
-    userHandler = new UserHandler(environment.dataRepo, {});
+    userHandler = new UserHandler(environment.dataRepo, saveSystem);
     environment.init();
     app = express();
     app.use(express.json());

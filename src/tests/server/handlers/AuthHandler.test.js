@@ -5,15 +5,17 @@ import TestEnvironment from '../database/TestEnvironment.js';
 import AuthHandler from '../../../server/handlers/AuthHandler.js';
 import UserModel from '../../../server/database/UserModel.js';
 import UuidValidator from '../../../lib/uuid/UuidValidator.js';
+import SaveSystem from '../../../server/save/SaveSystem.js';
 
 describe('AuthHandler', () => {
   let environment;
   let authHandler;
   let app;
+  const saveSystem = new SaveSystem('.', '.');
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
-    authHandler = new AuthHandler(environment.dataRepo, {});
+    authHandler = new AuthHandler(environment.dataRepo, saveSystem);
     environment.init();
     app = express();
     app.use(express.json());

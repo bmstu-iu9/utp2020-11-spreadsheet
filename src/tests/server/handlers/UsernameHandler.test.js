@@ -7,15 +7,17 @@ import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator
 import Authorizer from '../../../server/authorization/Authorizer.js';
 import UsernameHandler from '../../../server/handlers/UsernameHandler.js';
 import UserModel from '../../../server/database/UserModel.js';
+import SaveSystem from '../../../server/save/SaveSystem.js';
 
 describe('UsernameHandler', () => {
   let environment;
   let usernameHandler;
   let app;
+  const saveSystem = new SaveSystem('.', '.');
 
   beforeEach(() => {
     environment = TestEnvironment.getInstance();
-    usernameHandler = new UsernameHandler(environment.dataRepo, {});
+    usernameHandler = new UsernameHandler(environment.dataRepo, saveSystem);
     environment.init();
     app = express();
     app.use(express.json());
