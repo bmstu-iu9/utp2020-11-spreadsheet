@@ -397,30 +397,6 @@ input.cell {
   border: 1px solid #fca311;
 }
 
-#table td.selection-right {
-  border-right: 1px dashed #999;
-}
-
-#table td.selection-bottom {
-  border-bottom: 1px dashed #999;
-}
-
-#table td.selection-left {
-  border-left: 1px dashed #999;
-}
-
-#table td.selection-top {
-  border-top: 1px dashed #999;
-}
-
-#table td.selected-right {
-  border-right: 1px solid #fca311;
-}
-
-#table td.selected-bottom {
-  border-bottom: 1px solid #fca311;
-}
-
 #table td.selected:hover {
   background-color: #d9d9d9;
 }

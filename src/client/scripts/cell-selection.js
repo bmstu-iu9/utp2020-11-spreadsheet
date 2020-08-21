@@ -81,30 +81,6 @@ function updateButtons() {
 }
 
 function changeSelection() {
-  // if (Math.min(selectionStart[1], selectionEnd[1]) > 0) {
-  //   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-  //     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-  //     cells[(Math.min(selectionStart[1], selectionEnd[1]) - 1) * tableWidth + i].classList.add('selection-bottom');
-  //   }
-  // }
-  // if (Math.min(selectionStart[0], selectionEnd[0]) > 0) {
-  //   for (let i = Math.min(selectionStart[1], selectionEnd[1]);
-  //     i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
-  //     cells[i * tableWidth + Math.min(selectionStart[0], selectionEnd[0]) - 1].classList.add('selection-right');
-  //   }
-  // }
-  // if (Math.max(selectionStart[1], selectionEnd[1]) < tableHeight - 1) {
-  //   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-  //     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-  //     cells[(Math.max(selectionStart[1], selectionEnd[1]) + 1) * tableWidth + i].classList.add('selection-top');
-  //   }
-  // }
-  // if (Math.max(selectionStart[0], selectionEnd[0]) < tableWidth - 1) {
-  //   for (let i = Math.min(selectionStart[1], selectionEnd[1]);
-  //     i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
-  //     cells[i * tableWidth + Math.max(selectionStart[0], selectionEnd[0]) + 1].classList.add('selection-left');
-  //   }
-  // }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     for (let j = Math.min(selectionStart[1], selectionEnd[1]);
@@ -115,18 +91,6 @@ function changeSelection() {
 }
 
 function applySelection() {
-  // if (Math.min(selectionStart[1], selectionEnd[1]) > 0) {
-  //   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
-  //     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
-  //     cells[(Math.min(selectionStart[1], selectionEnd[1]) - 1) * tableWidth + i].classList.add('selected-bottom');
-  //   }
-  // }
-  // if (Math.min(selectionStart[0], selectionEnd[0]) > 0) {
-  //   for (let i = Math.min(selectionStart[1], selectionEnd[1]);
-  //     i <= Math.max(selectionStart[1], selectionEnd[1]); i += 1) {
-  //     cells[i * tableWidth + Math.min(selectionStart[0], selectionEnd[0]) - 1].classList.add('selected-right');
-  //   }
-  // }
   for (let i = Math.min(selectionStart[0], selectionEnd[0]);
     i <= Math.max(selectionStart[0], selectionEnd[0]); i += 1) {
     columnHeaders[i].classList.add('header-selected');
@@ -167,12 +131,8 @@ function removeSelection(ctrl) {
     for (let j = 0; j < tableWidth; j += 1) {
       if (!ctrl) {
         cells[i * tableWidth + j].classList.remove('selected');
-        // cells[i * tableWidth + j].classList.remove('selected-right');
-        // cells[i * tableWidth + j].classList.remove('selected-bottom');
       }
       cells[i * tableWidth + j].classList.remove('selection');
-      // cells[i * tableWidth + j].classList.remove('selection-right');
-      // cells[i * tableWidth + j].classList.remove('selection-bottom');
     }
   }
 }
