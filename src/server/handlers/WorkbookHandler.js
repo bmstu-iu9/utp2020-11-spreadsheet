@@ -3,6 +3,7 @@ import { zeroID } from '../../lib/synchronization/Synchronizer.js';
 import EndpointHandler from './EndpointHandler.js';
 import WorkbookDeserializer from '../../lib/serialization/WorkbookDeserializer.js';
 import WorkbookIdSerializer from '../../lib/serialization/WorkbookIdSerializer.js';
+import WorkbookId from '../../lib/spreadsheets/WorkbookId.js';
 
 export default class WorkbookHandler extends EndpointHandler {
   get(req, res) {
@@ -20,7 +21,8 @@ export default class WorkbookHandler extends EndpointHandler {
       const workbook = this.saveSystem.workbookLoader.load(wbModel.id);
       const commits = this.saveSystem.commitLoader.load(wbModel.id);
       const lastCommitId = commits[commits.length - 1].ID;
-      const serialized = WorkbookIdSerializer.serialize(workbook, wbModel.id, lastCommitId);
+      const workbookId = new WorkbookId(wbModel.id, lastCommitId, workbook.name, workbook.spreadsheets);
+      const serialized = WorkbookIdSerializer.serialize(workbookId);
       result.push(serialized);
     });
     return res.status(200).send(result);
@@ -38,7 +40,8 @@ export default class WorkbookHandler extends EndpointHandler {
     const id = this.dataRepo.workbookRepo.save(workbookModel);
     this.saveSystem.workbookSaver.save(id, deserialized);
     this.saveSystem.commitSaver.save(id, [{ ID: zeroID }]);
-    const workbookId = WorkbookIdSerializer.serialize(deserialized, id, zeroID);
-    return res.status(200).send(workbookId);
+    const workbookId = new WorkbookId(id, zeroID, deserialized.name, deserialized.spreadsheets);
+    const serialized = WorkbookIdSerializer.serialize(workbookId);
+    return res.status(200).send(serialized);
   }
 }

@@ -3,6 +3,7 @@ import EndpointHandler from './EndpointHandler.js';
 import CommitFinder from '../../lib/synchronization/CommitFinder.js';
 import { Synchronizer } from '../../lib/synchronization/Synchronizer.js';
 import WorkbookIdSerializer from '../../lib/serialization/WorkbookIdSerializer.js';
+import WorkbookId from '../../lib/spreadsheets/WorkbookId.js';
 
 export default class WorkbookIdHandler extends EndpointHandler {
   get(req, res) {
@@ -76,8 +77,9 @@ export default class WorkbookIdHandler extends EndpointHandler {
     const workbook = this.saveSystem.workbookLoader.load(id);
     const commits = this.saveSystem.commitLoader.load(id);
     const lastCommitId = commits[commits.length - 1].ID;
-    const workbookId = WorkbookIdSerializer.serialize(workbook, id, lastCommitId);
-    return res.status(200).json(workbookId);
+    const workbookId = new WorkbookId(id, lastCommitId, workbook.name, workbook.spreadsheets);
+    const serialized = WorkbookIdSerializer.serialize(workbookId);
+    return res.status(200).json(serialized);
   }
 
   getCommits(req, res) {
