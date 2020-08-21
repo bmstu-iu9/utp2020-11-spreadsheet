@@ -25,7 +25,7 @@ export default class UserModel {
   }
 
   setPassword(password) {
-    if (password.length > 0) {
+    if (password.length >= 6) {
       this.password = UserModel.getHashedPassword(password);
     } else {
       throw new FormatError('UserModel: wrong format of password');
