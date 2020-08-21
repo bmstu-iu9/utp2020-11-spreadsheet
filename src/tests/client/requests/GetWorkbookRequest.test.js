@@ -6,7 +6,6 @@ import Request from '../../../client/js/requests/Request.js';
 import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
 import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
 import WorkbookId from '../../../lib/spreadsheets/WorkbookId.js';
-import UnauthorizedError from '../../../lib/errors/UnanuthorizedError.js';
 
 describe('GetWorkbookRequest', () => {
   before(() => {
@@ -38,16 +37,6 @@ describe('GetWorkbookRequest', () => {
       };
       const response = request.send();
       assert.deepStrictEqual(response, [workbookId]);
-    });
-    it('should throw UnauthorizedError', () => {
-      global.XMLHttpRequest.onCreate = (req) => {
-        req.send = () => {
-          req.respond(401);
-        };
-      };
-      assert.throws(() => {
-        request.send();
-      }, UnauthorizedError);
     });
   });
 });
