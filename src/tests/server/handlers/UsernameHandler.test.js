@@ -6,6 +6,7 @@ import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
 import UsernameHandler from '../../../server/handlers/UsernameHandler.js';
+import UserModel from '../../../server/database/UserModel.js';
 
 describe('UsernameHandler', () => {
   let environment;
@@ -21,7 +22,6 @@ describe('UsernameHandler', () => {
     const matcher = new HeaderMatcher('authorization', 'Token ');
     const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
     const authorizer = new Authorizer(authenticator);
-    app = express();
     app.use(authorizer.getMiddleware());
   });
   afterEach(() => {
@@ -45,7 +45,7 @@ describe('UsernameHandler', () => {
           assert.deepStrictEqual(response.body, { isAdmin: false, username });
         });
     });
-    it('should give response 401 because of unauthorized', () => request(app)
+    it('should give response 401 because of unauthorized request', () => request(app)
       .get('/user/login')
       .expect(401));
     it('should give response 403 because of lack of rights', () => {
@@ -64,6 +64,81 @@ describe('UsernameHandler', () => {
         .get('/user/login')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(404);
+    });
+  });
+  describe('#patch', () => {
+    beforeEach(() => {
+      app.patch('/user/:username', (req, res) => {
+        usernameHandler.patch(req, res);
+      });
+    });
+    it('should change password, return 200 and user data', () => {
+      environment.addUsers(2, true);
+      const { username, token } = environment.userTokens[0];
+      return request(app)
+        .patch(`/user/${username}`)
+        .send({ isAdmin: false, password: '1111111' })
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(200)
+        .then((response) => {
+          assert.deepStrictEqual(response.body, { isAdmin: false, username: 'test0' });
+        })
+        .then(() => {
+          const user = environment.dataRepo.userRepo.get('test0');
+          assert.deepStrictEqual(user.password, UserModel.getHashedPassword('1111111'));
+        });
+    });
+    it('should change isAdmin, return 200 and user data', () => {
+      environment.addUsers(2, true);
+      const { token } = environment.userTokens[1];
+      const { username } = environment.userTokens[0];
+      return request(app)
+        .patch(`/user/${username}`)
+        .send({ isAdmin: true, password: '1234567' })
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(200)
+        .then((response) => {
+          assert.deepStrictEqual(response.body, { isAdmin: true, username: 'test0' });
+        })
+        .then(() => {
+          const user = environment.dataRepo.userRepo.get('test0');
+          assert.deepStrictEqual(Boolean(user.isAdmin), true);
+        });
+    });
+    it('should give response 404 becouse user is missing', () => {
+      environment.addUsers(2, true);
+      const { token } = environment.userTokens[1];
+      return request(app)
+        .patch('/user/login')
+        .send({ isAdmin: true, password: '1234567' })
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(404);
+    });
+    it('should give response 401 because of unauthorized request', () => {
+      environment.addUsers(1, true);
+      const { username } = environment.userTokens[0];
+      return request(app)
+        .patch(`/user/${username}`)
+        .send({ isAdmin: false, password: '1111111' })
+        .expect(401);
+    });
+    it('should give response 400 because of incorrect request', () => {
+      environment.addUsers(1, true);
+      const { username, token } = environment.userTokens[0];
+      return request(app)
+        .patch(`/user/${username}`)
+        .send({ isAdmin: false, username })
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(400);
+    });
+    it('should give response 403 because of lack of rights', () => {
+      environment.addUsers(2, true);
+      const { token, username } = environment.userTokens[0];
+      return request(app)
+        .patch(`/user/${username}`)
+        .send({ isAdmin: true, password: '1234567' })
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(403);
     });
   });
 });

@@ -24,4 +24,23 @@ export default class UsernameHandler extends EndpointHandler {
     const user = this.dataRepo.userRepo.get(req.params.username);
     return res.status(200).send(UserModel.fromUserToSQL(user));
   }
+
+  patch(req, res) {
+    const validationResult = this.validateAccess(req, res);
+    if (validationResult !== true) {
+      return validationResult;
+    }
+    if (req.body === undefined
+      || req.body.isAdmin === undefined || req.body.password === undefined) {
+      return res.sendStatus(400);
+    }
+    const user = this.dataRepo.userRepo.get(req.params.username);
+    if (req.user.isAdmin === 0 && user.isAdmin !== Number(req.body.isAdmin)) {
+      return res.sendStatus(403);
+    }
+    user.setPassword(req.body.password);
+    user.setIsAdmin(req.body.isAdmin);
+    this.dataRepo.userRepo.save(user);
+    return res.status(200).send(UserModel.fromUserToSQL(user));
+  }
 }
