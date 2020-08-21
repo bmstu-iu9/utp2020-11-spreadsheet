@@ -43,4 +43,13 @@ export default class UsernameHandler extends EndpointHandler {
     this.dataRepo.userRepo.save(user);
     return res.status(200).send(UserModel.fromUserToSQL(user));
   }
+
+  delete(req, res) {
+    const validationResult = this.validateAccess(req, res);
+    if (validationResult !== true) {
+      return validationResult;
+    }
+    this.dataRepo.userRepo.delete(req.params.username);
+    return res.sendStatus(200);
+  }
 }

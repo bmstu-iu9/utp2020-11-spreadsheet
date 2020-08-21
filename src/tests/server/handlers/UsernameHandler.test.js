@@ -105,7 +105,7 @@ describe('UsernameHandler', () => {
           assert.deepStrictEqual(Boolean(user.isAdmin), true);
         });
     });
-    it('should give response 404 becouse user is missing', () => {
+    it('should give response 404 because user is missing', () => {
       environment.addUsers(2, true);
       const { token } = environment.userTokens[1];
       return request(app)
@@ -137,6 +137,49 @@ describe('UsernameHandler', () => {
       return request(app)
         .patch(`/user/${username}`)
         .send({ isAdmin: true, password: '1234567' })
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(403);
+    });
+  });
+  describe('#delete', () => {
+    beforeEach(() => {
+      app.delete('/user/:username', (req, res) => {
+        usernameHandler.delete(req, res);
+      });
+    });
+    it('should delete user and give response 200', () => {
+      environment.addUsers(2, true);
+      const { token } = environment.userTokens[1];
+      const { username } = environment.userTokens[0];
+      return request(app)
+        .delete(`/user/${username}`)
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(200)
+        .then(() => {
+          assert.deepStrictEqual(environment.dataRepo.userRepo.get(username), undefined);
+        });
+    });
+    it('should give response 401 because of unauthorized request', () => {
+      environment.addUsers(2, true);
+      const { username } = environment.userTokens[0];
+      return request(app)
+        .delete(`/user/${username}`)
+        .expect(401);
+    });
+    it('should give response 404 for unfound user', () => {
+      environment.addUsers(2, true);
+      const { token } = environment.userTokens[1];
+      return request(app)
+        .delete('/user/login')
+        .set('Authorization', `Token ${token.uuid}`)
+        .expect(404);
+    });
+    it('should give response 403 because of lack of rights', () => {
+      environment.addUsers(2, true);
+      const { token } = environment.userTokens[0];
+      const { username } = environment.userTokens[1];
+      return request(app)
+        .delete(`/user/${username}`)
         .set('Authorization', `Token ${token.uuid}`)
         .expect(403);
     });

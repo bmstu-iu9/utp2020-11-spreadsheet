@@ -84,11 +84,11 @@ describe('UserHandler', () => {
       const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
       const authorizer = new Authorizer(authenticator);
       app.use(authorizer.getMiddleware());
-    });
-    it('should give response 200 and list of users', () => {
       app.get('/user/get', (req, res) => {
         userHandler.get(req, res);
       });
+    });
+    it('should give response 200 and list of users', () => {
       environment.addUsers(2, true);
       const { token } = environment.userTokens[1];
       return request(app)
@@ -107,9 +107,6 @@ describe('UserHandler', () => {
         });
     });
     it('should give response 403 because of lack of rights', () => {
-      app.get('/user/get', (req, res) => {
-        userHandler.get(req, res);
-      });
       environment.addUsers(2, true);
       const { token } = environment.userTokens[0];
       return request(app)
@@ -117,13 +114,8 @@ describe('UserHandler', () => {
         .set('Authorization', `Token ${token.uuid}`)
         .expect(403);
     });
-    it('should give response 401 because of unauthorized', () => {
-      app.get('/user/get', (req, res) => {
-        userHandler.get(req, res);
-      });
-      return request(app)
-        .get('/user/get')
-        .expect(401);
-    });
+    it('should give response 401 because of unauthorized', () => request(app)
+      .get('/user/get')
+      .expect(401));
   });
 });
