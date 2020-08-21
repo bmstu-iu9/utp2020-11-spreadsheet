@@ -51,7 +51,7 @@ export default class Server {
       '/workbook/:id': WorkbookIdHandler,
       '/user': UserHandler,
       '/user/:username': UsernameHandler,
-      '/auth': AuthHandler
+      '/auth': AuthHandler,
     };
     const saveSystem = new SaveSystem(this.config.pathToWorkbooks, this.config.pathToCommits);
     Object.keys(endpoints).forEach((path) => {
