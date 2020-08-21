@@ -5,6 +5,7 @@ import GetWorkbookRequest from '../../../client/js/requests/GetWorkbookRequest.j
 import Request from '../../../client/js/requests/Request.js';
 import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
 import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
+import UnauthorizedError from '../../../lib/errors/UnanuthorizedError.js';
 
 describe('GetWorkbookRequest', () => {
   before(() => {
@@ -14,10 +15,10 @@ describe('GetWorkbookRequest', () => {
     global.XMLHttpRequest.restore();
   });
 
-  const requester = new GetWorkbookRequest('https://example.com', new RequestAuthorizer('f546a652-e0cf-4718-b77d-9dec4a9b4e5c'));
+  const request = new GetWorkbookRequest('https://example.com', new RequestAuthorizer('f546a652-e0cf-4718-b77d-9dec4a9b4e5c'));
 
   it('should be a child of Request', () => {
-    assert.strictEqual(requester instanceof Request, true);
+    assert.strictEqual(request instanceof Request, true);
   });
   describe('#send()', () => {
     it('should return workbook array', () => {
@@ -33,8 +34,18 @@ describe('GetWorkbookRequest', () => {
           JSON.stringify(serialized));
         };
       };
-      const response = requester.send();
+      const response = request.send();
       assert.deepStrictEqual(response, serialized);
+    });
+    it('should throw UnauthorizedError', () => {
+      global.XMLHttpRequest.onCreate = (req) => {
+        req.send = () => {
+          req.respond(401);
+        };
+      };
+      assert.throws(() => {
+        request.send();
+      }, UnauthorizedError);
     });
   });
 });
