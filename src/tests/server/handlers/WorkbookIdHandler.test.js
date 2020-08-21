@@ -7,7 +7,7 @@ import CommitSaver from '../../../server/save/CommitSaver.js';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
-import TokenAuthencticator from '../../../server/authorization/TokenAuthenticator.js';
+import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
@@ -49,7 +49,7 @@ describe('WorkbookIdHandler', () => {
       pathToCommits: 'commits',
     });
     const matcher = new HeaderMatcher('authorization', 'Token ');
-    const authenticator = new TokenAuthencticator(matcher, environment.dataRepo);
+    const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
     const authorizer = new Authorizer(authenticator);
     app = express();
     app.use(authorizer.getMiddleware());
