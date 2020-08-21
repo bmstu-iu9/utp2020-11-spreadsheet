@@ -410,6 +410,8 @@ bgcolorBtn.addEventListener('click', () => {
   reduceCells((cell) => {
     // eslint-disable-next-line no-param-reassign
     cell.style.backgroundColor = bgcolorInput.value;
+    // eslint-disable-next-line no-param-reassign
+    cell.parentNode.style.backgroundColor = bgcolorInput.value;
   });
 });
 
@@ -418,6 +420,8 @@ bgcolorInput.addEventListener('input', () => {
     bgcolorBtn.style.color = bgcolorInput.value;
     // eslint-disable-next-line no-param-reassign
     cell.style.backgroundColor = bgcolorInput.value;
+    // eslint-disable-next-line no-param-reassign
+    cell.parentNode.style.backgroundColor = bgcolorInput.value;
   });
 });
 
