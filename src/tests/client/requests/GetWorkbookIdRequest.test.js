@@ -37,7 +37,7 @@ describe('GetWorkbookIdRequest', () => {
         req.send = () => {
           spy.calledOnceWith('GET', `${baseUrl}/workbook/${id}`);
           const data = JSON.stringify(WorkbookIdSerializer.serialize(expected));
-          req.respond(200, {'Content-Type': 'application/json'}, data);
+          req.respond(200, { 'Content-Type': 'application/json' }, data);
           called = true;
         };
       };
