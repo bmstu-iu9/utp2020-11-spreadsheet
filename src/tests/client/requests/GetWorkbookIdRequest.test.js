@@ -55,5 +55,24 @@ describe('GetWorkbookIdRequest', () => {
         request.send();
       }, UnknownServerError);
     });
+    it('should return commits', () => {
+      const commits = [
+        {
+          ID: '4f6a134b-4305-4ec3-9f98-4396f0f3f92c',
+        },
+      ];
+      const after = '28ca1eb4-bc64-4418-b866-d370e5656094';
+      global.XMLHttpRequest.onCreate = (req) => {
+        const spy = sinon.spy(req, 'open');
+        req.send = () => {
+          assert.strictEqual(spy.calledOnceWith('GET', `${baseUrl}/workbook/1?after=${after}`), true);
+          req.respond(200,
+            { 'Content-Type': 'application/json' },
+            JSON.stringify(commits));
+        };
+      };
+      const actual = request.send(1, after);
+      assert.deepStrictEqual(actual, commits);
+    });
   });
 });
