@@ -25,7 +25,8 @@ export default class UserModel {
   }
 
   setPassword(password) {
-    if (password.length >= 6) {
+    const minimumPasswordLength = 6;
+    if (password.length >= minimumPasswordLength) {
       this.password = UserModel.getHashedPassword(password);
     } else {
       throw new FormatError('UserModel: wrong format of password');
