@@ -10,9 +10,10 @@ import Authorizer from '../../../server/authorization/Authorizer.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
-import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
+import WorkbookId from '../../../lib/spreadsheets/WorkbookId.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import SaveSystem from '../../../server/save/SaveSystem.js';
+import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
 
 describe('WorkbookIdHandler', () => {
   const saveSystem = new SaveSystem('workbooks', 'commits');
@@ -90,16 +91,17 @@ describe('WorkbookIdHandler', () => {
       createWorkbook();
       createCommits();
       const workbook = saveSystem.workbookLoader.load(1);
-      const workbookId = WorkbookIdSerializer.serialize(
+      const workbookId = new WorkbookId(
         workbook, 1, initialCommits[initialCommits.length - 1].ID,
       );
+      const serialized = WorkbookIdSerializer.serialize(workbookId);
       const { token } = environment.userTokens[0];
       return request(app)
         .get('/1')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(200)
         .then((response) => {
-          assert.deepStrictEqual(response.body, workbookId);
+          assert.deepStrictEqual(response.body, serialized);
         })
         .then(mock.restore);
     });
