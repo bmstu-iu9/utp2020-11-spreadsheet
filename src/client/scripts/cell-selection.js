@@ -428,7 +428,7 @@ bgcolorInput.addEventListener('input', () => {
 bordercolorBtn.addEventListener('click', () => {
   reduceCells((cell) => {
     // eslint-disable-next-line no-param-reassign
-    cell.style.borderColor = bordercolorInput.value;
+    cell.parentNode.style.borderColor = bordercolorInput.value;
   });
 });
 
