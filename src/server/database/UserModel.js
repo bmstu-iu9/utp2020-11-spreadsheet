@@ -25,7 +25,8 @@ export default class UserModel {
   }
 
   setPassword(password) {
-    if (password.length > 0) {
+    const minimumPasswordLength = 6;
+    if (password.length >= minimumPasswordLength) {
       this.password = UserModel.getHashedPassword(password);
     } else {
       throw new FormatError('UserModel: wrong format of password');
@@ -34,6 +35,10 @@ export default class UserModel {
 
   static getHashedPassword(password) {
     return crypto.createHash('sha256').update(password).digest('base64');
+  }
+
+  getIsAdmin() {
+    return Boolean(this.isAdmin);
   }
 
   static fromSQLtoUser(row) {
@@ -46,6 +51,21 @@ export default class UserModel {
     const result = [];
     rows.forEach((row) => {
       result.push(UserModel.fromSQLtoUser(row));
+    });
+    return result;
+  }
+
+  static fromUserToSQL(user) {
+    return {
+      isAdmin: Boolean(user.isAdmin),
+      username: user.login,
+    };
+  }
+
+  static fromUsersToSQL(users) {
+    const result = [];
+    users.forEach((user) => {
+      result.push(UserModel.fromUserToSQL(user));
     });
     return result;
   }
