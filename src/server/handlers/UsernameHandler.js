@@ -6,7 +6,7 @@ export default class UsernameHandler extends EndpointHandler {
     if (req.user === undefined) {
       return res.sendStatus(401);
     }
-    if (req.user.isAdmin === 1 || req.user.login === req.params.username) {
+    if (req.user.getIsAdmin() === true || req.user.login === req.params.username) {
       const user = this.dataRepo.userRepo.get(req.params.username);
       if (user === undefined) {
         return res.sendStatus(404);
@@ -35,7 +35,7 @@ export default class UsernameHandler extends EndpointHandler {
       return res.sendStatus(400);
     }
     const user = this.dataRepo.userRepo.get(req.params.username);
-    if (req.user.isAdmin === 0 && user.isAdmin !== Number(req.body.isAdmin)) {
+    if (req.user.getIsAdmin() === false && user.getIsAdmin() !== req.body.isAdmin) {
       return res.sendStatus(403);
     }
     user.setPassword(req.body.password);

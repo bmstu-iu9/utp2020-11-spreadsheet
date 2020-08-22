@@ -25,7 +25,7 @@ export default class UserHandler extends EndpointHandler {
     if (req.user === undefined) {
       return res.sendStatus(401);
     }
-    if (req.user.isAdmin === 1) {
+    if (req.user.getIsAdmin() === true) {
       const list = UserModel.fromUsersToSQL(this.dataRepo.userRepo.getAllUsers());
       return res.status(200).send(list);
     }

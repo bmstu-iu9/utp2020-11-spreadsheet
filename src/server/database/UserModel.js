@@ -37,6 +37,10 @@ export default class UserModel {
     return crypto.createHash('sha256').update(password).digest('base64');
   }
 
+  getIsAdmin() {
+    return Boolean(this.isAdmin);
+  }
+
   static fromSQLtoUser(row) {
     const user = new UserModel(row.login, 'password', Boolean(row.isAdmin));
     user.password = row.password;
