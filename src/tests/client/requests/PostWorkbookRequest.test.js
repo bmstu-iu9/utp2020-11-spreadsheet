@@ -39,9 +39,10 @@ describe('PostWorkbookRequest', () => {
             JSON.stringify(WorkbookIdSerializer.serialize(workbookId)));
         };
       };
-
+      const authorizerSpy = sinon.spy(authorizer, 'authorize');
       const created = request.send(workbook);
       assert.deepStrictEqual(created, workbookId);
+      assert.strictEqual(authorizerSpy.calledOnce, true);
     });
     it('should throw UnauthorizedError', () => {
       global.XMLHttpRequest.onCreate = (req) => {

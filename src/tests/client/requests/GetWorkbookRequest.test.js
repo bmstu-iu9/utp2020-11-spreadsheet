@@ -15,7 +15,9 @@ describe('GetWorkbookRequest', () => {
     global.XMLHttpRequest.restore();
   });
 
-  const request = new GetWorkbookRequest('https://example.com', new RequestAuthorizer('f546a652-e0cf-4718-b77d-9dec4a9b4e5c'));
+  const baseUrl = 'https://example.com';
+  const authorizer = new RequestAuthorizer('f546a652-e0cf-4718-b77d-9dec4a9b4e5c');
+  const request = new GetWorkbookRequest(baseUrl, authorizer);
 
   it('should be a child of Request', () => {
     assert.strictEqual(request instanceof Request, true);
@@ -35,8 +37,10 @@ describe('GetWorkbookRequest', () => {
           JSON.stringify(serialized));
         };
       };
+      const authorizerSpy = sinon.spy(authorizer, 'authorize');
       const response = request.send();
       assert.deepStrictEqual(response, [workbookId]);
+      assert.strictEqual(authorizerSpy.calledOnce, true);
     });
   });
 });

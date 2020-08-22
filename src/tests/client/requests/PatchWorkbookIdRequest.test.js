@@ -44,17 +44,19 @@ describe('PatchWorkbookIdRequest', () => {
     it('should successfully send changes', () => {
       let called = false;
       global.XMLHttpRequest.onCreate = (req) => {
-        const spy = sinon.spy(req, 'open');
+        const openSpy = sinon.spy(req, 'open');
         req.send = (actualCommits) => {
           called = true;
           assert.deepStrictEqual(JSON.parse(actualCommits), commits);
-          assert.strictEqual(spy.calledOnceWith('PATCH', `${baseUrl}/workbook/1`), true);
+          assert.strictEqual(openSpy.calledOnceWith('PATCH', `${baseUrl}/workbook/1`), true);
           req.respond(200);
         };
       };
+      const authorizerSpy = sinon.spy(authorizer, 'authorize');
       const result = request.send(1, commits);
       assert.strictEqual(called, true);
       assert.deepStrictEqual(result, []);
+      assert.strictEqual(authorizerSpy.calledOnce, true);
     });
     it('should return conflicts', () => {
       global.XMLHttpRequest.onCreate = (req) => {

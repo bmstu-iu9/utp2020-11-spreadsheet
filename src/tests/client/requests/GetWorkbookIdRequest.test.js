@@ -33,17 +33,19 @@ describe('GetWorkbookIdRequest', () => {
       const expected = new WorkbookId(workbook, id, uuid);
       let called = false;
       global.XMLHttpRequest.onCreate = (req) => {
-        const spy = sinon.spy(req, 'open');
+        const openSpy = sinon.spy(req, 'open');
         req.send = () => {
-          spy.calledOnceWith('GET', `${baseUrl}/workbook/${id}`);
+          openSpy.calledOnceWith('GET', `${baseUrl}/workbook/${id}`);
           const data = JSON.stringify(WorkbookIdSerializer.serialize(expected));
           req.respond(200, { 'Content-Type': 'application/json' }, data);
           called = true;
         };
       };
+      const authorizerSpy = sinon.spy(authorizer, 'authorize');
       const workbookId = request.send(id);
       assert.strictEqual(called, true);
       assert.deepStrictEqual(workbookId, expected);
+      assert.strictEqual(authorizerSpy.calledOnce, true);
     });
     it('should throw UnknownServerError', () => {
       global.XMLHttpRequest.onCreate = (req) => {
