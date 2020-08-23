@@ -1,7 +1,17 @@
+import mock from 'mock-fs';
 import Server from '../../../server/main/Server.js';
 import config from '../../../server/main/config.js';
 
 describe('Server', () => {
+  before(() => {
+    mock({
+      'dist/img/logo.png': '',
+    });
+  });
+  after(() => {
+    mock.restore();
+  });
+
   describe('#main()', () => {
     it('should create server twice successfully', () => {
       for (let i = 0; i < 2; i += 1) {
