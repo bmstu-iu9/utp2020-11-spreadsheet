@@ -25,8 +25,8 @@ describe('WorkbookRepo', () => {
     workbookRepo.createTable();
     // Where should be user's table because login is foreign key to user
     userRepo.createTable();
-    userRepo.save(new UserModel(login, 'abcdefg', false));
-    userRepo.save(new UserModel(anotherLogin, 'abcefg', false));
+    userRepo.save(new UserModel(login, false, 'abcdefg'));
+    userRepo.save(new UserModel(anotherLogin, false, 'abcefg'));
   });
   afterEach(() => {
     workbookRepo.dropTable();

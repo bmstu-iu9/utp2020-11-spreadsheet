@@ -46,7 +46,7 @@ describe('UserHandler', () => {
         });
     });
     it('should give response 403 because of reserved login', () => {
-      const user = new UserModel('login', '1234567', false);
+      const user = new UserModel('login', false, '1234567');
       environment.dataRepo.userRepo.save(user);
       app.post('/user/post', (req, res) => {
         userHandler.post(req, res);

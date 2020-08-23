@@ -22,7 +22,7 @@ export default class UsernameHandler extends EndpointHandler {
       return validationResult;
     }
     const user = this.dataRepo.userRepo.get(req.params.username);
-    return res.status(200).send(UserModel.fromUserToSQL(user));
+    return res.status(200).send(UserModel.fromUserToJSON(user));
   }
 
   patch(req, res) {
@@ -41,7 +41,7 @@ export default class UsernameHandler extends EndpointHandler {
     user.setPassword(req.body.password);
     user.setIsAdmin(req.body.isAdmin);
     this.dataRepo.userRepo.save(user);
-    return res.status(200).send(UserModel.fromUserToSQL(user));
+    return res.status(200).send(UserModel.fromUserToJSON(user));
   }
 
   delete(req, res) {

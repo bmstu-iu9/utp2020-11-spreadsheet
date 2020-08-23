@@ -37,7 +37,7 @@ describe('Validation', () => {
       assert.strictEqual(validator.validateRegistration('alexis', 'omgomg'), result.ok);
     });
     it('should ask for changing login', () => {
-      environment.dataRepo.userRepo.save(new UserModel('alexis', 'omgomg', true));
+      environment.dataRepo.userRepo.save(new UserModel('alexis', true, 'omgomg'));
       assert.strictEqual(Validation.checkLogin(NaN, NaN), false);
       const validator = new Validation(environment.dataRepo);
       assert.strictEqual(validator.validateRegistration('alexis', 'omgomg'), result.loginUnavailable);
@@ -61,12 +61,12 @@ describe('Validation', () => {
   });
   describe('#validateAuthorization()', () => {
     it('should return \'OK\' for correct user', () => {
-      environment.dataRepo.userRepo.save(new UserModel('alexis', 'omgomg', true));
+      environment.dataRepo.userRepo.save(new UserModel('alexis', true, 'omgomg'));
       const validator = new Validation(environment.dataRepo);
       assert.strictEqual(validator.validateAuthorization('alexis', 'omgomg'), result.ok);
     });
     it('should report about incorrect password', () => {
-      environment.dataRepo.userRepo.save(new UserModel('alexis', 'omgomg', true));
+      environment.dataRepo.userRepo.save(new UserModel('alexis', true, 'omgomg'));
       const validator = new Validation(environment.dataRepo);
       assert.strictEqual(validator.validateAuthorization('alexis', 'Omgomg'), result.incorrectPassword);
     });
@@ -81,7 +81,7 @@ describe('Validation', () => {
       assert.strictEqual(validator.validate('', 'omgomg', true), result.emptyLogin);
     });
     it('should return \'Incorrect password\' from validateAuthorization()', () => {
-      environment.dataRepo.userRepo.save(new UserModel('alexis', 'omgomg', true));
+      environment.dataRepo.userRepo.save(new UserModel('alexis', true, 'omgomg'));
       const validator = new Validation(environment.dataRepo);
       assert.strictEqual(validator.validate('alexis', 'OMGomg', false), result.incorrectPassword);
     });
