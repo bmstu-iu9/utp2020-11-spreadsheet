@@ -33,7 +33,7 @@ describe('DeleteWorkbookIdRequest', () => {
         };
       };
       const authorizerSpy = sinon.spy(authorizer, 'authorize');
-      request.send();
+      request.send(1);
       assert.strictEqual(called, true);
       assert.strictEqual(authorizerSpy.calledOnce, true);
     });
