@@ -1,15 +1,21 @@
-import mock from 'mock-fs';
+import fs from 'fs';
+import path from 'path';
 import Server from '../../../server/main/Server.js';
 import config from '../../../server/main/config.js';
 
 describe('Server', () => {
+  const faviconDirname = path.dirname(config.favicon);
+
   before(() => {
-    mock({
-      'dist/img/logo.png': '',
+    fs.mkdirSync(faviconDirname, {
+      recursive: true,
     });
+    fs.writeFileSync(config.favicon, '');
   });
   after(() => {
-    mock.restore();
+    fs.rmdirSync(faviconDirname, {
+      recursive: true,
+    });
   });
 
   describe('#main()', () => {
