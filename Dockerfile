@@ -3,4 +3,4 @@ COPY . project
 WORKDIR project
 RUN npm ci
 RUN mkdir data
-ENTRYPOINT ["npm", "run", "run"]
+ENTRYPOINT ["npm", "run", "server"]

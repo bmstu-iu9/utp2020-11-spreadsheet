@@ -3,11 +3,11 @@ export default {
   viewOptions: {
     layout: false,
   },
-  favicon: 'src/client/img/logo.png',
+  favicon: 'dist/img/logo.png',
   urlencoded: {
     extended: true,
   },
-  static: 'src/client',
+  static: 'dist',
   entrypoint: '/index.html',
   dataPath: 'data',
   env: 'development',
