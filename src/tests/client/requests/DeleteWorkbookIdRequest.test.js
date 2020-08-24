@@ -27,7 +27,7 @@ describe('DeleteWorkbookIdRequest', () => {
       global.XMLHttpRequest.onCreate = (req) => {
         const openSpy = sinon.spy(req, 'open');
         req.send = () => {
-          openSpy.calledOnceWith('DELETE', `${baseUrl}/workbook/1`);
+          assert.deepStrictEqual(openSpy.calledOnceWith('DELETE', `${baseUrl}/workbook/1`), true);
           called = true;
           req.respond(200);
         };
