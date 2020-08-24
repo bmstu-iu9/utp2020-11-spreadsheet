@@ -1,18 +1,18 @@
-import * as assert from 'assert';
 import sinon from 'sinon';
-import Request from '../../../client/js/requests/Request.js';
-import DeleteWorkbookIdRequest from '../../../client/js/requests/DeleteWorkbookIdRequest.js';
+import * as assert from 'assert';
 import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
-import UnauthorizedError from '../../../lib/errors/UnanuthorizedError.js';
+import Request from '../../../client/js/requests/Request.js';
+import DeleteUsernameRequest from '../../../client/js/requests/DeleteUsernameRequest.js';
 
-describe('DeleteWorkbookIdRequest', () => {
+describe('DeleteUsernameRequest', () => {
   const baseUrl = 'localhost';
-  const authorizer = new RequestAuthorizer('9bc21cca-4965-48d2-b41e-608d99dce4fc');
-  const request = new DeleteWorkbookIdRequest(baseUrl, authorizer);
+  const authorizer = new RequestAuthorizer('a3b7755b-931b-4913-8c68-ddbb2e61e320');
+  const request = new DeleteUsernameRequest(baseUrl, authorizer);
 
   before(() => {
     global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
   });
+
   after(() => {
     global.XMLHttpRequest.restore();
   });
@@ -27,25 +27,15 @@ describe('DeleteWorkbookIdRequest', () => {
       global.XMLHttpRequest.onCreate = (req) => {
         const openSpy = sinon.spy(req, 'open');
         req.send = () => {
-          assert.deepStrictEqual(openSpy.calledOnceWith('DELETE', `${baseUrl}/workbook/1`), true);
+          openSpy.calledOnceWith('DELETE', `${baseUrl}/user/username`);
           called = true;
           req.respond(200);
         };
       };
       const authorizerSpy = sinon.spy(authorizer, 'authorize');
-      request.send(1);
+      request.send('username');
       assert.strictEqual(called, true);
       assert.strictEqual(authorizerSpy.calledOnce, true);
-    });
-    it('should throw UnauthorizedError', () => {
-      global.XMLHttpRequest.onCreate = (req) => {
-        req.send = () => {
-          req.respond(401);
-        };
-      };
-      assert.throws(() => {
-        request.send();
-      }, UnauthorizedError);
     });
   });
 });

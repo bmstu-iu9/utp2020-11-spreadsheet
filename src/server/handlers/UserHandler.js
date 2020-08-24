@@ -11,9 +11,9 @@ export default class UserHandler extends EndpointHandler {
     const validator = new Validation(this.dataRepo);
     const validationResult = validator.validate(req.body.username, req.body.password, true);
     if (validationResult === result.ok) {
-      const user = new UserModel(req.body.username, req.body.password, false);
+      const user = new UserModel(req.body.username, false, req.body.password);
       this.dataRepo.userRepo.save(user);
-      return res.status(200).send(UserModel.fromUserToSQL(user));
+      return res.status(200).send(UserModel.fromUserToJSON(user));
     }
     if (validationResult === result.loginUnavailable) {
       return res.sendStatus(409);
@@ -26,7 +26,7 @@ export default class UserHandler extends EndpointHandler {
       return res.sendStatus(401);
     }
     if (req.user.getIsAdmin() === true) {
-      const list = UserModel.fromUsersToSQL(this.dataRepo.userRepo.getAllUsers());
+      const list = UserModel.fromUsersToJSON(this.dataRepo.userRepo.getAllUsers());
       return res.status(200).send(list);
     }
     return res.sendStatus(403);

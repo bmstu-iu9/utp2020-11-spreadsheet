@@ -23,9 +23,9 @@ describe('AuthHandler', () => {
   afterEach(() => {
     TestEnvironment.destroyInstance();
   });
-  describe('#post', () => {
+  describe('#post()', () => {
     it('should give response 200 and token', () => {
-      const user = new UserModel('login', '1234567', false);
+      const user = new UserModel('login', false, '1234567');
       environment.dataRepo.userRepo.save(user);
       app.post('/auth/test', (req, res) => {
         authHandler.post(req, res);
@@ -54,7 +54,7 @@ describe('AuthHandler', () => {
         .expect(403);
     });
     it('should give response 403 because of incorrect password', () => {
-      const user = new UserModel('login', '1234567', false);
+      const user = new UserModel('login', false, '1234567');
       environment.dataRepo.userRepo.save(user);
       app.post('/auth/test', (req, res) => {
         authHandler.post(req, res);

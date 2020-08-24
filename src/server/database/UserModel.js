@@ -2,10 +2,12 @@ import crypto from 'crypto';
 import FormatError from '../../lib/errors/FormatError.js';
 
 export default class UserModel {
-  constructor(login, password, isAdmin) {
+  constructor(login, isAdmin, password) {
     if (UserModel.isLoginCorrect(login)) {
       this.login = login;
-      this.setPassword(password);
+      if (password !== undefined) {
+        this.setPassword(password);
+      }
       this.setIsAdmin(isAdmin);
     } else {
       throw new FormatError('UserModel: wrong format of login');
@@ -42,7 +44,7 @@ export default class UserModel {
   }
 
   static fromSQLtoUser(row) {
-    const user = new UserModel(row.login, 'password', Boolean(row.isAdmin));
+    const user = new UserModel(row.login, Boolean(row.isAdmin));
     user.password = row.password;
     return user;
   }
@@ -55,17 +57,29 @@ export default class UserModel {
     return result;
   }
 
-  static fromUserToSQL(user) {
+  static fromJSONtoUser(row) {
+    return new UserModel(row.username, row.isAdmin);
+  }
+
+  static fromJSONtoUsers(rows) {
+    const result = [];
+    rows.forEach((row) => {
+      result.push(UserModel.fromJSONtoUser(row));
+    });
+    return result;
+  }
+
+  static fromUserToJSON(user) {
     return {
       isAdmin: Boolean(user.isAdmin),
       username: user.login,
     };
   }
 
-  static fromUsersToSQL(users) {
+  static fromUsersToJSON(users) {
     const result = [];
     users.forEach((user) => {
-      result.push(UserModel.fromUserToSQL(user));
+      result.push(UserModel.fromUserToJSON(user));
     });
     return result;
   }
