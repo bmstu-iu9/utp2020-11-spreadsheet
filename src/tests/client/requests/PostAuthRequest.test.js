@@ -22,7 +22,7 @@ describe('PostAuthRequest', () => {
     assert.strictEqual(request instanceof Request, true);
   });
 
-  describe('#send', () => {
+  describe('#send()', () => {
     it('should return TokenModel', () => {
       const username = 'username';
       const password = 'password';

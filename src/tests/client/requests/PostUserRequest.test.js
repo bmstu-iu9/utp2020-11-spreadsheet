@@ -21,7 +21,7 @@ describe('PostUserRequest', () => {
     assert.strictEqual(request instanceof Request, true);
   });
 
-  describe('#send', () => {
+  describe('#send()', () => {
     it('should register new user', () => {
       const username = 'username';
       const password = 'password';

@@ -205,7 +205,7 @@ describe('WorkbookIdHandler', () => {
         .then(mock.restore);
     });
   });
-  describe('#patch', () => {
+  describe('#patch()', () => {
     const requestBody = {
       lastSynchronizedCommit: zeroID,
       changes: [{

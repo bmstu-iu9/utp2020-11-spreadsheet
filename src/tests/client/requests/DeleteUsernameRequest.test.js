@@ -21,7 +21,7 @@ describe('DeleteUsernameRequest', () => {
     assert.strictEqual(request instanceof Request, true);
   });
 
-  describe('#send', () => {
+  describe('#send()', () => {
     it('should send a delete request', () => {
       let called = false;
       global.XMLHttpRequest.onCreate = (req) => {

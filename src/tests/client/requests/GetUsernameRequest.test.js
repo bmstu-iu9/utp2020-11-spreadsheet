@@ -22,7 +22,7 @@ describe('GetUsernameRequest', () => {
     assert.strictEqual(request instanceof Request, true);
   });
 
-  describe('#send', () => {
+  describe('#send()', () => {
     it('should return UserModel', () => {
       const username = 'login';
       const isAdmin = false;

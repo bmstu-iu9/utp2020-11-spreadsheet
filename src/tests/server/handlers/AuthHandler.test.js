@@ -23,7 +23,7 @@ describe('AuthHandler', () => {
   afterEach(() => {
     TestEnvironment.destroyInstance();
   });
-  describe('#post', () => {
+  describe('#post()', () => {
     it('should give response 200 and token', () => {
       const user = new UserModel('login', false, '1234567');
       environment.dataRepo.userRepo.save(user);

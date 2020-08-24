@@ -30,7 +30,7 @@ describe('UsernameHandler', () => {
     TestEnvironment.destroyInstance();
   });
 
-  describe('#get', () => {
+  describe('#get()', () => {
     beforeEach(() => {
       app.get('/user/:username', (req, res) => {
         usernameHandler.get(req, res);
@@ -68,7 +68,7 @@ describe('UsernameHandler', () => {
         .expect(404);
     });
   });
-  describe('#patch', () => {
+  describe('#patch()', () => {
     beforeEach(() => {
       app.patch('/user/:username', (req, res) => {
         usernameHandler.patch(req, res);
@@ -143,7 +143,7 @@ describe('UsernameHandler', () => {
         .expect(403);
     });
   });
-  describe('#delete', () => {
+  describe('#delete()', () => {
     beforeEach(() => {
       app.delete('/user/:username', (req, res) => {
         usernameHandler.delete(req, res);

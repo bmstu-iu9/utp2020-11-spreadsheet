@@ -65,7 +65,7 @@ describe('UserModel', () => {
       );
     });
   });
-  describe('#fromJSONtoUsers', () => {
+  describe('#fromJSONtoUsers()', () => {
     it('should transform json answer to array of users', () => {
       const user1 = new UserModel('login1', true);
       const user2 = new UserModel('login2', false);

@@ -25,7 +25,7 @@ describe('UserHandler', () => {
   afterEach(() => {
     TestEnvironment.destroyInstance();
   });
-  describe('#post', () => {
+  describe('#post()', () => {
     it('should give response 200 and user data', () => {
       app.post('/user/post', (req, res) => {
         userHandler.post(req, res);
@@ -80,7 +80,7 @@ describe('UserHandler', () => {
         .expect(400);
     });
   });
-  describe('#get', () => {
+  describe('#get()', () => {
     beforeEach(() => {
       const matcher = new HeaderMatcher('authorization', 'Token ');
       const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
