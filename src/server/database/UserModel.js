@@ -2,10 +2,10 @@ import crypto from 'crypto';
 import FormatError from '../../lib/errors/FormatError.js';
 
 export default class UserModel {
-  constructor(login, isAdmin, password = null) {
+  constructor(login, isAdmin, password) {
     if (UserModel.isLoginCorrect(login)) {
       this.login = login;
-      if (password !== null) {
+      if (password !== undefined) {
         this.setPassword(password);
       }
       this.setIsAdmin(isAdmin);
