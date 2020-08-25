@@ -1,10 +1,10 @@
 import WorkbookSerializer from './WorkbookSerializer.js';
 
 export default class WorkbookIdSerializer {
-  static serialize(workbook, id, lastCommitId) {
-    const normallySerialized = WorkbookSerializer.serialize(workbook);
-    normallySerialized.id = id;
-    normallySerialized.lastCommitId = lastCommitId;
+  static serialize(workbookId) {
+    const normallySerialized = WorkbookSerializer.serialize(workbookId.workbook);
+    normallySerialized.id = workbookId.id;
+    normallySerialized.lastCommitId = workbookId.lastCommitId;
     return normallySerialized;
   }
 }

@@ -5,14 +5,15 @@ import mock from 'mock-fs';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
-import TokenAuthencticator from '../../../server/authorization/TokenAuthenticator.js';
+import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator.js';
 import Authorizer from '../../../server/authorization/Authorizer.js';
 import TestEnvironment from '../database/TestEnvironment.js';
 import WorkbookIdHandler from '../../../server/handlers/WorkbookIdHandler.js';
 import WorkbookModel from '../../../server/database/WorkbookModel.js';
-import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
+import WorkbookId from '../../../lib/spreadsheets/WorkbookId.js';
 import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 import SaveSystem from '../../../server/save/SaveSystem.js';
+import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
 
 describe('WorkbookIdHandler', () => {
   const saveSystem = new SaveSystem('workbooks', 'commits');
@@ -38,7 +39,7 @@ describe('WorkbookIdHandler', () => {
     environment.init();
     const handler = new WorkbookIdHandler(environment.dataRepo, saveSystem);
     const matcher = new HeaderMatcher('authorization', 'Token ');
-    const authenticator = new TokenAuthencticator(matcher, environment.dataRepo);
+    const authenticator = new TokenAuthenticator(matcher, environment.dataRepo);
     const authorizer = new Authorizer(authenticator);
     app = express();
     app.use(authorizer.getMiddleware());
@@ -90,16 +91,17 @@ describe('WorkbookIdHandler', () => {
       createWorkbook();
       createCommits();
       const workbook = saveSystem.workbookLoader.load(1);
-      const workbookId = WorkbookIdSerializer.serialize(
+      const workbookId = new WorkbookId(
         workbook, 1, initialCommits[initialCommits.length - 1].ID,
       );
+      const serialized = WorkbookIdSerializer.serialize(workbookId);
       const { token } = environment.userTokens[0];
       return request(app)
         .get('/1')
         .set('Authorization', `Token ${token.uuid}`)
         .expect(200)
         .then((response) => {
-          assert.deepStrictEqual(response.body, workbookId);
+          assert.deepStrictEqual(response.body, serialized);
         })
         .then(mock.restore);
     });
@@ -203,7 +205,7 @@ describe('WorkbookIdHandler', () => {
         .then(mock.restore);
     });
   });
-  describe('#patch', () => {
+  describe('#patch()', () => {
     const requestBody = {
       lastSynchronizedCommit: zeroID,
       changes: [{

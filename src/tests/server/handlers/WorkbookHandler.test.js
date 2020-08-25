@@ -10,11 +10,12 @@ import TokenAuthenticator from '../../../server/authorization/TokenAuthenticator
 import HeaderMatcher from '../../../server/authorization/HeaderMatcher.js';
 import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
 import { zeroID } from '../../../lib/synchronization/Synchronizer.js';
-import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
 import SaveSystem from '../../../server/save/SaveSystem.js';
 
 const testWorkbook = {
   name: 'test',
+  id: 1,
+  lastCommitId: zeroID,
   spreadsheets: [
     {
       name: 'My Sheet',
@@ -52,7 +53,7 @@ describe('WorkbookHandler', () => {
     app.use(authorizer.getMiddleware());
     const serialized = WorkbookSerializer.serialize(testWorkbook);
     saveSystem.workbookSaver.save(1, serialized);
-    workbookId = WorkbookIdSerializer.serialize(testWorkbook, 1, zeroID);
+    workbookId = testWorkbook;
   });
   afterEach(() => {
     TestEnvironment.destroyInstance();
