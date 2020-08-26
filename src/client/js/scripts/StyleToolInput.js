@@ -29,7 +29,7 @@ export default class StyleToolInput {
           this.apply();
         });
       });
-    } else if (type === 'radio') {
+    } else if (type === 'color') {
       this.button = HTMLelement.querySelector('.tool-button-standard, .tool-button-big, .tool-button-big');
       this.input.addEventListener('input', () => {
         this.button.style.color = this.input.value;
@@ -37,6 +37,15 @@ export default class StyleToolInput {
       });
       this.button.addEventListener('click', () => {
         this.apply();
+      });
+    }
+
+    if (this.isBorder) {
+      this.sideButtons = HTMLelement.querySelector('.side-button');
+      this.sideButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          this.borderSide = button.index;
+        });
       });
     }
   }
@@ -49,10 +58,11 @@ export default class StyleToolInput {
     }
 
     this.selection.reduceAll((cell) => {
-      if (this.isCell) {
+      if (this.isCell || this.style === 'backgroundColor') {
         // eslint-disable-next-line no-param-reassign
         cell.style[this.style] = this.input.value;
-      } else {
+      }
+      if (!this.isCell) {
         // eslint-disable-next-line no-param-reassign
         cell.children[0].style[this.style] = this.input.value;
       }

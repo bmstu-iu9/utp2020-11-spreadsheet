@@ -132,11 +132,28 @@
                     <div class="tool-button-standard content-center base-text" id="button-lowerCase">
                         <span class="iconify" data-inline="false" data-icon="mdi:format-letter-case-lower"></span>
                     </div>
-                    <div class="row">
+                    <div class="row" id="tool-border">
                         <div class="tool-button-standard content-center base-text">
-                            <div id="button-border">
                                 <span class="no-click"><i class="material-icons"
                                                           style="font-size: 20px;">border_style</i></span>
+                        </div>
+                        <div class="drop-down invisible" id="tool-border-dropdown">
+                            <div class="row" style="width: 100%; justify-content: space-between;">
+                                <div class="tool-button-big content-center base-text side-button button-active"></div>
+                                <div class="tool-button-big content-center base-text side-button button-active"></div>
+                                <div class="tool-button-big content-center base-text side-button button-active"></div>
+                                <div class="tool-button-big content-center base-text side-button button-active"></div>
+                            </div>
+                            <div class="row space-around" style="width: 100%;">
+                                <input type="range" min="1", max="10">
+                                <div class="column space-around" style="height: 50px;">
+                                    <div class="tool-button-standard content-center base-text" id="tool-border-solid"></div>
+                                    <div class="tool-button-standard content-center base-text" id="tool-border-dotted"></div>
+                                </div>
+                                <div class="column space-around" style="height: 50px;">
+                                    <div class="tool-button-standard content-center base-text" id="tool-border-dashed"></div>
+                                    <div class="tool-button-standard content-center base-text" id="tool-border-invisible"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="unbar-button unbar-button-standard"></div>
@@ -263,7 +280,7 @@
                     <div class="vertical"></div>
                 </td>
                 <td class="column-header"> L
-                <div class="vertical"></div>
+                    <div class="vertical"></div>
                 </td>
                 <td class="column-header">M
                     <div class="vertical"></div>

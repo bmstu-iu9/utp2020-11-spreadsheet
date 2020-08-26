@@ -3,6 +3,7 @@ import SelectionSquare from './SelectionSquare.js';
 import Table from './Table.js';
 import StyleToolButton from './StyleToolButton.js';
 import StyleToolInput from './StyleToolInput.js';
+import StyleToolBorder from "./StyleToolBorder";
 
 function $(id) {
   return document.getElementById(id);
@@ -110,11 +111,13 @@ function prepareStyleTools(currentSelection) {
 
   const styleToolRadios = new Map();
   ['color', 'backgroundColor'].forEach((style) => {
-    styleToolRadios.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'radio'));
+    styleToolRadios.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'color'));
   });
   ['borderColor'].forEach((style) => {
-    styleToolRadios.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'radio', true));
+    styleToolRadios.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'color', true));
   });
+
+  const borderStyleTool = new StyleToolBorder(currentSelection, $('tool-border'));
 }
 
 function prepare() {

@@ -264,8 +264,37 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   color: #fca311;
 }
 
+div#tool-border-dropdown {
+  padding: 10px;
+  width: 250px;
+  height: 120px;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin: 20px 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+div#tool-border-dropdown input[type='range'] {
+  width: 190px;
+}
+
+div#tool-border-dropdown div.tool-button-big {
+  z-index: 2;
+  background-color: #d9d9d9;
+}
+
+div#tool-border-dropdown div.tool-button-standard {
+  z-index: 2;
+  background-color: #d9d9d9;
+}
+
 div.button-active {
-  color: #fca311;
+  background-color: #fca311 !important;
 }
 
 #button-bold {
@@ -401,15 +430,16 @@ input.cell {
 }
 
 #table td:hover {
-  border: 1px solid #999 !important;
+  border-color: #999 !important;
 }
 
 #table td.selection {
-  border: 1px dashed #999 !important;
+  border-color: #999 !important;
+  border-style: dashed !important;
 }
 
 #table td.selected {
-  border: 1px solid #fca311 !important;
+  border-color: #fca311 !important;
 }
 
 #table td.selected:hover {
