@@ -10,19 +10,14 @@ export default class CellValueRenderer {
 
   activate(row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
-    this.cellInfo.value = cell.childNodes[0].value;
+    this.cellInfo.value = this.workbook.spreadsheets[0].getCell(position).value;
     const cellToChange = cell;
     this.cellInfo.oninput = () => {
-      cellToChange.childNodes[0].value = this.cellInfo.value;
+      const valueType = CellValueRenderer.getCellValueType(this.cellInfo.value);
       this.workbook.spreadsheets[0].setValueInCell(
-        position, valueTypes.string, this.cellInfo.value,
+        position, valueType.type, valueType.value,
       );
-    };
-    cellToChange.oninput = () => {
-      this.cellInfo.value = cell.childNodes[0].value;
-      this.workbook.spreadsheets[0].setValueInCell(
-        position, valueTypes.string, this.cellInfo.value,
-      );
+      cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
     };
   }
 
@@ -31,6 +26,31 @@ export default class CellValueRenderer {
     cellToChange.oninput = null;
     this.cellInfo.oninput = null;
     this.cellInfo.value = '';
+  }
+
+  static getCellValueType(valueString) {
+    if (valueString === 'true' || valueString === 'false') {
+      return {
+        type: valueTypes.boolean,
+        value: valueString === 'true',
+      };
+    }
+    if (valueString.startsWith('=')) {
+      return {
+        type: valueTypes.formula,
+        value: valueString,
+      };
+    }
+    if (Number.isNaN(valueString)) {
+      return {
+        type: valueTypes.number,
+        value: Number.parseFloat(valueString),
+      };
+    }
+    return {
+      type: valueTypes.string,
+      value: valueString,
+    };
   }
 
   setWorkbook(workbook) {
