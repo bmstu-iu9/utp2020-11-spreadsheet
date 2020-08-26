@@ -2,51 +2,64 @@ export default class StyleToolButton {
   constructor(selection, button, func, styleClass) {
     this.selection = selection;
     this.buttonHTML = button;
+    this.style = styleClass;
+    this.func = func;
 
     if (styleClass) {
       this.buttonHTML.addEventListener('click', () => {
-        this.clickClass(styleClass);
+        this.clickClass();
       });
     } else if (func) {
       this.buttonHTML.addEventListener('click', () => {
-        this.clickFunc(func);
+        this.clickFunc();
       });
     }
   }
 
-  drawText(style) {
+  drawText() {
     this.selection.reduceAll((cell) => {
-      cell.children[0].classList.add(style);
+      if (cell.children[0].classList.contains(this.conflict)) {
+        cell.children[0].classList.remove(this.conflict);
+        cell.children[0].classList.add(this.compromiss);
+      } else {
+        cell.children[0].classList.add(this.style);
+      }
     });
   }
 
-  eraseText(style) {
+  eraseText() {
     this.selection.reduceAll((cell) => {
-      cell.children[0].classList.remove(style);
+      if (cell.children[0].classList.contains(this.compromiss)) {
+        cell.children[0].classList.remove(this.compromiss);
+        cell.children[0].classList.add(this.conflict);
+      } else {
+        cell.children[0].classList.remove(this.style);
+      }
     });
   }
 
-  isStyledText(style) {
-    return this.selection.getMainCellInput().classList.contains(style);
+  isStyledText(styles) {
+    let isStyled = false;
+    // eslint-disable-next-line consistent-return
+    styles.forEach((style) => {
+      if (this.selection.getMainCellInput().classList.contains(style)) {
+        isStyled = true;
+      }
+    });
+    return isStyled;
   }
 
-  clickClass(style) {
+  clickClass() {
     // eslint-disable-next-line no-unused-expressions
-    if (this.isStyledText(this.compromiss)) {
-      this.eraseText(this.compromiss);
-      this.drawText(this.conflict);
-    } else if (this.isStyledText(style)) {
-      this.eraseText(style);
-    } else if (this.isStyledText(this.conflict)) {
-      this.eraseText(this.conflict);
-      this.drawText(this.compromiss);
+    if (this.isStyledText([this.style, this.compromiss])) {
+      this.eraseText(this.style, this.conflict, this.compromiss);
     } else {
-      this.drawText(style);
+      this.drawText(this.style);
     }
   }
 
-  clickFunc(func) {
-    this.selection.reduceAll(func);
+  clickFunc() {
+    this.selection.reduceAll(this.func);
   }
 
   setConflict(conflictStyle, compromissStyle) {
