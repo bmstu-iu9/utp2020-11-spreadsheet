@@ -2,7 +2,7 @@ import Selection from './Selection.js';
 import SelectionSquare from './SelectionSquare.js';
 import Table from './Table.js';
 import StyleToolButton from './StyleToolButton.js';
-import StyleToolList from './StyleToolList.js';
+import StyleToolInput from './StyleToolInput.js';
 
 function $(id) {
   return document.getElementById(id);
@@ -20,11 +20,11 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
       if (e.shiftKey) {
         // eslint-disable-next-line no-param-reassign
         currentSelectionSquare = new SelectionSquare(currentSelectionSquare.start,
-            Table.getCellXY(cell), table);
+          Table.getCellXY(cell), table);
       } else if (currentSelection.isEmpty() || e.ctrlKey) {
         // eslint-disable-next-line no-param-reassign
         currentSelectionSquare = new SelectionSquare(Table.getCellXY(cell),
-            Table.getCellXY(cell), table);
+          Table.getCellXY(cell), table);
       }
       currentSelectionSquare.change();
       currentSelection.add(currentSelectionSquare);
@@ -35,7 +35,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
       }
     });
     cell.addEventListener('mouseup', () => {
-      currentSelectionSquare.apply();
+      currentSelection.applyAll();
     });
     cell.addEventListener('dblclick', () => {
       table.focus(cell);
@@ -51,11 +51,11 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
       if (e.shiftKey) {
         // eslint-disable-next-line no-param-reassign
         currentSelectionSquare = new SelectionSquare(currentSelectionSquare.start,
-            [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
+          [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
       } else if (currentSelection.isEmpty() || e.ctrlKey) {
         // eslint-disable-next-line no-param-reassign
         currentSelectionSquare = new SelectionSquare([0, rowHeader.parentNode.rowIndex - 1],
-            [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
+          [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
       }
       currentSelection.add(currentSelectionSquare);
       currentSelectionSquare.apply();
@@ -71,11 +71,11 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
       if (e.shiftKey) {
         // eslint-disable-next-line no-param-reassign
         currentSelectionSquare = new SelectionSquare(currentSelectionSquare.start,
-            [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
+          [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
       } else if (currentSelection.isEmpty() || e.ctrlKey) {
         // eslint-disable-next-line no-param-reassign
         currentSelectionSquare = new SelectionSquare([columnHeader.cellIndex - 1, 0],
-            [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
+          [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
       }
       currentSelection.add(currentSelectionSquare);
       currentSelectionSquare.apply();
@@ -85,13 +85,11 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
 
 function prepareStyleTools(currentSelection) {
   const styleToolButtons = new Map();
-
   ['bold', 'italic', 'underline', 'line-through'].forEach((style) => {
     styleToolButtons.set(style, new StyleToolButton(currentSelection, $(`button-${style}`), false, style));
   });
   styleToolButtons.get('underline').setConflict('line-through', 'underline-line-through');
   styleToolButtons.get('line-through').setConflict('underline', 'underline-line-through');
-
   const upperCaseFunc = (cell) => {
     // eslint-disable-next-line no-param-reassign
     cell.children[0].value = cell.children[0].value.toUpperCase();
@@ -101,14 +99,21 @@ function prepareStyleTools(currentSelection) {
     cell.children[0].value = cell.children[0].value.toLowerCase();
   };
   styleToolButtons.set('upperCase', new StyleToolButton(currentSelection, $('button-upperCase'),
-      (cell) => upperCaseFunc(cell), false));
+    (cell) => upperCaseFunc(cell), false));
   styleToolButtons.set('lowerCase', new StyleToolButton(currentSelection, $('button-lowerCase'),
-      (cell) => lowerCaseFunc(cell), false));
+    (cell) => lowerCaseFunc(cell), false));
 
   const styleToolLists = new Map();
-
   ['fontFamily', 'fontSize'].forEach((style) => {
-    styleToolLists.set(style, new StyleToolList(currentSelection, $(`tool-${style}`), style));
+    styleToolLists.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'list'));
+  });
+
+  const styleToolRadios = new Map();
+  ['color', 'backgroundColor'].forEach((style) => {
+    styleToolRadios.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'radio'));
+  });
+  ['borderColor'].forEach((style) => {
+    styleToolRadios.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'radio', true));
   });
 }
 

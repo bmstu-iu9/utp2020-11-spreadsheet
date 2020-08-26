@@ -8,6 +8,12 @@ export default class Selection {
     this.selectionSquares.push(selectionSquare);
   }
 
+  applyAll(){
+    this.selectionSquares.forEach((selection) => {
+      selection.apply();
+    });
+  }
+
   removeAll() {
     this.selectionSquares.forEach((selection) => {
       selection.remove();
