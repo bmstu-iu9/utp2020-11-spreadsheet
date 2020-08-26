@@ -32,7 +32,7 @@ export default class CellValueRenderer {
     if (valueString === 'true' || valueString === 'false') {
       return {
         type: valueTypes.boolean,
-        value: valueString === 'true',
+        value: (valueString === 'true'),
       };
     }
     if (valueString.startsWith('=')) {
@@ -41,10 +41,11 @@ export default class CellValueRenderer {
         value: valueString,
       };
     }
-    if (Number.isNaN(valueString)) {
+    const parsedNumber = Number.parseFloat(valueString);
+    if (!Number.isNaN(parsedNumber)) {
       return {
         type: valueTypes.number,
-        value: Number.parseFloat(valueString),
+        value: parsedNumber,
       };
     }
     return {

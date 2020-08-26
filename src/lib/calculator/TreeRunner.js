@@ -4,6 +4,7 @@ import BooleanType from '../typevalue/BooleanType.js';
 import FormatError from '../errors/FormatError.js';
 
 const libFunc = new Map([
+  ['boolean', (treeRunner) => new BooleanType(treeRunner.tree[1])],
   ['number', (treeRunner) => new NumberType(treeRunner.tree[1])],
 
   ['string', (treeRunner) => new StringType(treeRunner.tree[1])],
