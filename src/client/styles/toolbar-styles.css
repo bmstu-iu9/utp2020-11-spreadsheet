@@ -1,0 +1,23 @@
+.test {
+  text-decoration: line-through;
+}
+
+input.bold {
+  font-weight: bold;
+}
+
+input.italic {
+  font-style: italic;
+}
+
+input.underline {
+  text-decoration: underline;
+}
+
+input.line-through {
+  text-decoration: line-through;
+}
+
+input.underline-line-through {
+  text-decoration: underline line-through;
+}

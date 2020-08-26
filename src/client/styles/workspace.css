@@ -132,7 +132,41 @@ div#toolbar-color {
 }
 
 div#toolbar-ident {
-  width: 100px;
+  width: 140px;
+}
+
+div.drop-down-list-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+div.drop-down-list {
+  margin-top: 20px;
+  z-index: 1;
+  height: max-content;
+  background-color: white;
+  position: absolute;
+}
+
+div.drop-down-list-wrapper#tool-font div.drop-down-list {
+  width: 150px;
+}
+
+div.drop-down-list-wrapper#tool-fontsize div.drop-down-list {
+  width: 60px;
+}
+
+div.drop-down-list ol {
+  padding: 2px 2px;
+}
+
+div.drop-down-list li {
+  padding: 2px 0;
+  user-select: none;
+}
+
+div.drop-down-list li:hover {
+  background-color: #918f8f;
 }
 
 div.text-input-list {
@@ -145,14 +179,15 @@ div.text-input-list input[type="text"] {
   box-sizing: border-box;
   border: none;
   background-color: white;
+  color: #444c5c;
 }
 
 div.text-input-list input[type="text"]:focus {
   border: none;
 }
 
-div.unbar-button {
-  background-color: #f3f3f3;
+.unbar-button {
+  background-color: #d9d9d9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -162,25 +197,40 @@ div.unbar-button {
   background-position: bottom;
 }
 
-div.unbar-button:hover {
+.unbar-button:hover {
   background-color: #767676;
 }
 
-div.unbar-button-input {
+.unbar-button-input {
   width: 20px;
   height: 20px;
 }
 
-div.unbar-button-standard {
+.unbar-button-standard {
   width: 8px;
   height: 20px;
   align-items: flex-end;
 }
 
-div.unbar-button-big {
+.unbar-button-big {
   width: 15px;
   height: 40px;
   align-items: flex-end;
+}
+
+input[type="color"] {
+  border: 0;
+  outline: none;
+  opacity: 0;
+  width: 15px;
+  height: 40px;
+  position: absolute;
+  margin-left: 40px;
+  padding: 0;
+}
+
+input[type="color"]:hover + div.unbar-button {
+  background-color: #767676;
 }
 
 #input-font {
@@ -195,6 +245,7 @@ div.tool-button-standard {
   background-color: transparent;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 div.tool-button-big {
@@ -210,32 +261,11 @@ div.tool-button-great {
 }
 
 div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great:hover {
-  background-color: #fca311;
+  color: #fca311;
 }
 
-#button-copy {
-  color: #444c5c;
-}
-
-#button-paste {
-  color: #444c5c;
-}
-
-#button-cut {
-  color: #444c5c;
-}
-
-#button-clear {
-  color: #444c5c;
-}
-
-#button-undo {
-  color: #444c5c;
-}
-
-#button-redo {
-  color: #444c5c;
-  font-size: 20px;
+div.button-active {
+  color: #fca311;
 }
 
 #button-bold {
@@ -254,37 +284,25 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   text-decoration: none;
 }
 
-#button-border {
-  width: 15px;
-  height: 15px;
-  box-sizing: border-box;
-  color: #444c5c;
-}
-
 #button-high-reg {
-  color: #444c5c;
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-low-reg {
-  color: #444c5c;
   font-size: 35px;
   font-weight: bold;
 }
 
 #button-text-color {
-  color: #444c5c;
   font-size: 30px;
 }
 
 #button-bg-color {
-  color: #444c5c;
   font-size: 30px;
 }
 
 #button-border-color {
-  color: #444c5c;
   font-size: 30px;
 }
 
@@ -300,26 +318,6 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   background-repeat: no-repeat;
   background-position: center;
   background-size: 30px;
-}
-
-#button-align-left {
-  color: #444c5c;
-}
-
-#button-align-center {
-  color: #444c5c;
-}
-
-#button-align-justify {
-  color: #444c5c;
-}
-
-#button-indent-increase {
-  color: #444c5c;
-}
-
-#button-indent-decrease {
-  color: #444c5c;
 }
 
 #button-sort {
@@ -358,41 +356,19 @@ div#table-wrapper {
 
 #table {
   table-layout: fixed;
-  border-collapse: collapse;
   border: 1px solid #d9d9d9;
-  border-radius: inherit;
-}
-
-#table tr {
-  height: 22px;
+  border-collapse: separate;
 }
 
 #table td {
-  width: 100px;
-  border: 1px solid #d9d9d9;
   box-sizing: border-box;
-  font-family: Lato, sans-serif;
-  font-size: 14px;
-  color: #1f1f1f;
-  font-weight: 400;
   white-space: nowrap;
   cursor: cell;
-}
-
-input.cell {
-  width: 100%;
-  height: 25px;
-  border: 0;
-  padding: 0 5px;
+  border: 1px solid #d9d9d9;
   background-color: #f3f3f3;
-  box-sizing: border-box;
-  outline: none;
-  z-index: 0;
-  cursor: cell;
 }
 
 #table td.column-header, #table td.row-header {
-  padding: 5px 2px;
   position: relative;
   background: #eee;
   font-family: Lato, sans-serif;
@@ -401,28 +377,46 @@ input.cell {
   text-align: center;
   cursor: pointer;
   user-select: none;
+  line-height: 25px;
 }
 
 #table td.header-selected {
   background-color: #fca311;
 }
 
-input.cell:hover {
-  border: 2px solid #999;
-  padding: 0 3px;
+input.cell {
+  width: 100px;
+  min-height: 25px;
+  height: 100%;
+  border: 0;
+  padding: 0 5px;
+  background-color: #f3f3f3;
+  box-sizing: border-box;
+  outline: none;
+  z-index: 0;
+  cursor: cell;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #1f1f1f;
 }
 
-#table td input.selection {
-  border: 1px dashed #999;
-  padding: 0 4px;
+#table td:hover {
+  border: 1px solid #999 !important;
 }
 
-#table td input.selected {
-  border: 1px solid #fca311;
-  padding: 0 4px;
+#table td.selection {
+  border: 1px dashed #999 !important;
 }
 
-#table td input.selected:hover {
+#table td.selected {
+  border: 1px solid #fca311 !important;
+}
+
+#table td.selected:hover {
+  background-color: #d9d9d9;
+}
+
+#table td.selected:hover > input.cell {
   background-color: #d9d9d9;
 }
 
@@ -431,7 +425,7 @@ input.cell:hover {
 }
 
 #table td.column-header {
-  min-width: 100px;
+  height: 25px;
 }
 
 #table tr:nth-child(1) > td:nth-child(1):hover {
