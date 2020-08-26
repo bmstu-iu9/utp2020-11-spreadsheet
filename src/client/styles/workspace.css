@@ -148,11 +148,11 @@ div.drop-down-list {
   position: absolute;
 }
 
-div.drop-down-list-wrapper#tool-font div.drop-down-list {
+div.drop-down-list-wrapper#tool-fontFamily div.drop-down-list {
   width: 150px;
 }
 
-div.drop-down-list-wrapper#tool-fontsize div.drop-down-list {
+div.drop-down-list-wrapper#tool-fontSize div.drop-down-list {
   width: 60px;
 }
 
