@@ -167,4 +167,25 @@ describe('Spreadsheet', () => {
       }, FormatError);
     });
   });
+  describe('getPositionByIndexes', () => {
+    const testCases = [
+      {
+        row: 0,
+        column: 0,
+        ans: 'A1',
+      },
+      {
+        row: 132,
+        column: 27,
+        ans: 'AB133',
+      },
+    ];
+    testCases.forEach((test) => {
+      it(`should return ${test.ans}`, () => {
+        assert.strictEqual(
+          Spreadsheet.getPositionByIndexes(test.row, test.column), test.ans,
+        );
+      });
+    });
+  });
 });
