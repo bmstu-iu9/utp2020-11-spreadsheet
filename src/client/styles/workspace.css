@@ -284,12 +284,12 @@ div.button-active {
   text-decoration: none;
 }
 
-#button-high-reg {
+#button-upperCase {
   font-size: 35px;
   font-weight: bold;
 }
 
-#button-low-reg {
+#button-lowerCase {
   font-size: 35px;
   font-weight: bold;
 }

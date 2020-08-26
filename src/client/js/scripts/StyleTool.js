@@ -2,12 +2,16 @@ export default class StyleToolButton {
   constructor(selection, button, func, styleClass) {
     this.selection = selection;
     this.buttonHTML = button;
-    this.func = func;
-    this.styleClass = styleClass;
 
-    this.buttonHTML.addEventListener('click', () => {
-      this.click(styleClass);
-    });
+    if (styleClass) {
+      this.buttonHTML.addEventListener('click', () => {
+        this.clickClass(styleClass);
+      });
+    } else if (func) {
+      this.buttonHTML.addEventListener('click', () => {
+        this.clickFunc(func);
+      });
+    }
   }
 
   drawText(style) {
@@ -26,7 +30,7 @@ export default class StyleToolButton {
     return this.selection.getMainCellInput().classList.contains(style);
   }
 
-  click(style) {
+  clickClass(style) {
     // eslint-disable-next-line no-unused-expressions
     if (this.isStyledText(this.compromiss)) {
       this.eraseText(this.compromiss);
@@ -39,6 +43,10 @@ export default class StyleToolButton {
     } else {
       this.drawText(style);
     }
+  }
+
+  clickFunc(func) {
+    this.selection.reduceAll(func);
   }
 
   setConflict(conflictStyle, compromissStyle) {
