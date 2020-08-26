@@ -106,20 +106,19 @@ export default class Spreadsheet {
   }
 
   static getPositionByIndexes(row, column) {
-    const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let i = column;
-    let reversedColumn = '';
-    for (;;) {
-      i = Math.floor(i / alpha.length);
-      const cur = i % alpha.length;
-      reversedColumn += alpha[cur];
-      if (i === 0) {
-        break;
-      }
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let reversedColumnString = '';
+    let number = column;
+    let wordsWithNumberCharacters = 1;
+    while (number >= 0) {
+      const currentCharacter = Math.floor(number / wordsWithNumberCharacters) % alphabet.length;
+      reversedColumnString += alphabet[currentCharacter];
+      wordsWithNumberCharacters *= alphabet.length;
+      number -= wordsWithNumberCharacters;
     }
     let columnString = '';
-    for (let j = reversedColumn.length - 1; j >= 0; j -= 1) {
-      columnString += reversedColumn[j];
+    for (let j = reversedColumnString.length - 1; j >= 0; j -= 1) {
+      columnString += reversedColumnString[j];
     }
     return `${columnString}${row + 1}`;
   }

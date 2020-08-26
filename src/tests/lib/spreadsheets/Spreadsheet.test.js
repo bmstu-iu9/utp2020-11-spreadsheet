@@ -175,9 +175,24 @@ describe('Spreadsheet', () => {
         ans: 'A1',
       },
       {
+        row: 0,
+        column: 1,
+        ans: 'B1',
+      },
+      {
         row: 132,
         column: 27,
         ans: 'AB133',
+      },
+      {
+        row: 132,
+        column: 26,
+        ans: 'AA133',
+      },
+      {
+        row: 132,
+        column: 702,
+        ans: 'AAA133',
       },
     ];
     testCases.forEach((test) => {
