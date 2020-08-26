@@ -272,15 +272,15 @@ div.button-active {
   font-weight: normal;
 }
 
-#button-italics {
+#button-italic {
   font-style: normal;
 }
 
-#button-underlined {
+#button-underline {
   text-decoration: none;
 }
 
-#button-stretched {
+#button-line-through {
   text-decoration: none;
 }
 
