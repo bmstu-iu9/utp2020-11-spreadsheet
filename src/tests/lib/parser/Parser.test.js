@@ -32,7 +32,7 @@ describe('Parser', () => {
       assert.deepStrictEqual(new Parser('=1+2+3').run(),
         EW.sum(EW.sum(EW.makeNumber(1), EW.makeNumber(2)), EW.makeNumber(3)));
 
-      assert.deepStrictEqual(new Parser('=(1+5^(1/2))/2').run(),
+      assert.deepStrictEqual(new Parser('= ( 1 + 5 ^ ( 1 / 2 ) ) / 2 ').run(),
         EW.div(EW.sum(EW.makeNumber(1), EW.exp(EW.makeNumber(5),
           EW.div(EW.makeNumber(1), EW.makeNumber(2)))), EW.makeNumber(2)));
       assert.deepStrictEqual(new Parser('=A1').run(), EW.makeAddress('A', 1));
@@ -58,11 +58,11 @@ describe('Parser', () => {
           expression: EW.lessEqual(EW.makeNumber(5), EW.sum(EW.makeNumber(2), EW.makeNumber(2))),
         },
         {
-          inputString: '=5<2+2',
+          inputString: '= 5 < 2 + 2 ',
           expression: EW.less(EW.makeNumber(5), EW.sum(EW.makeNumber(2), EW.makeNumber(2))),
         },
         {
-          inputString: '=5!=2+2',
+          inputString: '= 5 != 2 + 2 ',
           expression: EW.notEqual(EW.makeNumber(5), EW.sum(EW.makeNumber(2), EW.makeNumber(2))),
         },
       ];
@@ -75,7 +75,7 @@ describe('Parser', () => {
         { inputString: '=2<3<4' },
         { inputString: '=2<' },
         { inputString: '=<3' },
-        { inputString: '=2!3' },
+        { inputString: '=2! =3' },
         { inputString: '=2=3' },
       ];
       testCases.forEach((testCase) => {
@@ -87,31 +87,31 @@ describe('Parser', () => {
   });
   describe('#parseExpr()', () => {
     it('should parse valid summarizing functions', () => {
-      assert.deepStrictEqual(new Parser('=2+2').run(), EW.sum(EW.makeNumber(2), EW.makeNumber(2)));
+      assert.deepStrictEqual(new Parser('= 2 + 2 ').run(), EW.sum(EW.makeNumber(2), EW.makeNumber(2)));
     });
     it('should parse valid subtractive functions', () => {
-      assert.deepStrictEqual(new Parser('=2-2').run(), EW.sub(EW.makeNumber(2), EW.makeNumber(2)));
+      assert.deepStrictEqual(new Parser('= 2 - 2 ').run(), EW.sub(EW.makeNumber(2), EW.makeNumber(2)));
     });
   });
   describe('#parseTerm()', () => {
     it('should parse valid multiplying functions', () => {
-      assert.deepStrictEqual(new Parser('=2*2').run(), EW.mul(EW.makeNumber(2), EW.makeNumber(2)));
+      assert.deepStrictEqual(new Parser('= 2 * 2').run(), EW.mul(EW.makeNumber(2), EW.makeNumber(2)));
     });
     it('should parse valid dividing functions', () => {
-      assert.deepStrictEqual(new Parser('=13/27').run(), EW.div(EW.makeNumber(13), EW.makeNumber(27)));
+      assert.deepStrictEqual(new Parser('= 13 / 27').run(), EW.div(EW.makeNumber(13), EW.makeNumber(27)));
     });
     it('should parse valid residual  functions', () => {
-      assert.deepStrictEqual(new Parser('=13%27').run(), EW.rem(EW.makeNumber(13), EW.makeNumber(27)));
+      assert.deepStrictEqual(new Parser('= 13 % 27 ').run(), EW.rem(EW.makeNumber(13), EW.makeNumber(27)));
     });
   });
   describe('#parseFactor()', () => {
     it('should parse valid power functions', () => {
-      assert.deepStrictEqual(new Parser('=2^10').run(), EW.exp(EW.makeNumber(2), EW.makeNumber(10)));
+      assert.deepStrictEqual(new Parser('= 2 ^ 10').run(), EW.exp(EW.makeNumber(2), EW.makeNumber(10)));
     });
   });
   describe('#parsePower() && #parseArgs()', () => {
     it('should parse valid bracket sequence', () => {
-      assert.deepStrictEqual(new Parser('=((((2))+(((2)))))').run(), EW.sum(EW.makeNumber(2), EW.makeNumber(2)));
+      assert.deepStrictEqual(new Parser('=(( ((2)) + ( ((2) ))) )').run(), EW.sum(EW.makeNumber(2), EW.makeNumber(2)));
     });
     it('should parse invalid bracket sequence', () => {
       assert.throws(() => {
@@ -120,13 +120,17 @@ describe('Parser', () => {
     });
     it('should parse valid functions with unary minus', () => {
       assert.deepStrictEqual(new Parser('=-1').run(), EW.unMinus(EW.makeNumber(1)));
-      assert.deepStrictEqual(new Parser('=(-2)^3').run(), EW.exp(EW.unMinus(EW.makeNumber(2)), EW.makeNumber(3)));
-      assert.deepStrictEqual(new Parser('=5*(-5)').run(), EW.mul(EW.makeNumber(5), EW.unMinus(EW.makeNumber(5))));
+      assert.deepStrictEqual(new Parser('= ( -  2  )  ^   3   ').run(), EW.exp(EW.unMinus(EW.makeNumber(2)), EW.makeNumber(3)));
+      assert.deepStrictEqual(new Parser('= 5 * ( - 5 ) ').run(), EW.mul(EW.makeNumber(5), EW.unMinus(EW.makeNumber(5))));
     });
     it('should parse validity function name', () => {
-      assert.deepStrictEqual(new Parser('=СУММА(1;2)').run(), EW.makeFuncWithArgs('СУММА', EW.makeNumber(1), EW.makeNumber(2)));
+      assert.deepStrictEqual(new Parser('= СУММА ( 1  ; 2  ) ').run(), EW.makeFuncWithArgs('СУММА', EW.makeNumber(1), EW.makeNumber(2)));
       assert.deepStrictEqual(new Parser('=КОРЕНЬ(5)').run(), EW.makeFuncWithArgs('КОРЕНЬ', EW.makeNumber(5)));
       assert.deepStrictEqual(new Parser('=ЛЮБЛЮПИСАТЬТЕСТЫ()').run(), EW.makeFunc('ЛЮБЛЮПИСАТЬТЕСТЫ'));
+    });
+    it('should parse validity expression', () => {
+      assert.deepStrictEqual(new Parser('= ФУНК ( 0 ^ 0 ; 2  ) ').run(),
+        EW.makeFuncWithArgs('ФУНК', EW.exp(EW.makeNumber(0), EW.makeNumber(0)), EW.makeNumber(2)));
     });
     it('should parse invalidity function name', () => {
       const testCases = [
