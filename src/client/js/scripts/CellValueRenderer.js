@@ -34,7 +34,11 @@ export default class CellValueRenderer {
   deactivate(row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
     const cellToChange = cell;
-    cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
+    try {
+      cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
+    } catch {
+      cellToChange.childNodes[0].value = 'Error';
+    }
     cellToChange.oninput = null;
     this.cellInfo.oninput = null;
     this.cellInfo.value = '';
