@@ -174,7 +174,7 @@ export default class Parser {
     if (this.hasNext() && (this.get() === '"')) {
       return this.parseStr();
     } if (this.hasNext() && this.get() >= '0' && this.get() <= '9') {
-      return EW.makeNumber(this.parseInt());
+      return EW.makeNumber(this.parseNum());
     } if (this.hasNext() && this.get() >= 'A' && this.get() <= 'Z') {
       const res = this.parseAddress();
       if (this.checkGet(':')) {
@@ -191,16 +191,20 @@ export default class Parser {
       Parser.makeParserError('parseFromTo');
     }
     let res = start;
-    while (this.hasNext() && from <= this.get() && this.get() <= to) {
-      res = func(res, this.get());
+    for (let ind = 0; this.hasNext() && from <= this.get() && this.get() <= to; ind += 1) {
+      res = func(res, this.get(), ind);
       this.next();
     }
     return res;
   }
 
-  // number: [0-9]*
-  parseInt() {
-    return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
+  // number: [0-9]*,[0-9]
+  parseNum() {
+    const left = this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
+    const right = (this.checkGet('.')
+      ? this.parseFromTo('0', '9', (res, c, ind) => res + (toInt(c) - toInt('0')) * 10 ** (-ind - 1), 0)
+      : 0);
+    return left + right;
   }
 
   // nameFunc: [А-Я]*
