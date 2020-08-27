@@ -47,36 +47,20 @@ export default class StyleToolBorder {
       });
     });
 
-    ['solid', 'dotted', 'dashed', 'invisible'].forEach((style) => {
+    ['solid', 'dotted', 'dashed', 'hidden'].forEach((style) => {
       document.getElementById(`tool-border-${style}`).addEventListener('click', () => {
         selection.reduceAll((cell) => {
           if (this.side[0]) {
-            if (style === 'invisible') {
-              cell.style.borderTopColor = '#f3f3f3';
-            } else {
-              cell.style.borderTopStyle = style;
-            }
+            cell.style.borderTopStyle = style;
           }
           if (this.side[1]) {
-            if (style === 'invisible') {
-              cell.style.borderRightCrolor = '#f3f3f3';
-            } else {
-              cell.style.borderRightStyle = style;
-            }
+            cell.style.borderRightStyle = style;
           }
           if (this.side[2]) {
-            if (style === 'invisible') {
-              cell.style.borderBottomColor = '#f3f3f3';
-            } else {
-              cell.style.borderBottomStyle = style;
-            }
+            cell.style.borderBottomStyle = style;
           }
           if (this.side[3]) {
-            if (style === 'invisible') {
-              cell.style.borderLeftColor = '#f3f3f3';
-            } else {
-              cell.style.borderLeftStyle = style;
-            }
+            cell.style.borderLeftStyle = style;
           }
         });
       });

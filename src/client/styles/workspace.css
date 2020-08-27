@@ -294,7 +294,7 @@ div#tool-border-dropdown div.tool-button-standard {
 }
 
 div.button-active {
-  background-color: #fca311 !important;
+  color: #fca311 !important;
 }
 
 #button-bold {
