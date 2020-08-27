@@ -40,7 +40,6 @@ export default class StyleToolButton {
 
   isStyledText(styles) {
     let isStyled = false;
-    // eslint-disable-next-line consistent-return
     styles.forEach((style) => {
       if (this.selection.getMainCellInput().classList.contains(style)) {
         isStyled = true;
@@ -50,7 +49,6 @@ export default class StyleToolButton {
   }
 
   clickClass() {
-    // eslint-disable-next-line no-unused-expressions
     if (this.isStyledText([this.style, this.compromiss])) {
       this.eraseText(this.style, this.conflict, this.compromiss);
     } else {

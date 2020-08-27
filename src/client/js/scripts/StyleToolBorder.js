@@ -33,19 +33,15 @@ export default class StyleToolBorder {
       });
       selection.reduceAll((cell) => {
         if (this.side[0]) {
-          // eslint-disable-next-line no-param-reassign
           cell.style.borderTopWidth = `${this.widthInput.value}px`;
         }
         if (this.side[1]) {
-          // eslint-disable-next-line no-param-reassign
           cell.style.borderRightWidth = `${this.widthInput.value}px`;
         }
         if (this.side[2]) {
-          // eslint-disable-next-line no-param-reassign
           cell.style.borderBottomWidth = `${this.widthInput.value}px`;
         }
         if (this.side[3]) {
-          // eslint-disable-next-line no-param-reassign
           cell.style.borderLeftWidth = `${this.widthInput.value}px`;
         }
       });

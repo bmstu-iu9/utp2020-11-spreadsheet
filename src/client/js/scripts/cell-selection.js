@@ -3,7 +3,7 @@ import SelectionSquare from './SelectionSquare.js';
 import Table from './Table.js';
 import StyleToolButton from './StyleToolButton.js';
 import StyleToolInput from './StyleToolInput.js';
-import StyleToolBorder from "./StyleToolBorder";
+import StyleToolBorder from './StyleToolBorder.js';
 
 function $(id) {
   return document.getElementById(id);
@@ -92,11 +92,9 @@ function prepareStyleTools(currentSelection) {
   styleToolButtons.get('underline').setConflict('line-through', 'underline-line-through');
   styleToolButtons.get('line-through').setConflict('underline', 'underline-line-through');
   const upperCaseFunc = (cell) => {
-    // eslint-disable-next-line no-param-reassign
     cell.children[0].value = cell.children[0].value.toUpperCase();
   };
   const lowerCaseFunc = (cell) => {
-    // eslint-disable-next-line no-param-reassign
     cell.children[0].value = cell.children[0].value.toLowerCase();
   };
   styleToolButtons.set('upperCase', new StyleToolButton(currentSelection, $('button-upperCase'),
@@ -117,6 +115,7 @@ function prepareStyleTools(currentSelection) {
     styleToolRadios.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'color', true));
   });
 
+  // eslint-disable-next-line no-unused-vars
   const borderStyleTool = new StyleToolBorder(currentSelection, $('tool-border'));
 }
 

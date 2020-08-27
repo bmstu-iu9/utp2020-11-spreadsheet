@@ -59,11 +59,9 @@ export default class StyleToolInput {
 
     this.selection.reduceAll((cell) => {
       if (this.isCell || this.style === 'backgroundColor') {
-        // eslint-disable-next-line no-param-reassign
         cell.style[this.style] = this.input.value;
       }
       if (!this.isCell) {
-        // eslint-disable-next-line no-param-reassign
         cell.children[0].style[this.style] = this.input.value;
       }
     });
