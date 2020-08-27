@@ -49,6 +49,9 @@ export default class StyleToolBorder {
 
     ['solid', 'dotted', 'dashed', 'hidden'].forEach((style) => {
       document.getElementById(`tool-border-${style}`).addEventListener('click', () => {
+        this.selection.selectionSquares.forEach((selectionSquare) => {
+          selectionSquare.erase('selected');
+        });
         selection.reduceAll((cell) => {
           if (this.side[0]) {
             cell.style.borderTopStyle = style;

@@ -440,6 +440,7 @@ input.cell {
 
 #table td.selected {
   border-color: #fca311 !important;
+  border-style: solid !important;
 }
 
 #table td.selected:hover {
