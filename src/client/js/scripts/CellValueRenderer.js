@@ -10,8 +10,10 @@ export default class CellValueRenderer {
 
   activate(row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
-    this.cellInfo.value = this.workbook.spreadsheets[0].getCell(position).value;
+    const initialValueString = this.workbook.spreadsheets[0].getCell(position).value;
+    this.cellInfo.value = initialValueString;
     const cellToChange = cell;
+    cellToChange.childNodes[0].value = initialValueString;
     this.cellInfo.oninput = () => {
       const valueType = CellValueRenderer.getCellValueType(this.cellInfo.value);
       this.workbook.spreadsheets[0].setValueInCell(
@@ -19,10 +21,20 @@ export default class CellValueRenderer {
       );
       cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
     };
+    cellToChange.oninput = () => {
+      const valueString = cellToChange.childNodes[0].value;
+      this.cellInfo.value = valueString;
+      const valueType = CellValueRenderer.getCellValueType(valueString);
+      this.workbook.spreadsheets[0].setValueInCell(
+        position, valueType.type, valueType.value,
+      );
+    };
   }
 
-  deactivate(cell) {
+  deactivate(row, column, cell) {
+    const position = Spreadsheet.getPositionByIndexes(row, column);
     const cellToChange = cell;
+    cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
     cellToChange.oninput = null;
     this.cellInfo.oninput = null;
     this.cellInfo.value = '';
