@@ -141,6 +141,30 @@ describe('Parser', () => {
       });
     });
   });
+  describe('#parseNum()', () => {
+    it('should parse valid number', () => {
+      const testCases = [
+        { inputString: '=3.1415926', outputValue: EW.makeNumber(3.1415926) },
+        { inputString: '=-2.71828182', outputValue: EW.unMinus(EW.makeNumber(2.71828182)) },
+        { inputString: '=1.618033988', outputValue: EW.makeNumber(1.618033988) },
+      ];
+      testCases.forEach((testCase) => {
+        assert.deepStrictEqual(new Parser(testCase.inputString).run(), testCase.outputValue);
+      });
+    });
+    it('should parse invalid number', () => {
+      const testCases = [
+        { inputString: '=3.' },
+        { inputString: '=-2."' },
+        { inputString: '=1.g' },
+      ];
+      testCases.forEach((testCase) => {
+        assert.throws(() => {
+          new Parser(testCase.inputString).run();
+        }, FormatError);
+      });
+    });
+  });
   describe('#parseStr()', () => {
     it('should parse valid strings', () => {
       assert.deepStrictEqual(new Parser('="A"+1+":B"+2').run(),
