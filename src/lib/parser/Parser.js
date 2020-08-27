@@ -123,6 +123,9 @@ export default class Parser {
 
   // <_Factor> ::= PowOp <Power> <_Factor> | .
   parseFactorHelper() {
+    while (this.checkGet(' ')) {
+      // skip spaces
+    }
     if (this.checkGet('^')) {
       return EW.exp(this.parsePower(), this.parseFactorHelper());
     }
@@ -131,6 +134,9 @@ export default class Parser {
 
   // <Power> ::= value | (<Expr>) | unaryMinus Power | nameFunc (<Args> .
   parsePower() {
+    while (this.checkGet(' ')) {
+      // skip spaces
+    }
     if (this.checkGet('(')) {
       const res = this.parseExpr();
       if (!this.checkGet(')')) {
@@ -141,6 +147,9 @@ export default class Parser {
       return EW.unMinus(this.parsePower());
     } if (this.hasNext() && this.get() >= 'А' && this.get() <= 'Я') {
       const func = EW.makeFunc(this.parseNameFunc());
+      while (this.checkGet(' ')) {
+        // skip spaces
+      }
       if (!this.checkGet('(')) {
         Parser.makeParserError('parsePower (no argument)');
       }
