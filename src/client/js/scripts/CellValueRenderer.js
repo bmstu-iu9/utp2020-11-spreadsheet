@@ -11,16 +11,9 @@ export default class CellValueRenderer {
   activate(row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
     const initialValueString = this.workbook.spreadsheets[0].getCell(position).value;
-    this.cellInfo.value = initialValueString;
     const cellToChange = cell;
     cellToChange.childNodes[0].value = initialValueString;
-    this.cellInfo.oninput = () => {
-      const valueType = CellValueRenderer.getCellValueType(this.cellInfo.value);
-      this.workbook.spreadsheets[0].setValueInCell(
-        position, valueType.type, valueType.value,
-      );
-      cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
-    };
+    this.syncWithCellInfo(row, column, cellToChange);
     cellToChange.oninput = () => {
       const valueString = cellToChange.childNodes[0].value;
       this.cellInfo.value = valueString;
@@ -31,13 +24,27 @@ export default class CellValueRenderer {
     };
   }
 
+  syncWithCellInfo(row, column, cell) {
+    const position = Spreadsheet.getPositionByIndexes(row, column);
+    const cellToChange = cell;
+    const initialValueString = this.workbook.spreadsheets[0].getCell(position).value;
+    this.cellInfo.value = initialValueString;
+    this.cellInfo.oninput = () => {
+      const valueType = CellValueRenderer.getCellValueType(this.cellInfo.value);
+      this.workbook.spreadsheets[0].setValueInCell(
+        position, valueType.type, valueType.value,
+      );
+      cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
+    };
+  }
+
   deactivate(row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
     const cellToChange = cell;
     try {
       cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
     } catch {
-      cellToChange.childNodes[0].value = 'Error';
+      cellToChange.childNodes[0].value = 'Ошибка';
     }
     cellToChange.oninput = null;
     this.cellInfo.oninput = null;

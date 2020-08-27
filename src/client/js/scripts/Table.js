@@ -40,6 +40,7 @@ export default class Table {
       const cell = this.getCell(this.focusedXY[0], this.focusedXY[1]);
       cell.blur();
       cell.children[0].classList.remove('cursor-text');
+      cell.children[0].blur();
       this.cellValueRenderer.deactivate(this.focusedXY[1], this.focusedXY[0], cell);
       this.focusedXY = false;
     }

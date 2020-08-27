@@ -45,6 +45,8 @@ export default class SelectionSquare {
     this.erase('selection');
     this.draw('selected');
     this.isSelected = true;
+    const cell = this.table.getCell(...this.start);
+    this.table.cellValueRenderer.syncWithCellInfo(this.start[1], this.start[0], cell);
   }
 
   remove() {
