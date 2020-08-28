@@ -167,38 +167,45 @@ describe('Spreadsheet', () => {
       }, FormatError);
     });
   });
-  describe('getPositionByIndexes', () => {
+  describe('getPositionByIndexes && getIndexesByPosition', () => {
     const testCases = [
       {
         row: 0,
         column: 0,
-        ans: 'A1',
+        position: 'A1',
       },
       {
         row: 0,
         column: 1,
-        ans: 'B1',
+        position: 'B1',
       },
       {
         row: 132,
         column: 27,
-        ans: 'AB133',
+        position: 'AB133',
       },
       {
         row: 132,
         column: 26,
-        ans: 'AA133',
+        position: 'AA133',
       },
       {
         row: 132,
         column: 702,
-        ans: 'AAA133',
+        position: 'AAA133',
       },
     ];
     testCases.forEach((test) => {
-      it(`should return ${test.ans}`, () => {
+      it(`should return ${test.position}`, () => {
         assert.strictEqual(
-          Spreadsheet.getPositionByIndexes(test.row, test.column), test.ans,
+          Spreadsheet.getPositionByIndexes(test.row, test.column), test.position,
+        );
+      });
+    });
+    testCases.forEach((test) => {
+      it(`should return [${test.row}, ${test.column}]`, () => {
+        assert.deepStrictEqual(
+          Spreadsheet.getIndexesByPosition(test.position), [test.row, test.column],
         );
       });
     });
