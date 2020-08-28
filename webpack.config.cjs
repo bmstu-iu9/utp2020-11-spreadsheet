@@ -7,6 +7,7 @@ module.exports = {
     'cell-selection': './src/client/js/scripts/cell-selection.js',
     'sign-tabs': './src/client/js/scripts/sign-tabs.js',
     toolbar: './src/client/js/scripts/toolbar.js',
+    'register-page': './src/client/js/scripts/register-page.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

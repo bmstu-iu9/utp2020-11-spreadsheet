@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="sign-form">
-                <form action="">
+                <form action="" id="sign-in">
                     <input type="text" placeholder="LOGIN" id="auth-login">
                     <input type="password" placeholder="PASSWORD" id="auth-pass">
                     <input type="text" style="visibility: hidden;">
@@ -45,10 +45,10 @@
                 </form>
             </div>
             <div class="sign-form">
-                <form action="">
-                    <input type="text" placeholder="LOGIN" id="reg-login">
-                    <input type="password" placeholder="PASSWORD" id="reg-pass">
-                    <input type="password" placeholder="REPEAT PASSWORD" id="reg-pass-repeat">
+                <form action="" id="sign-up">
+                    <input type="text" placeholder="LOGIN" name="username" id="reg-login">
+                    <input type="password" placeholder="PASSWORD" name="password" id="reg-pass">
+                    <input type="password" placeholder="REPEAT PASSWORD" name="repeat-password" id="reg-pass-repeat">
                     <input type="submit" value="SIGN UP">
                 </form>
             </div>
@@ -56,6 +56,7 @@
     </div>
 </div>
 </div>
+<script src="js/scripts/register-page.js"></script>
 <script src="js/scripts/sign-tabs.js"></script>
 </body>
 </html>
