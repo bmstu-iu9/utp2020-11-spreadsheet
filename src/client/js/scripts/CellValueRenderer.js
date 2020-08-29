@@ -8,14 +8,14 @@ export default class CellValueRenderer {
     [this.cellInfo] = document.getElementsByClassName('cell-info');
   }
 
-  activate(tableObj, row, column, cell) {
+  activate(tableObj, row, column) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
+    const cell = tableObj.rows[row + 1].cells[column + 1];
     const initialValueString = this.workbook.spreadsheets[0].getCell(position).value;
-    const cellToChange = cell;
-    cellToChange.childNodes[0].value = initialValueString;
-    this.syncWithCellInfo(tableObj, row, column, cellToChange);
-    cellToChange.oninput = () => {
-      const valueString = cellToChange.childNodes[0].value;
+    cell.childNodes[0].value = initialValueString;
+    this.syncWithCellInfo(tableObj, row, column, cell);
+    cell.oninput = () => {
+      const valueString = cell.childNodes[0].value;
       this.cellInfo.value = valueString;
       const valueType = CellValueRenderer.getCellValueType(valueString);
       this.workbook.spreadsheets[0].setValueInCell(
@@ -24,35 +24,28 @@ export default class CellValueRenderer {
     };
   }
 
-  syncWithCellInfo(tableObj, row, column, cell) {
+  syncWithCellInfo(tableObj, row, column) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
-    const cellToChange = cell;
     const initialValueString = this.workbook.spreadsheets[0].getCell(position).value;
     this.cellInfo.value = initialValueString;
     this.cellInfo.oninput = () => {
       const valueType = CellValueRenderer.getCellValueType(this.cellInfo.value);
-      this.workbook.spreadsheets[0].setValueInCell(
-        position, valueType.type, valueType.value,
-      );
       try {
-        cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
-        this.updateAllDependents(position, tableObj);
-      } catch (err) {
-        cellToChange.childNodes[0].value = 'Ошибка';
+        this.workbook.spreadsheets[0].setValueInCell(
+          position, valueType.type, valueType.value,
+        );
+      } catch {
+        // Should not do anything in case of exception
       }
+      this.updateAllDependents(tableObj, position);
     };
   }
 
-  deactivate(tableObj, row, column, cell) {
+  deactivate(tableObj, row, column) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
-    const cellToChange = cell;
-    try {
-      cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
-      this.updateAllDependents(position, tableObj);
-    } catch (err) {
-      cellToChange.childNodes[0].value = 'Ошибка';
-    }
-    cellToChange.oninput = null;
+    this.updateAllDependents(tableObj, position);
+    const cell = tableObj.rows[row + 1].cells[column + 1];
+    cell.oninput = null;
     this.cellInfo.oninput = null;
     this.cellInfo.value = '';
   }
@@ -83,12 +76,16 @@ export default class CellValueRenderer {
     };
   }
 
-  updateAllDependents(position, tableObj) {
+  updateAllDependents(tableObj, position) {
     const [row, column] = Spreadsheet.getIndexesByPosition(position);
     const cell = tableObj.rows[row + 1].cells[column + 1];
-    cell.childNodes[0].value = this.workbook.getProcessedValue(position, 0).value;
+    try {
+      cell.childNodes[0].value = this.workbook.getProcessedValue(position).value;
+    } catch (err) {
+      cell.childNodes[0].value = 'Ошибка';
+    }
     this.workbook.spreadsheets[0].dependOn.get(position).forEach((pos) => {
-      this.updateAllDependents(pos, tableObj);
+      this.updateAllDependents(tableObj, pos);
     });
   }
 
