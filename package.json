@@ -5,7 +5,7 @@
   "scripts": {
     "server": "node src/server/main/main.js",
     "build": "webpack --config webpack.config.cjs",
-    "stylelint": "stylelint src/client/styles/*.css || true",
+    "stylelint": "stylelint src/client/styles/*.css",
     "eslint": "eslint src",
     "test": "c8 --all mocha --recursive ./src/tests"
   },
