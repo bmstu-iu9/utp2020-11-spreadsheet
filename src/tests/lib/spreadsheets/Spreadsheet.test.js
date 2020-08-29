@@ -166,5 +166,14 @@ describe('Spreadsheet', () => {
           .setValueInCell('A1', valueTypes.formula, '=A08');
       }, FormatError);
     });
+    it('should set needCalc for A2 to true', () => {
+      const workbook = new Workbook('book');
+      workbook.createSpreadsheet('list');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.formula, '=1');
+      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=A1');
+      workbook.getProcessedValue('A2');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.formula, '=2');
+      assert.strictEqual(workbook.spreadsheets[0].cells.get('A2').needCalc, true);
+    });
   });
 });

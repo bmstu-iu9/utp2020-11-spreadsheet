@@ -82,8 +82,8 @@ export default class Spreadsheet {
     });
   }
 
-  updateNeedCalc(address) {
-    if (!this.getCell(address).needCalc) {
+  updateNeedCalc(address, flag = false) {
+    if (!this.getCell(address).needCalc || flag) {
       this.getCell(address).needCalc = true;
       this.dependOn.get(address).forEach((element) => this.updateNeedCalc(element));
     }
@@ -102,6 +102,6 @@ export default class Spreadsheet {
       this.initializeCell(element);
       this.dependOn.get(element).add(position);
     });
-    this.updateNeedCalc(position);
+    this.updateNeedCalc(position, true);
   }
 }
