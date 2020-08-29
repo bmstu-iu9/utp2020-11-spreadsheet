@@ -8,12 +8,12 @@ export default class CellValueRenderer {
     [this.cellInfo] = document.getElementsByClassName('cell-info');
   }
 
-  activate(row, column, cell) {
+  activate(tableObj, row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
     const initialValueString = this.workbook.spreadsheets[0].getCell(position).value;
     const cellToChange = cell;
     cellToChange.childNodes[0].value = initialValueString;
-    this.syncWithCellInfo(row, column, cellToChange);
+    this.syncWithCellInfo(tableObj, row, column, cellToChange);
     cellToChange.oninput = () => {
       const valueString = cellToChange.childNodes[0].value;
       this.cellInfo.value = valueString;
@@ -24,7 +24,7 @@ export default class CellValueRenderer {
     };
   }
 
-  syncWithCellInfo(row, column, cell) {
+  syncWithCellInfo(tableObj, row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
     const cellToChange = cell;
     const initialValueString = this.workbook.spreadsheets[0].getCell(position).value;
@@ -34,16 +34,22 @@ export default class CellValueRenderer {
       this.workbook.spreadsheets[0].setValueInCell(
         position, valueType.type, valueType.value,
       );
-      cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
+      try {
+        cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
+        this.updateAllDependents(position, tableObj);
+      } catch (err) {
+        cellToChange.childNodes[0].value = 'Ошибка';
+      }
     };
   }
 
-  deactivate(row, column, cell) {
+  deactivate(tableObj, row, column, cell) {
     const position = Spreadsheet.getPositionByIndexes(row, column);
     const cellToChange = cell;
     try {
       cellToChange.childNodes[0].value = this.workbook.getProcessedValue(position).value;
-    } catch {
+      this.updateAllDependents(position, tableObj);
+    } catch (err) {
       cellToChange.childNodes[0].value = 'Ошибка';
     }
     cellToChange.oninput = null;
@@ -75,6 +81,15 @@ export default class CellValueRenderer {
       type: valueTypes.string,
       value: valueString,
     };
+  }
+
+  updateAllDependents(position, tableObj) {
+    const [row, column] = Spreadsheet.getIndexesByPosition(position);
+    const cell = tableObj.rows[row + 1].cells[column + 1];
+    cell.childNodes[0].value = this.workbook.getProcessedValue(position, 0).value;
+    this.workbook.spreadsheets[0].dependOn.get(position).forEach((pos) => {
+      this.updateAllDependents(pos, tableObj);
+    });
   }
 
   setWorkbook(workbook) {

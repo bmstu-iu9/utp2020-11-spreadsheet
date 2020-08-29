@@ -32,7 +32,7 @@ export default class Table {
     cell.children[0].focus();
     cell.children[0].classList.add('cursor-text');
     this.focusedXY = Table.getCellXY(cell);
-    this.cellValueRenderer.activate(this.focusedXY[1], this.focusedXY[0], cell);
+    this.cellValueRenderer.activate(this.tableObj, this.focusedXY[1], this.focusedXY[0], cell);
   }
 
   blur() {
@@ -41,7 +41,7 @@ export default class Table {
       cell.blur();
       cell.children[0].classList.remove('cursor-text');
       cell.children[0].blur();
-      this.cellValueRenderer.deactivate(this.focusedXY[1], this.focusedXY[0], cell);
+      this.cellValueRenderer.deactivate(this.table, this.focusedXY[1], this.focusedXY[0], cell);
       this.focusedXY = false;
     }
   }
