@@ -30,7 +30,9 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "serve-favicon": "^2.5.0",
-    "uuid": "^8.2.0"
+    "uuid": "^8.2.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "type": "module",
   "devDependencies": {
@@ -46,8 +48,6 @@
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
     "supertest": "^4.0.2",
-    "util.promisify": "^1.0.1",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "util.promisify": "^1.0.1"
   }
 }
