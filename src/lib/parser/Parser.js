@@ -145,11 +145,12 @@ export default class Parser {
       return res;
     } if (this.checkGet('-')) {
       return EW.unMinus(this.parsePower());
-    } if (this.hasNext() && this.get() >= 'А' && this.get() <= 'Я') {
+    } if (this.hasNext() && ((this.get() >= 'А' && this.get() <= 'Я') || this.get() === 'Ё')) {
       const func = EW.makeFunc(this.parseNameFunc());
       while (this.checkGet(' ')) {
         // skip spaces
       }
+      console.log(this, func);
       if (!this.checkGet('(')) {
         Parser.makeParserError('parsePower (no argument)');
       }
@@ -195,12 +196,13 @@ export default class Parser {
     return Parser.makeParserError('parseValue');
   }
 
-  parseFromTo(from, to, func, start) {
-    if (!(this.hasNext() && from <= this.get() && this.get() <= to)) {
+  parseFromTo(from, to, func, start, check = () => false) {
+    if (!(this.hasNext() && ((from <= this.get() && this.get() <= to) || check()))) {
       Parser.makeParserError('parseFromTo');
     }
     let res = start;
-    for (let ind = 0; this.hasNext() && from <= this.get() && this.get() <= to; ind += 1) {
+    for (let ind = 0; this.hasNext()
+          && ((from <= this.get() && this.get() <= to) || check()); ind += 1) {
       res = func(res, this.get(), ind);
       this.next();
     }
@@ -218,16 +220,18 @@ export default class Parser {
 
   // nameFunc: [А-Я]*
   parseNameFunc() {
-    return this.parseFromTo('А', 'Я', (res, c) => res + c, '');
+    return this.parseFromTo('А', 'Я', (res, c) => res + c, '', () => this.get() === 'Ё');
   }
 
   // address: ($)[A-Z]*($)[0-9]*
   parseAddress() {
-    this.checkGet('$');
+    const flag1 = this.checkGet('$');
     const ind1 = this.parseFromTo('A', 'Z', (res, c) => res + c, '');
-    this.checkGet('$');
+    const pos1 = new Parser(ind1).parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A') + 1, 0) - 1;
+    const flag2 = this.checkGet('$');
     const ind2 = this.parseFromTo('0', '9', (res, c) => res + c, '');
-    return EW.makeAddress(ind1, ind2);
+    const pos2 = new Parser(ind2).parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0) - 1;
+    return EW.makeAddress(ind1, ind2, pos1, pos2, flag1, flag2);
   }
 
   // string: "..."

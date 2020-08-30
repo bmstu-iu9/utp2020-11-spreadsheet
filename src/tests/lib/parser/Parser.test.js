@@ -9,7 +9,7 @@ describe('Parser', () => {
       assert.deepStrictEqual(new Parser('123').run(), EW.makeClearValue('123'));
       assert.deepStrictEqual(new Parser('abd123efg').run(), EW.makeClearValue('abd123efg'));
       assert.deepStrictEqual(new Parser('=1+2+3').run(), EW.sum(EW.sum(EW.makeNumber(1), EW.makeNumber(2)), EW.makeNumber(3)));
-      assert.deepStrictEqual(new Parser('=A1').run(), EW.makeAddress('A', 1));
+      assert.deepStrictEqual(new Parser('=A1').run(), EW.makeAddress('A', 1, 0, 0));
     });
     it('should parse invalid values', () => {
       assert.throws(() => {
@@ -35,7 +35,7 @@ describe('Parser', () => {
       assert.deepStrictEqual(new Parser('= ( 1 + 5 ^ ( 1 / 2 ) ) / 2 ').run(),
         EW.div(EW.sum(EW.makeNumber(1), EW.exp(EW.makeNumber(5),
           EW.div(EW.makeNumber(1), EW.makeNumber(2)))), EW.makeNumber(2)));
-      assert.deepStrictEqual(new Parser('=A1').run(), EW.makeAddress('A', 1));
+      assert.deepStrictEqual(new Parser('=A1').run(), EW.makeAddress('A', 1, 0, 0));
     });
   });
   describe('#parseEquals()', () => {
@@ -206,7 +206,7 @@ describe('Parser', () => {
       });
     });
     it('should parse valid interval', () => {
-      assert.deepStrictEqual(new Parser('=A2:B8').run(), EW.makeInterval(EW.makeAddress('A', 2), EW.makeAddress('B', 8)));
+      assert.deepStrictEqual(new Parser('=A2:B8').run(), EW.makeInterval(EW.makeAddress('A', 2, 0, 1), EW.makeAddress('B', 8, 1, 7)));
     });
     it('should parse invalid interval', () => {
       assert.throws(() => {

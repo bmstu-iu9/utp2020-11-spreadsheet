@@ -5,8 +5,10 @@ import TreeRunner from '../../../lib/calculator/TreeRunner.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Parser from '../../../lib/parser/Parser.js';
 import FormatError from '../../../lib/errors/FormatError.js';
+import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 
 const book = new Workbook('book');
+book.createSpreadsheet('lublu mamu');
 describe('TreeRunner', () => {
   describe('#constructor()', () => {
     it('should make new element', () => {
@@ -258,6 +260,21 @@ describe('TreeRunner', () => {
       parserExpression: '=ЕСЛИ(1==1;1;"string"*2)',
       result: 1,
     },
+    {
+      description: 'should calculate КОРЕНЬ()',
+      parserExpression: '=КОРЕНЬ(4)',
+      result: 2,
+    },
+    {
+      description: 'should calculate СУММА() with number',
+      parserExpression: '=СУММА(1; 2; 3; 4)',
+      result: 10,
+    },
+    {
+      description: 'should calculate ПРОИЗВЕД() with number',
+      parserExpression: '=ПРОИЗВЕД(1; 2; 3; 4)',
+      result: 24,
+    },
     ];
     testCasesWithoutError.forEach((testCase) => {
       it(testCase.description, () => {
@@ -267,6 +284,10 @@ describe('TreeRunner', () => {
       });
     });
     const testCasesWithTypeError = [{
+      description: 'should calculate Interval()',
+      parserExpression: '=A1:B2',
+    },
+    {
       description: 'should throw error in И() because an invalid expression started evaluating',
       parserExpression: '=И(1==1;"string")',
     },
@@ -290,10 +311,31 @@ describe('TreeRunner', () => {
         assert.throws(() => treeRunner.run(), TypeError);
       });
     });
-    it('should throw error in ЕСЛИ() because has zero arguments', () => {
-      const tree = new Parser('=ЕСЛИ()').run();
+    const testCasesWithFormatError = [{
+      description: 'should throw error in ЕСЛИ() because has zero arguments',
+      parserExpression: '=ЕСЛИ()',
+    },
+    {
+      description: 'should calculate КОРЕНЬ() because has two arguments',
+      parserExpression: '=КОРЕНЬ(3; 4)',
+    },
+    ];
+    testCasesWithFormatError.forEach((testCase) => {
+      it(testCase.description, () => {
+        const tree = new Parser(testCase.parserExpression).run();
+        const treeRunner = new TreeRunner(book, 0, tree);
+        assert.throws(() => treeRunner.run(), FormatError);
+      });
+    });
+    it('should calculate СЧЁТ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=СЧЁТ(A1:B4)').run();
       const treeRunner = new TreeRunner(book, 0, tree);
-      assert.throws(() => treeRunner.run(), FormatError);
+      assert.deepStrictEqual(treeRunner.run().value, 3);
     });
   });
 });
