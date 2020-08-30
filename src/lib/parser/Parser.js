@@ -150,7 +150,6 @@ export default class Parser {
       while (this.checkGet(' ')) {
         // skip spaces
       }
-      console.log(this, func);
       if (!this.checkGet('(')) {
         Parser.makeParserError('parsePower (no argument)');
       }

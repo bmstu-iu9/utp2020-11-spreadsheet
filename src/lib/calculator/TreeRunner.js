@@ -19,7 +19,9 @@ const libFunc = new Map([
     treeRunner.constructor.makeTypeError('trying to calculate the Interval');
   }],
 
-  ['Address', (treeRunner) => (Cell.isEmptyCell(treeRunner.tree[1]) ? new NumberType(0)
+  ['Address', (treeRunner) => (Cell.isEmptyCell(treeRunner.book
+    .spreadsheets[treeRunner.page].getCell(treeRunner.tree[1]))
+    ? new NumberType(0)
     : treeRunner.book.getProcessedValue(treeRunner.tree[1], treeRunner.page))],
 
   ['+', (treeRunner) => {
@@ -162,6 +164,8 @@ const libFunc = new Map([
     treeRunner.tree.slice(1).forEach((element) => {
       (element[0] === 'Interval'
         ? new IntervalType(element).getArrayAddresses()
+          .filter((address) => !Cell.isEmptyCell(treeRunner.book
+            .spreadsheets[treeRunner.page].getCell(address[1])))
         : [element])
         .forEach((element2) => {
           res = res.mul(treeRunner.makeTreeRunner(element2).run());
@@ -191,14 +195,10 @@ const libFunc = new Map([
       IntervalType.makeTypeError('СЧЁТЕСЛИ');
     }
     const checkRes = treeRunner.makeTreeRunner(treeRunner.tree[2]).run();
-    let res = new NumberType(0);
-    new IntervalType(treeRunner.tree[1]).getArrayAddresses()
+    const res = new NumberType(new IntervalType(treeRunner.tree[1]).getArrayAddresses()
       .filter((address) => !Cell.isEmptyCell(treeRunner.book
-        .spreadsheets[treeRunner.page].getCell(address[1])
-        && treeRunner.makeTreeRunner(address).run() === checkRes)
-      .forEach((element2) => {
-        res = res.sum(treeRunner.makeTreeRunner(element2).run());
-      });
+        .spreadsheets[treeRunner.page].getCell(address[1]))
+      && treeRunner.makeTreeRunner(address).run().equal(checkRes)).length);
     return res;
   }],
 ]);

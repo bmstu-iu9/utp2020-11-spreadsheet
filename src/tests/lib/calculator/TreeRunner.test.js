@@ -327,6 +327,26 @@ describe('TreeRunner', () => {
         assert.throws(() => treeRunner.run(), FormatError);
       });
     });
+    it('should calculate СУММА()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=СУММА(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 23);
+    });
+    it('should calculate ПРОИЗВЕД()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=ПРОИЗВЕД(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 400);
+    });
     it('should calculate СЧЁТ()', () => {
       book.spreadsheets[0].setCells(new Map([
         ['A1', new Cell(valueTypes.number, 5)],
@@ -336,6 +356,40 @@ describe('TreeRunner', () => {
       const tree = new Parser('=СЧЁТ(A1:B4)').run();
       const treeRunner = new TreeRunner(book, 0, tree);
       assert.deepStrictEqual(treeRunner.run().value, 3);
+    });
+    it('should throw error in СЧЁТ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=СЧЁТ(A1)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.throws(() => treeRunner.run(), TypeError);
+    });
+    it('should calculate СЧЁТЕСЛИ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+        ['A4', new Cell(valueTypes.number, 0)],
+      ]));
+      const tree = new Parser('=СЧЁТЕСЛИ(A1:B4; 0)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 1);
+    });
+    it('should throw error in СЧЁТЕСЛИ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      [{ string: '=СЧЁТЕСЛИ(A1)', errorType: FormatError },
+        { string: '=СЧЁТЕСЛИ(A1; 1)', errorType: TypeError }].forEach((elem) => {
+        const tree = new Parser(elem.string).run();
+        const treeRunner = new TreeRunner(book, 0, tree);
+        assert.throws(() => treeRunner.run(), elem.errorType);
+      });
     });
   });
 });
