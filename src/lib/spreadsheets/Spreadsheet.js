@@ -2,6 +2,8 @@ import { Cell, valueTypes } from './Cell.js';
 import Parser from '../parser/Parser.js';
 import FormatError from '../errors/FormatError.js';
 
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 export default class Spreadsheet {
   constructor(name, cells = new Map()) {
     this.setName(name);
@@ -103,5 +105,46 @@ export default class Spreadsheet {
       this.dependOn.get(element).add(position);
     });
     this.updateNeedCalc(position, true);
+  }
+
+  static getPositionByIndexes(row, column) {
+    let reversedColumnString = '';
+    let number = column;
+    let wordsWithNumberCharacters = 1;
+    while (number >= 0) {
+      const currentCharacter = Math.floor(number / wordsWithNumberCharacters) % alphabet.length;
+      reversedColumnString += alphabet[currentCharacter];
+      wordsWithNumberCharacters *= alphabet.length;
+      number -= wordsWithNumberCharacters;
+    }
+    let columnString = '';
+    for (let j = reversedColumnString.length - 1; j >= 0; j -= 1) {
+      columnString += reversedColumnString[j];
+    }
+    return `${columnString}${row + 1}`;
+  }
+
+  static getIndexesByPosition(position) {
+    let columnString = '';
+    let rowString = '';
+    let parsingColumn = true;
+    for (let i = 0; i < position.length; i += 1) {
+      const cur = alphabet.indexOf(position[i]);
+      if (cur === -1) {
+        parsingColumn = false;
+      }
+      if (parsingColumn) {
+        columnString += position[i];
+      } else {
+        rowString += position[i];
+      }
+    }
+    let column = 0;
+    let alphabetLengthPower = 1;
+    for (let i = columnString.length - 1; i >= 0; i -= 1) {
+      column += alphabetLengthPower * (alphabet.indexOf(columnString[i]) + 1);
+      alphabetLengthPower *= alphabet.length;
+    }
+    return [Number.parseInt(rowString, 10) - 1, column - 1];
   }
 }

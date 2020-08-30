@@ -176,4 +176,47 @@ describe('Spreadsheet', () => {
       assert.strictEqual(workbook.spreadsheets[0].cells.get('A2').needCalc, true);
     });
   });
+  describe('getPositionByIndexes && getIndexesByPosition', () => {
+    const testCases = [
+      {
+        row: 0,
+        column: 0,
+        position: 'A1',
+      },
+      {
+        row: 0,
+        column: 1,
+        position: 'B1',
+      },
+      {
+        row: 132,
+        column: 27,
+        position: 'AB133',
+      },
+      {
+        row: 132,
+        column: 26,
+        position: 'AA133',
+      },
+      {
+        row: 132,
+        column: 702,
+        position: 'AAA133',
+      },
+    ];
+    testCases.forEach((test) => {
+      it(`should return ${test.position}`, () => {
+        assert.strictEqual(
+          Spreadsheet.getPositionByIndexes(test.row, test.column), test.position,
+        );
+      });
+    });
+    testCases.forEach((test) => {
+      it(`should return [${test.row}, ${test.column}]`, () => {
+        assert.deepStrictEqual(
+          Spreadsheet.getIndexesByPosition(test.position), [test.row, test.column],
+        );
+      });
+    });
+  });
 });

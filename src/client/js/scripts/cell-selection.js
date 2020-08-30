@@ -1,12 +1,17 @@
 import Selection from './Selection.js';
+import CellValueRenderer from './CellValueRenderer.js';
 import SelectionSquare from './SelectionSquare.js';
 import Table from './Table.js';
+import Workbook from '../../../lib/spreadsheets/Workbook.js';
+import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 
 function $(id) {
   return document.getElementById(id);
 }
 
-const table = new Table($('table'));
+const workbook = new Workbook('test', [new Spreadsheet('test')]);
+const renderer = new CellValueRenderer(workbook);
+const table = new Table($('table'), renderer);
 const currentSelection = new Selection($('table'));
 let currentSelectionSquare;
 
