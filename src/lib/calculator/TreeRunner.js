@@ -138,12 +138,43 @@ const libFunc = new Map([
     return treeRunner.makeTreeRunner(treeRunner.tree[res1.value ? 2 : 3]).run();
   }],
 
+  ['_НЕ', (treeRunner) => {
+    if (treeRunner.tree.length - 1 !== 1) {
+      treeRunner.constructor.makeFormatError('wrong number arguments in НЕ');
+    }
+    const res = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
+    if (!(res instanceof BooleanType)) {
+      treeRunner.constructor.makeTypeError('wrong type arguments in НЕ');
+    }
+    return new BooleanType(!res.value);
+  }],
+
+  ['_ИСКЛИЛИ', (treeRunner) => {
+    if (treeRunner.tree.length - 1 !== 2) {
+      treeRunner.constructor.makeFormatError('wrong number arguments in ЕСЛИ');
+    }
+    const res1 = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
+    const res2 = treeRunner.makeTreeRunner(treeRunner.tree[2]).run();
+    if (!(res1 instanceof BooleanType && res2 instanceof BooleanType)) {
+      treeRunner.constructor.makeTypeError('wrong type arguments in ЕСЛИ');
+    }
+    return new BooleanType(!(res1.value && res2.value) && (res1.value || res2.value));
+  }],
+
   ['_КОРЕНЬ', (treeRunner) => {
     if (treeRunner.tree.length - 1 !== 1) {
       treeRunner.constructor.makeFormatError('wrong number arguments in КОРЕНЬ');
     }
     const res = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
     return res.exp(new NumberType(1 / 2));
+  }],
+
+  ['_МОД', (treeRunner) => {
+    if (treeRunner.tree.length - 1 !== 1) {
+      treeRunner.constructor.makeFormatError('wrong number arguments in КОРЕНЬ');
+    }
+    const res = treeRunner.makeTreeRunner(treeRunner.tree[1]).run();
+    return res.value > 0 ? res : res.mul(new NumberType(-1));
   }],
 
   ['_СУММА', (treeRunner) => {
@@ -169,6 +200,48 @@ const libFunc = new Map([
         : [element])
         .forEach((element2) => {
           res = res.mul(treeRunner.makeTreeRunner(element2).run());
+        });
+    });
+    return res;
+  }],
+
+  ['_МИН', (treeRunner) => {
+    if (treeRunner.tree.length - 1 < 1) {
+      treeRunner.constructor.makeFormatError('wrong number arguments in МИН');
+    }
+    let res = null;
+    treeRunner.tree.slice(1).forEach((element) => {
+      (element[0] === 'Interval'
+        ? new IntervalType(element).getArrayAddresses()
+          .filter((address) => !Cell.isEmptyCell(treeRunner.book
+            .spreadsheets[treeRunner.page].getCell(address[1])))
+        : [element])
+        .forEach((element2) => {
+          const buf = treeRunner.makeTreeRunner(element2).run();
+          if (res === null || res.greater(buf)) {
+            res = buf;
+          }
+        });
+    });
+    return res;
+  }],
+
+  ['_МАКС', (treeRunner) => {
+    if (treeRunner.tree.length - 1 < 1) {
+      treeRunner.constructor.makeFormatError('wrong number arguments in МАКС');
+    }
+    let res = null;
+    treeRunner.tree.slice(1).forEach((element) => {
+      (element[0] === 'Interval'
+        ? new IntervalType(element).getArrayAddresses()
+          .filter((address) => !Cell.isEmptyCell(treeRunner.book
+            .spreadsheets[treeRunner.page].getCell(address[1])))
+        : [element])
+        .forEach((element2) => {
+          const buf = treeRunner.makeTreeRunner(element2).run();
+          if (res === null || res.less(buf)) {
+            res = buf;
+          }
         });
     });
     return res;

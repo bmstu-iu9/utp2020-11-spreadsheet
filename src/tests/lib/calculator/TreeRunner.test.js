@@ -261,9 +261,29 @@ describe('TreeRunner', () => {
       result: 1,
     },
     {
+      description: 'should calculate НЕ() with treu expression',
+      parserExpression: '=НЕ(1==2)',
+      result: 1 !== 2,
+    },
+    {
+      description: 'should calculate НЕ() with false expression',
+      parserExpression: '=НЕ(1!=2)',
+      result: 1 === 2,
+    },
+    {
+      description: 'should calculate ИСКЛИЛИ()',
+      parserExpression: '=ИСКЛИЛИ(1==1;ИСКЛИЛИ(ИСКЛИЛИ(1!=1;1!=1);ИСКЛИЛИ(1==1;1==1)))',
+      result: true,
+    },
+    {
       description: 'should calculate КОРЕНЬ()',
       parserExpression: '=КОРЕНЬ(4)',
       result: 2,
+    },
+    {
+      description: 'should calculate МОД()',
+      parserExpression: '=МОД(-4) + МОД(4)',
+      result: 8,
     },
     {
       description: 'should calculate СУММА() with number',
@@ -274,6 +294,16 @@ describe('TreeRunner', () => {
       description: 'should calculate ПРОИЗВЕД() with number',
       parserExpression: '=ПРОИЗВЕД(1; 2; 3; 4)',
       result: 24,
+    },
+    {
+      description: 'should calculate МИН() with number',
+      parserExpression: '=МИН(-1; 2; -3; 4)',
+      result: -3,
+    },
+    {
+      description: 'should calculate МАКС() with number',
+      parserExpression: '=МАКС(-1; 2; -3; 4)',
+      result: 4,
     },
     ];
     testCasesWithoutError.forEach((testCase) => {
@@ -303,6 +333,14 @@ describe('TreeRunner', () => {
       description: 'should throw error in ЕСЛИ() because an invalid syntax',
       parserExpression: '=ЕСЛИ(1;2;3)',
     },
+    {
+      description: 'should throw error in НЕ() because an invalid syntax',
+      parserExpression: '=НЕ(1)',
+    },
+    {
+      description: 'should throw error in ИСКЛИЛИ() because an invalid syntax',
+      parserExpression: '=ИСКЛИЛИ(1;1)',
+    },
     ];
     testCasesWithTypeError.forEach((testCase) => {
       it(testCase.description, () => {
@@ -314,6 +352,26 @@ describe('TreeRunner', () => {
     const testCasesWithFormatError = [{
       description: 'should throw error in ЕСЛИ() because has zero arguments',
       parserExpression: '=ЕСЛИ()',
+    },
+    {
+      description: 'should throw error in НЕ() because has zero arguments',
+      parserExpression: '=НЕ()',
+    },
+    {
+      description: 'should throw error in ИСКЛИЛИ() because has zero arguments',
+      parserExpression: '=ИСКЛИЛИ()',
+    },
+    {
+      description: 'should throw error in МОД() because has zero arguments',
+      parserExpression: '=МОД()',
+    },
+    {
+      description: 'should throw error in МИН() because has zero arguments',
+      parserExpression: '=МИН()',
+    },
+    {
+      description: 'should throw error in МАКС() because has zero arguments',
+      parserExpression: '=МАКС()',
     },
     {
       description: 'should calculate КОРЕНЬ() because has two arguments',
@@ -346,6 +404,26 @@ describe('TreeRunner', () => {
       const tree = new Parser('=ПРОИЗВЕД(A1:B4)').run();
       const treeRunner = new TreeRunner(book, 0, tree);
       assert.deepStrictEqual(treeRunner.run().value, 400);
+    });
+    it('should calculate МАКС()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=МАКС(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 10);
+    });
+    it('should calculate МИН()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=МИН(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 5);
     });
     it('should calculate СЧЁТ()', () => {
       book.spreadsheets[0].setCells(new Map([
