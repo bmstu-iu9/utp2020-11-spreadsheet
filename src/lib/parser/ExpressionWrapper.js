@@ -3,8 +3,8 @@ export default class ExpressionWrapper {
     return ['Interval', a1, a2];
   }
 
-  static makeAddress(a1, a2) {
-    return ['Address', a1 + a2];
+  static makeAddress(a1, a2, p1 = NaN, p2 = NaN, f1 = false, f2 = false) {
+    return ['Address', a1 + a2, p1, p2, f1, f2];
   }
 
   static makeClearValue(a) {
