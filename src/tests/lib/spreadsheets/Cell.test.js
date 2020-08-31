@@ -34,6 +34,17 @@ describe('Cell', () => {
       }, TypeError);
     });
   });
+  describe('#isEmptyCell()', () => {
+    it('should return true for new cell', () => {
+      const cell = new Cell();
+      assert.strictEqual(Cell.isEmptyCell(cell), true);
+    });
+    it('should return false for non-empty cell', () => {
+      const cell = new Cell();
+      cell.setValue(valueTypes.string, '123');
+      assert.strictEqual(Cell.isEmptyCell(cell), false);
+    });
+  });
   describe('#setColor()', () => {
     it('should set color to #123456', () => {
       const cell = new Cell();
