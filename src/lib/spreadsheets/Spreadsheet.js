@@ -1,6 +1,7 @@
 import { Cell, valueTypes } from './Cell.js';
 import Parser from '../parser/Parser.js';
 import FormatError from '../errors/FormatError.js';
+import IntervalType from '../typevalue/IntervalType.js';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -76,6 +77,8 @@ export default class Spreadsheet {
   static findAddress(arr, ans) {
     if (arr[0] === 'Address') {
       ans.add(arr[1]);
+    } else if (arr[0] === 'Interval') {
+      new IntervalType(arr).getArrayAddresses().forEach((elem) => ans.add(elem[1]));
     }
     arr.forEach((element) => {
       if (Array.isArray(element)) {
