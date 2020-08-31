@@ -8,7 +8,7 @@ export default class Selection {
     this.selectionSquares.push(selectionSquare);
   }
 
-  applyAll(){
+  applyAll() {
     this.selectionSquares.forEach((selection) => {
       selection.apply();
     });
@@ -37,6 +37,6 @@ export default class Selection {
 
   getMainCellInput() {
     return this.table.getCell(this.selectionSquares[0].start[0],
-      this.selectionSquares[0].start[1]).children[0];
+        this.selectionSquares[0].start[1]).children[0];
   }
 }

@@ -18,9 +18,16 @@ export default class StyleToolButton {
 
   drawText() {
     this.selection.reduceAll((cell) => {
-      if (cell.children[0].classList.contains(this.conflict)) {
-        cell.children[0].classList.remove(this.conflict);
-        cell.children[0].classList.add(this.compromiss);
+      if (this.conflict) {
+        let isConflict = false;
+        this.conflict.forEach((conflictStyle) => {
+          if (cell.children[0].classList.contains(conflictStyle)) {
+            cell.children[0].classList.remove(conflictStyle);
+            isConflict = true;
+          }
+        });
+        // eslint-disable-next-line max-len
+        cell.children[0].classList.add(isConflict && this.compromiss ? this.compromiss : this.style);
       } else {
         cell.children[0].classList.add(this.style);
       }
@@ -29,7 +36,7 @@ export default class StyleToolButton {
 
   eraseText() {
     this.selection.reduceAll((cell) => {
-      if (cell.children[0].classList.contains(this.compromiss)) {
+      if (this.compromiss && cell.children[0].classList.contains(this.compromiss)) {
         cell.children[0].classList.remove(this.compromiss);
         cell.children[0].classList.add(this.conflict);
       } else {
@@ -60,8 +67,8 @@ export default class StyleToolButton {
     this.selection.reduceAll(this.func);
   }
 
-  setConflict(conflictStyle, compromissStyle) {
-    this.conflict = conflictStyle;
+  setConflict(conflictStyles, compromissStyle) {
+    this.conflict = conflictStyles;
     this.compromiss = compromissStyle;
   }
 }
