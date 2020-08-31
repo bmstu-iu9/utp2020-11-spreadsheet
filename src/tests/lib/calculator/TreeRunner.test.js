@@ -261,7 +261,7 @@ describe('TreeRunner', () => {
       result: 1,
     },
     {
-      description: 'should calculate НЕ() with treu expression',
+      description: 'should calculate НЕ() with true expression',
       parserExpression: '=НЕ(1==2)',
       result: 1 !== 2,
     },
