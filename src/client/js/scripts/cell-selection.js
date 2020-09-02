@@ -52,6 +52,11 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
     isStretching = false;
   });
 
+  document.addEventListener('mouseup', (e) => {
+    if (currentSelectionSquare && !currentSelectionSquare.isSelected && !e.target.classList.contains('cell')) {
+      currentSelectionSquare.apply();
+    }
+  });
   // eslint-disable-next-line array-callback-return
   table.reduce((cell) => {
     cell.addEventListener('mousedown', (e) => {
@@ -81,6 +86,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
       if (!currentSelection.isEmpty()) {
         currentSelection.applyAll();
         updateStyleButtons(buttons, lists);
+        document.getElementsByClassName('cell-info')[0].focus();
       }
     });
     cell.addEventListener('dblclick', () => {
