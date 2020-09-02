@@ -2,6 +2,7 @@ export default class Registration {
   constructor(form) {
     this.form = form;
     this.formData = new FormData(form);
+    console.log(this.formData.getAll('username'), 'usernames');
   }
 
   register(request) {
@@ -20,8 +21,10 @@ export default class Registration {
 
   getUsername() {
     if (this.formData.has('username')) {
+      console.log(this.formData.get('username'), ' :username');
       return this.formData.get('username');
     }
+    console.log('empty username');
     return undefined;
   }
 

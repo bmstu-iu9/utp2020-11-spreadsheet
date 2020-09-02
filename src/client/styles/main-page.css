@@ -106,9 +106,9 @@ div.sign-forms-wrapper input[type="submit"]:hover {
 }
 
 div.hide {
-  display: block;
+  display: none;
 }
 
 div.show {
-  display: none;
+  display: block;
 }
