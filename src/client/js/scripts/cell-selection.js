@@ -31,10 +31,10 @@ table.reduce((cell) => {
     }
     if (e.shiftKey) {
       currentSelectionSquare = new SelectionSquare(currentSelectionSquare.start,
-          Table.getCellXY(cell), table);
+        Table.getCellXY(cell), table);
     } else if (currentSelection.isEmpty() || e.ctrlKey) {
       currentSelectionSquare = new SelectionSquare(Table.getCellXY(cell),
-          Table.getCellXY(cell), table);
+        Table.getCellXY(cell), table);
     }
     currentSelectionSquare.change();
     currentSelection.add(currentSelectionSquare);
@@ -60,10 +60,10 @@ table.reduceRowHeaders((rowHeader) => {
     }
     if (e.shiftKey) {
       currentSelectionSquare = new SelectionSquare(currentSelectionSquare.start,
-          [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
+        [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
     } else if (currentSelection.isEmpty() || e.ctrlKey) {
       currentSelectionSquare = new SelectionSquare([0, rowHeader.parentNode.rowIndex - 1],
-          [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
+        [table.getWidth() - 1, rowHeader.parentNode.rowIndex - 1], table);
     }
     currentSelection.add(currentSelectionSquare);
     currentSelectionSquare.apply();
@@ -78,10 +78,10 @@ table.reduceColumnHeaders((columnHeader) => {
     }
     if (e.shiftKey) {
       currentSelectionSquare = new SelectionSquare(currentSelectionSquare.start,
-          [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
+        [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
     } else if (currentSelection.isEmpty() || e.ctrlKey) {
       currentSelectionSquare = new SelectionSquare([columnHeader.cellIndex - 1, 0],
-          [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
+        [columnHeader.cellIndex - 1, table.getHeight() - 1], table);
     }
     currentSelection.add(currentSelectionSquare);
     currentSelectionSquare.apply();
