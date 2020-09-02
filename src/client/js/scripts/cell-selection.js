@@ -22,6 +22,11 @@ function updateStyleButtons(buttons, lists) {
 }
 
 function prepareSelection(table, currentSelection, currentSelectionSquare, buttons, lists) {
+  document.addEventListener('mouseup', (e) => {
+    if (currentSelectionSquare && !currentSelectionSquare.isSelected && !e.target.classList.contains('cell')) {
+      currentSelectionSquare.apply();
+    }
+  });
   // eslint-disable-next-line array-callback-return
   table.reduce((cell) => {
     cell.addEventListener('mousedown', (e) => {
