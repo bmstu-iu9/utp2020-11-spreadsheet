@@ -55,6 +55,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
     cell.addEventListener('mouseup', () => {
       currentSelection.applyAll();
       updateStyleButtons(buttons, lists);
+      document.getElementsByClassName('cell-info')[0].focus();
     });
     cell.addEventListener('dblclick', () => {
       table.focus(cell);
