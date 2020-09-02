@@ -148,11 +148,11 @@ div.drop-down-list {
   position: absolute;
 }
 
-div.drop-down-list-wrapper#tool-font div.drop-down-list {
+div.drop-down-list-wrapper#tool-fontFamily div.drop-down-list {
   width: 150px;
 }
 
-div.drop-down-list-wrapper#tool-fontsize div.drop-down-list {
+div.drop-down-list-wrapper#tool-fontSize div.drop-down-list {
   width: 60px;
 }
 
@@ -264,32 +264,61 @@ div.tool-button-standard:hover, div.tool-button-big:hover, div.tool-button-great
   color: #fca311;
 }
 
+div#tool-border-dropdown {
+  padding: 10px;
+  width: 250px;
+  height: 120px;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin: 20px 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+div#tool-border-dropdown input[type='range'] {
+  width: 190px;
+}
+
+div#tool-border-dropdown div.tool-button-big {
+  z-index: 2;
+  background-color: #d9d9d9;
+}
+
+div#tool-border-dropdown div.tool-button-standard {
+  z-index: 2;
+  background-color: #d9d9d9;
+}
+
 div.button-active {
-  color: #fca311;
+  color: #fca311 !important;
 }
 
 #button-bold {
   font-weight: normal;
 }
 
-#button-italics {
+#button-italic {
   font-style: normal;
 }
 
-#button-underlined {
+#button-underline {
   text-decoration: none;
 }
 
-#button-stretched {
+#button-line-through {
   text-decoration: none;
 }
 
-#button-high-reg {
+#button-upperCase {
   font-size: 35px;
   font-weight: bold;
 }
 
-#button-low-reg {
+#button-lowerCase {
   font-size: 35px;
   font-weight: bold;
 }
@@ -366,6 +395,7 @@ div#table-wrapper {
   cursor: cell;
   border: 1px solid #d9d9d9;
   background-color: #f3f3f3;
+  min-height: 15px;
 }
 
 #table td.column-header, #table td.row-header {
@@ -384,10 +414,11 @@ div#table-wrapper {
   background-color: #fca311;
 }
 
-input.cell {
+textarea.cell {
   width: 100px;
-  min-height: 25px;
-  height: 100%;
+  min-height: 15px;
+  height: 1em;
+  font-size: 13px;
   border: 0;
   padding: 0 5px;
   background-color: #f3f3f3;
@@ -396,27 +427,31 @@ input.cell {
   z-index: 0;
   cursor: cell;
   font-family: Arial, sans-serif;
-  font-size: 13px;
   color: #1f1f1f;
+  resize: none;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 #table td:hover {
-  border: 1px solid #999 !important;
+  border-color: #999 !important;
 }
 
 #table td.selection {
-  border: 1px dashed #999 !important;
+  border-color: #999 !important;
+  border-style: dashed !important;
 }
 
 #table td.selected {
-  border: 1px solid #fca311 !important;
+  border-color: #fca311 !important;
+  border-style: solid !important;
 }
 
 #table td.selected:hover {
   background-color: #d9d9d9;
 }
 
-#table td.selected:hover > input.cell {
+#table td.selected:hover > textarea.cell {
   background-color: #d9d9d9;
 }
 

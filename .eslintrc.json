@@ -25,6 +25,7 @@
             "error",
             "always"
         ],
-        "no-new": "off"
+        "no-new": "off",
+        "no-param-reassign": ["error", {"props": false}]
     }
 }
