@@ -40,6 +40,7 @@ table.reduce((cell) => {
   });
   cell.addEventListener('mouseup', () => {
     currentSelectionSquare.apply();
+    document.getElementsByClassName('cell-info')[0].focus();
   });
   cell.addEventListener('dblclick', () => {
     table.focus(cell);

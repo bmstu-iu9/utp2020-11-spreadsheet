@@ -18,4 +18,9 @@ export default class Selection {
   isEmpty() {
     return this.selectionSquares.length === 0;
   }
+
+  getMainCellInput() {
+    return this.table.getCell(this.selectionSquares[0].start[0],
+      this.selectionSquares[0].start[1]).children[0];
+  }
 }
