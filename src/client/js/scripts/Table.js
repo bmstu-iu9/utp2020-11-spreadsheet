@@ -67,7 +67,7 @@ export default class Table {
     return [cell.cellIndex - 1, cell.parentElement.rowIndex - 1];
   }
 
-  static syncCoordinates(start, end){
+  static syncCoordinates(start, end) {
     const newStart = [Math.min(start[0], end[0]), Math.min(start[1], end[1])];
     const newEnd = [Math.max(start[0], end[0]), Math.max(start[1], end[1])];
     return [newStart, newEnd];
