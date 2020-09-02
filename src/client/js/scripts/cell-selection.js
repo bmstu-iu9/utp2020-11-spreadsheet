@@ -12,7 +12,13 @@ function $(id) {
   return document.getElementById(id);
 }
 
-function prepareSelection(table, currentSelection, currentSelectionSquare) {
+function updateStyleButtons(buttons) {
+  buttons.forEach((button) => {
+    button.buttonHTML.dispatchEvent(new Event('change'));
+  });
+}
+
+function prepareSelection(table, currentSelection, currentSelectionSquare, buttons) {
   // eslint-disable-next-line array-callback-return
   table.reduce((cell) => {
     cell.addEventListener('mousedown', (e) => {
@@ -40,6 +46,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
     });
     cell.addEventListener('mouseup', () => {
       currentSelection.applyAll();
+      updateStyleButtons(buttons);
     });
     cell.addEventListener('dblclick', () => {
       table.focus(cell);
@@ -63,6 +70,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
       }
       currentSelection.add(currentSelectionSquare);
       currentSelectionSquare.apply();
+      updateStyleButtons(buttons);
     });
   });
 
@@ -83,6 +91,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
       }
       currentSelection.add(currentSelectionSquare);
       currentSelectionSquare.apply();
+      updateStyleButtons(buttons);
     });
   });
 }
@@ -95,7 +104,7 @@ function setConflictStyles(buttons) {
   buttons.get('align-center').setConflict(['align-right', 'align-left']);
 }
 
-function prepareStyleTools(currentSelection) {
+function prepareStyleTools(table, currentSelection, currentSelectionSquare) {
   const styleToolButtons = new Map();
   ['bold', 'italic', 'underline', 'line-through', 'align-left', 'align-right', 'align-center'].forEach((style) => {
     styleToolButtons.set(style, new StyleToolButton(currentSelection, $(`button-${style}`), false, style));
@@ -157,6 +166,8 @@ function prepareStyleTools(currentSelection) {
 
   // eslint-disable-next-line no-unused-vars
   const borderStyleTool = new StyleToolBorder(currentSelection, $('tool-border'));
+
+  prepareSelection(table, currentSelection, currentSelectionSquare, styleToolButtons);
 }
 
 function prepare() {
@@ -166,8 +177,7 @@ function prepare() {
   const currentSelection = new Selection(table);
   let currentSelectionSquare;
 
-  prepareSelection(table, currentSelection, currentSelectionSquare);
-  prepareStyleTools(currentSelection);
+  prepareStyleTools(table, currentSelection, currentSelectionSquare);
 }
 
 prepare();

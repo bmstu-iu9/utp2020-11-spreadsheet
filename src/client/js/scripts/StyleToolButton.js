@@ -8,6 +8,16 @@ export default class StyleToolButton {
     if (styleClass) {
       this.buttonHTML.addEventListener('click', () => {
         this.clickClass();
+        this.buttonHTML.dispatchEvent(new Event('change'));
+      });
+      this.buttonHTML.addEventListener('change', () => {
+        console.log(this.compromiss);
+        if (selection.getMainCellInput().classList.contains(this.style)
+            || selection.getMainCellInput().classList.contains(this.compromiss)) {
+          this.buttonHTML.classList.add('button-active');
+        } else {
+          this.buttonHTML.classList.remove('button-active');
+        }
       });
     } else if (func) {
       this.buttonHTML.addEventListener('click', () => {
