@@ -144,14 +144,20 @@ describe('Spreadsheet', () => {
           type: valueTypes.formula,
           value: '=A3*7',
         },
+        {
+          position: 'A5',
+          type: valueTypes.formula,
+          value: '=СУММА(A1:A4)',
+        },
       ];
       testCases.forEach((testCase) => workbook.spreadsheets[0]
         .setValueInCell(testCase.position, testCase.type, testCase.value));
       const checkMapIn = new Map([
-        ['A1', new Set(['A2', 'A3'])],
-        ['A2', new Set(['A3'])],
-        ['A3', new Set(['A4'])],
-        ['A4', new Set()],
+        ['A1', new Set(['A2', 'A3', 'A5'])],
+        ['A2', new Set(['A3', 'A5'])],
+        ['A3', new Set(['A4', 'A5'])],
+        ['A4', new Set(['A5'])],
+        ['A5', new Set()],
       ]);
       assert.deepStrictEqual(workbook.spreadsheets[0].dependOn, checkMapIn);
       const checkMapOut = new Map([
@@ -159,12 +165,65 @@ describe('Spreadsheet', () => {
         ['A2', new Set(['A1'])],
         ['A3', new Set(['A1', 'A2'])],
         ['A4', new Set(['A3'])],
+        ['A5', new Set(['A1', 'A2', 'A3', 'A4'])],
       ]);
       assert.deepStrictEqual(workbook.spreadsheets[0].dependenciesOf, checkMapOut);
       assert.throws(() => {
         workbook.spreadsheets[0]
           .setValueInCell('A1', valueTypes.formula, '=A08');
       }, FormatError);
+    });
+    it('should set needCalc for A2 to true', () => {
+      const workbook = new Workbook('book');
+      workbook.createSpreadsheet('list');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.formula, '=1');
+      workbook.spreadsheets[0].setValueInCell('A2', valueTypes.formula, '=A1');
+      workbook.getProcessedValue('A2');
+      workbook.spreadsheets[0].setValueInCell('A1', valueTypes.formula, '=2');
+      assert.strictEqual(workbook.spreadsheets[0].cells.get('A2').needCalc, true);
+    });
+  });
+  describe('#getPositionByIndexes() && #getIndexesByPosition()', () => {
+    const testCases = [
+      {
+        row: 0,
+        column: 0,
+        position: 'A1',
+      },
+      {
+        row: 0,
+        column: 1,
+        position: 'B1',
+      },
+      {
+        row: 132,
+        column: 27,
+        position: 'AB133',
+      },
+      {
+        row: 132,
+        column: 26,
+        position: 'AA133',
+      },
+      {
+        row: 132,
+        column: 702,
+        position: 'AAA133',
+      },
+    ];
+    testCases.forEach((test) => {
+      it(`should return ${test.position}`, () => {
+        assert.strictEqual(
+          Spreadsheet.getPositionByIndexes(test.row, test.column), test.position,
+        );
+      });
+    });
+    testCases.forEach((test) => {
+      it(`should return [${test.row}, ${test.column}]`, () => {
+        assert.deepStrictEqual(
+          Spreadsheet.getIndexesByPosition(test.position), [test.row, test.column],
+        );
+      });
     });
   });
 });

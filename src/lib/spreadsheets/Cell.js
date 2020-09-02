@@ -33,6 +33,10 @@ export class Cell {
     }
   }
 
+  static isEmptyCell(cell) {
+    return cell.type === valueTypes.string && cell.value === Cell.getDefaultValue(cell.type);
+  }
+
   setColor(color = null) {
     if (color === null) {
       this.color = defaultCellColor;

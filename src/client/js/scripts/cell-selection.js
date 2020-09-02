@@ -1,9 +1,12 @@
 import Selection from './Selection.js';
+import CellValueRenderer from './CellValueRenderer.js';
 import SelectionSquare from './SelectionSquare.js';
 import Table from './Table.js';
 import StyleToolButton from './StyleToolButton.js';
 import StyleToolInput from './StyleToolInput.js';
 import StyleToolBorder from './StyleToolBorder.js';
+import Workbook from '../../../lib/spreadsheets/Workbook.js';
+import Spreadsheet from '../../../lib/spreadsheets/Spreadsheet.js';
 
 function $(id) {
   return document.getElementById(id);
@@ -41,6 +44,29 @@ function prepareSelection(table, currentSelection, currentSelectionSquare) {
     cell.addEventListener('dblclick', () => {
       table.focus(cell);
     });
+const workbook = new Workbook('test', [new Spreadsheet('test')]);
+const renderer = new CellValueRenderer(workbook);
+const table = new Table($('table'), renderer);
+const currentSelection = new Selection($('table'));
+let currentSelectionSquare;
+
+// eslint-disable-next-line array-callback-return
+table.reduce((cell) => {
+  cell.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    table.blur();
+    if (!currentSelection.isEmpty() && !e.ctrlKey) {
+      currentSelection.removeAll();
+    }
+    if (e.shiftKey) {
+      currentSelectionSquare = new SelectionSquare(currentSelectionSquare.start,
+        Table.getCellXY(cell), table);
+    } else if (currentSelection.isEmpty() || e.ctrlKey) {
+      currentSelectionSquare = new SelectionSquare(Table.getCellXY(cell),
+        Table.getCellXY(cell), table);
+    }
+    currentSelectionSquare.change();
+    currentSelection.add(currentSelectionSquare);
   });
 
   table.reduceRowHeaders((rowHeader) => {

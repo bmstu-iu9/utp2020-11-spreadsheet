@@ -5,8 +5,10 @@ import TreeRunner from '../../../lib/calculator/TreeRunner.js';
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
 import Parser from '../../../lib/parser/Parser.js';
 import FormatError from '../../../lib/errors/FormatError.js';
+import { Cell, valueTypes } from '../../../lib/spreadsheets/Cell.js';
 
 const book = new Workbook('book');
+book.createSpreadsheet('lublu mamu');
 describe('TreeRunner', () => {
   describe('#constructor()', () => {
     it('should make new element', () => {
@@ -258,6 +260,51 @@ describe('TreeRunner', () => {
       parserExpression: '=ЕСЛИ(1==1;1;"string"*2)',
       result: 1,
     },
+    {
+      description: 'should calculate НЕ() with true expression',
+      parserExpression: '=НЕ(1==2)',
+      result: 1 !== 2,
+    },
+    {
+      description: 'should calculate НЕ() with false expression',
+      parserExpression: '=НЕ(1!=2)',
+      result: 1 === 2,
+    },
+    {
+      description: 'should calculate ИСКЛИЛИ()',
+      parserExpression: '=ИСКЛИЛИ(1==1;ИСКЛИЛИ(ИСКЛИЛИ(1!=1;1!=1);ИСКЛИЛИ(1==1;1==1)))',
+      result: true,
+    },
+    {
+      description: 'should calculate КОРЕНЬ()',
+      parserExpression: '=КОРЕНЬ(4)',
+      result: 2,
+    },
+    {
+      description: 'should calculate МОД()',
+      parserExpression: '=МОД(-4) + МОД(4)',
+      result: 8,
+    },
+    {
+      description: 'should calculate СУММА() with number',
+      parserExpression: '=СУММА(1; 2; 3; 4)',
+      result: 10,
+    },
+    {
+      description: 'should calculate ПРОИЗВЕД() with number',
+      parserExpression: '=ПРОИЗВЕД(1; 2; 3; 4)',
+      result: 24,
+    },
+    {
+      description: 'should calculate МИН() with number',
+      parserExpression: '=МИН(-1; 2; -3; 4)',
+      result: -3,
+    },
+    {
+      description: 'should calculate МАКС() with number',
+      parserExpression: '=МАКС(-1; 2; -3; 4)',
+      result: 4,
+    },
     ];
     testCasesWithoutError.forEach((testCase) => {
       it(testCase.description, () => {
@@ -267,6 +314,10 @@ describe('TreeRunner', () => {
       });
     });
     const testCasesWithTypeError = [{
+      description: 'should calculate Interval()',
+      parserExpression: '=A1:B2',
+    },
+    {
       description: 'should throw error in И() because an invalid expression started evaluating',
       parserExpression: '=И(1==1;"string")',
     },
@@ -282,6 +333,14 @@ describe('TreeRunner', () => {
       description: 'should throw error in ЕСЛИ() because an invalid syntax',
       parserExpression: '=ЕСЛИ(1;2;3)',
     },
+    {
+      description: 'should throw error in НЕ() because an invalid syntax',
+      parserExpression: '=НЕ(1)',
+    },
+    {
+      description: 'should throw error in ИСКЛИЛИ() because an invalid syntax',
+      parserExpression: '=ИСКЛИЛИ(1;1)',
+    },
     ];
     testCasesWithTypeError.forEach((testCase) => {
       it(testCase.description, () => {
@@ -290,10 +349,125 @@ describe('TreeRunner', () => {
         assert.throws(() => treeRunner.run(), TypeError);
       });
     });
-    it('should throw error in ЕСЛИ() because has zero arguments', () => {
-      const tree = new Parser('=ЕСЛИ()').run();
+    const testCasesWithFormatError = [{
+      description: 'should throw error in ЕСЛИ() because has zero arguments',
+      parserExpression: '=ЕСЛИ()',
+    },
+    {
+      description: 'should throw error in НЕ() because has zero arguments',
+      parserExpression: '=НЕ()',
+    },
+    {
+      description: 'should throw error in ИСКЛИЛИ() because has zero arguments',
+      parserExpression: '=ИСКЛИЛИ()',
+    },
+    {
+      description: 'should throw error in МОД() because has zero arguments',
+      parserExpression: '=МОД()',
+    },
+    {
+      description: 'should throw error in МИН() because has zero arguments',
+      parserExpression: '=МИН()',
+    },
+    {
+      description: 'should throw error in МАКС() because has zero arguments',
+      parserExpression: '=МАКС()',
+    },
+    {
+      description: 'should calculate КОРЕНЬ() because has two arguments',
+      parserExpression: '=КОРЕНЬ(3; 4)',
+    },
+    ];
+    testCasesWithFormatError.forEach((testCase) => {
+      it(testCase.description, () => {
+        const tree = new Parser(testCase.parserExpression).run();
+        const treeRunner = new TreeRunner(book, 0, tree);
+        assert.throws(() => treeRunner.run(), FormatError);
+      });
+    });
+    it('should calculate СУММА()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=СУММА(A1:B4)').run();
       const treeRunner = new TreeRunner(book, 0, tree);
-      assert.throws(() => treeRunner.run(), FormatError);
+      assert.deepStrictEqual(treeRunner.run().value, 23);
+    });
+    it('should calculate ПРОИЗВЕД()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=ПРОИЗВЕД(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 400);
+    });
+    it('should calculate МАКС()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=МАКС(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 10);
+    });
+    it('should calculate МИН()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=МИН(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 5);
+    });
+    it('should calculate СЧЁТ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=СЧЁТ(A1:B4)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 3);
+    });
+    it('should throw error in СЧЁТ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      const tree = new Parser('=СЧЁТ(A1)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.throws(() => treeRunner.run(), TypeError);
+    });
+    it('should calculate СЧЁТЕСЛИ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+        ['A4', new Cell(valueTypes.number, 0)],
+      ]));
+      const tree = new Parser('=СЧЁТЕСЛИ(A1:B4; 0)').run();
+      const treeRunner = new TreeRunner(book, 0, tree);
+      assert.deepStrictEqual(treeRunner.run().value, 1);
+    });
+    it('should throw error in СЧЁТЕСЛИ()', () => {
+      book.spreadsheets[0].setCells(new Map([
+        ['A1', new Cell(valueTypes.number, 5)],
+        ['A2', new Cell(valueTypes.formula, '=A1*2')],
+        ['A3', new Cell(valueTypes.number, 8)],
+      ]));
+      [{ string: '=СЧЁТЕСЛИ(A1)', errorType: FormatError },
+        { string: '=СЧЁТЕСЛИ(A1; 1)', errorType: TypeError }].forEach((elem) => {
+        const tree = new Parser(elem.string).run();
+        const treeRunner = new TreeRunner(book, 0, tree);
+        assert.throws(() => treeRunner.run(), elem.errorType);
+      });
     });
   });
 });

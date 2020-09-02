@@ -1,7 +1,7 @@
 export default class Table {
-  constructor(tableObj) {
+  constructor(tableObj, cellValueRenderer) {
     this.table = tableObj;
-    this.focusedXY = undefined;
+    this.cellValueRenderer = cellValueRenderer;
   }
 
   getHeight() {
@@ -32,12 +32,16 @@ export default class Table {
     cell.children[0].focus();
     cell.children[0].classList.add('cursor-text');
     this.focusedXY = Table.getCellXY(cell);
+    this.cellValueRenderer.activate(this.table, this.focusedXY[1], this.focusedXY[0]);
   }
 
   blur() {
     if (this.focusedXY) {
-      this.getCell(this.focusedXY[0], this.focusedXY[1]).children[0].blur();
-      this.getCell(this.focusedXY[0], this.focusedXY[1]).children[0].classList.remove('cursor-text');
+      const cell = this.getCell(this.focusedXY[0], this.focusedXY[1]);
+      cell.blur();
+      cell.children[0].classList.remove('cursor-text');
+      cell.children[0].blur();
+      this.cellValueRenderer.deactivate(this.table, this.focusedXY[1], this.focusedXY[0]);
       this.focusedXY = false;
     }
   }
