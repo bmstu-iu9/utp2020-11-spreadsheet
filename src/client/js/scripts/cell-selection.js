@@ -12,13 +12,16 @@ function $(id) {
   return document.getElementById(id);
 }
 
-function updateStyleButtons(buttons) {
+function updateStyleButtons(buttons, lists) {
   buttons.forEach((button) => {
     button.buttonHTML.dispatchEvent(new Event('change'));
   });
+  lists.forEach((list) => {
+    list.input.dispatchEvent(new Event('change'));
+  });
 }
 
-function prepareSelection(table, currentSelection, currentSelectionSquare, buttons) {
+function prepareSelection(table, currentSelection, currentSelectionSquare, buttons, lists) {
   // eslint-disable-next-line array-callback-return
   table.reduce((cell) => {
     cell.addEventListener('mousedown', (e) => {
@@ -46,7 +49,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
     });
     cell.addEventListener('mouseup', () => {
       currentSelection.applyAll();
-      updateStyleButtons(buttons);
+      updateStyleButtons(buttons, lists);
     });
     cell.addEventListener('dblclick', () => {
       table.focus(cell);
@@ -70,7 +73,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
       }
       currentSelection.add(currentSelectionSquare);
       currentSelectionSquare.apply();
-      updateStyleButtons(buttons);
+      updateStyleButtons(buttons, lists);
     });
   });
 
@@ -91,7 +94,7 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
       }
       currentSelection.add(currentSelectionSquare);
       currentSelectionSquare.apply();
-      updateStyleButtons(buttons);
+      updateStyleButtons(buttons, lists);
     });
   });
 }
@@ -155,6 +158,8 @@ function prepareStyleTools(table, currentSelection, currentSelectionSquare) {
   ['fontFamily', 'fontSize'].forEach((style) => {
     styleToolLists.set(style, new StyleToolInput(currentSelection, $(`tool-${style}`), style, 'list'));
   });
+  styleToolLists.get('fontFamily').setDefault('Arial');
+  styleToolLists.get('fontSize').setDefault('13px');
 
   const styleToolRadios = new Map();
   ['color', 'backgroundColor'].forEach((style) => {
@@ -167,7 +172,8 @@ function prepareStyleTools(table, currentSelection, currentSelectionSquare) {
   // eslint-disable-next-line no-unused-vars
   const borderStyleTool = new StyleToolBorder(currentSelection, $('tool-border'));
 
-  prepareSelection(table, currentSelection, currentSelectionSquare, styleToolButtons);
+  prepareSelection(table, currentSelection,
+    currentSelectionSquare, styleToolButtons, styleToolLists);
 }
 
 function prepare() {

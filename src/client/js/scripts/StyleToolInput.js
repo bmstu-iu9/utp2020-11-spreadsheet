@@ -22,6 +22,14 @@ export default class StyleToolInput {
         }
       });
 
+      this.input.addEventListener('change', () => {
+        if (this.selection.getMainCellInput().style[this.style]) {
+          this.input.value = this.selection.getMainCellInput().style[this.style];
+        } else {
+          this.input.value = this.defaultValue;
+        }
+      });
+
       this.list.querySelectorAll('li').forEach((item) => {
         item.addEventListener('click', () => {
           this.hideList();
@@ -48,6 +56,10 @@ export default class StyleToolInput {
         });
       });
     }
+  }
+
+  setDefault(def) {
+    this.defaultValue = def;
   }
 
   apply() {

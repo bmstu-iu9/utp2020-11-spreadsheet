@@ -11,7 +11,6 @@ export default class StyleToolButton {
         this.buttonHTML.dispatchEvent(new Event('change'));
       });
       this.buttonHTML.addEventListener('change', () => {
-        console.log(this.compromiss);
         if (selection.getMainCellInput().classList.contains(this.style)
             || selection.getMainCellInput().classList.contains(this.compromiss)) {
           this.buttonHTML.classList.add('button-active');
