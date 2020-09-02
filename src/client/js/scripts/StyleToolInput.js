@@ -2,6 +2,7 @@ export default class StyleToolInput {
   constructor(selection, HTMLelement, style, type, isCell) {
     this.input = HTMLelement.querySelector('input');
     this.unbarButton = HTMLelement.querySelector('div.unbar-button');
+    this.HTMLelement = HTMLelement;
     this.style = style;
     this.selection = selection;
     this.isCell = isCell;
@@ -20,6 +21,10 @@ export default class StyleToolInput {
         if (e.key === 'Enter') {
           this.apply();
         }
+      });
+
+      this.HTMLelement.addEventListener('mouseleave', () => {
+        this.hideList();
       });
 
       this.input.addEventListener('change', () => {

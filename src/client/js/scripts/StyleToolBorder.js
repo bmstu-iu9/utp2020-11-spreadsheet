@@ -1,12 +1,17 @@
 export default class StyleToolBorder {
   constructor(selection, HTMLelement) {
     this.selection = selection;
+    this.HTMLelement = HTMLelement;
     this.button = HTMLelement.querySelector('.tool-button-standard');
     this.dropDown = HTMLelement.querySelector('.drop-down');
     this.unbarButton = HTMLelement.querySelector('.unbar-button');
     this.sideButtons = HTMLelement.querySelectorAll('.side-button');
     this.widthInput = HTMLelement.querySelector('input');
     this.side = [true, true, true, true];
+
+    this.HTMLelement.addEventListener('mouseleave', () => {
+      this.dropDown.classList.add('invisible');
+    });
 
     this.unbarButton.addEventListener('click', () => {
       if (this.dropDown.classList.contains('invisible')) {
