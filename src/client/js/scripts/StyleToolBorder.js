@@ -34,6 +34,23 @@ export default class StyleToolBorder {
       });
     });
 
+    this.button.addEventListener('click', () => {
+      selection.reduceAll((cell) => {
+        if (this.side[0]) {
+          cell.style.borderTopWidth = `${this.widthInput.value}px`;
+        }
+        if (this.side[1]) {
+          cell.style.borderRightWidth = `${this.widthInput.value}px`;
+        }
+        if (this.side[2]) {
+          cell.style.borderBottomWidth = `${this.widthInput.value}px`;
+        }
+        if (this.side[3]) {
+          cell.style.borderLeftWidth = `${this.widthInput.value}px`;
+        }
+      });
+    });
+
     this.widthInput.addEventListener('input', () => {
       this.selection.selectionSquares.forEach((selectionSquare) => {
         selectionSquare.erase('selected');
