@@ -110,7 +110,7 @@ function setConflictStyles(buttons) {
 function prepareStyleTools(table, currentSelection, currentSelectionSquare) {
   const styleToolButtons = new Map();
   ['bold', 'italic', 'underline', 'line-through', 'align-left', 'align-right', 'align-center'].forEach((style) => {
-    styleToolButtons.set(style, new StyleToolButton(currentSelection, $(`button-${style}`), false, style));
+    styleToolButtons.set(style, new StyleToolButton(currentSelection, $(`button-${style}`), false, style, styleToolButtons));
   });
   setConflictStyles(styleToolButtons);
 

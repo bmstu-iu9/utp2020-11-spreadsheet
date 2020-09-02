@@ -1,14 +1,16 @@
 export default class StyleToolButton {
-  constructor(selection, button, func, styleClass) {
+  constructor(selection, buttonHTML, func, styleClass, buttonsList) {
     this.selection = selection;
-    this.buttonHTML = button;
+    this.buttonHTML = buttonHTML;
     this.style = styleClass;
     this.func = func;
 
     if (styleClass) {
       this.buttonHTML.addEventListener('click', () => {
         this.clickClass();
-        this.buttonHTML.dispatchEvent(new Event('change'));
+        buttonsList.forEach((button) => {
+          button.buttonHTML.dispatchEvent(new Event('change'));
+        });
       });
       this.buttonHTML.addEventListener('change', () => {
         if (selection.getMainCellInput().classList.contains(this.style)
