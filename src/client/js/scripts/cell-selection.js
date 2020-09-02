@@ -22,6 +22,36 @@ function updateStyleButtons(buttons, lists) {
 }
 
 function prepareSelection(table, currentSelection, currentSelectionSquare, buttons, lists) {
+  const horizontals = document.querySelectorAll('.vertical-stretch');
+  const verticals = document.querySelectorAll('.horizontal-stretch');
+  let stretchingStart;
+  let stretchingStartSize;
+  let currentStretchedHeader;
+  let isStretching = false;
+
+  verticals.forEach((vertical) => {
+    vertical.addEventListener('mousedown', (e) => {
+      isStretching = true;
+      stretchingStart = e.clientY;
+      // eslint-disable-next-line max-len
+      stretchingStartSize = vertical.parentElement.style.height ? parseFloat(vertical.parentElement.style.height) : 27;
+      currentStretchedHeader = vertical.parentElement;
+    });
+  });
+  horizontals.forEach((horizontal) => {
+    horizontal.addEventListener('mousedown', (e) => {
+      isStretching = true;
+      stretchingStart = e.clientX;
+      // eslint-disable-next-line max-len
+      stretchingStartSize = horizontal.parentElement.style.width ? parseFloat(horizontal.parentElement.style.width) : 102;
+      currentStretchedHeader = horizontal.parentElement;
+    });
+  });
+
+  document.addEventListener('mouseup', () => {
+    isStretching = false;
+  });
+
   document.addEventListener('mouseup', (e) => {
     if (currentSelectionSquare && !currentSelectionSquare.isSelected && !e.target.classList.contains('cell')) {
       currentSelectionSquare.apply();
@@ -53,9 +83,11 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
       }
     });
     cell.addEventListener('mouseup', () => {
-      currentSelection.applyAll();
-      updateStyleButtons(buttons, lists);
-      document.getElementsByClassName('cell-info')[0].focus();
+      if (!currentSelection.isEmpty()) {
+        currentSelection.applyAll();
+        updateStyleButtons(buttons, lists);
+        document.getElementsByClassName('cell-info')[0].focus();
+      }
     });
     cell.addEventListener('dblclick', () => {
       table.focus(cell);
@@ -81,6 +113,12 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
       currentSelectionSquare.apply();
       updateStyleButtons(buttons, lists);
     });
+
+    rowHeader.addEventListener('mousemove', (e) => {
+      if (isStretching) {
+        currentStretchedHeader.style.height = `${stretchingStartSize + e.clientY - stretchingStart}px`;
+      }
+    });
   });
 
   table.reduceColumnHeaders((columnHeader) => {
@@ -101,6 +139,17 @@ function prepareSelection(table, currentSelection, currentSelectionSquare, butto
       currentSelection.add(currentSelectionSquare);
       currentSelectionSquare.apply();
       updateStyleButtons(buttons, lists);
+    });
+
+    columnHeader.addEventListener('mousemove', (e) => {
+      if (isStretching) {
+        currentStretchedHeader.style.width = `${stretchingStartSize + e.clientX - stretchingStart}px`;
+        // eslint-disable-next-line array-callback-return
+        table.reduce((cell) => {
+          cell.children[0].style.width = `${stretchingStartSize + e.clientX - stretchingStart}px`;
+        }, [currentStretchedHeader.cellIndex - 1, 0],
+        [currentStretchedHeader.cellIndex - 1, table.getHeight() - 1]);
+      }
     });
   });
 }

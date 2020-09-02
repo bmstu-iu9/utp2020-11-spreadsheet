@@ -36,7 +36,7 @@ export default class Selection {
   }
 
   getMainCellInput() {
-    return this.table.getCell(this.selectionSquares[0].start[0],
+    return this.isEmpty() ? false : this.table.getCell(this.selectionSquares[0].start[0],
       this.selectionSquares[0].start[1]).children[0];
   }
 }
