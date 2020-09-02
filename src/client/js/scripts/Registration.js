@@ -1,22 +1,30 @@
+import FormatError from '../../../lib/errors/FormatError.js';
+import ConflictError from '../../../lib/errors/ConflictError.js';
+
 export default class Registration {
-  constructor(form) {
+  constructor(form, resultHolder) {
     this.form = form;
     this.formData = new FormData(form);
-    console.log(this.formData.getAll('username'), 'usernames');
+    this.resultHolder = resultHolder;
   }
 
   register(request) {
     try {
-      this.validateData(this.formData);
+      this.validateData();
       request.send(this.getUsername(), this.getPassword());
     } catch (e) {
-      this.errorHandler();
+      this.errorHandler(e);
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  errorHandler() {
-    // todo
+  errorHandler(error) {
+    if (error === FormatError) {
+      this.resultHolder.textContent = 'Некорректный формат данных';
+    } else if (error === ConflictError) {
+      this.resultHolder.textContent = 'Логин уже занят';
+    }
+    this.resultHolder.classList.remove('hide');
+    console.log(' show');
   }
 
   getUsername() {

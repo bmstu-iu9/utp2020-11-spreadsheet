@@ -5,7 +5,7 @@ import Registration from './Registration.js';
 const authorizer = new FakeRequestAuthorizer();
 const request = new PostUserRequest('http://localhost:3000', authorizer);
 const form = document.getElementById('regForm');
-const registration = new Registration(form);
+const registration = new Registration(form, document.getElementById('resultText'));
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   registration.register(request);
