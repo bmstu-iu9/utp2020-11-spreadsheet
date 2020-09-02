@@ -1,5 +1,4 @@
 import FormatError from '../../../lib/errors/FormatError.js';
-import ConflictError from '../../../lib/errors/ConflictError.js';
 
 export default class Registration {
   constructor(form, resultHolder) {
@@ -18,9 +17,11 @@ export default class Registration {
   }
 
   errorHandler(error) {
-    if (error === FormatError) {
+    if (error.name === 'FormatError' || error.message === 'Wrong second password') {
+      this.resultHolder.textContent = 'Два пароля не совпадают';
+    } else if (error.name === 'FormatError') {
       this.resultHolder.textContent = 'Некорректный формат данных';
-    } else if (error === ConflictError) {
+    } else if (error.name === 'ConflictError') {
       this.resultHolder.textContent = 'Логин уже занят';
     }
     this.resultHolder.classList.remove('hide');
@@ -43,8 +44,9 @@ export default class Registration {
     return undefined;
   }
 
-  // eslint-disable-next-line no-unused-vars,class-methods-use-this
-  validateData(formData) {
-    // todo
+  validateData() {
+    if (this.getPassword() !== this.formData.get('repeat-password')) {
+      throw new FormatError('Wrong second password');
+    }
   }
 }
