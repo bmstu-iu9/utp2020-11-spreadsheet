@@ -18,6 +18,6 @@ div.hide {
   display: block;
 }
 
-input.cursor-text {
+textarea.cursor-text {
   cursor: text;
 }

@@ -2,22 +2,38 @@
   text-decoration: line-through;
 }
 
-input.bold {
+.bold {
   font-weight: bold;
 }
 
-input.italic {
+.italic {
   font-style: italic;
 }
 
-input.underline {
+.underline {
   text-decoration: underline;
 }
 
-input.line-through {
+.line-through {
   text-decoration: line-through;
 }
 
-input.underline-line-through {
+.underline-line-through {
   text-decoration: underline line-through;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-justify {
+  text-align: justify;
 }

@@ -46,7 +46,8 @@ export default class Table {
     }
   }
 
-  reduce(func, start = [0, 0], end = [this.getWidth() - 1, this.getHeight() - 1]) {
+  reduce(func, firstPoint = [0, 0], secondPoint = [this.getWidth() - 1, this.getHeight() - 1]) {
+    const [start, end] = Table.syncCoordinates(firstPoint, secondPoint);
     for (let i = start[1]; i <= end[1]; i += 1) {
       for (let j = start[0]; j <= end[0]; j += 1) {
         func(this.getCell(j, i));
@@ -68,5 +69,11 @@ export default class Table {
 
   static getCellXY(cell) {
     return [cell.cellIndex - 1, cell.parentElement.rowIndex - 1];
+  }
+
+  static syncCoordinates(start, end) {
+    const newStart = [Math.min(start[0], end[0]), Math.min(start[1], end[1])];
+    const newEnd = [Math.max(start[0], end[0]), Math.max(start[1], end[1])];
+    return [newStart, newEnd];
   }
 }
