@@ -9,8 +9,10 @@ export default class StyleToolBorder {
     this.widthInput = HTMLelement.querySelector('input');
     this.side = [true, true, true, true];
 
-    this.HTMLelement.addEventListener('mouseleave', () => {
-      this.dropDown.classList.add('invisible');
+    document.addEventListener('mouseup', (e) => {
+      if (!this.HTMLelement.contains(e.target)) {
+        this.dropDown.classList.add('invisible');
+      }
     });
 
     this.unbarButton.addEventListener('click', () => {
