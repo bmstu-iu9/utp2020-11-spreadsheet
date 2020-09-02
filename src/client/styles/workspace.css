@@ -408,6 +408,7 @@ div#table-wrapper {
   cursor: pointer;
   user-select: none;
   line-height: 25px;
+  height: 15px;
 }
 
 #table td.header-selected {
@@ -459,10 +460,6 @@ textarea.cell {
   min-width: 70px;
 }
 
-#table td.column-header {
-  height: 25px;
-}
-
 #table tr:nth-child(1) > td:nth-child(1):hover {
   background-color: inherit;
   cursor: inherit;
@@ -484,7 +481,7 @@ textarea.cell {
   bottom: 2px;
 }
 
-.vertical {
+.vertical-stretch {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -492,18 +489,18 @@ textarea.cell {
   width: 6px;
 }
 
-.vertical:hover {
+.vertical-stretch:hover {
   cursor: col-resize;
 }
 
-.horizontal {
+.horizontal-stretch {
   position: absolute;
   right: 0;
   left: 0;
   bottom: -3px;
-  height: 6px;
+  height: 10px;
 }
 
-.horizontal:hover {
+.horizontal-stretch:hover {
   cursor: row-resize;
 }
