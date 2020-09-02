@@ -395,6 +395,7 @@ div#table-wrapper {
   cursor: cell;
   border: 1px solid #d9d9d9;
   background-color: #f3f3f3;
+  min-height: 15px;
 }
 
 #table td.column-header, #table td.row-header {
@@ -415,8 +416,9 @@ div#table-wrapper {
 
 textarea.cell {
   width: 100px;
-  min-height: 25px;
-  height: 100%;
+  min-height: 15px;
+  height: 1em;
+  font-size: 13px;
   border: 0;
   padding: 0 5px;
   background-color: #f3f3f3;
@@ -425,7 +427,6 @@ textarea.cell {
   z-index: 0;
   cursor: cell;
   font-family: Arial, sans-serif;
-  font-size: 13px;
   color: #1f1f1f;
   resize: none;
   white-space: nowrap;
