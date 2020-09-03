@@ -3,7 +3,6 @@ import * as assert from 'assert';
 import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
 import Request from '../../../client/js/requests/Request.js';
 import PostUserRequest from '../../../client/js/requests/PostUserRequest.js';
-import UserModel from '../../../server/database/UserModel.js';
 
 describe('PostUserRequest', () => {
   const baseUrl = '/';
@@ -34,8 +33,7 @@ describe('PostUserRequest', () => {
             JSON.stringify({ isAdmin: false, username }));
         };
       };
-      const result = request.send(username, password);
-      assert.deepStrictEqual(result, new UserModel(username, false));
+      request.send(username, password);
     });
   });
 });
