@@ -15,4 +15,13 @@ export default class RegisterPageErrorHandler {
     }
     this.resultHolder.classList.remove('hide');
   }
+
+  authorizeHandle(error) {
+    if (error.name === 'ForbiddenError') {
+      this.resultHolder.textContent = 'Неверный логин или пароль';
+    } else {
+      this.resultHolder.textContent = 'Неизвестная ошибка';
+    }
+    this.resultHolder.classList.remove('hide');
+  }
 }
