@@ -60,6 +60,10 @@ div.content {
   align-items: center;
 }
 
+.space-around {
+  justify-content: space-around;
+}
+
 span.content-center {
   text-align: center;
 }

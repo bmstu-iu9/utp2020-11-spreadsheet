@@ -2,10 +2,11 @@
   "name": "unitables",
   "version": "1.0.0",
   "description": "Online spreadsheets with the opportunity to merge tables",
-  "main": "index.js",
   "scripts": {
-    "run": "node src/server/main/main.js",
-    "stylelint": "stylelint src/client/styles/*.css || true",
+    "server": "node src/server/main/main.js",
+    "build": "webpack --config webpack.config.cjs",
+    "stylelint": "stylelint src/client/styles/*.css",
+    "eslint": "eslint src",
     "test": "c8 --all mocha --recursive ./src/tests"
   },
   "repository": {
@@ -29,11 +30,14 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "serve-favicon": "^2.5.0",
-    "uuid": "^8.2.0"
+    "uuid": "^8.2.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "type": "module",
   "devDependencies": {
     "c8": "^7.2.1",
+    "copy-webpack-plugin": "^6.0.3",
     "eslint": "^7.4.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
@@ -43,6 +47,7 @@
     "sinon": "^9.0.2",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
+    "supertest": "^4.0.2",
     "util.promisify": "^1.0.1"
   }
 }

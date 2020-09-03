@@ -14,7 +14,8 @@
       "id": "41c23854-8c6b-40a7-b8fa-2a2b794ce034",
       "changeType": "color",
       "cellAddress": "A1",
-      "color": "#aaaaaa"
+      "color": "#aaaaaa",
+      "page": 2
     }
   ]
 }

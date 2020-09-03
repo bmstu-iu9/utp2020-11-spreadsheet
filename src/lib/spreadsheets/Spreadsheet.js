@@ -1,6 +1,9 @@
 import { Cell, valueTypes } from './Cell.js';
 import Parser from '../parser/Parser.js';
 import FormatError from '../errors/FormatError.js';
+import IntervalType from '../typevalue/IntervalType.js';
+
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export default class Spreadsheet {
   constructor(name, cells = new Map()) {
@@ -74,6 +77,8 @@ export default class Spreadsheet {
   static findAddress(arr, ans) {
     if (arr[0] === 'Address') {
       ans.add(arr[1]);
+    } else if (arr[0] === 'Interval') {
+      new IntervalType(arr).getArrayAddresses().forEach((elem) => ans.add(elem[1]));
     }
     arr.forEach((element) => {
       if (Array.isArray(element)) {
@@ -82,8 +87,8 @@ export default class Spreadsheet {
     });
   }
 
-  updateNeedCalc(address) {
-    if (!this.getCell(address).needCalc) {
+  updateNeedCalc(address, flag = false) {
+    if (!this.getCell(address).needCalc || flag) {
       this.getCell(address).needCalc = true;
       this.dependOn.get(address).forEach((element) => this.updateNeedCalc(element));
     }
@@ -102,6 +107,47 @@ export default class Spreadsheet {
       this.initializeCell(element);
       this.dependOn.get(element).add(position);
     });
-    this.updateNeedCalc(position);
+    this.updateNeedCalc(position, true);
+  }
+
+  static getPositionByIndexes(row, column) {
+    let reversedColumnString = '';
+    let number = column;
+    let wordsWithNumberCharacters = 1;
+    while (number >= 0) {
+      const currentCharacter = Math.floor(number / wordsWithNumberCharacters) % alphabet.length;
+      reversedColumnString += alphabet[currentCharacter];
+      wordsWithNumberCharacters *= alphabet.length;
+      number -= wordsWithNumberCharacters;
+    }
+    let columnString = '';
+    for (let j = reversedColumnString.length - 1; j >= 0; j -= 1) {
+      columnString += reversedColumnString[j];
+    }
+    return `${columnString}${row + 1}`;
+  }
+
+  static getIndexesByPosition(position) {
+    let columnString = '';
+    let rowString = '';
+    let parsingColumn = true;
+    for (let i = 0; i < position.length; i += 1) {
+      const cur = alphabet.indexOf(position[i]);
+      if (cur === -1) {
+        parsingColumn = false;
+      }
+      if (parsingColumn) {
+        columnString += position[i];
+      } else {
+        rowString += position[i];
+      }
+    }
+    let column = 0;
+    let alphabetLengthPower = 1;
+    for (let i = columnString.length - 1; i >= 0; i -= 1) {
+      column += alphabetLengthPower * (alphabet.indexOf(columnString[i]) + 1);
+      alphabetLengthPower *= alphabet.length;
+    }
+    return [Number.parseInt(rowString, 10) - 1, column - 1];
   }
 }

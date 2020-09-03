@@ -123,6 +123,9 @@ export default class Parser {
 
   // <_Factor> ::= PowOp <Power> <_Factor> | .
   parseFactorHelper() {
+    while (this.checkGet(' ')) {
+      // skip spaces
+    }
     if (this.checkGet('^')) {
       return EW.exp(this.parsePower(), this.parseFactorHelper());
     }
@@ -131,6 +134,9 @@ export default class Parser {
 
   // <Power> ::= value | (<Expr>) | unaryMinus Power | nameFunc (<Args> .
   parsePower() {
+    while (this.checkGet(' ')) {
+      // skip spaces
+    }
     if (this.checkGet('(')) {
       const res = this.parseExpr();
       if (!this.checkGet(')')) {
@@ -139,8 +145,11 @@ export default class Parser {
       return res;
     } if (this.checkGet('-')) {
       return EW.unMinus(this.parsePower());
-    } if (this.hasNext() && this.get() >= 'А' && this.get() <= 'Я') {
+    } if (this.hasNext() && ((this.get() >= 'А' && this.get() <= 'Я') || this.get() === 'Ё')) {
       const func = EW.makeFunc(this.parseNameFunc());
+      while (this.checkGet(' ')) {
+        // skip spaces
+      }
       if (!this.checkGet('(')) {
         Parser.makeParserError('parsePower (no argument)');
       }
@@ -174,7 +183,7 @@ export default class Parser {
     if (this.hasNext() && (this.get() === '"')) {
       return this.parseStr();
     } if (this.hasNext() && this.get() >= '0' && this.get() <= '9') {
-      return EW.makeNumber(this.parseInt());
+      return EW.makeNumber(this.parseNum());
     } if (this.hasNext() && this.get() >= 'A' && this.get() <= 'Z') {
       const res = this.parseAddress();
       if (this.checkGet(':')) {
@@ -186,35 +195,42 @@ export default class Parser {
     return Parser.makeParserError('parseValue');
   }
 
-  parseFromTo(from, to, func, start) {
-    if (!(this.hasNext() && from <= this.get() && this.get() <= to)) {
+  parseFromTo(from, to, func, start, check = () => false) {
+    if (!(this.hasNext() && ((from <= this.get() && this.get() <= to) || check()))) {
       Parser.makeParserError('parseFromTo');
     }
     let res = start;
-    while (this.hasNext() && from <= this.get() && this.get() <= to) {
-      res = func(res, this.get());
+    for (let ind = 0; this.hasNext()
+          && ((from <= this.get() && this.get() <= to) || check()); ind += 1) {
+      res = func(res, this.get(), ind);
       this.next();
     }
     return res;
   }
 
-  // number: [0-9]*
-  parseInt() {
-    return this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
+  // number: [0-9]*,[0-9]
+  parseNum() {
+    const left = this.parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0);
+    const right = (this.checkGet('.')
+      ? this.parseFromTo('0', '9', (res, c, ind) => res + (toInt(c) - toInt('0')) * 10 ** (-ind - 1), 0)
+      : 0);
+    return left + right;
   }
 
   // nameFunc: [А-Я]*
   parseNameFunc() {
-    return this.parseFromTo('А', 'Я', (res, c) => res + c, '');
+    return this.parseFromTo('А', 'Я', (res, c) => res + c, '', () => this.get() === 'Ё');
   }
 
   // address: ($)[A-Z]*($)[0-9]*
   parseAddress() {
-    this.checkGet('$');
+    const flag1 = this.checkGet('$');
     const ind1 = this.parseFromTo('A', 'Z', (res, c) => res + c, '');
-    this.checkGet('$');
+    const pos1 = new Parser(ind1).parseFromTo('A', 'Z', (res, c) => res * 26 + toInt(c) - toInt('A') + 1, 0) - 1;
+    const flag2 = this.checkGet('$');
     const ind2 = this.parseFromTo('0', '9', (res, c) => res + c, '');
-    return EW.makeAddress(ind1, ind2);
+    const pos2 = new Parser(ind2).parseFromTo('0', '9', (res, c) => res * 10 + toInt(c) - toInt('0'), 0) - 1;
+    return EW.makeAddress(ind1, ind2, pos1, pos2, flag1, flag2);
   }
 
   // string: "..."

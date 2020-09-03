@@ -46,7 +46,7 @@ describe('UserRepo', () => {
   });
   describe('#save()', () => {
     it('should save new user', () => {
-      const user = new UserModel(login, password, isAdmin);
+      const user = new UserModel(login, isAdmin, password);
       userRepo.save(user);
       assert.deepStrictEqual(
         database.prepare('SELECT * FROM Users WHERE login = ?')
@@ -97,8 +97,8 @@ describe('UserRepo', () => {
       inserting.run(anotherLogin, UserModel.getHashedPassword(anotherPassword), Number(isAdmin));
       assert.deepStrictEqual(
         userRepo.getAllUsers(),
-        [new UserModel(login, password, isAdmin),
-          new UserModel(anotherLogin, anotherPassword, isAdmin)],
+        [new UserModel(login, isAdmin, password),
+          new UserModel(anotherLogin, isAdmin, anotherPassword)],
       );
     });
   });

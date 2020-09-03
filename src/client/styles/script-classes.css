@@ -2,10 +2,22 @@ div.hide {
   display: none;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
 .show-flex {
   display: flex;
 }
 
 .show-block {
   display: block;
+}
+
+textarea.cursor-text {
+  cursor: text;
 }

@@ -1,6 +1,6 @@
 FROM node:14
-COPY . project
-WORKDIR project
-RUN npm ci
-RUN mkdir data
-ENTRYPOINT ["npm", "run", "run"]
+COPY . /project
+WORKDIR /project
+RUN npm i
+RUN npm run build
+ENTRYPOINT ["npm", "run", "server"]

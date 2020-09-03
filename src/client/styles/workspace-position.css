@@ -15,7 +15,7 @@
     width: 100vw;
   }
 
-  div.table-wrapper {
+  div#table-wrapper {
     height: calc(100vh - 95px);
   }
 }
@@ -46,7 +46,7 @@
     width: calc(100vw - 400px);
   }
 
-  div.table-wrapper {
+  div#table-wrapper {
     height: calc(100vh - 160px);
   }
 }

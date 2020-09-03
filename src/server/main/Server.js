@@ -13,15 +13,54 @@ import Authorizer from '../authorization/Authorizer.js';
 import DataRepo from '../database/DataRepo.js';
 import ConsoleLogger from '../../lib/logging/ConsoleLogger.js';
 import logLevel from '../../lib/logging/logLevel.js';
+import WorkbookHandler from '../handlers/WorkbookHandler.js';
+import WorkbookIdHandler from '../handlers/WorkbookIdHandler.js';
+import SaveSystem from '../save/SaveSystem.js';
+import UserHandler from '../handlers/UserHandler.js';
+import UsernameHandler from '../handlers/UsernameHandler.js';
+import AuthHandler from '../handlers/AuthHandler.js';
 
 export default class Server {
   constructor(config) {
     this.setConfig(config);
     this.configureApp();
     this.configureLogging();
+    this.configureDataDirs();
     this.configureDataRepo();
     this.configureMiddleware();
+    this.configureEndpoints();
     this.configureServer();
+  }
+
+  configureDataDirs() {
+    const dataDirs = [
+      this.config.dataPath,
+      this.config.pathToWorkbooks,
+      this.config.pathToCommits,
+    ];
+    dataDirs.forEach((dir) => {
+      fs.mkdirSync(dir, {
+        recursive: true,
+      });
+    });
+  }
+
+  configureEndpoints() {
+    const endpoints = {
+      '/workbook': WorkbookHandler,
+      '/workbook/:id': WorkbookIdHandler,
+      '/user': UserHandler,
+      '/user/:username': UsernameHandler,
+      '/auth': AuthHandler,
+    };
+    const saveSystem = new SaveSystem(this.config.pathToWorkbooks, this.config.pathToCommits);
+    Object.keys(endpoints).forEach((path) => {
+      const handler = new endpoints[path](this.dataRepo, saveSystem);
+      this.app.get(path, (req, res) => handler.get(req, res));
+      this.app.post(path, (req, res) => handler.post(req, res));
+      this.app.patch(path, (req, res) => handler.patch(req, res));
+      this.app.delete(path, (req, res) => handler.delete(req, res));
+    });
   }
 
   run() {
@@ -41,6 +80,7 @@ export default class Server {
     this.app = express();
     this.app.set('port', this.config.port);
     this.app.set('view options', this.config.viewOptions);
+    this.app.set('env', this.config.env);
   }
 
   configureLogging() {
@@ -56,9 +96,6 @@ export default class Server {
   }
 
   configureDataRepo() {
-    fs.mkdirSync(this.config.dataPath, {
-      recursive: true,
-    });
     const databasePath = `${this.config.dataPath}/${this.config.databaseName}`;
     const database = new Database(databasePath);
     this.dataRepo = new DataRepo(database, this.logger);
