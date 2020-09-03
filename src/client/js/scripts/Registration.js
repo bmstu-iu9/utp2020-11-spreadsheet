@@ -6,34 +6,25 @@ export default class Registration {
     this.resultHolder = resultHolder;
   }
 
-  register(request) {
+  register(request, handler) {
+    if (!this.resultHolder.classList.contains('hide')) {
+      this.resultHolder.classList.add('hide');
+    }
+    this.formData = new FormData(this.form);
     try {
-      this.formData = new FormData(this.form);
       this.validateData();
-      request.send(this.getUsername(), this.getPassword());
     } catch (e) {
-      this.errorHandler(e);
+      handler.registerHandle(e);
     }
-  }
-
-  errorHandler(error) {
-    if (error.name === 'FormatError' || error.message === 'Wrong second password') {
-      this.resultHolder.textContent = 'Два пароля не совпадают';
-    } else if (error.name === 'FormatError') {
-      this.resultHolder.textContent = 'Некорректный формат данных';
-    } else if (error.name === 'ConflictError') {
-      this.resultHolder.textContent = 'Логин уже занят';
-    }
+    request.send(this.getUsername(), this.getPassword(), handler);
+    this.resultHolder.textContent = 'Вы успешно зарегистрированы';
     this.resultHolder.classList.remove('hide');
-    console.log(' show');
   }
 
   getUsername() {
     if (this.formData.has('username')) {
-      console.log(this.formData.get('username'), ' :username');
       return this.formData.get('username');
     }
-    console.log('empty username');
     return undefined;
   }
 
