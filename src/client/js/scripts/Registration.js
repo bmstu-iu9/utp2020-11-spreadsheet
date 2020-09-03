@@ -3,12 +3,12 @@ import FormatError from '../../../lib/errors/FormatError.js';
 export default class Registration {
   constructor(form, resultHolder) {
     this.form = form;
-    this.formData = new FormData(form);
     this.resultHolder = resultHolder;
   }
 
   register(request) {
     try {
+      this.formData = new FormData(this.form);
       this.validateData();
       request.send(this.getUsername(), this.getPassword());
     } catch (e) {
