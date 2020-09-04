@@ -1,4 +1,4 @@
-import FormatError from '../../../lib/errors/FormatError.js';
+import WrongSecondPasswordError from '../../../lib/errors/WrongSecondPasswordError.js';
 
 export default class Registration {
   constructor(authorizeForm, registerForm, resultHolder) {
@@ -14,12 +14,12 @@ export default class Registration {
     const formData = new FormData(this.registerForm);
     try {
       Registration.validateRegisterData(formData);
+      request.send(Registration.getUsername(formData), Registration.getPassword(formData), handler);
+      this.resultHolder.textContent = 'Вы успешно зарегистрированы';
+      this.resultHolder.classList.remove('hide');
     } catch (e) {
       handler.registerHandle(e);
     }
-    request.send(Registration.getUsername(formData), Registration.getPassword(formData), handler);
-    this.resultHolder.textContent = 'Вы успешно зарегистрированы';
-    this.resultHolder.classList.remove('hide');
   }
 
   authorize(request, handler) {
@@ -48,7 +48,7 @@ export default class Registration {
 
   static validateRegisterData(formData) {
     if (Registration.getPassword(formData) !== formData.get('repeat-password')) {
-      throw new FormatError('Wrong second password');
+      throw new WrongSecondPasswordError('Wrong second password');
     }
   }
 }
