@@ -52,7 +52,7 @@ export default class TokenRepo extends AbstractRepo {
       if (row) {
         return new TokenModel(row.login, row.uuid);
       }
-      throw new Error(`no token with login: ${login}`);
+      return undefined;
     } catch (err) {
       throw new DatabaseError(`Error while getting token: ${err}`);
     }

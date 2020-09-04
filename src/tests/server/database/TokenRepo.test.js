@@ -83,11 +83,9 @@ describe('TokenRepo', () => {
       const actualToken = environment.dataRepo.tokenRepo.getByLogin(userToken.username);
       assert.deepStrictEqual(actualToken, userToken.token);
     });
-    it('should throw an exception when token not found', () => {
+    it('should return undefined when token not found', () => {
       environment.init();
-      assert.throws(() => {
-        environment.dataRepo.tokenRepo.getByLogin('228');
-      }, DatabaseError);
+      assert.deepStrictEqual(environment.dataRepo.tokenRepo.getByLogin('228'), undefined);
     });
   });
   describe('#getAllTokens()', () => {
