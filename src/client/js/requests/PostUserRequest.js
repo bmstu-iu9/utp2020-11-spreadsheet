@@ -9,8 +9,6 @@ export default class PostUserRequest extends Request {
     xhr.onload = () => {
       try {
         PostUserRequest.validateStatusCode(xhr.status);
-        // const parsed = JSON.parse(xhr.response);
-        // return UserModel.fromJSONtoUser(parsed);
       } catch (e) {
         if (handler !== undefined) {
           handler.registerHandle(e);
