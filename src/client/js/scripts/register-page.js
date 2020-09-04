@@ -4,7 +4,7 @@ import Registration from './Registration.js';
 import RegisterPageErrorHandler from './RegisterPageErrorHandler.js';
 import PostAuthRequest from '../requests/PostAuthRequest.js';
 
-const baseURL = document.URL;
+const baseURL = `${document.location.protocol}//${document.location.host}`;
 const authorizer = new FakeRequestAuthorizer();
 const postUserRequest = new PostUserRequest(baseURL, authorizer);
 const postAuthRequest = new PostAuthRequest(baseURL, authorizer);
