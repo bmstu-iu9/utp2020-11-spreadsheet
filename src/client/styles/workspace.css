@@ -335,39 +335,36 @@ div.button-active {
   font-size: 30px;
 }
 
-#button-search {
-  background-image: url(../img/search-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 30px;
-}
-
-#button-erase {
-  background-image: url(../img/erase-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 30px;
-}
-
-#button-sort {
-  background-image: url(../img/sort-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 17px;
-}
-
-#button-filter {
-  background-image: url(../img/filter-icon.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 17px;
-}
-
 #toolbar-filter {
   width: 350px;
   margin-left: 10px;
   height: 100%;
   justify-content: space-around;
+}
+
+#button-merger {
+  font-size: 15px;
+}
+
+#toolbar-file {
+  width: 400px;
+  margin-left: 10px;
+  height: 100%;
+  justify-content: space-around;
+}
+
+div.filename-container {
+  font-family: Lato, sans-serif;
+  color: #444c5c;
+  border-color: #444c5c;
+}
+
+div#toolbar-file div.tool-button-big {
+  background-color: transparent;
+}
+
+#button-export-file {
+  transform: rotate(180deg);
 }
 
 div.toolbar-column {
@@ -384,6 +381,7 @@ div#table-wrapper {
 }
 
 #table {
+  position: relative;
   table-layout: fixed;
   border: 1px solid #d9d9d9;
   border-collapse: separate;
@@ -460,12 +458,12 @@ textarea.cell {
   min-width: 70px;
 }
 
-#table tr:nth-child(1) > td:nth-child(1):hover {
+#table tr:nth-child(1) > th:nth-child(1):hover {
   background-color: inherit;
   cursor: inherit;
 }
 
-#table td.column-header:hover, #table td.row-header:hover {
+#table th.column-header:hover, #table th.row-header:hover {
   border: 1px solid #d9d9d9;
   background-color: #f89a03;
 }
