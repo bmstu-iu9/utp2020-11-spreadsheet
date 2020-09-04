@@ -4,7 +4,7 @@ import Registration from './Registration.js';
 import RegisterPageErrorHandler from './RegisterPageErrorHandler.js';
 import PostAuthRequest from '../requests/PostAuthRequest.js';
 
-const baseURL = 'https://unitables.flygrounder.ru';
+const baseURL = document.URL;
 const authorizer = new FakeRequestAuthorizer();
 const postUserRequest = new PostUserRequest(baseURL, authorizer);
 const postAuthRequest = new PostAuthRequest(baseURL, authorizer);
