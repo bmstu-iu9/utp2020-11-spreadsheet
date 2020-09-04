@@ -105,10 +105,10 @@ div.sign-forms-wrapper input[type="submit"]:hover {
   background: linear-gradient(#fca311, #f89a03);
 }
 
-div.hide {
-  display: block;
+.hide {
+  display: none;
 }
 
-div.show {
-  display: none;
+.show {
+  display: block;
 }

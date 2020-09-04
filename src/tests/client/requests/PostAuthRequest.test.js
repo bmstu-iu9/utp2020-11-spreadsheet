@@ -3,7 +3,6 @@ import * as assert from 'assert';
 import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
 import Request from '../../../client/js/requests/Request.js';
 import PostAuthRequest from '../../../client/js/requests/PostAuthRequest.js';
-import TokenModel from '../../../server/database/TokenModel.js';
 
 describe('PostAuthRequest', () => {
   const baseUrl = '/';
@@ -23,7 +22,7 @@ describe('PostAuthRequest', () => {
   });
 
   describe('#send()', () => {
-    it('should return TokenModel', () => {
+    it('should authorize', () => {
       const username = 'username';
       const password = 'password';
       global.XMLHttpRequest.onCreate = (req) => {
@@ -35,8 +34,7 @@ describe('PostAuthRequest', () => {
             JSON.stringify({ token }));
         };
       };
-      const result = request.send(username, password);
-      assert.deepStrictEqual(result, new TokenModel(username, token));
+      request.send(username, password);
     });
   });
 });

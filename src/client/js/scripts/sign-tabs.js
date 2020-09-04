@@ -32,5 +32,9 @@ document.getElementById('sign-choice').onclick = (event) => {
         showTabContent(i, signTabs, signForms);
       }
     }
+    const resultText = document.getElementById('resultText');
+    if (!resultText.classList.contains('hide')) {
+      resultText.classList.add('hide');
+    }
   }
 };

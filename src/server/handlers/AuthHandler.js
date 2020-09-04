@@ -10,6 +10,10 @@ export default class AuthHandler extends EndpointHandler {
     }
     const validator = new Validation(this.dataRepo);
     if (validator.validate(req.body.username, req.body.password, false) === result.ok) {
+      if (this.dataRepo.tokenRepo.getByLogin(req.body.username) !== undefined) {
+        const oldToken = this.dataRepo.tokenRepo.getByLogin(req.body.username).uuid;
+        this.dataRepo.tokenRepo.delete(oldToken);
+      }
       const token = new TokenModel(req.body.username);
       this.dataRepo.tokenRepo.save(token);
       return res.status(200).send({ token: token.uuid });
