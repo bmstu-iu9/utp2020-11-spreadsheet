@@ -10,8 +10,8 @@ const postUserRequest = new PostUserRequest(baseURL, authorizer);
 const postAuthRequest = new PostAuthRequest(baseURL, authorizer);
 const registerForm = document.getElementById('regForm');
 const authorizeForm = document.getElementById('authForm');
-const submitHandler = new Registration(authorizeForm, registerForm, document.getElementById('resultText'));
-const errorHandler = new RegisterPageErrorHandler(document.getElementById('resultText'));
+const submitHandler = new Registration(authorizeForm, registerForm, document.getElementById('auth-message'));
+const errorHandler = new RegisterPageErrorHandler(document.getElementById('auth-message'));
 registerForm.addEventListener('submit', (e) => {
   e.preventDefault();
   submitHandler.register(postUserRequest, errorHandler);
