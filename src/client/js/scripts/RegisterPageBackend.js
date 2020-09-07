@@ -1,6 +1,6 @@
 import WrongSecondPasswordError from '../../../lib/errors/WrongSecondPasswordError.js';
 
-export default class Registration {
+export default class RegisterPageBackend {
   constructor(authorizeForm, registerForm, resultHolder) {
     this.registerForm = registerForm;
     this.resultHolder = resultHolder;
@@ -13,12 +13,11 @@ export default class Registration {
     }
     const formData = new FormData(this.registerForm);
     try {
-      Registration.validateRegisterData(formData);
-      request.send(Registration.getUsername(formData), Registration.getPassword(formData), handler);
-      this.resultHolder.textContent = 'Вы успешно зарегистрированы';
-      this.resultHolder.classList.remove('hide');
+      RegisterPageBackend.validateRegisterData(formData);
+      request.send(RegisterPageBackend.getUsername(formData),
+        RegisterPageBackend.getPassword(formData), handler);
     } catch (e) {
-      handler.registerHandle(e);
+      handler.registerErrorHandle(e);
     }
   }
 
@@ -27,9 +26,8 @@ export default class Registration {
       this.resultHolder.classList.add('hide');
     }
     const formData = new FormData(this.authorizeForm);
-    request.send(Registration.getUsername(formData), Registration.getPassword(formData), handler);
-    this.resultHolder.textContent = 'Вы успешно вошли';
-    this.resultHolder.classList.remove('hide');
+    request.send(RegisterPageBackend.getUsername(formData),
+      RegisterPageBackend.getPassword(formData), handler);
   }
 
   static getUsername(formData) {
@@ -47,7 +45,7 @@ export default class Registration {
   }
 
   static validateRegisterData(formData) {
-    if (Registration.getPassword(formData) !== formData.get('repeat-password')) {
+    if (RegisterPageBackend.getPassword(formData) !== formData.get('repeat-password')) {
       throw new WrongSecondPasswordError('Wrong second password');
     }
   }

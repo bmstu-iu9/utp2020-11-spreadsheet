@@ -3,12 +3,13 @@ import ConflictError from '../../../lib/errors/ConflictError.js';
 import WrongSecondPasswordError from '../../../lib/errors/WrongSecondPasswordError.js';
 import ForbiddenError from '../../../lib/errors/ForbiddenError.js';
 
-export default class RegisterPageErrorHandler {
-  constructor(resultHolder) {
+export default class RegisterPageResultHandler {
+  constructor(resultHolder, accountPageURL) {
     this.resultHolder = resultHolder;
+    this.accountPageURL = accountPageURL;
   }
 
-  registerHandle(error) {
+  registerErrorHandle(error) {
     if (error instanceof WrongSecondPasswordError) {
       this.resultHolder.textContent = 'Два пароля не совпадают';
     } else if (error instanceof FormatError) {
@@ -21,12 +22,23 @@ export default class RegisterPageErrorHandler {
     this.resultHolder.classList.remove('hide');
   }
 
-  authorizeHandle(error) {
+  registerResultHandle() {
+    this.resultHolder.textContent = 'Вы успешно зарегистрированы';
+    this.resultHolder.classList.remove('hide');
+  }
+
+  authorizeErrorHandle(error) {
     if (error instanceof ForbiddenError) {
       this.resultHolder.textContent = 'Неверный логин или пароль';
     } else {
       this.resultHolder.textContent = 'Неизвестная ошибка';
     }
     this.resultHolder.classList.remove('hide');
+  }
+
+  authorizeResultHandle(username, token) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', username);
+    window.location.href = this.accountPageURL;
   }
 }
