@@ -10,10 +10,10 @@ export default class PostAuthRequest extends Request {
       try {
         PostAuthRequest.validateStatusCode(xhr.status);
         const parsed = JSON.parse(xhr.response);
-        localStorage.setItem('token', parsed.token);
+        handler.authorizeResultHandle(username, parsed.token);
       } catch (e) {
         if (handler !== undefined) {
-          handler.authorizeHandle(e);
+          handler.authorizeErrorHandle(e);
         }
       }
     };

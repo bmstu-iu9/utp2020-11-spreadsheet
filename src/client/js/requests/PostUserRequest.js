@@ -9,9 +9,10 @@ export default class PostUserRequest extends Request {
     xhr.onload = () => {
       try {
         PostUserRequest.validateStatusCode(xhr.status);
+        handler.registerResultHandle();
       } catch (e) {
         if (handler !== undefined) {
-          handler.registerHandle(e);
+          handler.registerErrorHandle(e);
         }
       }
     };
