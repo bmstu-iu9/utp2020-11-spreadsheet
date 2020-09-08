@@ -6,13 +6,17 @@ export default class WorkbookPageBackend {
   }
 
   static getUsername() {
-    return localStorage.getItem('username');
+    const username = localStorage.getItem('username');
+    if (username !== null) {
+      return localStorage.getItem('username');
+    }
+    return 'RANDOM USERNAME';
   }
 
-  logout() {
+  static logout(registerPageURL) {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    // перекинуть на страницу регистрации
+    window.location.href = registerPageURL;
   }
 
   setBooks() {
