@@ -1,16 +1,23 @@
 import Request from './Request.js';
-import WorkbookIdDeserializer from '../../../lib/serialization/WorkbookIdDeserializer.js';
 import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
 
 export default class PostWorkbookRequest extends Request {
-  send(workbook) {
+  send(workbook, handler) {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${this.baseUrl}/workbook`);
     this.authorizer.authorize(xhr);
+    xhr.setRequestHeader('Content-type', 'application/json');
     const serialized = WorkbookSerializer.serialize(workbook);
     xhr.send(JSON.stringify(serialized));
-    PostWorkbookRequest.validateStatusCode(xhr.status);
-    const parsed = JSON.parse(xhr.response);
-    return WorkbookIdDeserializer.deserialize(parsed);
+    xhr.onload = () => {
+      try {
+        PostWorkbookRequest.validateStatusCode(xhr.status);
+        handler.addBookResultHandle();
+      } catch (e) {
+        if (handler !== undefined) {
+          handler.addBookErrorHandle(e);
+        }
+      }
+    };
   }
 }

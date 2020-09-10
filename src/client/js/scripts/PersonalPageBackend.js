@@ -1,8 +1,14 @@
-export default class WorkbookPageBackend {
-  addBook(request) {
-  // всплывает форма, я получаю инфу с неё и добавляю
-  // при успехе убираю форму и направляю на страницу с книгой, при неудаче ....
+import Workbook from '../../../lib/spreadsheets/Workbook.js';
 
+export default class PersonalPageBackend {
+  constructor(addForm) {
+    this.addForm = addForm;
+  }
+
+  addBook(request, handler) {
+    const formData = new FormData(this.addForm);
+    const book = new Workbook(formData.get('name'));
+    request.send(book, handler);
   }
 
   static getUsername() {

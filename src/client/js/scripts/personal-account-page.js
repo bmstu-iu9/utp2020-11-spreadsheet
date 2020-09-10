@@ -1,10 +1,21 @@
-import WorkbookPageBackend from './WorkbookPageBackend.js';
+import PersonalPageBackend from './PersonalPageBackend.js';
+import RequestAuthorizer from '../requests/RequestAuthorizer.js';
+import PostWorkbookRequest from '../requests/PostWorkbookRequest.js';
+import PersonalPageResultHandler from './PersonalPageResultHandler.js';
 
 const baseURL = `${document.location.protocol}//${document.location.host}`;
 const registerPageURL = `${baseURL}`;
+const addForm = document.getElementById('book-form');
 const workspacePageURL = `${baseURL}/workspace.html`;
-const backend = new WorkbookPageBackend();
+const backend = new PersonalPageBackend(addForm);
+const resultHandler = new PersonalPageResultHandler(workspacePageURL);
+const authorizer = new RequestAuthorizer(localStorage.getItem('token'));
+const postWorkbookRequest = new PostWorkbookRequest(baseURL, authorizer);
 
-document.getElementById('name-panel-span').textContent = WorkbookPageBackend.getUsername();
+document.getElementById('name-panel-span').textContent = PersonalPageBackend.getUsername();
 document.getElementById('logout-button').addEventListener('click',
-  () => WorkbookPageBackend.logout(registerPageURL));
+  () => PersonalPageBackend.logout(registerPageURL));
+addForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  backend.addBook(postWorkbookRequest, resultHandler);
+});
