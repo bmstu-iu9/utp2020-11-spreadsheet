@@ -30,6 +30,63 @@ div.name-panel {
   color: #444c5c;
 }
 
+div.add-form-wrapper {
+  background-color: #fcfcfc;
+  border-radius: 10px;
+  display: flex;
+  height: max-content;
+  top: 0;
+}
+div.add-form-wrapper input {
+  width: 90%;
+  height: 40px;
+  margin: 15px 4% 4%;
+  padding-left: 10px;
+  background: #fff;
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  border: 1px solid #999;
+  box-sizing: border-box;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #444c5c;
+  outline: none;
+}
+
+div.add-form-wrapper input:hover {
+  border-color: #444;
+}
+
+div.add-form-wrapper input:active {
+  border-color: #767676;
+}
+
+div.add-form-wrapper input[type="submit"] {
+  width: 76%;
+  margin-top: 25px;
+  margin-left: 12%;
+  float: bottom;
+  border: 0;
+  background: #fca311;
+  border-radius: 5px;
+  font-weight: bolder;
+  font-size: 18px;
+  color: #fff;
+}
+
+div.add-form-wrapper input[type="submit"]:hover {
+  background: linear-gradient(#fca311, #f89a03);
+}
+
+div.hide {
+  display: none;
+}
+
+div.show {
+  display: block;
+}
+
 div.name-panel > img {
   width: 25px;
   height: 25px;
