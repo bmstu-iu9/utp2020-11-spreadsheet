@@ -1,4 +1,5 @@
 import Workbook from '../../../lib/spreadsheets/Workbook.js';
+import PersonalPageResultHandler from './PersonalPageResultHandler.js';
 
 export default class PersonalPageBackend {
   constructor(addForm) {
@@ -7,8 +8,12 @@ export default class PersonalPageBackend {
 
   addBook(request, handler) {
     const formData = new FormData(this.addForm);
-    const book = new Workbook(formData.get('name'));
-    request.send(book, handler);
+    try {
+      const book = new Workbook(formData.get('name'));
+      request.send(book, handler);
+    } catch (e) {
+      PersonalPageResultHandler.addBookErrorHandle(e);
+    }
   }
 
   static getUsername() {
@@ -25,11 +30,4 @@ export default class PersonalPageBackend {
     window.location.href = registerPageURL;
   }
 
-  setBooks() {
-    // получаем книги и заполняем инфу в html
-  }
-
-  onBookClick(id) {
-    // просто редиректим на страницу пространства с названием книги в local data...
-  }
 }

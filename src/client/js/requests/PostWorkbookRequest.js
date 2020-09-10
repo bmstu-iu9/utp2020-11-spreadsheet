@@ -1,5 +1,6 @@
 import Request from './Request.js';
 import WorkbookSerializer from '../../../lib/serialization/WorkbookSerializer.js';
+import PersonalPageResultHandler from '../scripts/PersonalPageResultHandler.js';
 
 export default class PostWorkbookRequest extends Request {
   send(workbook, handler) {
@@ -12,10 +13,10 @@ export default class PostWorkbookRequest extends Request {
     xhr.onload = () => {
       try {
         PostWorkbookRequest.validateStatusCode(xhr.status);
-        handler.addBookResultHandle();
+        handler.addBookResultHandle(workbook);
       } catch (e) {
         if (handler !== undefined) {
-          handler.addBookErrorHandle(e);
+          PersonalPageResultHandler.addBookErrorHandle(e);
         }
       }
     };

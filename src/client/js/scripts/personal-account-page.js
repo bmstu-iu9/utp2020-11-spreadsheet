@@ -8,8 +8,13 @@ const registerPageURL = `${baseURL}`;
 const addForm = document.getElementById('book-form');
 const workspacePageURL = `${baseURL}/workspace.html`;
 const backend = new PersonalPageBackend(addForm);
-const resultHandler = new PersonalPageResultHandler(workspacePageURL);
-const authorizer = new RequestAuthorizer(localStorage.getItem('token'));
+const resultHandler = new PersonalPageResultHandler(workspacePageURL, registerPageURL);
+let authorizer;
+try {
+  authorizer = new RequestAuthorizer(localStorage.getItem('token'));
+} catch (e) {
+  resultHandler.authErrorHandle(e);
+}
 const postWorkbookRequest = new PostWorkbookRequest(baseURL, authorizer);
 
 document.getElementById('name-panel-span').textContent = PersonalPageBackend.getUsername();
