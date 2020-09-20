@@ -30,4 +30,11 @@ export default class PersonalPageBackend {
     window.location.href = registerPageURL;
   }
 
+  static getBookList(request, handler) {
+    try {
+      request.send(handler);
+    } catch (e) {
+      PersonalPageResultHandler.getBookListErrorHandler(e);
+    }
+  }
 }

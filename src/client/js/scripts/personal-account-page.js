@@ -2,6 +2,7 @@ import PersonalPageBackend from './PersonalPageBackend.js';
 import RequestAuthorizer from '../requests/RequestAuthorizer.js';
 import PostWorkbookRequest from '../requests/PostWorkbookRequest.js';
 import PersonalPageResultHandler from './PersonalPageResultHandler.js';
+import GetWorkbookRequest from '../requests/GetWorkbookRequest.js';
 
 const baseURL = `${document.location.protocol}//${document.location.host}`;
 const registerPageURL = `${baseURL}`;
@@ -24,3 +25,7 @@ addForm.addEventListener('submit', (e) => {
   e.preventDefault();
   backend.addBook(postWorkbookRequest, resultHandler);
 });
+
+const getWorkbookRequest = new GetWorkbookRequest(baseURL, authorizer);
+
+PersonalPageBackend.getBookList(getWorkbookRequest, resultHandler);

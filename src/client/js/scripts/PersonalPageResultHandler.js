@@ -30,4 +30,18 @@ export default class PersonalPageResultHandler {
       window.location.href = this.registerPageURL;
     }
   }
+
+  static getBookListResultHandler(list) {
+    const template = document.querySelector('#book-icon-template');
+    const name = template.content.querySelector('#book-name');
+    const listPlace = document.getElementById('person-book-list');
+    list.forEach((book) => {
+      name.textContent = book.workbook.name;
+      listPlace.appendChild(document.importNode(template.content, true));
+    });
+  }
+
+  static getBookListErrorHandler(e) {
+    // todo
+  }
 }
