@@ -13,7 +13,7 @@ export default class GetWorkbookRequest extends Request {
         GetWorkbookRequest.validateStatusCode(xhr.status);
         const list = JSON.parse(xhr.response)
           .map((serialized) => WorkbookIdDeserializer.deserialize(serialized));
-        PersonalPageResultHandler.getBookListResultHandler(list);
+        handler.getBookListResultHandler(list);
       } catch (e) {
         if (handler !== undefined) {
           PersonalPageResultHandler.getBookListErrorHandler(e);

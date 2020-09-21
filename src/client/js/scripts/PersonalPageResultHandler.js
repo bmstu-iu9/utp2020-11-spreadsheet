@@ -12,6 +12,10 @@ export default class PersonalPageResultHandler {
     window.location.href = this.workspacePageUrl;
   }
 
+  bookClickHandle() {
+    window.location.href = this.workspacePageUrl;
+  }
+
   static addBookErrorHandle(e) {
     if (e instanceof FormatError) {
       alert('Неверный формат данных');
@@ -31,13 +35,16 @@ export default class PersonalPageResultHandler {
     }
   }
 
-  static getBookListResultHandler(list) {
+  getBookListResultHandler(list) {
     const template = document.querySelector('#book-icon-template');
     const name = template.content.querySelector('#book-name');
     const listPlace = document.getElementById('person-book-list');
     list.forEach((book) => {
       name.textContent = book.workbook.name;
       listPlace.appendChild(document.importNode(template.content, true));
+    });
+    document.querySelectorAll('.book-icon').forEach((item) => {
+      item.addEventListener('click', () => this.bookClickHandle());
     });
   }
 
