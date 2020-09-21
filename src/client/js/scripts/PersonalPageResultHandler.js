@@ -1,5 +1,6 @@
 import FormatError from '../../../lib/errors/FormatError.js';
 import UnauthorizedError from '../../../lib/errors/UnanuthorizedError.js';
+import NotFoundError from '../../../lib/errors/NotFoundError.js';
 
 export default class PersonalPageResultHandler {
   constructor(workspacePageUrl, registerPageURL) {
@@ -49,6 +50,12 @@ export default class PersonalPageResultHandler {
   }
 
   static getBookListErrorHandler(e) {
-    // todo
+    if (e instanceof UnauthorizedError) {
+      alert('Вы не авторизированны');
+      return;
+    }
+    if (!(e instanceof NotFoundError)) {
+      alert('Неизвестная ошибка');
+    }
   }
 }
