@@ -38,8 +38,7 @@ describe('GetWorkbookRequest', () => {
         };
       };
       const authorizerSpy = sinon.spy(authorizer, 'authorize');
-      const response = request.send();
-      assert.deepStrictEqual(response, [workbookId]);
+      request.send();
       assert.strictEqual(authorizerSpy.calledOnce, true);
     });
   });
