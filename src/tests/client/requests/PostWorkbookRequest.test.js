@@ -7,7 +7,6 @@ import PostWorkbookRequest from '../../../client/js/requests/PostWorkbookRequest
 import WorkbookDeserializer from '../../../lib/serialization/WorkbookDeserializer.js';
 import WorkbookIdSerializer from '../../../lib/serialization/WorkbookIdSerializer.js';
 import RequestAuthorizer from '../../../client/js/requests/RequestAuthorizer.js';
-import UnauthorizedError from '../../../lib/errors/UnanuthorizedError.js';
 
 describe('PostWorkbookRequest', () => {
   const workbook = new Workbook('test');
@@ -40,19 +39,8 @@ describe('PostWorkbookRequest', () => {
         };
       };
       const authorizerSpy = sinon.spy(authorizer, 'authorize');
-      const created = request.send(workbook);
-      assert.deepStrictEqual(created, workbookId);
+      request.send(workbook);
       assert.strictEqual(authorizerSpy.calledOnce, true);
-    });
-    it('should throw UnauthorizedError', () => {
-      global.XMLHttpRequest.onCreate = (req) => {
-        req.send = () => {
-          req.respond(401);
-        };
-      };
-      assert.throws(() => {
-        request.send(workbook);
-      }, UnauthorizedError);
     });
   });
 });

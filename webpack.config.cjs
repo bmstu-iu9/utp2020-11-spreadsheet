@@ -8,6 +8,8 @@ module.exports = {
     'sign-tabs': './src/client/js/scripts/sign-tabs.js',
     toolbar: './src/client/js/scripts/toolbar.js',
     'register-page': './src/client/js/scripts/register-page.js',
+    'personal-account-page': './src/client/js/scripts/personal-account-page.js',
+    'personal-acc-add-new-book': './src/client/js/scripts/personal-acc-add-new-book.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
