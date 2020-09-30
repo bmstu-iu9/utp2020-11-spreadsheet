@@ -11,6 +11,14 @@
 - Дмитрий Жук - [@ZhukDima](https://github.com/ZhukDima)
 - Милана Кондакова - [@MKondakova](https://github.com/MKondakova)
 
+## Запуск проекта
+
+``` shell
+npm i
+npm run build
+npm run server
+```
+
 ## Прогресс
 Проект находится на ранней стадии разработки.
 
